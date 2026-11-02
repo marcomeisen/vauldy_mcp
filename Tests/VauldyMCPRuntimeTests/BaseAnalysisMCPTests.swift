@@ -33,6 +33,7 @@ struct BaseAnalysisMCPTests {
             try await baseStore { root, store in
                 let file = root.appendingPathComponent(fixture.filename)
                 try SyntheticDocumentWriter.writePDF(pages: fixture.pages.map(\.text), rasterPages: [1], to: file)
+                let original = try Data(contentsOf: file)
                 let outcome = try await LocalImportService(store: store).importFile(file)
                 let document = try #require(try await store.documents().first)
                 try diagnostics(document, fixture: fixture.id, mode: "raster", original: file)
@@ -41,20 +42,18 @@ struct BaseAnalysisMCPTests {
                 let analysis = try #require(document.currentBaseAnalysis)
                 measurements.append((fixture, analysis))
                 let card = try #require(analysis.documents.first)
-                // Native OCR can omit readable text at high confidence. Strict golden
-                // accuracy is recorded separately; incomplete analysis must stay reviewable.
-                if analysis.status == .completed {
-                    check(analysis, against: fixture)
-                } else {
-                    #expect(analysis.status == .needsReview)
-                    #expect(!analysis.issues.isEmpty)
-                }
+                // Every golden field and critical fact is a blocking regression gate.
+                check(analysis, against: fixture)
                 for field in card.fields {
                     #expect(document.ocrText.contains(field.quote))
                     #expect(field.page == 1)
                 }
                 #expect(card.issuer == nil || card.issuer?.value == fixture.expected.issuer)
                 #expect(card.issueDate == nil || card.issueDate?.value == fixture.expected.issueDate)
+                let reloaded = try #require(try await LocalDocumentStore(root: store.root).documents().first)
+                check(try #require(reloaded.currentBaseAnalysis), against: fixture)
+                #expect(try Data(contentsOf: file) == original)
+                #expect(try Data(contentsOf: await store.original(for: outcome.documentID)) == original)
             }
         }
         if let path = ProcessInfo.processInfo.environment["VAULDY_BASE_ANALYSIS_NATIVE_REPORT"] {

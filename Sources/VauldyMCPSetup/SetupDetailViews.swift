@@ -112,11 +112,13 @@ struct SetupDocumentList: View {
                                 Text(document.title).font(.body.weight(.medium))
                                 Text(analysisLabel(document.baseAnalysisStatus)).font(.caption).foregroundStyle(.secondary)
                                 Text(model.importLabel(document).isEmpty ? document.sourceName : model.importLabel(document)).font(.caption).foregroundStyle(.secondary)
+                                SetupDocumentAnalysisView(document: document)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                             if model.vaultURL == model.localStore.snapshotURL {
                                 Button("Vorschau") { model.preview(document) }
-                                if let state = document.localImport?.state, [.partial, .failed, .interrupted, .cancelled].contains(state) {
+                                if let state = document.localImport?.state, ![.queued, .recognizing].contains(state) {
                                     Button("Text erneut lesen") { model.importFiles([], retry: document.id) }.disabled(model.importing)
+                                        .help("Liest das gesicherte Original mit frischer OCR und Basisanalyse. Vorhandene OCR-Cacheeinträge werden nicht verwendet; Freigaben bleiben unverändert.")
                                 }
                             }
                         }.padding(14)

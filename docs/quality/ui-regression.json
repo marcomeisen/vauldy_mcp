@@ -1,0 +1,12 @@
+{
+  "uiImportedRasterCases": 3,
+  "freshOCRCacheBypassed": true,
+  "identityPreserved": true,
+  "grantsPreservedDuringRefresh": true,
+  "originalsUnchanged": true,
+  "staleHandleRejected": true,
+  "uiPauseDeniedExistingServer": true,
+  "productionUntouched": true,
+  "pausedGrantPersistsAfterUIRestart": true,
+  "allThreeStoredAnalysesCompleted": true
+}

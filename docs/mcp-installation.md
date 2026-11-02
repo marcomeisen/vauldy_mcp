@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.8)
+# Vauldy MCP einrichten (macOS, Version 0.8.1)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -22,8 +22,10 @@ Unter **Einstellungen** erfolgt das Softwareupdate unabhängig von Freigaben und
 Bestehende Profile bleiben bytegenau erhalten, einschließlich pausierter Zustände. Das Update startet die Statusanzeige neu, aber keine Chatbot-Verbindung. Bereits laufende Server müssen im Chatbot neu gestartet werden.
 
 „Lokalen MCP-Bestand laden“ lädt frühere Importe und erkennt unterbrochene OCR-Läufe. Für fehlgeschlagene,
-unterbrochene oder teilweise erkannte Dokumente steht „Text erneut lesen“ zur Verfügung.
-Das nutzt die gesicherte Originalkopie, auch wenn die importierte Quelldatei verschoben wurde.
+unterbrochene, teilweise und bereits als abgeschlossen markierte Dokumente steht „Text erneut lesen“ zur Verfügung.
+Das liest die gesicherte Originalkopie cachefrei neu und aktualisiert die Basisanalyse,
+auch wenn die importierte Quelldatei verschoben wurde. Originale und Freigaben bleiben erhalten.
+„Übersicht und Basisangaben“ zeigt die gespeicherten Angaben mit ihren Quellseiten.
 „Import abbrechen“ wartet auf das tatsächliche Ende der laufenden System-OCR. Ein Worker-/Prozessabbruch
 hinterlässt einen wiederaufnehmbaren Datensatz; er wird nicht als erfolgreicher Import angezeigt.
 
@@ -418,3 +420,22 @@ Notarisierung und Neuinstallation auf unterstützten Systemen zusätzlich zu pr�
 ```sh
 python3 scripts/mcp/package.py --identity 'Developer ID Application: …' --notary-profile '…'
 ```
+
+## Vorhandene MCP-UI aus diesem Repository starten
+
+```sh
+python3 scripts/mcp/run_ui.py
+```
+
+Der Befehl baut die Einrichtung, den Server, das lokale Importprogramm und die Menüleiste
+zu `dist/mcp/Vauldy MCP Einrichtung.app`. Diese App lässt sich danach direkt öffnen.
+`--skip-build` verwendet den bereits vorhandenen Release-Build, `--no-open` baut nur das Paket.
+Für native Tests `--setup-root /absoluter/isolierter/testordner` angeben. Dadurch bleiben auch
+Testverbindungen und ihre Clientregistrierung im Testbereich. Ein ungepacktes Swift-Executable
+hat die benötigten Bundle-Ressourcen nicht vollständig.
+
+Gesamte synthetische Regression: `python3 scripts/mcp/regression_test.py`.
+Der Lauf umfasst Swift, Paket, echten stdio-Verkehr, 25 textbasierte und acht Raster-Originale,
+Import, Audit, Clientregistrierung, Verwaltung, Menüleiste, Ordnerüberwachung, lokalen
+Tunnel-Launcher-Stub, OCR-Qualität/Cache und die P0-/LVM-Prüfungen. Er installiert keine
+produktive Verbindung und aktualisiert Qualitätsberichte nur mit `--update-reports`.

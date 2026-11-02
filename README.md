@@ -12,9 +12,14 @@ Profile oder Provider-Einstellungen automatisch übernommen.
 Benötigt werden macOS 14+, Swift 6 und Python 3 für die Protokolltests.
 
 ```sh
-swift build
-swift run vauldy-mcp-setup
+python3 scripts/mcp/run_ui.py
 ```
+
+Der Startbefehl baut das vollständige macOS-App-Bundle samt Server, CLI und Menüleiste.
+Es liegt anschließend unter `dist/mcp/Vauldy MCP Einrichtung.app` und lässt sich dort
+auch direkt öffnen. Ein ungepacktes `swift run vauldy-mcp-setup` enthält diese Helfer nicht.
+Für eine isolierte Prüfung: `python3 scripts/mcp/run_ui.py --setup-root /absoluter/testordner`.
+Mit `--no-open` wird das Bundle nur vorbereitet; `--skip-build` verwendet den vorhandenen Release-Build.
 
 Der Assistent importiert in einen eigenen Bestand, verlangt die lokale Freigabe und
 richtet bei Bedarf einen kompatiblen stdio-Client ein. Das manuelle Starten des Servers

@@ -186,6 +186,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
     }
 
     private static func recognizeImage(_ image: CGImage, page: Int, cancellation: OCRCancellation) throws -> LocalOCRPage {
+        let image = OCRWhiteMargins.cropped(image)
         if isBlank(image) { return LocalOCRPage(info: .init(page: page, method: .blank), text: "") }
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate

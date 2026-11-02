@@ -83,8 +83,10 @@ Drei Ebenen werden getrennt geprüft:
 
 Die Berichte unter `docs/quality/` weisen Konfusionsmatrix, Macro-F1, ausgefüllte Rollen,
 unerwartete Rollen, kritische Übersichtsinhalte und einzelne Fallfehler aus. Die Rastermessung
-bewahrt auch Fehler der strikten Sollwerte. Grüne Sicherheitstests sind daher kein behaupteter
-100-Prozent-OCR-Qualitätsnachweis. Reale Archive und Produktionsdokumente sind nicht Teil
+bewahrt auch Fehler der strikten Sollwerte. Alle acht Rasterfälle sind seit 0.8.1 strikte Regressionen: fehlende Sollfelder oder
+kritische Inhalte lassen den Test fehlschlagen. Der dokumentierte Ausgangsstand liegt
+separat unter `native-raster-before-ocr-fix.json`. Acht passende künstliche Vorlagen
+sind kein allgemeiner 100-Prozent-OCR-Qualitätsnachweis. Reale Archive und Produktionsdokumente sind nicht Teil
 dieser Messung. Einfache saubere synthetische Scans können bereits OCR-Auslassungen zeigen.
 
 Reproduktion:
@@ -127,3 +129,21 @@ python3 scripts/mcp/base_analysis_wire_test.py \
 Der Diagnoseordner enthält ausschließlich die künstlichen Testvorlagen. Anschließend kann
 er gelöscht werden. Der Test verwendet einen eigenen temporären Importbestand und stoppt
 seinen Worker. Er verändert keine installierte Verbindung.
+
+## OCR-Korrektur und vorhandene Oberfläche (0.8.1)
+
+Die Vorverarbeitung entfernt nur weiße Außenränder um den gesamten erkannten Bildinhalt,
+mit Sicherheitsabstand. Sie behält auch einzelne, sehr helle farbige Randmarkierungen und
+Fußzeilen. Unklare oder übergroße Eingaben bleiben unverändert. Texterkennung, Sprachkorrektur,
+Auflösungsgrenzen und echte Konfidenzen bleiben erhalten. Alte OCR-Checkpoints haben eine
+andere Konfigurationskennung. Produktivbestände werden nicht automatisch neu gelesen.
+
+Die bisherige MCP-Oberfläche zeigt „Übersicht und Basisangaben“ aus dem aktuellen gespeicherten
+Datensatz mit Rollen und Quellseiten. „Text erneut lesen“ liest auf ausdrückliche Nutzeraktion
+das Original cachefrei und aktualisiert anschließend die Basisanalyse. Auch ein zuvor als
+OCR-abgeschlossen markierter Import kann so erneut geprüft werden. Auswahl und Freigaben
+werden dadurch nicht erweitert. Manueller Titel und eigene Notizen bleiben erhalten.
+
+Start mit allen Helferprogrammen: `python3 scripts/mcp/run_ui.py`.
+Gesamte Regression: `python3 scripts/mcp/regression_test.py`.
+Mit `--update-reports` werden die gemessenen Qualitätsberichte unter `docs/quality/` aktualisiert.

@@ -1,6 +1,6 @@
 {
-  "actualPopulatedFields" : 27,
-  "allPassed" : false,
+  "actualPopulatedFields" : 30,
+  "allPassed" : true,
   "cases" : 8,
   "classificationConfusion" : {
     "authorityDecision" : {
@@ -25,11 +25,11 @@
       "utilityStatement" : 1
     },
     "vehicleReport" : {
-      "unknown" : 1
+      "vehicleReport" : 1
     }
   },
   "corpusVersion" : 1,
-  "correctPopulatedFields" : 27,
+  "correctPopulatedFields" : 30,
   "criticalOverviewFacts" : 15,
   "domains" : [
     "authorities",
@@ -43,11 +43,10 @@
   ],
   "engine" : "local-rules-extractive-v1",
   "falsePopulatedFields" : 0,
-  "macroF1" : 0.77777777777777779,
-  "missingExpectedFields" : 3,
+  "macroF1" : 1,
+  "missingExpectedFields" : 0,
   "outcomes" : {
-    "completed" : 5,
-    "needsReview" : 3
+    "completed" : 8
   },
   "populatedFieldChecks" : 30,
   "results" : [
@@ -69,7 +68,7 @@
       "split" : "development"
     },
     {
-      "actualStatus" : "needsReview",
+      "actualStatus" : "completed",
       "actualType" : "bankStatement",
       "analyzedPages" : [
         1
@@ -79,15 +78,14 @@
       "expectedType" : "bankStatement",
       "id" : "bank",
       "issues" : [
-        "OVERVIEW_UNAVAILABLE",
-        "SUBJECT_UNRESOLVED"
+
       ],
-      "passed" : false,
+      "passed" : true,
       "physicalPages" : 1,
       "split" : "development"
     },
     {
-      "actualStatus" : "needsReview",
+      "actualStatus" : "completed",
       "actualType" : "authorityDecision",
       "analyzedPages" : [
         1
@@ -97,10 +95,9 @@
       "expectedType" : "authorityDecision",
       "id" : "authority",
       "issues" : [
-        "OVERVIEW_UNAVAILABLE",
-        "SUBJECT_UNRESOLVED"
+
       ],
-      "passed" : false,
+      "passed" : true,
       "physicalPages" : 1,
       "split" : "development"
     },
@@ -156,8 +153,8 @@
       "split" : "development"
     },
     {
-      "actualStatus" : "needsReview",
-      "actualType" : "unknown",
+      "actualStatus" : "completed",
+      "actualType" : "vehicleReport",
       "analyzedPages" : [
         1
       ],
@@ -166,10 +163,9 @@
       "expectedType" : "vehicleReport",
       "id" : "vehicle",
       "issues" : [
-        "DOCUMENT_TYPE_UNRESOLVED",
-        "SUBJECT_UNRESOLVED"
+
       ],
-      "passed" : false,
+      "passed" : true,
       "physicalPages" : 1,
       "split" : "holdout"
     },
@@ -191,6 +187,6 @@
       "split" : "development"
     }
   ],
-  "retainedCriticalOverviewFacts" : 11,
+  "retainedCriticalOverviewFacts" : 15,
   "scope" : "Eight raster-only synthetic PDF originals imported with Apple Vision, persisted and reloaded. Strict golden failures remain visible; not a real-document accuracy claim."
 }

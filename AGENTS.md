@@ -19,3 +19,21 @@ gehören in deren eigenes Repository. Keine Abhängigkeiten auf App-Quellpfade e
 - Dokumenttypübergreifend testen; LVM ist ein Regressionstest unter mehreren Domänen.
 
 Architektur: docs/mcp-mvp.md. Analysevertrag und Grenzen: docs/base-analysis.md.
+
+## OCR und bestehende UI ab 0.8.1
+
+`OCRWhiteMargins` darf nur weiße Außenränder mit Sicherheitsabstand entfernen. Einzelne,
+helle farbige Randzeichen, Fußzeilen und Tabellen müssen erhalten bleiben. Keine pauschale
+Auflösungsänderung, keine gelockerten Konfidenzgrenzen und kein Austausch durch Solltexte.
+OCR-Konfigurationsänderungen müssen alte Checkpoints ausschließen. Die acht Rasterfälle
+sind strikte Sollwerttests; Fehler dürfen nicht nur als Review akzeptiert werden.
+
+Die vorhandene UI wird als vollständiges Bundle über `scripts/mcp/run_ui.py` gestartet.
+Vorhandene Analyse erscheint aus dem aktuellen gespeicherten Datensatz. Explizites „Text
+erneut lesen“ läuft über den Worker mit `fresh: true`, auch für abgeschlossene Importe;
+Originalbytes, Identität und Freigaben bleiben erhalten. Native UI-Prüfungen verwenden
+ausschließlich `--setup-root` mit einem aufgabeneigenen synthetischen Bestand.
+
+Gesamte Regression: `python3 scripts/mcp/regression_test.py`. Keine parallel konkurrierenden
+OCR-Benchmarks. Die kleinen künstlichen Vorlagen begründen keine universelle OCR-Qualitäts-
+oder Performancezusage für reale Archive.

@@ -22,10 +22,16 @@ def main():
     parser.add_argument('local_binary', type=Path)
     parser.add_argument('mcp_binary', type=Path)
     parser.add_argument('originals', type=Path)
+    parser.add_argument('--include-raster', action='store_true', help='Also gate all eight native raster originals')
     args = parser.parse_args()
     local, binary = args.local_binary.resolve(), args.mcp_binary.resolve()
     cases = [c for c in json.loads((ROOT / 'Tests/VauldyMCPRuntimeTests/Fixtures/overview-corpus.json').read_text())['cases'] if c['id'] != 'low_quality']
-    files = [args.originals.resolve() / ('embedded-' + c['id'] + '.pdf') for c in cases]
+    entries = [(case, 'embedded') for case in cases]
+    if args.include_raster:
+        raster_ids = {'invoice', 'bank', 'authority', 'medical', 'housing', 'school', 'vehicle', 'insurance'}
+        entries += [(case, 'raster') for case in cases if case['id'] in raster_ids]
+    cases = [case for case, _ in entries]
+    files = [args.originals.resolve() / (mode + '-' + case['id'] + '.pdf') for case, mode in entries]
     assert all(p.is_file() for p in files), 'Generate synthetic originals with the Swift corpus tests first.'
     originals = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
     with tempfile.TemporaryDirectory(prefix='vauldy-base-wire-') as temp:

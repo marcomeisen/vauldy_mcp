@@ -46,7 +46,7 @@ def main():
         status_info = dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-status',
                            CFBundleName='Vauldy MCP Status', CFBundleDisplayName='Vauldy MCP Status',
                            CFBundleExecutable='vauldy-mcp-status', CFBundlePackageType='APPL',
-                           CFBundleShortVersionString='0.8.0', CFBundleVersion='1',
+                           CFBundleShortVersionString='0.8.1', CFBundleVersion='1',
                            LSMinimumSystemVersion='14.0', LSUIElement=True, NSHighResolutionCapable=True)
         with (status_app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(status_info, f)
         # Preserve dependency notices in every distributable.
@@ -61,7 +61,7 @@ def main():
         info = dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-setup',
                     CFBundleName='Vauldy MCP Einrichtung', CFBundleDisplayName='Vauldy MCP Einrichtung',
                     CFBundleExecutable='vauldy-mcp-setup', CFBundlePackageType='APPL',
-                    CFBundleShortVersionString='0.8.0', CFBundleVersion='1', LSMinimumSystemVersion='14.0',
+                    CFBundleShortVersionString='0.8.1', CFBundleVersion='1', LSMinimumSystemVersion='14.0',
                     NSHighResolutionCapable=True)
         with (app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(info, f)
         sign = ['codesign', '--force', '--sign', args.identity]
@@ -81,6 +81,17 @@ def main():
             run(['ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', str(app), str(archive)])
         import hashlib
         (output / 'SHA256SUMS').write_text(hashlib.sha256(archive.read_bytes()).hexdigest() + '  ' + archive.name + '\n')
+        local_app = output / app.name
+        if local_app.is_symlink():
+            raise SystemExit('Refusing to replace a symlink at the app output.')
+        if local_app.exists():
+            with (local_app / 'Contents' / 'Info.plist').open('rb') as f:
+                if plistlib.load(f).get('CFBundleIdentifier') != info['CFBundleIdentifier']:
+                    raise SystemExit('Refusing to replace an unrelated app.')
+            shutil.rmtree(local_app)
+        shutil.copytree(app, local_app)
+        run(['codesign', '--verify', '--deep', '--strict', str(local_app)])
+        print(local_app)
         print(archive)
         print('Signing: ' + ('local ad-hoc; NOT notarized for public distribution' if args.identity == '-' else args.identity))
 

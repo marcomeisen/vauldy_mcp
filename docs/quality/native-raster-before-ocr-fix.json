@@ -1,0 +1,196 @@
+{
+  "actualPopulatedFields" : 27,
+  "allPassed" : false,
+  "cases" : 8,
+  "classificationConfusion" : {
+    "authorityDecision" : {
+      "authorityDecision" : 1
+    },
+    "bankStatement" : {
+      "bankStatement" : 1
+    },
+    "insuranceNotice" : {
+      "insuranceNotice" : 1
+    },
+    "invoice" : {
+      "invoice" : 1
+    },
+    "medicalReport" : {
+      "medicalReport" : 1
+    },
+    "schoolNotice" : {
+      "schoolNotice" : 1
+    },
+    "utilityStatement" : {
+      "utilityStatement" : 1
+    },
+    "vehicleReport" : {
+      "unknown" : 1
+    }
+  },
+  "corpusVersion" : 1,
+  "correctPopulatedFields" : 27,
+  "criticalOverviewFacts" : 15,
+  "domains" : [
+    "authorities",
+    "banking",
+    "family",
+    "finance",
+    "health",
+    "housing",
+    "insurance",
+    "mobility"
+  ],
+  "engine" : "local-rules-extractive-v1",
+  "falsePopulatedFields" : 0,
+  "macroF1" : 0.77777777777777779,
+  "missingExpectedFields" : 3,
+  "outcomes" : {
+    "completed" : 5,
+    "needsReview" : 3
+  },
+  "populatedFieldChecks" : 30,
+  "results" : [
+    {
+      "actualStatus" : "completed",
+      "actualType" : "invoice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "finance",
+      "expectedStatus" : "completed",
+      "expectedType" : "invoice",
+      "id" : "invoice",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "bankStatement",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "banking",
+      "expectedStatus" : "completed",
+      "expectedType" : "bankStatement",
+      "id" : "bank",
+      "issues" : [
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "passed" : false,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "authorityDecision",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "authorities",
+      "expectedStatus" : "completed",
+      "expectedType" : "authorityDecision",
+      "id" : "authority",
+      "issues" : [
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "passed" : false,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "medicalReport",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "health",
+      "expectedStatus" : "completed",
+      "expectedType" : "medicalReport",
+      "id" : "medical",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "insuranceNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "insurance",
+      "expectedStatus" : "completed",
+      "expectedType" : "insuranceNotice",
+      "id" : "insurance",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "utilityStatement",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "housing",
+      "expectedStatus" : "completed",
+      "expectedType" : "utilityStatement",
+      "id" : "housing",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "unknown",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "mobility",
+      "expectedStatus" : "completed",
+      "expectedType" : "vehicleReport",
+      "id" : "vehicle",
+      "issues" : [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "passed" : false,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "schoolNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "family",
+      "expectedStatus" : "completed",
+      "expectedType" : "schoolNotice",
+      "id" : "school",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    }
+  ],
+  "retainedCriticalOverviewFacts" : 11,
+  "scope" : "Eight raster-only synthetic PDF originals imported with Apple Vision, persisted and reloaded. Strict golden failures remain visible; not a real-document accuracy claim."
+}

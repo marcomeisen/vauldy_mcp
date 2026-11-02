@@ -218,6 +218,7 @@ final class SetupModel: ObservableObject {
         let service = LocalImportWorker(store: localStore, executable: executable)
         importTask = Task { [self] in
             var completed = 0; var review = 0; var failed = 0; var reused = 0
+            var analyzed = 0; var analysisReview = 0
             var lastError: String?
             let updates: @Sendable (LocalImportProgress) -> Void = { [weak self] update in
                 Task { @MainActor in if self?.importing == true { self?.importProgress = update } }
@@ -227,8 +228,9 @@ final class SetupModel: ObservableObject {
                     try Task.checkCancellation()
                     do {
                         let outcome: LocalImportOutcome
-                        if let retry { outcome = try await service.retry(documentID: retry, progress: updates) }
+                        if let retry { outcome = try await service.retry(documentID: retry, fresh: true, progress: updates) }
                         else { outcome = try await service.importFile(urls[index], progress: updates) }
+                        if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
                         if outcome.reusedOriginal { reused += 1 }
                         if outcome.state == .completed { completed += 1 }
                         else if outcome.state == .partial { review += 1 }
@@ -239,9 +241,9 @@ final class SetupModel: ObservableObject {
                         lastError = (error as? LocalImportError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden."
                     }
                 }
-                message = "Text erfasst: \(completed) · Prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Neue Dokumente bitte unten ausdrücklich freigeben."
+                message = "Text erfasst: \(completed) · OCR prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Basisanalyse vorhanden: \(analyzed) · Basisanalyse prüfen: \(analysisReview). Neue Dokumente bitte unten ausdrücklich freigeben."
                 if let lastError { message += " " + lastError }
-                failure = failed > 0
+                failure = failed > 0 || review > 0 || analysisReview > 0
             } catch {
                 message = "Import abgebrochen. Gesicherte Originale bleiben erhalten; ausstehende Texterkennung kann erneut gestartet werden."
             }
