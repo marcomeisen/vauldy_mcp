@@ -67,7 +67,7 @@ struct VauldyLocalCLI {
             return
         }
         guard args.count >= 3, args[1] == "--store", args[2].hasPrefix("/") else {
-            FileHandle.standardError.write(Data("Aufruf: vauldy-local import --store /bestand /datei.pdf […]\n        vauldy-local status --store /bestand\n        vauldy-local watch-add --store /bestand /ordner […] [--recursive]\n        vauldy-local watch-list --store /bestand\n        vauldy-local watch-pause|watch-resume|watch-remove --store /bestand --folder UUID\n        vauldy-local watch-start --store /bestand\n        vauldy-local retry --store /bestand --document UUID\n        vauldy-local analyze --store /bestand --document UUID\n        vauldy-local example --output /neues-beispiel.pdf\n        vauldy-local connect --client chatgpt|claude --profile /pfad/profile.json\n        vauldy-local logs --profile /pfad/profile.json [--verify]\n        vauldy-local mcp-status --root /installation\n        vauldy-local status-menu --root /installation\n        vauldy-local status-menu-stop --root /installation\n".utf8))
+            FileHandle.standardError.write(Data("Aufruf: vauldy-local import --store /bestand /datei.pdf […]\n        vauldy-local status --store /bestand\n        vauldy-local import-folder --store /bestand /ordner [--recursive]\n        vauldy-local originals-preview|originals-migrate --store /bestand /quellordner […]\n        vauldy-local check-originals --store /bestand\n        vauldy-local watch-add --store /bestand /ordner […] [--recursive]\n        vauldy-local watch-list --store /bestand\n        vauldy-local watch-pause|watch-resume|watch-remove --store /bestand --folder UUID\n        vauldy-local watch-start --store /bestand\n        vauldy-local retry --store /bestand --document UUID\n        vauldy-local analyze --store /bestand --document UUID\n        vauldy-local example --output /neues-beispiel.pdf\n        vauldy-local connect --client chatgpt|claude --profile /pfad/profile.json\n        vauldy-local logs --profile /pfad/profile.json [--verify]\n        vauldy-local mcp-status --root /installation\n        vauldy-local status-menu --root /installation\n        vauldy-local status-menu-stop --root /installation\n".utf8))
             Foundation.exit(64)
         }
         let store = LocalDocumentStore(root: URL(fileURLWithPath: args[2]))
@@ -119,12 +119,31 @@ struct VauldyLocalCLI {
             }
             try output(outcomes)
             if outcomes.contains(where: { $0.state != .completed }) { Foundation.exit(2) }
+        case "import-folder":
+            let recursive = args.last == "--recursive"
+            let paths = Array(args.dropFirst(3).dropLast(recursive ? 1 : 0))
+            guard !paths.isEmpty, paths.allSatisfy({ $0.hasPrefix("/") }) else { throw LocalWatchError.invalidFolder }
+            var outcomes: [LocalImportOutcome] = []
+            for path in paths { outcomes += try await service.importFolder(URL(fileURLWithPath: path), recursive: recursive, progress: showProgress) }
+            try output(outcomes)
+            if outcomes.contains(where: { $0.state != .completed }) { Foundation.exit(2) }
+        case "originals-preview", "originals-migrate":
+            let paths = Array(args.dropFirst(3))
+            guard !paths.isEmpty, paths.allSatisfy({ $0.hasPrefix("/") }) else { throw LocalWatchError.invalidFolder }
+            let migration = LocalOriginalMigrationService(store: store)
+            let plan = try await migration.inspect(sourceFolders: paths.map { URL(fileURLWithPath: $0) })
+            if args[0] == "originals-preview" { try output(plan.report) }
+            else { try output(await migration.apply(plan)) }
+        case "check-originals":
+            guard args.count == 3 else { throw LocalImportError.invalidDocument }
+            struct Availability: Encodable { let id: UUID; let state: LocalOriginalState? }
+            try output(await store.checkOriginals().map { Availability(id: $0.id, state: $0.localImport?.originalState) })
         case "status":
             guard args.count == 3 else { throw LocalImportError.unreadableFile }
             try await store.recoverInterrupted()
-            struct Status: Encodable { let id: UUID; let state: LocalImportState; let pageCount: Int?; let analysisStatus: String; let error: LocalImportError? }
+            struct Status: Encodable { let id: UUID; let state: LocalImportState; let pageCount: Int?; let analysisStatus: String; let error: LocalImportError?; let originalState: LocalOriginalState? }
             try output(await store.documents().map { Status(id: $0.id, state: $0.localImport?.state ?? .failed,
-                                                             pageCount: $0.pageCount, analysisStatus: $0.baseAnalysisStatus, error: $0.localImport?.error) })
+                                                             pageCount: $0.pageCount, analysisStatus: $0.baseAnalysisStatus, error: $0.localImport?.error, originalState: $0.localImport?.originalState) })
         case "analyze":
             guard args.count == 5, args[3] == "--document", let id = UUID(uuidString: args[4]) else { throw LocalImportError.invalidDocument }
             let document = try await LocalBaseAnalysisService(store: store).analyze(documentID: id)

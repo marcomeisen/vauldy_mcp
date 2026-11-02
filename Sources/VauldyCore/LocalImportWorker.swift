@@ -37,15 +37,29 @@ public struct LocalImportWorker: Sendable {
         guard FileManager.default.fileExists(atPath: url.path) else { return [] }
         return try read(url, as: [LocalWatchScanStatus].self)
     }
-    public func importFile(_ file: URL, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
+    public func importFile(_ file: URL, storage: LocalOriginalStorage = .managedCopy, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
-        let staged = try await store.stage(file: file)
+        let staged = try await store.stage(file: file, storage: storage)
         if staged.duplicate, staged.document.localImport?.state != .queued {
             return .init(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
                          reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
         }
         return try await submit(staged.document.id, progress: progress)
     }
+    public func importFolder(_ url: URL, recursive: Bool = false,
+                             progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> [LocalImportOutcome] {
+        _ = try await store.documents()
+        let folder = try LocalWatchedFolder.authorizing(url, recursive: recursive)
+        let access = try folder.openDirectory(); defer { access.close() }
+        let files = try await Task.detached { try LocalWatchedFolderMonitor.files(folder, excluding: store.root, directory: access.url) }.value
+        var outcomes: [LocalImportOutcome] = []
+        for file in files {
+            try Task.checkCancellation()
+            outcomes.append(try await importFile(file, storage: .referenced, progress: progress))
+        }
+        return outcomes
+    }
+
     public func retry(documentID: UUID, fresh: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try await submit(documentID, fresh: fresh, progress: progress)
     }
@@ -152,7 +166,7 @@ public struct LocalImportWorker: Sendable {
                 let statuses = await monitor.scan(folders) { file in
                     guard !FileManager.default.fileExists(atPath: stopURL.path),
                           try jobs().filter({ $0.finishedAt == nil }).count < 200 else { throw LocalImportError.workerBusy }
-                    let staged = try await store.stage(file: file)
+                    let staged = try await store.stage(file: file, storage: .referenced)
                     if !staged.duplicate || staged.document.localImport?.state == .queued {
                         _ = try enqueue(staged.document.id)
                     }

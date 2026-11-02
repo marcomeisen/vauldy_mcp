@@ -40,6 +40,9 @@ public struct LocalOCRPageInfo: Codable, Equatable, Sendable {
     }
 }
 public struct LocalImportMetadata: Codable, Equatable, Sendable {
+    public var originalReference: LocalOriginalReference? = nil
+    public var referenceCandidate: LocalOriginalReference? = nil
+    public var originalState: LocalOriginalState? = nil
     public var contentHash: String
     public var fileExtension: String
     public var state: LocalImportState

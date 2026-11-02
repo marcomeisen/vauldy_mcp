@@ -56,6 +56,7 @@ def main():
             ('management_smoke_test', [resources]),
             ('status_smoke_test', [local, server, resources / 'Vauldy MCP Status.app']),
             ('watch_smoke_test', [local, server]),
+            ('original_reference_smoke_test', [local, server]),
             ('tunnel_launcher_smoke_test', []),
             ('benchmark_ocr', [local]),
             ('retrieval_benchmark', [server, '--local', local, '--p0', '--gate', '--output', output / 'p0-retrieval.json']),

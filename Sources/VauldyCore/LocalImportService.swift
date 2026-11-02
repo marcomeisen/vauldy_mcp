@@ -8,12 +8,12 @@ public struct LocalImportService: Sendable {
     public init(store: LocalDocumentStore, ocr: (any LocalDocumentOCR)? = nil, analyzer: any DocumentBaseAnalyzing = LocalRuleBasedDocumentAnalyzer()) {
         self.store = store; self.ocr = ocr ?? NativeLocalDocumentOCR(cacheRoot: store.root.appendingPathComponent("ocr-cache")); self.analyzer = analyzer
     }
-    public func importFile(_ url: URL,
+    public func importFile(_ url: URL, storage: LocalOriginalStorage = .managedCopy,
                            progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
         try await store.recoverInterrupted()
         progress(.init(stage: "Original lokal sichern"))
-        let staged = try await store.stage(file: url)
+        let staged = try await store.stage(file: url, storage: storage)
         if staged.duplicate {
             return LocalImportOutcome(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
                                       reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
@@ -31,7 +31,9 @@ public struct LocalImportService: Sendable {
         defer { lease.release() }
         let attempt = UUID()
         let clock = LocalStopwatch()
-        let original = try await store.start(id, attempt: attempt)
+        let access = try await store.start(id, attempt: attempt)
+        defer { access.close() }
+        let original = access.url
         let validation = clock.milliseconds
         let ocrClock = LocalStopwatch()
         do {
@@ -60,8 +62,9 @@ public struct LocalImportService: Sendable {
             return outcome
         } catch {
             let failure = error is CancellationError ? LocalImportError.cancelled : (error as? LocalImportError ?? .invalidDocument)
-            _ = try await store.fail(id, attempt: attempt, error: failure)
+            _ = try await store.fail(id, attempt: attempt, error: failure, originalState: (error as? LocalOriginalError)?.state)
             if error is CancellationError { throw CancellationError() }
+            if let error = error as? LocalOriginalError { throw error }
             throw failure
         }
     }

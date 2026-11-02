@@ -99,8 +99,9 @@ geänderte Dokumente neu vor; bereinigte Textfassungen werden versions- und frei
 ## Unabhängiger Import und OCR
 
 `LocalDocumentStore` schreibt ausschließlich seinen markierten eigenen Bestand. Ein fremdes oder
-beschädigtes Archiv wird ausdrücklich abgelehnt. Originale werden vor OCR unverändert kopiert,
-über SHA-256 dedupliziert und vor Wiederholung erneut geprüft. Atomare Snapshots, vorheriger gültiger
+beschädigtes Archiv wird ausdrücklich abgelehnt. Ordnerimporte referenzieren Originale über
+schreibgeschützte Security-Scoped Bookmarks; temporäre Einzelimporte behalten eine lokale Kopie.
+Beide Pfade werden über SHA-256 dedupliziert und vor Wiederholung erneut geprüft. Atomare Snapshots, vorheriger gültiger
 Snapshot als Sicherung, private Dateirechte und prozessübergreifende Schreibsperren sichern den Zustand.
 Der Speicher ist lokal, aber nicht zusätzlich anwendungsseitig verschlüsselt.
 

@@ -37,3 +37,16 @@ ausschließlich `--setup-root` mit einem aufgabeneigenen synthetischen Bestand.
 Gesamte Regression: `python3 scripts/mcp/regression_test.py`. Keine parallel konkurrierenden
 OCR-Benchmarks. Die kleinen künstlichen Vorlagen begründen keine universelle OCR-Qualitäts-
 oder Performancezusage für reale Archive.
+
+## Originalverweise ab 0.9.0
+
+Ordnerimporte verwenden read-only Security-Scoped Bookmarks; Einzelimporte behalten standardmäßig
+managedCopy. Native OCR und Quick Look halten einen Access-Lease bis zum tatsächlichen Ende.
+Vor OCR und vor OCR-Commit Inhalt verifizieren. Veränderte Quellen machen alten Text historisch,
+fehlende Quellen löschen keine Dokumente. Keine Pfad-Fallbacks nach fehlgeschlagenem Bookmark.
+
+Alt-Kopien nur im expliziten lokalen Migrationsdienst entfernen: Vorschau, erneuter Vergleich unter
+OCR-/Writer-Sperre, unabhängig wiedergeöffnete Quelle, persistierte und synchronisierte Haupt- und
+Backupsnapshots mit Verweis, abschließender Bytevergleich. Nur eigene reguläre Kopien entfernen;
+Quellen und nicht verifizierte Kopien unverändert lassen. Storeformat 2 verhindert alte Writer.
+`LocalOriginalReferenceTests` und `original_reference_smoke_test.py` sind zusätzliche Regressionen.

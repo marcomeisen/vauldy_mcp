@@ -14,10 +14,35 @@ private func canonicalWatchPath(_ url: URL) throws -> String {
 public struct LocalWatchedFolder: Codable, Identifiable, Equatable, Sendable {
     public let id: UUID
     public let path: String
+    public var bookmark: Data? = nil
     public var recursive: Bool
     public var enabled: Bool
     public init(id: UUID = UUID(), path: String, recursive: Bool = false, enabled: Bool = true) {
         self.id = id; self.path = path; self.recursive = recursive; self.enabled = enabled
+    }
+}
+
+extension LocalWatchedFolder {
+    static func authorizing(_ url: URL, recursive: Bool) throws -> Self {
+        let access = LocalOriginalAccess(url: url); defer { access.close() }
+        guard (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true else { throw LocalWatchError.invalidFolder }
+        var folder = Self(path: try canonicalWatchPath(url), recursive: recursive)
+        do { folder.bookmark = try url.bookmarkData(options: [.withSecurityScope, .securityScopeAllowOnlyReadAccess], includingResourceValuesForKeys: nil, relativeTo: nil) }
+        catch { throw LocalWatchError.invalidFolder }
+        let reopened = try folder.openDirectory(); defer { reopened.close() }
+        return folder
+    }
+    func openDirectory() throws -> LocalOriginalAccess {
+        let url: URL
+        if let bookmark {
+            guard !bookmark.isEmpty, bookmark.count <= 65_536 else { throw LocalWatchError.invalidFolder }
+            var stale = false
+            do { url = try URL(resolvingBookmarkData: bookmark, options: [.withSecurityScope, .withoutUI, .withoutMounting], relativeTo: nil, bookmarkDataIsStale: &stale) }
+            catch { throw LocalWatchError.invalidFolder }
+        } else { url = URL(fileURLWithPath: path) }
+        let access = LocalOriginalAccess(url: url)
+        guard (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true else { access.close(); throw LocalWatchError.invalidFolder }
+        return access
     }
 }
 
@@ -49,13 +74,18 @@ public struct LocalWatchedFolderStore: Sendable {
     public func add(_ urls: [URL], recursive: Bool = false) async throws -> [LocalWatchedFolder] {
         _ = try await store.documents()
         return try await Task.detached {
-            let paths = try urls.map { try validatedPath($0) }
+            let authorized = try urls.map { input in
+                let access = LocalOriginalAccess(url: input); defer { access.close() }
+                _ = try validatedPath(input)
+                return try LocalWatchedFolder.authorizing(input, recursive: recursive)
+            }
             return try locked {
                 var folders = try read()
-                for path in paths {
-                    if let index = folders.firstIndex(where: { $0.path == path }) {
+                for folder in authorized {
+                    if let index = folders.firstIndex(where: { $0.path == folder.path }) {
                         folders[index].recursive = recursive; folders[index].enabled = true
-                    } else { folders.append(.init(path: path, recursive: recursive)) }
+                        folders[index].bookmark = folder.bookmark
+                    } else { folders.append(folder) }
                 }
                 guard folders.count <= 32 else { throw LocalWatchError.tooManyFolders }
                 try save(folders)
@@ -110,7 +140,7 @@ public struct LocalWatchedFolderStore: Sendable {
               let folders = try? JSONDecoder().decode([LocalWatchedFolder].self, from: Data(contentsOf: url)),
               folders.count <= 32, Set(folders.map(\.id)).count == folders.count,
               Set(folders.map(\.path)).count == folders.count,
-              folders.allSatisfy({ $0.path.hasPrefix("/") && $0.path.utf8.count <= 8_192 }) else {
+              folders.allSatisfy({ $0.path.hasPrefix("/") && $0.path.utf8.count <= 8_192 && ($0.bookmark?.count ?? 0) <= 65_536 }) else {
             throw LocalWatchError.invalidConfiguration
         }
         return folders
@@ -153,7 +183,9 @@ actor LocalWatchedFolderMonitor {
         for folder in folders where folder.enabled {
             var status = LocalWatchScanStatus(folderID: folder.id, scannedAt: Date(), submitted: 0)
             do {
-                let files = try await Task.detached { try Self.files(folder, excluding: self.store.root) }.value
+                let directoryAccess = try folder.openDirectory(); defer { directoryAccess.close() }
+                let directory = directoryAccess.url
+                let files = try await Task.detached { try Self.files(folder, excluding: self.store.root, directory: directory) }.value
                 for file in files {
                     do {
                         guard try canonicalWatchPath(file) == file.path else { continue }
@@ -171,7 +203,7 @@ actor LocalWatchedFolderMonitor {
                         if let previous = observations[key], previous.signature == signature {
                             observation = previous
                             if !previous.submitted && submissions < 100 {
-                                // Recheck the grant to watch this folder before copying another original.
+                                // Recheck the grant to watch this folder before referencing another original.
                                 let current = try LocalWatchedFolderStore(store: store).configuredFolders()
                                 guard current.contains(folder) else { break }
                                 do {
@@ -192,11 +224,10 @@ actor LocalWatchedFolderMonitor {
     }
 
     private enum ScanFailure: Error { case unavailable, limit }
-    private static func files(_ folder: LocalWatchedFolder, excluding root: URL) throws -> [URL] {
-        let directory = URL(fileURLWithPath: folder.path)
+    static func files(_ folder: LocalWatchedFolder, excluding root: URL, directory: URL) throws -> [URL] {
         let resolved = try canonicalWatchPath(directory)
         let vault = try canonicalWatchPath(root)
-        guard resolved == folder.path, resolved != vault, !resolved.hasPrefix(vault + "/"),
+        guard (folder.bookmark != nil || resolved == folder.path), resolved != vault, !resolved.hasPrefix(vault + "/"),
               !vault.hasPrefix(resolved == "/" ? "/" : resolved + "/"),
               (try? directory.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true else { throw ScanFailure.unavailable }
         let keys: [URLResourceKey] = [.isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey]

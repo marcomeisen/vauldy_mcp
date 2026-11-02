@@ -25,6 +25,9 @@ final class SetupModel: ObservableObject {
     @Published var probing: Set<UUID> = []
     @Published var accessChanges: Set<UUID> = []
     @Published var previewURL: URL?
+    var previewAccess: LocalOriginalAccess?
+    @Published var originalMigration: LocalOriginalMigrationPlan?
+    @Published var showingOriginalMigration = false
     var monitoring: Task<Void, Never>?
     var refreshingManagement = false
     var lastInstalledStamp: Date?
@@ -208,7 +211,7 @@ final class SetupModel: ObservableObject {
         }
     }
 
-    func importFiles(_ urls: [URL], retry: UUID? = nil) {
+    func importFiles(_ urls: [URL], retry: UUID? = nil, folder: Bool = false) {
         guard !importing else { return }
         importing = true; failure = false; configuration = nil
         message = "Originale und Texterkennung bleiben auf diesem Mac."
@@ -227,18 +230,21 @@ final class SetupModel: ObservableObject {
                 for index in 0..<(retry == nil ? urls.count : 1) {
                     try Task.checkCancellation()
                     do {
-                        let outcome: LocalImportOutcome
-                        if let retry { outcome = try await service.retry(documentID: retry, fresh: true, progress: updates) }
-                        else { outcome = try await service.importFile(urls[index], progress: updates) }
+                        let outcomes: [LocalImportOutcome]
+                        if let retry { outcomes = [try await service.retry(documentID: retry, fresh: true, progress: updates)] }
+                        else if folder { outcomes = try await service.importFolder(urls[index], recursive: watchRecursive, progress: updates) }
+                        else { outcomes = [try await service.importFile(urls[index], progress: updates)] }
+                        for outcome in outcomes {
                         if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
                         if outcome.reusedOriginal { reused += 1 }
                         if outcome.state == .completed { completed += 1 }
                         else if outcome.state == .partial { review += 1 }
                         else { failed += 1 }
+                        }
                     } catch is CancellationError { throw CancellationError() }
                     catch {
                         failed += 1
-                        lastError = (error as? LocalImportError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden."
+                        lastError = (error as? LocalizedError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden."
                     }
                 }
                 message = "Text erfasst: \(completed) · OCR prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Basisanalyse vorhanden: \(analyzed) · Basisanalyse prüfen: \(analysisReview). Neue Dokumente bitte unten ausdrücklich freigeben."
@@ -277,6 +283,8 @@ final class SetupModel: ObservableObject {
 
     func importLabel(_ document: VaultDocument) -> String {
         guard let metadata = document.localImport else { return document.isSearchable ? "" : "noch nicht durchsuchbar" }
+        if metadata.originalState == .changed { return "Original verändert · gespeicherter Text ist historisch" }
+        if metadata.originalState == .unavailable { return "Original nicht erreichbar · gespeicherter Text bleibt erhalten" }
         switch metadata.state {
         case .completed: return "Text erfasst · \(SetupText.pages(document.pageCount ?? 0))"
         case .partial: return "Text teilweise erfasst · bitte prüfen"

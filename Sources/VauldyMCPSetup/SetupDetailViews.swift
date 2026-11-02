@@ -112,6 +112,9 @@ struct SetupDocumentList: View {
                                 Text(document.title).font(.body.weight(.medium))
                                 Text(analysisLabel(document.baseAnalysisStatus)).font(.caption).foregroundStyle(.secondary)
                                 Text(model.importLabel(document).isEmpty ? document.sourceName : model.importLabel(document)).font(.caption).foregroundStyle(.secondary)
+                                if let metadata = document.localImport {
+                                    Text(metadata.originalReference == nil ? "Lokale Kopie" : "Verweis auf Originaldatei").font(.caption).foregroundStyle(.secondary)
+                                }
                                 SetupDocumentAnalysisView(document: document)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                             if model.vaultURL == model.localStore.snapshotURL {
@@ -138,7 +141,12 @@ struct SetupFoldersView: View {
                 Button("Ordner hinzufügen …", systemImage: "folder.badge.plus", action: model.chooseWatchedFolders).buttonStyle(.borderedProminent)
                 Toggle("Unterordner einbeziehen", isOn: $model.watchRecursive).help("Gilt für neu hinzugefügte Ordner.")
             }.disabled(model.busy)
-            Text("PDFs und Bilder werden in deinen lokalen MCP-Bestand kopiert und auf diesem Mac gelesen. Neu importierte Dokumente bleiben für alle Chatbots gesperrt, bis du sie ausdrücklich auswählst.").foregroundStyle(.secondary)
+            Text("Ordnerimporte verwenden deine Originaldateien über dauerhafte Dateiverweise. Verschobene, gelöschte oder geänderte Originale können einen erneuten Zugriff erfordern. Neue Dokumente bleiben bis zu deiner ausdrücklichen Freigabe für Chatbots gesperrt.").foregroundStyle(.secondary)
+            HStack {
+                Button("Ordner einmal importieren …", action: model.chooseFolderImport)
+                Button("Bestehende Kopien prüfen …", action: model.inspectOriginalMigration)
+                Button("Originalzugriff prüfen", action: model.checkOriginals)
+            }.disabled(model.busy || model.importing)
             if model.watchedFolders.isEmpty { ContentUnavailableView("Noch keine beobachteten Ordner", systemImage: "folder", description: Text("Du kannst einen oder mehrere Ordner hinzufügen.")) }
             ForEach(model.watchedFolders, id: \.id) { folder in
                 VStack(alignment: .leading, spacing: 12) {

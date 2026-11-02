@@ -289,8 +289,13 @@ extension SetupModel {
     func preview(_ document: VaultDocument) {
         guard vaultURL == localStore.snapshotURL else { return }
         Task {
-            do { previewURL = try await localStore.original(for: document.id) }
-            catch { showError("Die lokale Originaldatei konnte nicht geöffnet werden. Der Dokumenteintrag bleibt erhalten.") }
+            do {
+                let access = try await localStore.openOriginal(for: document.id)
+                previewAccess?.close(); previewAccess = access; previewURL = access.url
+            } catch {
+                showError((error as? LocalizedError)?.errorDescription ?? "Die Originaldatei konnte nicht geöffnet werden.")
+                try? await refreshLocalDocuments()
+            }
         }
     }
 

@@ -46,7 +46,7 @@ def main():
         status_info = dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-status',
                            CFBundleName='Vauldy MCP Status', CFBundleDisplayName='Vauldy MCP Status',
                            CFBundleExecutable='vauldy-mcp-status', CFBundlePackageType='APPL',
-                           CFBundleShortVersionString='0.8.1', CFBundleVersion='1',
+                           CFBundleShortVersionString='0.9.0', CFBundleVersion='1',
                            LSMinimumSystemVersion='14.0', LSUIElement=True, NSHighResolutionCapable=True)
         with (status_app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(status_info, f)
         # Preserve dependency notices in every distributable.
@@ -61,7 +61,7 @@ def main():
         info = dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-setup',
                     CFBundleName='Vauldy MCP Einrichtung', CFBundleDisplayName='Vauldy MCP Einrichtung',
                     CFBundleExecutable='vauldy-mcp-setup', CFBundlePackageType='APPL',
-                    CFBundleShortVersionString='0.8.1', CFBundleVersion='1', LSMinimumSystemVersion='14.0',
+                    CFBundleShortVersionString='0.9.0', CFBundleVersion='1', LSMinimumSystemVersion='14.0',
                     NSHighResolutionCapable=True)
         with (app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(info, f)
         sign = ['codesign', '--force', '--sign', args.identity]

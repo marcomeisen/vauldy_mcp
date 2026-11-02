@@ -37,42 +37,51 @@ public struct LocalDocumentStore: Sendable {
         }
     }
 
-    public func stage(file: URL) async throws -> (document: VaultDocument, duplicate: Bool) {
+    public func stage(file: URL, storage: LocalOriginalStorage = .managedCopy) async throws -> (document: VaultDocument, duplicate: Bool) {
         try await run {
             guard file.isFileURL else { throw LocalImportError.unsupportedFile }
             let ext = file.pathExtension.lowercased()
             guard Self.supportedExtensions.contains(ext) else { throw LocalImportError.unsupportedFile }
-            let scope = file.startAccessingSecurityScopedResource()
-            defer { if scope { file.stopAccessingSecurityScopedResource() } }
-            let data: Data
-            do {
-                let values = try file.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey])
-                guard values.isRegularFile == true else { throw LocalImportError.unreadableFile }
-                guard (values.fileSize ?? 0) <= Self.maximumOriginalBytes else { throw LocalImportError.fileTooLarge }
-                let source = try FileHandle(forReadingFrom: file); defer { try? source.close() }
-                data = try source.read(upToCount: Self.maximumOriginalBytes + 1) ?? Data()
-                guard data.count <= Self.maximumOriginalBytes else { throw LocalImportError.fileTooLarge }
-                guard !data.isEmpty else { throw LocalImportError.invalidDocument }
-            } catch let error as LocalImportError { throw error }
-            catch { throw LocalImportError.unreadableFile }
-            let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+            let reference = storage == .referenced ? try LocalOriginalReference.capture(file, excluding: root) : nil
+            let access = try reference?.open(excluding: root) ?? LocalOriginalAccess(url: file)
+            defer { access.close() }
+            let data = try access.readData(), hash = LocalOriginalAccess.hash(data)
             return try locked {
                 var documents = try read()
-                if let existing = documents.first(where: { $0.localImport?.contentHash == hash }) { return (existing, true) }
+                var changed = false
+                if let reference {
+                    for index in documents.indices {
+                        if let prior = documents[index].localImport?.originalReference,
+                           prior.lastKnownPath == reference.lastKnownPath || prior.identity == reference.identity,
+                           documents[index].localImport?.contentHash != hash {
+                            documents[index].localImport?.originalState = .changed
+                            changed = true
+                        }
+                    }
+                }
+                if let index = documents.firstIndex(where: { $0.localImport?.contentHash == hash }) {
+                    if let reference, documents[index].localImport?.originalReference == nil {
+                        documents[index].localImport?.referenceCandidate = reference; changed = true
+                    }
+                    if changed { try save(documents) }
+                    return (documents[index], true)
+                }
                 guard documents.count < 20_000 else { throw LocalImportError.fileTooLarge }
-                let originals = root.appendingPathComponent("originals", isDirectory: true)
-                try privateDirectory(originals)
-                let original = originals.appendingPathComponent("\(hash).\(ext)")
-                // A previous crash may have left this content-addressed original before the snapshot commit.
-                try refuseSymlink(original)
-                if FileManager.default.fileExists(atPath: original.path) {
-                    guard try Data(contentsOf: original) == data else { throw LocalImportError.damagedStore }
-                } else { try privateWrite(data, to: original) }
+                if reference == nil {
+                    let originals = root.appendingPathComponent("originals", isDirectory: true)
+                    try privateDirectory(originals)
+                    let original = originals.appendingPathComponent("\(hash).\(ext)")
+                    try refuseSymlink(original)
+                    if FileManager.default.fileExists(atPath: original.path) {
+                        guard try Data(contentsOf: original) == data else { throw LocalImportError.damagedStore }
+                    } else { try privateWrite(data, to: original) }
+                } else { try requireReferenceStore() }
                 var document = VaultDocument(title: file.deletingPathExtension().lastPathComponent,
                                              sourceName: file.lastPathComponent, status: "imported")
-                document.localImport = LocalImportMetadata(contentHash: hash, fileExtension: ext)
-                documents.append(document)
-                try save(documents)
+                var metadata = LocalImportMetadata(contentHash: hash, fileExtension: ext)
+                metadata.originalReference = reference; metadata.originalState = .available
+                document.localImport = metadata
+                documents.append(document); try save(documents)
                 return (document, false)
             }
         }
@@ -82,28 +91,23 @@ public struct LocalDocumentStore: Sendable {
         try await run { try locked { try LocalWorkerLease(url: root.appendingPathComponent("ocr.lock")) } }
     }
 
-    func start(_ id: UUID, attempt: UUID) async throws -> URL {
-        try await run {
-            try locked {
-                var documents = try read()
-                guard let index = documents.firstIndex(where: { $0.id == id }),
-                      var metadata = documents[index].localImport else { throw LocalImportError.staleAttempt }
-                let original = try originalURL(metadata)
-                guard FileManager.default.fileExists(atPath: original.path) else { throw LocalImportError.unreadableFile }
-                let source = try FileHandle(forReadingFrom: original)
-                defer { try? source.close() }
-                let bytes = try source.read(upToCount: Self.maximumOriginalBytes + 1) ?? Data()
-                guard bytes.count <= Self.maximumOriginalBytes,
-                      SHA256.hash(data: bytes).map({ String(format: "%02x", $0) }).joined() == metadata.contentHash else {
-                    throw LocalImportError.invalidDocument
-                }
-                metadata.state = .recognizing; metadata.attempt = attempt; metadata.error = nil; metadata.updatedAt = Date()
-                documents[index].localImport = metadata
-                documents[index].status = "ocrRunning"
-                try save(documents)
-                return original
+    func start(_ id: UUID, attempt: UUID) async throws -> LocalOriginalAccess {
+        try await run { try locked {
+            var documents = try read()
+            guard let index = documents.firstIndex(where: { $0.id == id }),
+                  var metadata = documents[index].localImport else { throw LocalImportError.staleAttempt }
+            let access: LocalOriginalAccess
+            do { access = try checkedOriginal(metadata) }
+            catch let error as LocalOriginalError {
+                documents[index].localImport?.originalState = error.state
+                try save(documents); throw error
             }
-        }
+            metadata.state = .recognizing; metadata.attempt = attempt; metadata.error = nil; metadata.updatedAt = Date()
+            metadata.originalState = .available
+            documents[index].localImport = metadata; documents[index].status = "ocrRunning"
+            do { try save(documents) } catch { access.close(); throw error }
+            return access
+        } }
     }
 
     func finish(_ id: UUID, attempt: UUID, result: LocalOCRResult, metrics: LocalImportMetrics? = nil, analysis: DocumentBaseAnalysis? = nil) async throws -> VaultDocument {
@@ -111,6 +115,10 @@ public struct LocalDocumentStore: Sendable {
               result.pages.map(\.info.page) == Array(1...result.pages.count) else { throw LocalImportError.invalidDocument }
         guard result.pages.reduce(0, { $0 + $1.text.utf8.count }) <= 900_000 else { throw LocalImportError.fileTooLarge }
         return try await update(id, attempt: attempt) { document, metadata in
+            if metadata.originalReference != nil {
+                let access = try checkedOriginal(metadata); access.close()
+            }
+            metadata.originalState = .available
             metadata.pages = result.pages.map(\.info)
             metadata.pipelineVersion = 2
             metadata.metrics = metrics
@@ -146,8 +154,9 @@ public struct LocalDocumentStore: Sendable {
         } }
     }
 
-    func fail(_ id: UUID, attempt: UUID, error: LocalImportError) async throws -> VaultDocument {
+    func fail(_ id: UUID, attempt: UUID, error: LocalImportError, originalState: LocalOriginalState? = nil) async throws -> VaultDocument {
         try await update(id, attempt: attempt) { document, metadata in
+            if let originalState { metadata.originalState = originalState }
             metadata.state = error == .cancelled ? .cancelled : .failed
             metadata.error = error
             document.status = error == .cancelled ? "cancelled" : "failed"
@@ -157,8 +166,54 @@ public struct LocalDocumentStore: Sendable {
     public func original(for id: UUID) async throws -> URL {
         try await run { try locked {
             guard let metadata = try read().first(where: { $0.id == id })?.localImport else { throw LocalImportError.unreadableFile }
-            return try originalURL(metadata)
+            guard metadata.originalReference == nil else { throw LocalOriginalError.scopedAccessRequired }
+            return try managedOriginalURL(metadata)
         } }
+    }
+
+    public func openOriginal(for id: UUID) async throws -> LocalOriginalAccess {
+        try await run { try locked {
+            var documents = try read()
+            guard let index = documents.firstIndex(where: { $0.id == id }), let metadata = documents[index].localImport else { throw LocalImportError.unreadableFile }
+            do { return try checkedOriginal(metadata) }
+            catch let error as LocalOriginalError {
+                documents[index].localImport?.originalState = error.state
+                try save(documents); throw error
+            }
+        } }
+    }
+
+    /// Explicit local availability check; stored OCR is retained even when a source disappears.
+    public func checkOriginals() async throws -> [VaultDocument] {
+        try await run { try locked {
+            var documents = try read()
+            var changed = false
+            for index in documents.indices {
+                guard let metadata = documents[index].localImport, metadata.originalReference != nil else { continue }
+                let state: LocalOriginalState
+                do { let access = try checkedOriginal(metadata); access.close(); state = .available }
+                catch let error as LocalOriginalError { state = error.state }
+                catch { state = .unavailable }
+                if state != metadata.originalState { documents[index].localImport?.originalState = state; changed = true }
+            }
+            if changed { try save(documents) }
+            return documents
+        } }
+    }
+
+    func checkedOriginal(_ metadata: LocalImportMetadata) throws -> LocalOriginalAccess {
+        let access: LocalOriginalAccess
+        if let reference = metadata.originalReference { access = try reference.open(excluding: root) }
+        else { access = LocalOriginalAccess(url: try managedOriginalURL(metadata)) }
+        do { try access.verify(hash: metadata.contentHash); return access }
+        catch {
+            access.close()
+            if metadata.originalReference == nil, let sourceError = error as? LocalOriginalError {
+                throw sourceError == .changed ? LocalImportError.invalidDocument : LocalImportError.unreadableFile
+            }
+            if metadata.originalReference != nil, error is LocalImportError { throw LocalOriginalError.changed }
+            throw error
+        }
     }
 
     /// Cancelling a queued job must be visible even if it never acquired the native OCR lease.
@@ -177,12 +232,12 @@ public struct LocalDocumentStore: Sendable {
     }
 
     private func update(_ id: UUID, attempt: UUID,
-                        mutation: @escaping @Sendable (inout VaultDocument, inout LocalImportMetadata) -> Void) async throws -> VaultDocument {
+                        mutation: @escaping @Sendable (inout VaultDocument, inout LocalImportMetadata) throws -> Void) async throws -> VaultDocument {
         try await run { try locked {
             var documents = try read()
             guard let index = documents.firstIndex(where: { $0.id == id }),
                   var metadata = documents[index].localImport, metadata.attempt == attempt else { throw LocalImportError.staleAttempt }
-            mutation(&documents[index], &metadata)
+            try mutation(&documents[index], &metadata)
             metadata.attempt = nil; metadata.updatedAt = Date()
             documents[index].localImport = metadata
             try save(documents)
@@ -190,7 +245,7 @@ public struct LocalDocumentStore: Sendable {
         } }
     }
 
-    private func originalURL(_ metadata: LocalImportMetadata) throws -> URL {
+    func managedOriginalURL(_ metadata: LocalImportMetadata) throws -> URL {
         guard metadata.contentHash.count == 64,
               metadata.contentHash.allSatisfy({ "0123456789abcdef".contains($0) }),
               Self.supportedExtensions.contains(metadata.fileExtension) else { throw LocalImportError.damagedStore }
@@ -201,7 +256,13 @@ public struct LocalDocumentStore: Sendable {
         return url
     }
 
-    private func locked<T>(_ operation: () throws -> T) throws -> T {
+    func requireReferenceStore() throws {
+        let markerURL = root.appendingPathComponent("store.json")
+        var marker = try JSONDecoder().decode(Marker.self, from: Data(contentsOf: markerURL))
+        if marker.version < 2 { marker.version = 2; try privateWrite(JSONEncoder().encode(marker), to: markerURL) }
+    }
+
+    func locked<T>(_ operation: () throws -> T) throws -> T {
         do {
             try privateDirectory(root)
             let markerURL = root.appendingPathComponent("store.json")
@@ -216,7 +277,7 @@ public struct LocalDocumentStore: Sendable {
             try refuseSymlink(markerURL)
             if FileManager.default.fileExists(atPath: markerURL.path) {
                 guard let marker = try? JSONDecoder().decode(Marker.self, from: Data(contentsOf: markerURL)),
-                      marker.kind == "vauldy-local-core", marker.version == 1 else { throw LocalImportError.foreignStore }
+                      marker.kind == "vauldy-local-core", (1...2).contains(marker.version) else { throw LocalImportError.foreignStore }
                 guard FileManager.default.fileExists(atPath: snapshotURL.path) else { throw LocalImportError.damagedStore }
             } else {
                 let entries = try FileManager.default.contentsOfDirectory(atPath: root.path)
@@ -228,10 +289,11 @@ public struct LocalDocumentStore: Sendable {
             try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: root.path)
             return try operation()
         } catch let error as LocalImportError { throw error }
+        catch let error as LocalOriginalError { throw error }
         catch { throw LocalImportError.storageUnavailable }
     }
 
-    private func read() throws -> [VaultDocument] {
+    func read() throws -> [VaultDocument] {
         do {
             try refuseSymlink(snapshotURL)
             let documents = try FileVaultSnapshotSource(fileURL: snapshotURL).loadDocuments()
@@ -239,7 +301,7 @@ public struct LocalDocumentStore: Sendable {
             return documents
         } catch { throw LocalImportError.damagedStore }
     }
-    private func save(_ documents: [VaultDocument]) throws {
+    func save(_ documents: [VaultDocument]) throws {
         // Never overwrite or rotate away an unreadable current snapshot.
         _ = try read()
         let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601; encoder.outputFormatting = [.sortedKeys]
@@ -250,7 +312,7 @@ public struct LocalDocumentStore: Sendable {
         try privateWrite(Data(contentsOf: snapshotURL), to: backup)
         try privateWrite(data, to: snapshotURL)
     }
-    private func privateWrite(_ data: Data, to url: URL) throws {
+    func privateWrite(_ data: Data, to url: URL) throws {
         try refuseSymlink(url)
         try data.write(to: url, options: [.atomic])
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
@@ -261,10 +323,10 @@ public struct LocalDocumentStore: Sendable {
         guard try url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory == true else { throw LocalImportError.storageUnavailable }
         // Only the dedicated store directory is touched; no parent permissions are changed.
     }
-    private func refuseSymlink(_ url: URL) throws {
+    func refuseSymlink(_ url: URL) throws {
         if (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) == true { throw LocalImportError.storageUnavailable }
     }
-    private func run<T: Sendable>(_ work: @escaping @Sendable () throws -> T) async throws -> T {
+    func run<T: Sendable>(_ work: @escaping @Sendable () throws -> T) async throws -> T {
         try await withCheckedThrowingContinuation { continuation in
             Self.io.async { continuation.resume(with: Result { try work() }) }
         }

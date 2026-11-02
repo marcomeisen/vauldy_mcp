@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.8.1)
+# Vauldy MCP einrichten (macOS, Version 0.9.0)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -8,7 +8,7 @@ Assistenten oder `vauldy-local`; die MCP-Schnittstelle bleibt ausschließlich le
 
 1. `Vauldy-MCP-macOS.zip` entpacken und `Vauldy MCP Einrichtung.app` nach Programme verschieben.
 2. In **Übersicht** „Chatbot verbinden“ wählen. Der Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**.
-3. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Originale werden lokal kopiert; Import allein erteilt keine Freigabe.
+3. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Einzelimporte werden lokal kopiert, Ordnerimporte referenzieren die Originaldateien; Import allein erteilt keine Freigabe.
 4. Die lesbaren Dokumente einzeln auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
 5. „Freigeben und einrichten“ installiert die lokalen Programme und legt bei ChatGPT oder Claude einen passenden Client-Eintrag an. Bestehende fremde Einträge werden nicht ersetzt; Konflikte bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
 6. Der echte lokale Protokolltest prüft Handshake und Freigabestatus, ohne Dokumentinhalte zu lesen. Er bestätigt noch keine Nutzung aus dem Chatbot. Aktiviere Vauldy im Chatbot und starte dessen Verbindung bei Bedarf neu.
@@ -199,7 +199,7 @@ Unter `~/Library/Application Support/VauldyMCP/` liegen:
 
 - `vault/store.json`: Kennzeichnung des eigenständigen Bestands;
 - `vault/documents.json` und `documents.backup.json`: atomarer Such-/OCR-Bestand und letzter gültiger Vorzustand;
-- `vault/originals/`: inhaltsadressierte Originalkopien, keine Originalbytes im JSON;
+- `vault/originals/`: inhaltsadressierte Kopien von Einzelimporten und noch nicht migrierten Altimporten; keine zusätzlichen Kopien neuer Ordnerimporte;
 - `vault/ocr-cache/`: begrenzte, versionsgebundene Seiten-Ergebnisse; keine neuen Freigaben;
 - `vault/worker/`: private Auftragswarteschlange, Fortschritt und kurzzeitig aufbewahrte Ergebnisse;
 - `vault/writer.lock` und `ocr.lock`: Prozesssperren gegen verlorene Schreibzugriffe und parallele OCR im selben Bestand;
@@ -349,13 +349,14 @@ zu starten. Diese lokalen Verwaltungsbefehle verändern keine MCP-Dokumentfreiga
 
 Im Assistenten unter **Ordner → „Ordner hinzufügen …“** einen oder mehrere Ordner
 wählen. „Unterordner … einbeziehen“ gilt für neu hinzugefügte Ordner; standardmäßig wird nur die
-oberste Ebene gelesen. Vorhandene und später hinzugefügte PDFs und Bilder werden lokal kopiert und
-durch denselben OCR-Worker verarbeitet. Neue Dokumente erscheinen in der Dokumentauswahl und müssen
+oberste Ebene gelesen. Vorhandene und später hinzugefügte PDFs und Bilder werden über dauerhafte,
+schreibgeschützte Dateiverweise durch denselben OCR-Worker verarbeitet. Neue Dokumente erscheinen in der Dokumentauswahl und müssen
 weiterhin ausdrücklich pro MCP-Verbindung freigegeben werden. Keine automatische Chatbot-Freigabe.
 
 Die Liste bleibt im eigenen Bestand unter `vault/watched-folders.json` gespeichert. Jeder Ordner
 lässt sich pausieren, fortsetzen oder entfernen. Entfernen oder Löschen einer Quelldatei löscht keine
-bereits importierten Originale. Geänderte Dateiinhalte erzeugen einen neuen Datensatz; identische
+gespeicherten Dokumenteinträge oder deren OCR. Ohne erreichbares Original sind Vorschau und erneute
+OCR nicht möglich. Geänderte Dateiinhalte erzeugen einen neuen Datensatz; identische
 Bytes werden auch über mehrere Ordner hinweg per SHA-256 dedupliziert. Fehlgeschlagene oder teilweise
 erkannte Originale werden nicht endlos neu erkannt; dafür „Text erneut lesen“ verwenden.
 
@@ -439,3 +440,45 @@ Der Lauf umfasst Swift, Paket, echten stdio-Verkehr, 25 textbasierte und acht Ra
 Import, Audit, Clientregistrierung, Verwaltung, Menüleiste, Ordnerüberwachung, lokalen
 Tunnel-Launcher-Stub, OCR-Qualität/Cache und die P0-/LVM-Prüfungen. Er installiert keine
 produktive Verbindung und aktualisiert Qualitätsberichte nur mit `--update-reports`.
+
+
+## Originalverweise und bestehende Kopien (ab 0.9.0)
+
+**Ordner → „Ordner einmal importieren …“** importiert ohne dauerhafte Überwachung. Für beide
+Ordnerimportwege bleiben Dateien an ihrem ursprünglichen Ort. Vauldy speichert private
+Security-Scoped Bookmarks und Metadaten, OCR, Basisanalyse und begrenzte OCR-Checkpoints.
+Einzeldateiimporte, etwa aus temporären Übergaben, behalten weiterhin eine eigene Originalkopie.
+Es werden weder Originalbytes noch Berechtigungen oder Änderungsdaten der Quellen verändert.
+
+**„Originalzugriff prüfen“** prüft gespeicherte Verweise und Hashes. Vorschau und OCR prüfen den
+Inhalt ebenfalls. Die Zustände geben den zuletzt geprüften Zugriff wieder, keine permanente
+Überwachung aller Dateizugriffsrechte. Fehlende Quellen behalten ihren Dokumenteintrag und Text.
+Geänderte Quellen kennzeichnen den alten Text als historisch und die Basisanalyse als veraltet;
+die neue Fassung separat importieren und ausdrücklich freigeben. Verweise können nach einem
+Verschieben vom Betriebssystem aufgelöst werden; dies ist für fremde Volumes und Dateianbieter
+nicht garantiert. Es gibt keinen stillen Rückfall auf einen gespeicherten Klartextpfad.
+
+Für Altimporte **„Bestehende Kopien prüfen …“** wählen und die ursprünglichen Quellordner angeben.
+Die Vorschau verändert keine Dokumente. Nur vollständig bytegleiche Kopien mit unabhängig erneut
+geöffnetem Original werden zur Umstellung angeboten. Beim Bestätigen werden Datensatz, Zugriff,
+Hash und vollständiger Inhalt erneut geprüft. Zuerst werden Hauptsnapshot und Sicherung auf den
+Originalverweis umgestellt und synchronisiert, danach wird ausschließlich die eigene verwaltete
+Kopie entfernt. Originaldateien bleiben unverändert. Fehlende, abweichende, verlinkte, gleichzeitig
+veränderte oder aktiv verarbeitete Dateien bleiben erhalten; ein laufender OCR-Prozess sperrt die
+Migration. Nach Abbruch zwischen Metadatenumstellung und Kopienentfernung ist die Prüfung wiederholbar.
+IDs, Text, Basisanalyse und Dokumentfreigaben bleiben bei erfolgreicher Migration erhalten.
+Es gibt keine automatische produktive Migration und keine Löschung über MCP.
+
+```sh
+vauldy-local import-folder --store /pfad/zum/vault /pfad/zur/quelle --recursive
+vauldy-local check-originals --store /pfad/zum/vault
+vauldy-local originals-preview --store /pfad/zum/vault /pfad/zur/quelle
+vauldy-local originals-migrate --store /pfad/zum/vault /pfad/zur/quelle
+```
+
+Die CLI-Migration prüft rekursiv. Sie gibt nur lokale Verwaltungsberichte aus. Pfade, Bookmarks
+und Dateiidentitäten werden niemals als MCP-Dokumentmetadaten ausgegeben. Der lokale Storemarker
+wird vor dem ersten aktiven Originalverweis auf Formatversion 2 angehoben. Ältere Programme dürfen
+diesen Bestand nicht mehr schreiben; nach Softwareaktualisierung alte Worker kontrolliert beenden
+und neu starten. Ein Downgrade auf Programme ohne Verweisunterstützung ist für diesen Bestand
+nicht vorgesehen.

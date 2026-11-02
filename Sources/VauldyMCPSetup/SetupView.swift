@@ -51,6 +51,15 @@ struct SetupView: View {
             }
         }
         .quickLookPreview($model.previewURL)
+        .onChange(of: model.previewURL) { _, url in
+            if url == nil { model.previewAccess?.close(); model.previewAccess = nil }
+        }
+        .confirmationDialog("Geprüfte Kopien durch Originalverweise ersetzen?", isPresented: $model.showingOriginalMigration, titleVisibility: .visible) {
+            Button("Geprüfte Kopien entfernen", role: .destructive) { model.applyOriginalMigration() }
+            Button("Abbrechen", role: .cancel) { model.originalMigration = nil }
+        } message: {
+            Text("\(model.originalMigration?.report.eligibleDocuments ?? 0) Kopien stimmen vollständig mit erreichbaren Originalen überein. Vor dem Entfernen werden Zugriff und Inhalt erneut geprüft. Originaldateien bleiben unverändert; nicht geprüfte Kopien bleiben erhalten.")
+        }
     }
 
     private var header: some View {

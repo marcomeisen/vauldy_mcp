@@ -15,11 +15,12 @@ extension VaultDocument {
         }
     }
     public var baseAnalysisStatus: String {
+        if localImport?.originalState == .changed { return "stale" }
         guard baseAnalysis != nil else { return "not-analyzed" }
         return currentBaseAnalysis?.status.rawValue ?? "stale"
     }
     public var currentBaseAnalysis: DocumentBaseAnalysis? {
-        guard let analysis = baseAnalysis, analysis.version == 1, baseAnalysisSourceHash == analysisFingerprint else { return nil }
+        guard localImport?.originalState != .changed, let analysis = baseAnalysis, analysis.version == 1, baseAnalysisSourceHash == analysisFingerprint else { return nil }
         if analysis.status == .failed || analysis.status == .unavailable { return analysis }
         return BaseAnalysisPipeline.finalize(analysis.documents, pages: baseAnalysisPages)
     }
