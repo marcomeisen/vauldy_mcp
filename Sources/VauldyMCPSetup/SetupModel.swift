@@ -19,6 +19,7 @@ final class SetupModel: ObservableObject {
     @Published var showingSetup = false
     @Published var setupStep = 0
     @Published var resumeCandidate: MCPAccessProfile?
+    @Published var removalCandidate: MCPAccessProfile?
     @Published var diagnosisProfile: MCPAccessProfile?
     @Published var probeResults: [UUID: MCPLocalProbeResult] = [:]
     @Published var probeErrors: [UUID: String] = [:]
@@ -235,11 +236,11 @@ final class SetupModel: ObservableObject {
                         else if folder { outcomes = try await service.importFolder(urls[index], recursive: watchRecursive, progress: updates) }
                         else { outcomes = [try await service.importFile(urls[index], progress: updates)] }
                         for outcome in outcomes {
-                        if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
-                        if outcome.reusedOriginal { reused += 1 }
-                        if outcome.state == .completed { completed += 1 }
-                        else if outcome.state == .partial { review += 1 }
-                        else { failed += 1 }
+                            if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
+                            if outcome.reusedOriginal { reused += 1 }
+                            if outcome.state == .completed { completed += 1 }
+                            else if outcome.state == .partial { review += 1 }
+                            else { failed += 1 }
                         }
                     } catch is CancellationError { throw CancellationError() }
                     catch {

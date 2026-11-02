@@ -48,7 +48,11 @@ struct MCPSourceState {
             } else { complete = sections.allSatisfy { !$0.text.isEmpty } }
         }
         if document.localImport?.originalState == .changed || document.localImport?.originalState == .unavailable { complete = false }
-        sourceCoverage = document.localImport?.originalState == .changed ? "original-changed-stored-ocr-is-historical" : complete ? (document.localImport == nil ? "all-declared-pages-have-ocr-text" : "all-declared-pages-processed") : "incomplete-or-unknown"
+        switch document.localImport?.originalState {
+        case .changed: sourceCoverage = "original-changed-stored-ocr-is-historical"
+        case .unavailable: sourceCoverage = "original-unavailable-stored-ocr-retained"
+        default: sourceCoverage = complete ? (document.localImport == nil ? "all-declared-pages-have-ocr-text" : "all-declared-pages-processed") : "incomplete-or-unknown"
+        }
         if let info = document.localImport {
             switch info.state {
             case .queued, .recognizing: processingStatus = "pending"

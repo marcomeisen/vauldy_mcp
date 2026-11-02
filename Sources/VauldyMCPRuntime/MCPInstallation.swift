@@ -12,7 +12,10 @@ public struct MCPInstallation: Sendable {
     public func profileURL(_ id: UUID) -> URL { connectionsURL.appendingPathComponent(id.uuidString).appendingPathComponent("profile.json") }
     public func configurationURL(_ id: UUID) -> URL { connectionsURL.appendingPathComponent(id.uuidString).appendingPathComponent("mcp-config.json") }
 
+    public var removedConnectionsURL: URL { root.appendingPathComponent("removed-connections", isDirectory: true) }
+
     public func install(binary: URL, profile: MCPAccessProfile, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws -> URL {
+        guard !FileManager.default.fileExists(atPath: removedConnectionsURL.appendingPathComponent(profile.connectionID.uuidString).path) else { throw MCPAccessError.stale }
         try profile.validate()
         guard binary.isFileURL, FileManager.default.isExecutableFile(atPath: binary.path) else { throw MCPAccessError.configuration }
         try updateSoftware(binary: binary, localCLI: localCLI, statusApp: statusApp, setupApp: setupApp)
@@ -95,6 +98,7 @@ public struct MCPInstallation: Sendable {
         guard FileManager.default.fileExists(atPath: connectionsURL.path) else { return [] }
         return try FileManager.default.contentsOfDirectory(at: connectionsURL, includingPropertiesForKeys: nil)
             .filter { UUID(uuidString: $0.lastPathComponent) != nil }
+            .filter { !MCPRemovalState.isRemoved(profileURL: $0.appendingPathComponent("profile.json")) }
             .map { try FileMCPProfileSource(url: $0.appendingPathComponent("profile.json")).load() }
     }
 

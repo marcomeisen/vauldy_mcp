@@ -305,7 +305,8 @@ public actor ReadOnlyMCPRuntime {
         let metadata = document.currentBaseAnalysis?.documents.flatMap { card in
             [card.title] + card.fields.flatMap { [$0.value, $0.quote] }
         } ?? []
-        let contents = [document.title, document.sourceName, document.ocrText, document.summary] + metadata + metadataNames
+        let sourceSections = VaultPageMarkedText.sections(in: document.ocrText).map(\.text)
+        let contents = [document.title, document.sourceName, document.summary] + sourceSections + metadata + metadataNames
             + document.entities.map { "\($0.type): \($0.value)\n\($0.sourceSnippet)" } + entityNames
             + document.contentFacts.map { "\($0.label): \($0.value)\n\($0.sourceSnippet)" }
             + document.deadlines.map { "\($0.title)\n\($0.sourceSnippet)" }

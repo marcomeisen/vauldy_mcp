@@ -2,7 +2,7 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.9.0" }
+public enum MCPBuild { public static let version = "0.9.1" }
 
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
     case overview, connections, documents, folders, settings
@@ -82,6 +82,38 @@ extension MCPInstallation {
             // Preserve paused access when a selection is saved, including an expanded selection.
             try value.validate()
         }
+    }
+
+    /// Remove active access, retaining the disabled connection history locally.
+    /// Neither the vault nor client configuration is owned by this operation.
+    @discardableResult
+    public func removeConnection(_ id: UUID, expectedRevision: UUID) throws -> URL {
+        let path = profileURL(id), directory = path.deletingLastPathComponent()
+        let archive = removedConnectionsURL.appendingPathComponent(id.uuidString, isDirectory: true)
+        for url in [root, connectionsURL, directory, removedConnectionsURL, archive] {
+            guard (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) != true else { throw MCPAccessError.configuration }
+        }
+        if FileManager.default.fileExists(atPath: archive.path) {
+            let old = try FileMCPProfileSource(url: archive.appendingPathComponent("profile.json")).load()
+            guard old.connectionID == id, !old.enabled else { throw MCPAccessError.configuration }
+            return archive
+        }
+        let lock = try MCPManagementLock(directory.appendingPathComponent("profile-update.lock"))
+        defer { lock.release() }
+        let source = FileMCPProfileSource(url: path)
+        var profile = try source.load()
+        guard profile.revision == expectedRevision, profile.connectionID == id else { throw MCPAccessError.stale }
+        let vault = URL(fileURLWithPath: profile.vaultPath).resolvingSymlinksInPath().path
+        let ownedDirectory = directory.resolvingSymlinksInPath().path
+        guard vault != ownedDirectory, !vault.hasPrefix(ownedDirectory + "/") else { throw MCPAccessError.configuration }
+        guard (try? removedConnectionsURL.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) != true else { throw MCPAccessError.configuration }
+        try FileManager.default.createDirectory(at: removedConnectionsURL, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        guard !FileManager.default.fileExists(atPath: archive.path) else { throw MCPAccessError.stale }
+        profile.enabled = false; profile.revision = UUID()
+        try source.save(profile)
+        try MCPAuditLog(profileURL: path).append(.profileRemoved, count: 0, revision: profile.revision)
+        try FileManager.default.moveItem(at: directory, to: archive)
+        return archive
     }
 
     private func changeProfile(_ id: UUID, expectedRevision: UUID?, mutation: (inout MCPAccessProfile) throws -> Void) throws -> MCPAccessProfile {

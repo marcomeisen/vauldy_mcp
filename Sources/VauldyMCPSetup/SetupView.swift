@@ -50,6 +50,16 @@ struct SetupView: View {
                 Text("\(profile.connectionName) darf wieder auf \(SetupText.documents(profile.allowedDocumentIDs.count)) zugreifen. Empfänger und gespeicherte Auswahl bleiben unverändert; neue Importe werden nicht freigegeben.")
             }
         }
+        .alert("Verbindung löschen?", isPresented: Binding(get: { model.removalCandidate != nil }, set: { if !$0 { model.removalCandidate = nil } })) {
+            if let profile = model.removalCandidate {
+                Button("Verbindung löschen", role: .destructive) { model.removeConnection(profile); model.removalCandidate = nil }
+            }
+            Button("Abbrechen", role: .cancel) { model.removalCandidate = nil }
+        } message: {
+            if let profile = model.removalCandidate {
+                Text("„\(profile.connectionName)“ wird entfernt und ihr Dokumentzugriff gesperrt. Ein passender Client-Eintrag wird entfernt. Deine Dokumente bleiben erhalten; der deaktivierte Verbindungsverlauf bleibt lokal archiviert.")
+            }
+        }
         .quickLookPreview($model.previewURL)
         .onChange(of: model.previewURL) { _, url in
             if url == nil { model.previewAccess?.close(); model.previewAccess = nil }
@@ -173,7 +183,12 @@ struct SetupConnectionCard: View {
                 Button("Dokumente bearbeiten") { model.edit(profile) }
                 Button("Verbindung prüfen") { model.checkConnection(profile) }
             }
-            Label("Neue Dokumente werden nie automatisch für diesen Chatbot freigegeben.", systemImage: "lock").font(.caption).foregroundStyle(.secondary)
+            HStack(alignment: .top) {
+                Label("Neue Dokumente werden nie automatisch für diesen Chatbot freigegeben.", systemImage: "lock").font(.caption).foregroundStyle(.secondary)
+                Spacer()
+                Button("Verbindung löschen", role: .destructive) { model.removalCandidate = profile }
+                    .disabled(model.busy || model.accessChanges.contains(profile.connectionID))
+            }
         }.padding(22).frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
             .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))

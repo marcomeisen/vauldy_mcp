@@ -91,7 +91,7 @@ def main():
         root = Path(temp); doc_id = str(uuid.uuid4())
         vault = root / 'documents.json'; profile_file = root / 'profile.json'
         document = dict(id=doc_id, title='Rechnung Erika Musterfrau', sourceName='secret-file.pdf', status='indexed',
-                        pageCount=1, ocrText='--- Seite 1 ---\nFahrradwartung 49,99 EUR.\nName: Erika Musterfrau\nE-Mail: erika@example.com\nIBAN: DE89370400440532013000')
+                        pageCount=1, ocrText='--- Seite 1 ---\nFahrradwartung 49,99 EUR.\nName: Erika Musterfrau\nE-Mail: erika@example.com\nIBAN: DE89370400440532013000\n12345 Testort Dr: eine lange vertrauliche Zusatzangabe.\nName: Dr: eine lange vertrauliche Zusatzangabe.')
         vault.write_text(json.dumps([document]))
         before = hashlib.sha256(vault.read_bytes()).hexdigest()
         profile = dict(version=1, revision=str(uuid.uuid4()), connectionID=str(uuid.uuid4()), connectionName='Wire test',

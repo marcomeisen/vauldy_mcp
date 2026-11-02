@@ -50,3 +50,15 @@ OCR-/Writer-Sperre, unabhängig wiedergeöffnete Quelle, persistierte und synchr
 Backupsnapshots mit Verweis, abschließender Bytevergleich. Nur eigene reguläre Kopien entfernen;
 Quellen und nicht verifizierte Kopien unverändert lassen. Storeformat 2 verhindert alte Writer.
 `LocalOriginalReferenceTests` und `original_reference_smoke_test.py` sind zusätzliche Regressionen.
+
+## Verbindungen und Privacy ab 0.9.1
+
+Entfernen widerruft zuerst Zugriff, archiviert die deaktivierte Verbindung und entfernt nur den
+exakt passenden Client-Eintrag. Alte Prozesse/Handles und wiederangelegte Auditordner dürfen keine
+Verbindung reaktivieren. Archive sind Sperrmarken; Originale, Bestand und andere Freigaben erhalten.
+Client-TOML mit echtem Parser in privatem Staging validieren, fremde Originalbytes erhalten.
+
+Pseudonymisierung arbeitet auf ursprünglichen Quellkoordinaten ohne numerische Zwischentokens.
+Überlappende Restkennungen begrenzt im gemeinsamen Kontext vervollständigen; Ausgabe zuletzt immer
+validieren und andernfalls sperren. Physische Textabschnitte gehören in denselben Privacy-Kontext.
+Währungs-/Protokollkürzel nur im NER ausschließen, nie explizite persönliche Kennungsregeln umgehen.

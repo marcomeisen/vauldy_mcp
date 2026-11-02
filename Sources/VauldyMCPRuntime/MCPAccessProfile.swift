@@ -54,6 +54,7 @@ public struct FileMCPProfileSource: MCPProfileSource {
     public let url: URL
     public init(url: URL) { self.url = url }
     public func load() throws -> MCPAccessProfile {
+        guard !MCPRemovalState.isRemoved(profileURL: url) else { throw MCPAccessError.notAuthorized }
         do {
             guard (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) != true else { throw MCPAccessError.configuration }
             let handle = try FileHandle(forReadingFrom: url)
@@ -68,6 +69,7 @@ public struct FileMCPProfileSource: MCPProfileSource {
     }
 
     public func save(_ value: MCPAccessProfile) throws {
+        guard !MCPRemovalState.isRemoved(profileURL: url) else { throw MCPAccessError.notAuthorized }
         try value.validate()
         let directory = url.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true,

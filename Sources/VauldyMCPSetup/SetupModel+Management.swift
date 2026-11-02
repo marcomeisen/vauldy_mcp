@@ -193,6 +193,33 @@ extension SetupModel {
         }
     }
 
+    func removeConnection(_ profile: MCPAccessProfile) {
+        guard !busy, !accessChanges.contains(profile.connectionID) else { return }
+        accessChanges.insert(profile.connectionID)
+        let installer = installation, registrar = registration
+        Task {
+            defer { accessChanges.remove(profile.connectionID) }
+            do {
+                let clientCleanupIncomplete = try await Task.detached {
+                    try installer.removeConnection(profile.connectionID, expectedRevision: profile.revision)
+                    var incomplete = false
+                    for client in MCPDesktopClient.allCases {
+                        do { _ = try registrar.unregister(client, binary: installer.binaryURL, profile: installer.profileURL(profile.connectionID)) }
+                        catch { incomplete = true }
+                    }
+                    return incomplete
+                }.value
+                if editing?.connectionID == profile.connectionID { editing = nil; selected = []; acknowledged = false }
+                probeResults.removeValue(forKey: profile.connectionID); probeErrors.removeValue(forKey: profile.connectionID)
+                bindings.removeValue(forKey: profile.connectionID); resolvedClients.removeValue(forKey: profile.connectionID)
+                message = "Verbindung gelöscht und Zugriff gesperrt. Deine Dokumente bleiben erhalten."
+                if clientCleanupIncomplete { message += " Ein Client-Eintrag konnte nicht automatisch entfernt werden. Bitte im Chatbot prüfen." }
+                failure = clientCleanupIncomplete
+            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht entfernt werden. Bitte neu laden.") }
+            await refreshManagement()
+        }
+    }
+
     func saveSelection() {
         guard !busy, let profile = editing else { return }
         busy = true

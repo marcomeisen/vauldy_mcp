@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.9.0)
+# Vauldy MCP einrichten (macOS, Version 0.9.1)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -482,3 +482,26 @@ wird vor dem ersten aktiven Originalverweis auf Formatversion 2 angehoben. Älte
 diesen Bestand nicht mehr schreiben; nach Softwareaktualisierung alte Worker kontrolliert beenden
 und neu starten. Ein Downgrade auf Programme ohne Verweisunterstützung ist für diesen Bestand
 nicht vorgesehen.
+
+
+## Bestehende Verbindung löschen (0.9.1)
+
+Unter **Verbindungen → „Verbindung löschen“** die konkrete Verbindung bestätigen. Vauldy
+sperrt zuerst deren Zugriff und entfernt sie aus der aktiven Liste. Ein exakt zu dieser
+Verbindung gehörender ChatGPT-/Claude-Eintrag wird entfernt; fremde oder anders gebundene
+Einträge bleiben erhalten. Schlägt die Clientbereinigung fehl, bleibt der Vauldy-Zugriff
+bereits gesperrt und die Oberfläche fordert zur manuellen Prüfung auf.
+
+Deine Dokumente und andere Verbindungen bleiben erhalten. Deaktiviertes Profil, Konfiguration
+und Auditverlauf liegen lokal unter `removed-connections/<ID>/`. Diese Ablage ist eine
+Sperrmarke gegen versehentliche Wiederbelebung durch alte Prozesse; sie ist keine aktive
+Verbindung. Ein alter Server verliert seinen Zugriff auch mit zuvor ausgegebenen Handles.
+Bereits an den Chatbot übergebene Inhalte werden dadurch nicht aus dessen Verlauf gelöscht.
+
+Die Dokumentlisten verwenden weiterhin die Datenschutzprüfung vor jeder Ausgabe. Überlappende
+Erkennungen werden im gemeinsamen Dokumentkontext vervollständigt; unbekannte ausgehende
+Kennungen stoppen die Ausgabe weiterhin. Währungskürzel wie EUR werden bei der heuristischen
+Namenserkennung erhalten, ausdrücklich beschriftete persönliche Angaben bleiben geschützt.
+Nach Softwareaktualisierung die Vauldy-MCP-Verbindung im Chatbot neu starten, damit ein bereits
+laufender Prozess die neue Version verwendet. Ein erfolgreicher lokaler Statusaufruf allein
+bestätigt noch keine vollständige Dokumentliste.

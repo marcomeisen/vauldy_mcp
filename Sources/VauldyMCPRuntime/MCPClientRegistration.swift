@@ -103,6 +103,87 @@ public struct MCPClientRegistration: Sendable {
         return true
     }
 
+    /// Remove only this exact generated connection, even after its grant was removed.
+    /// Other server entries and source profiles are never changed.
+    @discardableResult
+    public func unregister(_ client: MCPDesktopClient, binary: URL, profile: URL) throws -> Bool {
+        let destination = configurationURL(for: client)
+        guard let before = try readConfiguration(destination) else { return false }
+        let lock = destination.deletingLastPathComponent().appendingPathComponent(".vauldy-registration.lock")
+        let fd = Darwin.open(lock.path, O_CREAT | O_RDWR | O_NOFOLLOW | O_CLOEXEC, S_IRUSR | S_IWUSR)
+        guard fd >= 0 else { throw MCPRegistrationError.invalidConfiguration }
+        defer { flock(fd, LOCK_UN); Darwin.close(fd) }
+        guard flock(fd, LOCK_EX | LOCK_NB) == 0 else { throw MCPRegistrationError.changed }
+        guard try readConfiguration(destination) == before else { throw MCPRegistrationError.changed }
+        let args = ["--profile", profile.path]
+        let after: Data
+        switch client {
+        case .claude:
+            guard var object = try JSONSerialization.jsonObject(with: before) as? [String: Any] else { throw MCPRegistrationError.invalidConfiguration }
+            guard let rawServers = object["mcpServers"] else { return false }
+            guard var servers = rawServers as? [String: Any] else { throw MCPRegistrationError.invalidConfiguration }
+            guard let entry = servers["vauldy"] as? [String: Any], entry["command"] as? String == binary.path,
+                  entry["args"] as? [String] == args else { return false }
+            servers.removeValue(forKey: "vauldy"); object["mcpServers"] = servers
+            after = try JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
+        case .chatgpt:
+            guard let data = try removingChatGPT(before, command: binary.path, args: args) else { return false }
+            after = data
+        }
+        guard try readConfiguration(destination) == before else { throw MCPRegistrationError.changed }
+        let backup = destination.deletingLastPathComponent().appendingPathComponent(destination.lastPathComponent + ".vauldy-backup-" + UUID().uuidString)
+        try privateWrite(before, to: backup)
+        guard try readConfiguration(destination) == before else { throw MCPRegistrationError.changed }
+        try privateWrite(after, to: destination)
+        return true
+    }
+
+    private func removingChatGPT(_ before: Data, command: String, args: [String]) throws -> Data? {
+        guard let chatGPTCLI else { throw MCPRegistrationError.clientMissing }
+        guard var text = String(data: before, encoding: .utf8) else { throw MCPRegistrationError.invalidConfiguration }
+        let stage = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-unregister-\(UUID())").resolvingSymlinksInPath()
+        try FileManager.default.createDirectory(at: stage, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        defer { try? FileManager.default.removeItem(at: stage) }
+        let config = stage.appendingPathComponent("config.toml")
+        try privateWrite(before, to: config)
+        let entries = try clientEntries(cli: chatGPTCLI, stage: stage)
+        guard let entry = entries.first(where: { $0["name"] as? String == "vauldy" }),
+              let transport = entry["transport"] as? [String: Any], transport["type"] as? String == "stdio",
+              transport["command"] as? String == command, transport["args"] as? [String] == args else { return nil }
+        let regex = try NSRegularExpression(pattern: #"(?m)^[\t ]*(\[\[?[^\r\n]+?\]\]?)[\t ]*(?:#[^\r\n]*)?(?:\r?\n|$)"#)
+        let headers = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
+        func header(_ match: NSTextCheckingResult) -> String {
+            guard let range = Range(match.range(at: 1), in: text) else { return "" }
+            let value = String(text[range])
+            let width = value.hasPrefix("[[") ? 2 : 1
+            return String(value.dropFirst(width).dropLast(width)).trimmingCharacters(in: .whitespaces)
+        }
+        guard let start = headers.firstIndex(where: { header($0) == "mcp_servers.vauldy" }) else { throw MCPRegistrationError.conflict }
+        let end = headers.dropFirst(start + 1).first { !header($0).hasPrefix("mcp_servers.vauldy.") }?.range.location ?? text.utf16.count
+        let range = NSRange(location: headers[start].range.location, length: end - headers[start].range.location)
+        guard let swiftRange = Range(range, in: text) else { throw MCPRegistrationError.invalidConfiguration }
+        let body = String(text[swiftRange])
+        guard !body.contains(String(repeating: String(UnicodeScalar(34)!), count: 3)), !body.contains(String(repeating: "'", count: 3)) else { throw MCPRegistrationError.conflict }
+        // Keep separator whitespace belonging to the following table byte-for-byte.
+        var deletion = body
+        while deletion.hasSuffix("\n") {
+            let withoutNewline = deletion.dropLast()
+            let lineStart = withoutNewline.lastIndex(of: "\n").map { withoutNewline.index(after: $0) } ?? withoutNewline.startIndex
+            let line = withoutNewline[lineStart...].trimmingCharacters(in: .whitespaces)
+            guard line.isEmpty || line.hasPrefix("#") else { break }
+            deletion = String(deletion[..<lineStart])
+        }
+        guard let deletionRange = Range(NSRange(location: range.location, length: deletion.utf16.count), in: text) else { throw MCPRegistrationError.invalidConfiguration }
+        text.removeSubrange(deletionRange)
+        let data = Data(text.utf8); try privateWrite(data, to: config)
+        let verified = try clientEntries(cli: chatGPTCLI, stage: stage)
+        func canonical(_ entries: [[String: Any]]) throws -> Data {
+            try JSONSerialization.data(withJSONObject: entries.filter { $0["name"] as? String != "vauldy" }.sorted { ($0["name"] as? String ?? "") < ($1["name"] as? String ?? "") }, options: .sortedKeys)
+        }
+        guard !verified.contains(where: { $0["name"] as? String == "vauldy" }), try canonical(entries) == canonical(verified) else { throw MCPRegistrationError.processFailed }
+        return data
+    }
+
     private func claudeConfiguration(_ data: Data?, command: String, args: [String]) throws -> Data? {
         var object: [String: Any]
         if let data {

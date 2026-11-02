@@ -148,6 +148,23 @@ struct MCPPrivacyBoundaryTests {
         }
     }
 
+    @Test func completeListingAndReadingSurviveOverlappingIdentifierContexts() async throws {
+        var document = sample()
+        document.ocrText = "--- Seite 1 ---\nRechnung Wartung 49,99 EUR.\n12345 Testort Dr: eine lange vertrauliche Zusatzangabe.\nName: Dr: eine lange vertrauliche Zusatzangabe.\n--- Seite 2 ---\nDie Wartung wurde abgeschlossen."
+        document.pageCount = 2
+        try await fixture(document) { f in
+            let before = try Data(contentsOf: f.vaultURL)
+            let list = try await f.runtime.list(pageSize: 1)
+            #expect(list.totalCount == 1 && list.retrievalComplete)
+            let handle = try #require(list.items.first?.document)
+            let read = try await f.runtime.read(document: handle)
+            let json = try encoded(read)
+            #expect(!json.contains("12345") && !json.contains("Testort"))
+            #expect(json.contains("49,99 EUR"))
+            #expect(try Data(contentsOf: f.vaultURL) == before)
+        }
+    }
+
     @Test func originalsAndArchiveBytesAreNeverModified() async throws {
         try await fixture { f in
             let before = try Data(contentsOf: f.vaultURL)

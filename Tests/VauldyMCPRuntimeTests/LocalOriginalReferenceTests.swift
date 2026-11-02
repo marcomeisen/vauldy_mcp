@@ -153,6 +153,10 @@ struct LocalOriginalReferenceTests {
             let fresh = try #require(try await runtime.search(query: "Fahrradwartung").hits.first)
             let historical = try await runtime.read(document: fresh.document)
             #expect(historical.sourceCoverage == "original-changed-stored-ocr-is-historical")
+            try FileManager.default.removeItem(at: file)
+            _ = try await store.checkOriginals()
+            let missingHit = try #require(try await runtime.search(query: "Fahrradwartung").hits.first)
+            #expect(try await runtime.read(document: missingHit.document).sourceCoverage == "original-unavailable-stored-ocr-retained")
         }
     }
 }

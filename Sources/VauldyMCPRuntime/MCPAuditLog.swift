@@ -7,7 +7,7 @@ import Foundation
 public struct MCPAuditLog: Sendable {
     public enum Event: String, Codable, Sendable {
         case serverStarted, serverStopped, toolsListed, requestStarted, responsePrepared, requestFailed
-        case profileSaved, profilePaused, clientRegistered
+        case profileSaved, profilePaused, profileRemoved, clientRegistered
     }
     public enum Operation: String, Codable, Sendable {
         case status, search, list, read, unknown, chatgpt, claude

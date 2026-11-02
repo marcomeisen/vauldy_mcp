@@ -33,6 +33,42 @@ struct MCPClientRegistrationTests {
         }
     }
 
+    @Test func unregisterOnlyRemovesItsOwnClaudeEntryAndIsIdempotent() throws {
+        let f = try Fixture()
+        let original = #"{"preferences":{"theme":"dark"},"mcpServers":{"existing":{"command":"other"}}}"#
+        let config = try f.seed(original, client: .claude)
+        _ = try f.register(.claude)
+        _ = try f.installer.removeConnection(f.profile.connectionID, expectedRevision: f.profile.revision)
+        #expect(try f.registrar.unregister(.claude, binary: f.installer.binaryURL, profile: f.profileURL))
+        let data = try Data(contentsOf: config)
+        let parsed = try #require(JSONSerialization.jsonObject(with: data) as? NSDictionary)
+        let old = try #require(JSONSerialization.jsonObject(with: Data(original.utf8)) as? NSDictionary)
+        #expect(parsed == old)
+        #expect(try !f.registrar.unregister(.claude, binary: f.installer.binaryURL, profile: f.profileURL))
+        #expect(try Data(contentsOf: config) == data)
+    }
+
+    @Test func unregisterKeepsAnotherConnectionsClientEntry() throws {
+        let f = try Fixture()
+        _ = try f.register(.claude)
+        let config = f.registrar.configurationURL(for: .claude), before = try Data(contentsOf: config)
+        #expect(try !f.registrar.unregister(.claude, binary: f.installer.binaryURL, profile: f.root.appendingPathComponent("other-profile.json")))
+        #expect(try Data(contentsOf: config) == before)
+    }
+
+    @Test(arguments: ["\n[features]\n# Preserve this too\n", "\n# Foreign array comment\n[[unrelated_array]]\nlabel = \"keep\"\n\n[features]\n"])
+    func chatGPTUnregisterPreservesBytesOutsideItsTable(suffix: String) throws {
+        let f = try Fixture()
+        guard MCPClientRegistration.findChatGPTCLI(home: f.registrar.home) != nil else { return }
+        let prefix = "# Preserve this comment\n[mcp_servers.existing]\ncommand = \"other\"\n"
+        let config = try f.seed(prefix, client: .chatgpt)
+        _ = try f.register(.chatgpt)
+        let handle = try FileHandle(forWritingTo: config); try handle.seekToEnd(); try handle.write(contentsOf: Data(suffix.utf8)); try handle.close()
+        #expect(try f.registrar.unregister(.chatgpt, binary: f.installer.binaryURL, profile: f.profileURL))
+        #expect(try Data(contentsOf: config) == Data((prefix + "\n" + suffix).utf8))
+        #expect(try !f.registrar.unregister(.chatgpt, binary: f.installer.binaryURL, profile: f.profileURL))
+    }
+
     @Test func claudePreservesSettingsBacksUpAndIsIdempotent() throws {
         let f = try Fixture()
         let original = #"{"preferences":{"theme":"dark"},"mcpServers":{"existing":{"command":"other","env":{"TOKEN":"test-only"}}}}"#

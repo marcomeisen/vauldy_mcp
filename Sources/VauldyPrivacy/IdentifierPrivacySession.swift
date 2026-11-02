@@ -25,17 +25,40 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
         let namespace = UUID().uuidString.replacingOccurrences(of: "-", with: "")
         var counters: [String: Int] = [:]
         var tokensByKey: [String: String] = [:]
-        for candidate in valuesByKind.sorted(by: { $0.value.count > $1.value.count }) {
+        add(valuesByKind.sorted { $0.value.count > $1.value.count }, namespace: namespace,
+            counters: &counters, tokensByKey: &tokensByKey, residual: false)
+        // Redacting an overlapping span can expose a shorter labelled identifier.
+        // Complete the same document-wide mapping before any value is released.
+        // Validation below still fails closed if bounded completion cannot cover it.
+        for _ in 0..<8 {
+            let residuals = try contents.flatMap { try ExternalPersonalDataDetector.identifiers(in: protect($0)) }
+            if residuals.isEmpty { break }
+            if !add(residuals, namespace: namespace, counters: &counters, tokensByKey: &tokensByKey, residual: true) { break }
+        }
+    }
+
+    @discardableResult
+    private mutating func add(_ candidates: [(kind: String, value: String)], namespace: String,
+                              counters: inout [String: Int], tokensByKey: inout [String: String], residual: Bool) -> Bool {
+        var changed = false
+        for candidate in candidates {
             let value = candidate.value.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard Self.isUseful(value) else { continue }
+            guard Self.isUseful(value), !value.contains("[V_" + namespace + "_") else { continue }
             let key = value.folding(options: [.caseInsensitive], locale: .current)
-            guard tokensByKey[key] == nil else { continue }
+            if let token = tokensByKey[key] {
+                if residual && !replacements.contains(where: { !$0.wholeWord && $0.original.caseInsensitiveCompare(value) == .orderedSame }) {
+                    replacements.append(Replacement(original: value, token: token, wholeWord: false)); changed = true
+                }
+                continue
+            }
             counters[candidate.kind, default: 0] += 1
             let token = "[V_\(namespace)_\(candidate.kind)_\(counters[candidate.kind, default: 1])]"
             tokensByKey[key] = token
             replacements.append(Replacement(original: value, token: token,
-                wholeWord: ["PERSON", "ORGANISATION", "ORT"].contains(candidate.kind)))
+                wholeWord: !residual && ["PERSON", "ORGANISATION", "ORT"].contains(candidate.kind)))
+            changed = true
         }
+        return changed
     }
 
     /// Validate the actual outgoing value, rather than trusting a settings flag.
@@ -49,19 +72,20 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
     }
 
     public func protect(_ value: String) -> String {
-        // Use neutral sentinels first so a short candidate such as "IBAN" cannot
-        // rewrite the token generated for a complete IBAN value.
-        var protected = value
-        for (index, replacement) in replacements.enumerated() {
-            for range in Self.ranges(of: replacement, in: protected).reversed() {
-                guard let swiftRange = Range(range, in: protected) else { continue }
-                protected.replaceSubrange(swiftRange, with: "\u{E000}\(index)\u{E001}")
+        // Match only original source coordinates. Never rescan generated tokens or
+        // numeric sentinels as source identifiers, even for short labelled values.
+        var selected: [(NSRange, String)] = []
+        let occupied = NSMutableIndexSet()
+        for replacement in replacements {
+            for range in Self.ranges(of: replacement, in: value) where !occupied.intersects(in: range) {
+                selected.append((range, replacement.token)); occupied.add(in: range)
             }
         }
-        for (index, replacement) in replacements.enumerated() {
-            protected = protected.replacingOccurrences(of: "\u{E000}\(index)\u{E001}", with: replacement.token)
+        let protected = NSMutableString(string: value)
+        for (range, token) in selected.sorted(by: { $0.0.location > $1.0.location }) {
+            protected.replaceCharacters(in: range, with: token)
         }
-        return protected
+        return protected as String
     }
 
     /// Local geometry projection needs the complete detected span, including
@@ -113,7 +137,9 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
                 let value = String(text[range])
                 // These are request protocol labels, never identifier candidates
                 // from NLTagger. Explicit personal-name fields still protect them.
-                if !["ref", "referenz", "dokument-id"].contains(value.lowercased()) {
+                // NLTagger can label currency codes as places in invoice context.
+                // Explicit personal-name/identifier rules above still apply to these values.
+                if !["ref", "referenz", "dokument-id", "eur", "usd", "chf", "gbp", "jpy", "cny"].contains(value.lowercased()) {
                     values.append((kind, value))
                 }
             }
