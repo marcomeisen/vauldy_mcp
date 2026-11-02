@@ -1,0 +1,17 @@
+{
+  "corpusOriginals": 25,
+  "metadataReads": 25,
+  "redactedMetadataTitles": 12,
+  "analysisCoverage": {
+    "completed": 20,
+    "failed": 0,
+    "needsReview": 4,
+    "notAnalyzed": 0,
+    "scope": "local-rule-based-extractive-analysis; not model-verified",
+    "stale": 0,
+    "unavailable": 1
+  },
+  "storeUnchanged": true,
+  "originalsUnchanged": true,
+  "revoked": true
+}

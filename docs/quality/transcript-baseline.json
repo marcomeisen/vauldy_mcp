@@ -1,0 +1,536 @@
+{
+  "actualPopulatedFields" : 87,
+  "allPassed" : true,
+  "cases" : 26,
+  "classificationConfusion" : {
+    "authorityDecision" : {
+      "authorityDecision" : 2
+    },
+    "bankStatement" : {
+      "bankStatement" : 2
+    },
+    "contract" : {
+      "contract" : 1
+    },
+    "correspondence" : {
+      "correspondence" : 1
+    },
+    "employmentDocument" : {
+      "employmentDocument" : 2
+    },
+    "insuranceNotice" : {
+      "insuranceNotice" : 3
+    },
+    "invoice" : {
+      "invoice" : 4
+    },
+    "laboratoryReport" : {
+      "laboratoryReport" : 1
+    },
+    "medicalReport" : {
+      "medicalReport" : 2
+    },
+    "prescription" : {
+      "prescription" : 1
+    },
+    "receipt" : {
+      "receipt" : 1
+    },
+    "schoolNotice" : {
+      "schoolNotice" : 1
+    },
+    "taxCertificate" : {
+      "taxCertificate" : 1
+    },
+    "unavailable" : {
+      "unavailable" : 1
+    },
+    "unknown" : {
+      "unknown" : 1
+    },
+    "utilityStatement" : {
+      "utilityStatement" : 1
+    },
+    "vehicleReport" : {
+      "vehicleReport" : 1
+    }
+  },
+  "corpusVersion" : 1,
+  "correctPopulatedFields" : 87,
+  "criticalOverviewFacts" : 43,
+  "domains" : [
+    "authorities",
+    "banking",
+    "contracts",
+    "employment",
+    "family",
+    "finance",
+    "health",
+    "household",
+    "housing",
+    "insurance",
+    "mixed",
+    "mobility",
+    "other",
+    "tax"
+  ],
+  "engine" : "local-rules-extractive-v1",
+  "falsePopulatedFields" : 0,
+  "macroF1" : 1,
+  "missingExpectedFields" : 0,
+  "outcomes" : {
+    "completed" : 20,
+    "needsReview" : 5,
+    "unavailable" : 1
+  },
+  "populatedFieldChecks" : 87,
+  "results" : [
+    {
+      "actualStatus" : "completed",
+      "actualType" : "invoice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "finance",
+      "expectedStatus" : "completed",
+      "expectedType" : "invoice",
+      "id" : "invoice",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "contract",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "contracts",
+      "expectedStatus" : "completed",
+      "expectedType" : "contract",
+      "id" : "contract",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "bankStatement",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "banking",
+      "expectedStatus" : "completed",
+      "expectedType" : "bankStatement",
+      "id" : "bank",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "authorityDecision",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "authorities",
+      "expectedStatus" : "completed",
+      "expectedType" : "authorityDecision",
+      "id" : "authority",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "medicalReport",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "health",
+      "expectedStatus" : "completed",
+      "expectedType" : "medicalReport",
+      "id" : "medical",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "laboratoryReport",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "health",
+      "expectedStatus" : "completed",
+      "expectedType" : "laboratoryReport",
+      "id" : "laboratory",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "prescription",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "health",
+      "expectedStatus" : "completed",
+      "expectedType" : "prescription",
+      "id" : "prescription",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "insuranceNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "insurance",
+      "expectedStatus" : "completed",
+      "expectedType" : "insuranceNotice",
+      "id" : "insurance",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "insuranceNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "insurance",
+      "expectedStatus" : "completed",
+      "expectedType" : "insuranceNotice",
+      "id" : "generic_scan",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "utilityStatement",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "housing",
+      "expectedStatus" : "completed",
+      "expectedType" : "utilityStatement",
+      "id" : "housing",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "vehicleReport",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "mobility",
+      "expectedStatus" : "completed",
+      "expectedType" : "vehicleReport",
+      "id" : "vehicle",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "employmentDocument",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "employment",
+      "expectedStatus" : "completed",
+      "expectedType" : "employmentDocument",
+      "id" : "payslip",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "employmentDocument",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "employment",
+      "expectedStatus" : "completed",
+      "expectedType" : "employmentDocument",
+      "id" : "reference",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "schoolNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "family",
+      "expectedStatus" : "completed",
+      "expectedType" : "schoolNotice",
+      "id" : "school",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "taxCertificate",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "tax",
+      "expectedStatus" : "completed",
+      "expectedType" : "taxCertificate",
+      "id" : "tax_certificate",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "receipt",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "household",
+      "expectedStatus" : "completed",
+      "expectedType" : "receipt",
+      "id" : "receipt",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "correspondence",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "household",
+      "expectedStatus" : "completed",
+      "expectedType" : "correspondence",
+      "id" : "correspondence",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "medicalReport",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "health",
+      "expectedStatus" : "completed",
+      "expectedType" : "medicalReport",
+      "id" : "wrapped",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "invoice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "finance",
+      "expectedStatus" : "completed",
+      "expectedType" : "invoice",
+      "id" : "role_negative",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "authorityDecision",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "authorities",
+      "expectedStatus" : "needsReview",
+      "expectedType" : "authorityDecision",
+      "id" : "ambiguous_date",
+      "issues" : [
+        "DOCUMENT_DATE_UNRESOLVED"
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "insuranceNotice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "insurance",
+      "expectedStatus" : "needsReview",
+      "expectedType" : "insuranceNotice",
+      "id" : "low_quality",
+      "issues" : [
+        "SOURCE_NEEDS_REVIEW"
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "development"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "unknown",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "other",
+      "expectedStatus" : "needsReview",
+      "expectedType" : "unknown",
+      "id" : "unknown",
+      "issues" : [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "unavailable",
+      "actualType" : "unavailable",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "other",
+      "expectedStatus" : "unavailable",
+      "expectedType" : "unavailable",
+      "id" : "unreadable",
+      "issues" : [
+        "NO_READABLE_TEXT"
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "invoice",
+      "analyzedPages" : [
+        1
+      ],
+      "domain" : "finance",
+      "expectedStatus" : "needsReview",
+      "expectedType" : "invoice",
+      "id" : "injection",
+      "issues" : [
+        "UNTRUSTED_INSTRUCTION_TEXT"
+      ],
+      "passed" : true,
+      "physicalPages" : 1,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "needsReview",
+      "actualType" : "invoice",
+      "analyzedPages" : [
+        1,
+        2
+      ],
+      "domain" : "mixed",
+      "expectedStatus" : "needsReview",
+      "expectedType" : "invoice",
+      "id" : "packet",
+      "issues" : [
+        "MULTIPLE_LOGICAL_DOCUMENTS"
+      ],
+      "passed" : true,
+      "physicalPages" : 2,
+      "split" : "holdout"
+    },
+    {
+      "actualStatus" : "completed",
+      "actualType" : "bankStatement",
+      "analyzedPages" : [
+        1,
+        2
+      ],
+      "domain" : "banking",
+      "expectedStatus" : "completed",
+      "expectedType" : "bankStatement",
+      "id" : "late_metadata",
+      "issues" : [
+
+      ],
+      "passed" : true,
+      "physicalPages" : 2,
+      "split" : "holdout"
+    }
+  ],
+  "retainedCriticalOverviewFacts" : 43,
+  "scope" : "Synthetic OCR transcripts and independent expected roles; not a real-document\/model\/OCR accuracy benchmark."
+}

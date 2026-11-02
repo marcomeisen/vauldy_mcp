@@ -1,0 +1,95 @@
+{
+  "binary_sha256": "e91bbf71eaff6bd2a3dbe4a47f57bd221819e6c885676bc231a27eca434b4cbc",
+  "binary_version": "vauldy-mcp 0.8.0",
+  "fixture": "synthetic; no real archive; no model answer evaluation",
+  "measurements": {
+    "list_calls": 3,
+    "lvm": {
+      "expected_documents": 12,
+      "returned_documents": 12,
+      "unique_markers": 12,
+      "set_recall": 1.0,
+      "set_precision": 1.0,
+      "has_total_count": true,
+      "has_list_cursor": true,
+      "generic_scan_in_complete_results": true
+    },
+    "generic_filename": {
+      "exact_lookup_count": 1,
+      "readable_lvm_body": false,
+      "search_excerpt": "[V_44DA27AF09BC464D9675E7D1A09EED0E_ORGANISATION_1]\nauditmarkerepson"
+    },
+    "substring": {
+      "returned": 1,
+      "issuer_is_lvm": false
+    },
+    "mention": {
+      "returned": 1,
+      "issuer_is_lvm": false
+    },
+    "content_paging": {
+      "calls": 2,
+      "segments": 5,
+      "lossless": true
+    },
+    "coverage": {
+      "authorizedDocumentCount": 5,
+      "completeSourceDocumentCount": 1,
+      "failedDocumentCount": 1,
+      "missingGrantedDocumentCount": 1,
+      "pendingDocumentCount": 1,
+      "reviewDocumentCount": 1,
+      "scope": "source-processing-only; analysis-is-reported-separately",
+      "searchableDocumentCount": 3,
+      "unknownCoverageDocumentCount": 1
+    },
+    "import": {
+      "state": "completed",
+      "pages": 1,
+      "method": "vision",
+      "issuer_entities": 0,
+      "classified_category": "other",
+      "source_contains_raster_images": false
+    }
+  },
+  "gates": {
+    "A_F_exhaustive_set": true,
+    "B_generic_filename_lookup": true,
+    "B_readable_excerpt": true,
+    "B_structured_issuer": false,
+    "C_exact_token": false,
+    "C_issuer_filter": false,
+    "F_content_pagination": true,
+    "G_allowlist": true,
+    "G_direct_id_denied": true,
+    "G_revoke": true,
+    "P0_empty_result_coverage": true,
+    "P0_coverage_counts": true,
+    "P0_list_privacy": true,
+    "P0_late_excerpt": true,
+    "B_import_to_mcp": true
+  },
+  "unmeasured": [
+    "D deadline/version correctness",
+    "E raster CER/WER and difficult-scan quality",
+    "H model resistance to prompt injection",
+    "real archive set recall",
+    "semantic search and structured organization resolution"
+  ],
+  "quality_pass": false,
+  "p0_gates": {
+    "A_F_exhaustive_set": true,
+    "B_generic_filename_lookup": true,
+    "B_readable_excerpt": true,
+    "F_content_pagination": true,
+    "G_allowlist": true,
+    "G_direct_id_denied": true,
+    "G_revoke": true,
+    "P0_empty_result_coverage": true,
+    "P0_coverage_counts": true,
+    "P0_list_privacy": true,
+    "P0_late_excerpt": true,
+    "B_import_to_mcp": true
+  },
+  "p0_pass": true
+}

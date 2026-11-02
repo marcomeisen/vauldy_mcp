@@ -1,0 +1,174 @@
+import CryptoKit
+import Darwin
+import Foundation
+
+public enum MCPBuild { public static let version = "0.8.0" }
+
+public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
+    case overview, connections, documents, folders, settings
+    public var title: String {
+        switch self {
+        case .overview: "Übersicht"
+        case .connections: "Verbindungen"
+        case .documents: "Dokumente"
+        case .folders: "Ordner"
+        case .settings: "Einstellungen"
+        }
+    }
+    public var symbol: String {
+        switch self {
+        case .overview: "square.grid.2x2"
+        case .connections: "bubble.left.and.bubble.right"
+        case .documents: "doc.on.doc"
+        case .folders: "folder"
+        case .settings: "slider.horizontal.3"
+        }
+    }
+}
+
+public struct MCPSetupRequest: Codable, Sendable {
+    public var section: MCPSetupSection
+    public var connectionID: UUID?
+    public var diagnose: Bool?
+    public var createdAt: Date
+    public init(section: MCPSetupSection, connectionID: UUID? = nil, diagnose: Bool = false) {
+        self.section = section; self.connectionID = connectionID; self.diagnose = diagnose; createdAt = Date()
+    }
+}
+
+public enum MCPSoftwareState: String, Sendable { case notInstalled, updateAvailable, current }
+
+public struct MCPSoftwareStatus: Sendable {
+    public var state: MCPSoftwareState
+    public var installedVersion: String?
+    public var availableVersion: String
+    public init(state: MCPSoftwareState, installedVersion: String?, availableVersion: String = MCPBuild.version) {
+        self.state = state; self.installedVersion = installedVersion; self.availableVersion = availableVersion
+    }
+}
+
+/// Serializes local access changes across the setup UI and menu agent. Never used through MCP arguments.
+struct MCPManagementLock {
+    let descriptor: Int32
+    init(_ url: URL) throws {
+        let fd = Darwin.open(url.path, O_CREAT | O_RDWR | O_NOFOLLOW | O_CLOEXEC, S_IRUSR | S_IWUSR)
+        guard fd >= 0 else { throw MCPAccessError.configuration }
+        guard flock(fd, LOCK_EX) == 0 else { close(fd); throw MCPAccessError.configuration }
+        descriptor = fd
+    }
+    func release() { flock(descriptor, LOCK_UN); close(descriptor) }
+}
+
+extension MCPInstallation {
+    public var setupAppURL: URL { root.appendingPathComponent("Vauldy MCP Einrichtung.app", isDirectory: true) }
+
+    @discardableResult
+    public func setAccess(_ enabled: Bool, for id: UUID, expectedRevision: UUID? = nil) throws -> MCPAccessProfile {
+        try changeProfile(id, expectedRevision: expectedRevision) { value in
+            value.enabled = enabled
+            // Resuming cannot invent an acknowledgment or a document grant.
+            try value.validate()
+        }
+    }
+
+    @discardableResult
+    public func updateSelection(_ ids: Set<UUID>, for id: UUID, expectedRevision: UUID,
+                                acknowledgedDisclosure: Bool = false) throws -> MCPAccessProfile {
+        try changeProfile(id, expectedRevision: expectedRevision) { value in
+            guard ids.isSubset(of: value.allowedDocumentIDs) || acknowledgedDisclosure else { throw MCPAccessError.notAuthorized }
+            if acknowledgedDisclosure { value.acknowledgedCloudDisclosure = true }
+            value.allowedDocumentIDs = ids
+            if ids.isEmpty { value.enabled = false }
+            // Preserve paused access when a selection is saved, including an expanded selection.
+            try value.validate()
+        }
+    }
+
+    private func changeProfile(_ id: UUID, expectedRevision: UUID?, mutation: (inout MCPAccessProfile) throws -> Void) throws -> MCPAccessProfile {
+        let path = profileURL(id)
+        let lock = try MCPManagementLock(path.deletingLastPathComponent().appendingPathComponent("profile-update.lock"))
+        defer { lock.release() }
+        let source = FileMCPProfileSource(url: path)
+        var profile = try source.load()
+        guard expectedRevision == nil || profile.revision == expectedRevision else { throw MCPAccessError.stale }
+        try mutation(&profile)
+        profile.revision = UUID()
+        try source.save(profile)
+        try MCPAuditLog(profileURL: path).append(profile.enabled ? .profileSaved : .profilePaused,
+                                               count: profile.enabled ? profile.allowedDocumentIDs.count : 0, revision: profile.revision)
+        return profile
+    }
+
+    /// Separate from installation/consent. No profile or client configuration is rewritten.
+    public func updateSoftware(binary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws {
+        guard binary.isFileURL, FileManager.default.isExecutableFile(atPath: binary.path) else { throw MCPAccessError.configuration }
+        try prepareSoftwareDirectories()
+        let lock = try MCPManagementLock(root.appendingPathComponent("software-update.lock"))
+        defer { lock.release() }
+        try copySoftware(binary: binary, localCLI: localCLI, statusApp: statusApp)
+        if let setupApp, setupApp.standardizedFileURL != setupAppURL.standardizedFileURL {
+            guard Bundle(url: setupApp)?.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup" else { throw MCPAccessError.configuration }
+            try replaceBundle(setupApp, at: setupAppURL)
+        }
+        struct Manifest: Codable { let version: String; let serverHash: String }
+        let manifest = Manifest(version: MCPBuild.version, serverHash: try Self.hash(binaryURL))
+        try writeManaged(JSONEncoder().encode(manifest), to: root.appendingPathComponent("software.json"))
+    }
+
+    public func softwareStatus(availableBinary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws -> MCPSoftwareStatus {
+        guard FileManager.default.fileExists(atPath: binaryURL.path) else { return .init(state: .notInstalled, installedVersion: nil) }
+        struct Manifest: Decodable { var version: String; var serverHash: String }
+        let url = root.appendingPathComponent("software.json")
+        let manifest = try? JSONDecoder().decode(Manifest.self, from: readManaged(url, limit: 4_096))
+        let hash = try Self.hash(binaryURL)
+        var current = hash == (try Self.hash(availableBinary))
+        var pairs: [(URL, URL)] = []
+        if let localCLI { pairs.append((localCLIURL, localCLI)) }
+        if let statusApp { pairs.append((statusAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"), statusApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"))) }
+        if let setupApp { pairs.append((setupAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"), setupApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"))) }
+        for (installed, available) in pairs {
+            if !FileManager.default.fileExists(atPath: installed.path) { current = false }
+            else if try Self.hash(installed) != Self.hash(available) { current = false }
+        }
+        let verifiedVersion = manifest?.serverHash == hash ? manifest?.version : nil
+        return .init(state: current ? .current : .updateAvailable, installedVersion: current ? MCPBuild.version : verifiedVersion)
+    }
+
+    public func requestSetup(_ request: MCPSetupRequest) throws {
+        try prepareSoftwareDirectories()
+        let lock = try MCPManagementLock(root.appendingPathComponent("setup-request.lock"))
+        defer { lock.release() }
+        try writeManaged(JSONEncoder().encode(request), to: root.appendingPathComponent("setup-request.json"))
+    }
+
+    public func consumeSetupRequest() throws -> MCPSetupRequest? {
+        let url = root.appendingPathComponent("setup-request.json")
+        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+        let lock = try MCPManagementLock(root.appendingPathComponent("setup-request.lock"))
+        defer { lock.release() }
+        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+        let request = try JSONDecoder().decode(MCPSetupRequest.self, from: readManaged(url, limit: 4_096))
+        try FileManager.default.removeItem(at: url)
+        guard abs(request.createdAt.timeIntervalSinceNow) <= 300 else { return nil }
+        return request
+    }
+
+    private static func hash(_ url: URL) throws -> String {
+        let values = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
+        guard values.isRegularFile == true, values.isSymbolicLink != true,
+              (values.fileSize ?? Int.max) <= 100 * 1_024 * 1_024 else { throw MCPAccessError.configuration }
+        return SHA256.hash(data: try Data(contentsOf: url, options: .mappedIfSafe)).map { String(format: "%02x", $0) }.joined()
+    }
+
+    private func readManaged(_ url: URL, limit: Int) throws -> Data {
+        let values = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
+        guard values.isRegularFile == true, values.isSymbolicLink != true,
+              (values.fileSize ?? Int.max) <= limit else { throw MCPAccessError.configuration }
+        return try Data(contentsOf: url)
+    }
+    private func writeManaged(_ data: Data, to url: URL) throws {
+        guard (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) != true else { throw MCPAccessError.configuration }
+        try data.write(to: url, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+    }
+}
