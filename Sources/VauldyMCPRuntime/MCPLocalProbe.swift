@@ -5,6 +5,8 @@ public struct MCPLocalProbeResult: Codable, Sendable {
     public let completedAt: Date
     public let accessEnabled: Bool
     public let grantedDocuments: Int
+    public let serverVersion: String
+    public let discoveredTools: [String]
 }
 
 /// A real, content-free stdio handshake. This is explicitly a local diagnostic, never a host/cloud proof.
@@ -56,12 +58,19 @@ public enum MCPLocalProbe {
         try send(["jsonrpc": "2.0", "id": 1, "method": "initialize", "params": [
             "protocolVersion": "2025-11-25", "capabilities": [:] as [String: String],
             "clientInfo": ["name": "Vauldy local diagnostic", "version": MCPBuild.version]]])
-        _ = try response(1)
+        let initialized = try response(1)
+        guard let server = initialized["serverInfo"] as? [String: Any], let version = server["version"] as? String,
+              version == MCPBuild.version else { throw MCPAccessError.unavailable }
         try send(["jsonrpc": "2.0", "method": "notifications/initialized"])
+        try send(["jsonrpc": "2.0", "id": 3, "method": "tools/list", "params": [:] as [String: String]])
+        let discovery = try response(3)
+        guard let tools = discovery["tools"] as? [[String: Any]] else { throw MCPAccessError.unavailable }
+        let names = tools.compactMap { $0["name"] as? String }.sorted()
+        guard Set(names) == ["get_vault_status", "list_documents", "search_documents", "read_document"] else { throw MCPAccessError.unavailable }
         try send(["jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": ["name": "get_vault_status", "arguments": [:] as [String: String]]])
         let result = try response(2)
         guard result["isError"] as? Bool != true, let content = result["structuredContent"] as? [String: Any],
               let granted = content["grantedDocumentCount"] as? Int else { throw MCPAccessError.unavailable }
-        return MCPLocalProbeResult(completedAt: Date(), accessEnabled: content["access"] as? String == "explicit-document-grants", grantedDocuments: granted)
+        return MCPLocalProbeResult(completedAt: Date(), accessEnabled: content["access"] as? String == "explicit-document-grants", grantedDocuments: granted, serverVersion: version, discoveredTools: names)
     }
 }

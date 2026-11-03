@@ -136,6 +136,13 @@ def main():
                 assert '49,99 EUR' in wire
             metadata = payload(client.call('read_document', document=handle, view='metadata'), schemas['read_document'])
             assert metadata['analysisStatus'] == 'not-analyzed' and not metadata['documents']
+            passages = payload(client.call('read_document', document=handle, view='passages', query='Fahrrad'), schemas['read_document'])
+            assert passages['mode'] == 'matching-passages' and passages['retrievalComplete']
+            assert not passages['containsEntireAvailableText'] and passages['matchingPassageCount'] == 1
+            assert '49,99 EUR' in passages['segments'][0]['text']
+            for secret in ['erika@example.com', 'Erika Musterfrau', doc_id, str(root), 'secret-file.pdf']:
+                assert secret not in json.dumps(passages)
+            assert client.call('read_document', document=handle, view='metadata', query='Fahrrad')['isError']
             assert result['containsEntireAvailableText']
             assert client.call('search_documents', query='Fahrradwartung', vaultPath='/arbitrary')['isError']
             assert client.call('read_document', document=doc_id)['isError']

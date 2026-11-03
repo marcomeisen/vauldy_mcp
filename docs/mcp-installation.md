@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.10.0)
+# Vauldy MCP einrichten (macOS, Version 0.11.0)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -20,6 +20,15 @@ Assistenten oder `vauldy-local`; die MCP-Schnittstelle bleibt ausschließlich le
 
 Unter **Einstellungen** erfolgt das Softwareupdate unabhängig von Freigaben und Client-Einträgen.
 Bestehende Profile bleiben bytegenau erhalten, einschließlich pausierter Zustände. Das Update startet die Statusanzeige neu, aber keine Chatbot-Verbindung. Bereits laufende Server müssen im Chatbot neu gestartet werden.
+
+Eine veraltete Installation kann gültige neuere Auditereignisse nicht lesen und beim Start `auditUnavailable` melden. Dafür die Software aktualisieren; keine Logs oder Freigaben löschen. Die Aktualisierung ist auch über den CLI-Helfer aus dem neuen Paket möglich:
+
+```sh
+vauldy-local update-software --root /bestehende/installation --from-app "/pfad/Vauldy MCP Einrichtung.app"
+vauldy-local check-connection --profile /bestehende/installation/connections/UUID/profile.json
+```
+
+Der Check prüft die tatsächliche Serverversion, alle vier Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
 
 „Lokalen MCP-Bestand laden“ lädt frühere Importe und erkennt unterbrochene OCR-Läufe. Für fehlgeschlagene,
 unterbrochene, teilweise und bereits als abgeschlossen markierte Dokumente steht „Text erneut lesen“ zur Verfügung.
@@ -375,7 +384,16 @@ erscheinen beim Ordnerstatus. Datei-Anbieter müssen die Dateien lokal lesbar be
 Bei aktiven Ordnern läuft der Worker auch nach Schließen des Einrichtungsfensters weiter. Der Mac muss
 aktiv und der Ordner erreichbar sein. „Worker nach Auftrag beenden“ stoppt auch die Überwachung.
 Nach Neustart oder Prozessabbruch die Einrichtung öffnen oder `watch-start` ausführen; es wird kein
-Login-Dienst installiert. „Lokalen MCP-Bestand laden“ zeigt die importierten Dokumente. Eine bereits
+Login-Dienst installiert. Eine veraltete Installation kann gültige neuere Auditereignisse nicht lesen und beim Start `auditUnavailable` melden. Dafür die Software aktualisieren; keine Logs oder Freigaben löschen. Die Aktualisierung ist auch über den CLI-Helfer aus dem neuen Paket möglich:
+
+```sh
+vauldy-local update-software --root /bestehende/installation --from-app "/pfad/Vauldy MCP Einrichtung.app"
+vauldy-local check-connection --profile /bestehende/installation/connections/UUID/profile.json
+```
+
+Der Check prüft die tatsächliche Serverversion, alle vier Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
+
+„Lokalen MCP-Bestand laden“ zeigt die importierten Dokumente. Eine bereits
 geöffnete lokale Dokumentliste aktualisiert sich automatisch, ohne neue Freigaben zu setzen.
 Die Ordnerüberwachung der bisherigen Vauldy-App bleibt unabhängig.
 

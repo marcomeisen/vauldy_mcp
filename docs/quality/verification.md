@@ -87,3 +87,19 @@ Das Paket enthält den OAuth-HTTP-Dienst und die Bedienoberfläche. Öffentliche
 und tatsächliche Nutzung aus ChatGPT/Claude sind separate noch ausstehende Abnahmen. Details und
 Reproduktion: [OAuth-Verbindungen](../mcp-oauth.md). Die oben dokumentierten fachlichen und
 OCR-Qualitätsgrenzen bleiben bestehen.
+
+## Ergänzung: Retrieval und lokale Startreparatur 0.11.0 (03.11.2026)
+
+146 Swift-Tests in 21 Suiten und alle 16 Regressionsstufen bestanden. Die neuen Gates prüfen
+2.000 Dokumente, generische Themenfilter in mehreren Domänen, kompakte Enumeration, gezielte
+wörtliche Belege, Dateiaustausch, gleich große Änderungen mit restaurierter mtime, Auditmanipulation
+und Widerruf. 2.000 künstliche Dokumente: Themenkandidaten 411 ms, vollständiges kompaktes Inventar
+2.537 ms. Eine künstliche 100-seitige Akte: 34 vollständige Textabrufe gegenüber einem gezielten
+Fundstellenabruf; kalte lokale Wandzeiten 2.986 gegenüber 2.056 ms. Keine allgemeine Qualitäts-
+oder End-to-End-Latenzzusage für reale Archive. Die dokumentweite Privacy-Prüfung bleibt erhalten.
+
+Der tatsächliche lokale Startfehler wurde als veraltetes Drei-Werkzeug-Programm 0.7.0 mit unbekannter
+Auditoperation list reproduziert. Nach ausschließlich der Softwareaktualisierung startet die
+installierte 0.11.0 mit allen vier Werkzeugen. Profile, Clientkonfigurationen und vorhandene
+Snapshots blieben bytegleich. Ein bereits geladener Hostkatalog und ein gehosteter Chat benötigen
+ihre getrennte Wiederverbindungs-/Anschlussprüfung. [Vollständige Architekturanalyse und Messdaten](../audits/mcp-2026-11-03-architecture/README.md).

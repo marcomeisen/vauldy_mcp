@@ -58,6 +58,7 @@ def main():
             ('watch_smoke_test', [local, server]),
             ('original_reference_smoke_test', [local, server]),
             ('oauth_smoke_test', [local, resources / 'vauldy-mcp-http']),
+            ('scalability_benchmark', [server, output / 'scalability.json']),
             ('tunnel_launcher_smoke_test', []),
             ('benchmark_ocr', [local]),
             ('retrieval_benchmark', [server, '--local', local, '--p0', '--gate', '--output', output / 'p0-retrieval.json']),

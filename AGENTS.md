@@ -77,3 +77,20 @@ Private Credentialablage atomar und synchronisiert, keine Rohsecrets in Logs/JSO
 niemals als HTTP-Endpunkt anbieten. CIMD nur von begrenzten öffentlichen Anbieter-Metadaten beziehen.
 OAuthConnectionTests und oauth_smoke_test.py ergänzen sämtliche bisherigen Regressionen.
 Betreibervertrag, Grenzen und noch erforderliche öffentliche Bereitstellung: docs/mcp-oauth.md.
+
+## Retrieval-Skalierung und Installation ab 0.11.0
+
+Topic-Inventare verwenden vollständige Textkandidaten mit explizitem any-term-substring-Modus;
+keine fixe Versichererlogik und keine Gleichsetzung mit aktiven Verträgen. Default all-tokens erhalten.
+Kompakte Listen enthalten keine Rohtexte und umgehen nie die Leseberechtigung. Mode und Auszüge
+an Cursor binden; Archivtexte nicht standardmäßig vollständig abrufen. Server-instructions erklären dies.
+
+Snapshot-/Audit-Caches nur bei unveränderter Dateidentität, Größe und Nanosekunden-mtime/ctime
+verwenden. Gleiche Länge, restaurierte mtime, Fremdschreiber, Rotation, Beschädigung und Widerruf
+prüfen. Vor Antwort Quelle und Profil revalidieren, auch bei Actor-Reentrancy. Keine TTL-Freigaben.
+Ein Softwareupdate ist von Profiländerung und Hostneustart getrennt. Nie gültige Auditdateien löschen,
+um alte Programme wieder starten zu lassen. MCPLocalProbe bestätigt Version/Discovery/Status, nicht
+die Verfügbarkeit im Zielchat. Zusätzliche Gates: MCPScalabilityTests, MCPPassageTests und scalability_benchmark.py.
+Fundstellen sind wörtliche Fenster nach vollständiger Privacy-Prüfung; nur überlappende Quellbereiche
+vereinigen. Auswahlvollständigkeit niemals als vollständigen Dokumenttext ausweisen. Neue Auditwerte
+nicht ohne Leser-/Deployment-Kompatibilitätsprüfung einführen.

@@ -1,0 +1,32 @@
+{
+  "syntheticOnly": true,
+  "legacyInstalledVersion": "0.7.0",
+  "legacyDiscoveredTools": [
+    "get_vault_status",
+    "search_documents",
+    "read_document"
+  ],
+  "observedTrigger": "operation=list (aggregate diagnosis only; no production entries used as fixtures)",
+  "syntheticLegacyStartupCases": [
+    {
+      "event": "serverStarted",
+      "exitCode": 0
+    },
+    {
+      "operation": "search",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "diagnostic": "auditUnavailable"
+    },
+    {
+      "event": "profileRemoved",
+      "exitCode": 1,
+      "diagnostic": "auditUnavailable"
+    }
+  ],
+  "newerReaderStartupSucceeded": true,
+  "legacyRepositorySourceIsNotInstalledBinary": true
+}

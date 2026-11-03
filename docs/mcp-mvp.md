@@ -1,6 +1,6 @@
 # Clientunabhängiger lokaler MCP-Dienst
 
-Version 0.8 importiert PDFs und Bilder und erkennt ihren Text unabhängig von der bestehenden
+Version 0.11 importiert PDFs und Bilder und erkennt ihren Text unabhängig von der bestehenden
 Vauldy-App. Der lokale Kern besitzt dafür einen eigenen Bestand. Die MCP-Schnittstelle bleibt
 lesend und freigabegesteuert; die bestehende App und ihre Daten bleiben erhalten. Das Paket wird eigenständig in `marcomeisen/vauldy_mcp` entwickelt.
 
@@ -14,12 +14,15 @@ lesend und freigabegesteuert; die bestehende App und ihre Daten bleiben erhalten
   Kennungsdetektor. Keine Quellpfadabhängigkeit zur App.
 - `Sources/VauldyMCPRuntime`: lokale Verbindungsfreigabe, Datenschutzgrenze, begrenzte DTOs,
   flüchtige Dokumentkennungen, seitenbezogenes Lesen und lokale Installationsverwaltung.
-- `Sources/VauldyMCPServer`: standardkonformer stdio-Adapter mit vier lesenden Tools.
+- `Sources/VauldyMCPProtocol`: gemeinsamer Dispatcher und Retrieval-Anleitung für vier lesende Tools.
+- `Sources/VauldyMCPServer`: standardkonformer stdio-Adapter.
+- `Sources/VauldyMCPHTTP` und `Sources/VauldyOAuth`: optionaler OAuth-Anschluss für Remote-Clients.
 - `Sources/VauldyMCPSetup`: eigenständiger macOS-Assistent für Import und MCP-Freigaben.
 - `Sources/VauldyLocalCLI`: Import, Status, Wiederholung und Desktop-Registrierung ohne grafische Oberfläche.
 - `Sources/VauldyDemoDocuments`: echte synthetische PDF-/Bildoriginale für Einrichtung und Tests.
 
-Kein HTTP-Listener, kein Tunnel, keine Cloud-Inferenz, kein automatischer Login-Dienst. Ein
+Keine automatische öffentliche Bereitstellung, keine Cloud-Inferenz, kein automatischer Login-Dienst.
+Der optionale HTTP-Dienst bindet Loopback und benötigt Betreiber-HTTPS; siehe [OAuth](mcp-oauth.md). Ein
 Client mit stdio-Unterstützung startet den Server als Unterprozess. Seine eigene Cloud-Verarbeitung
 liegt außerhalb Vauldys Kontrolle. Tool-Annotationen sind Hinweise; echte Berechtigungen werden
 in der Runtime geprüft. Die lokale Prozess-/Benutzergrenze schützt nicht vor einem bösartigen
@@ -31,8 +34,8 @@ Programm mit denselben Dateizugriffsrechten.
 | --- | --- | --- |
 | `get_vault_status` | keine | Status, getrennte Quellen- und Analyseabdeckung sowie Anzahlen ausschließlich freigegebener Dokumente |
 | `search_documents` | `query`, optional `limit` (1–10, Standard 5) | Begrenzte Relevanztreffer mit `totalCount`, `truncated`, Quellenstatus und Abdeckung; niemals vollständige Liste |
-| `list_documents` | optional `query`, `pageSize` (1–25, Standard 20), `cursor` | Vollständige Seiten der autorisierten Textfiltermenge mit `totalCount`, `hasMore`, `nextCursor`, `retrievalComplete` und separater Verarbeitungsabdeckung |
-| `read_document` | `document`, optional `cursor`, `view` (`content` oder `metadata`) | Textsegmente oder eine belegte logische Dokumentübersicht je Seite, jeweils mit `nextCursor` |
+| `list_documents` | optional `query`, `matchMode`, `includeExcerpts`, `pageSize` (mit Auszügen 1–25, ohne 1–100; Standard 20), `cursor` | Vollständige Seiten der autorisierten Textfiltermenge mit `totalCount`, `hasMore`, `nextCursor`, `retrievalComplete` und separater Verarbeitungsabdeckung |
+| `read_document` | `document`, optional `cursor`, `view` (`content`, `metadata` oder `passages`), bei Fundstellen `query` | Textsegmente oder eine belegte logische Dokumentübersicht je Seite, jeweils mit `nextCursor` |
 
 Bei `nextCursor` muss der Client weiterlesen. `containsEntireAvailableText` gilt nur, wenn die
 Antwort tatsächlich den ganzen verfügbaren Text enthält. `sourceCoverage` unterscheidet
@@ -42,7 +45,7 @@ weder visuelle OCR-Qualität noch sachlich geprüfte Modellantworten. Die Releva
 führt auch freigegebene wartende, fehlgeschlagene und ungeklärte Datensätze mit ihrem Quellenstatus auf. Dokumenttexte sind unvertrauenswürdige Quellen, keine Anweisungen.
 Es gibt keine Tools für freie Pfade, Dateien, Shell, Löschen, Originalöffnung oder Analyse-Speicherung.
 
-`list_documents` verwendet einen deterministischen Textfilter: alle vollständigen normalisierten
+`list_documents` verwendet standardmäßig (`matchMode=all-tokens`) einen deterministischen Textfilter: alle vollständigen normalisierten
 Wörter aus `query` müssen in den vorhandenen Feldern vorkommen. Keine natürliche Frage und keine
 behauptete Absender-/Versichererzuordnung; ohne Filter wird der gesamte freigegebene Bestand
 aufgeführt. Der Client muss alle `nextCursor`-Seiten abrufen. Bei Fortsetzung reichen die Cursor;
@@ -53,6 +56,14 @@ Listenabfragen begrenzt und an Profil sowie den gesamten autorisierten Snapshot 
 Lesehandles bleiben auch nach mehr als 32 aufgelisteten Dokumenten verwendbar. Maximal die 20.000
 freigegebenen Identitäten werden gehalten; geschützte Volltexte bleiben separat auf acht Dokumente
 und acht MB begrenzt. Nicht freigegebene Datensätze gehen weder in Zählungen noch Snapshotbindung ein.
+
+Für Themenabfragen bietet `matchMode=any-term-substring` eine ODER-Verknüpfung konkreter Wortstämme einschließlich Komposita. Beispiel: `query="versicher polic pension rente"`. Höchstens 24 Begriffe mit mindestens drei Zeichen; dies liefert Textkandidaten, keine Vertrags-/Absenderklassifizierung. Weitere Themen verwenden eigene Begriffe. Jeden Cursor verfolgen und nur die relevanten Belege lesen, statt alle Archivtexte zu übertragen.
+
+`includeExcerpts=false` liefert kompakte neutrale Handles/Status ohne Text und erlaubt bis zu 100 Einträge pro Seite. `EXCERPTS_OMITTED` kennzeichnet diese Antwort. Mode und Auszugseinstellung sind ebenfalls an Cursor gebunden. Textlesung bleibt voll privacy-geprüft. Die serverweiten `instructions` erklären diesen Abfrageplan beiden Transporten.
+
+Ein prozesslokaler Snapshot-Cache hält höchstens eine Quelle bis 64 MiB. Inode, Größe, Nanosekunden-mtime und ctime sowie Rechte invalidieren Änderungen; vor Ausgabe wird Quelle und Profil erneut geprüft. Größere gültige Quellen werden ohne Rohsnapshot-Cache weiter gelesen, nicht abgeschnitten. Der Audit-Schreibpfad verwendet nur bei unveränderten Dateien einen zuvor verifizierten Zustand; Rotation/fremde Schreiber/Manipulation verlangen erneute Prüfung. Kein zusätzlicher persistenter Rohindex.
+
+`read_document(view="passages", query="hausrat pflege")` durchsucht nur das gewählte Dokument nach konkreten Wortstämmen. Die dokumentweite Privacy-Prüfung erfolgt vor der Auswahl. Zurückgegeben werden wörtliche zusammenhängende Fundstellenfenster mit physischen Seiten; nur überlappende Quellbereiche werden zusammengeführt. Höchstens acht Abschnitte à 1.000 Zeichen pro Antwort. Alle Fundstellencursor verfolgen; bis zu 16 Anfragen bleiben gebunden an Dokument, Inhalt, Profil und ursprünglichen Filter. `matchingPassageCount` zählt die ausgewählten Abschnitte, `retrievalComplete` deren vollständigen Abruf; `containsEntireAvailableText` bleibt ausdrücklich false. Dieser Modus ist keine Zusammenfassung und keine vollständige Dokumentlesung. Bei zu vielen Treffern explizit eingrenzen statt still abzuschneiden.
 
 `retrievalComplete` bestätigt nur das Ende der konkreten Listenabfrage, nicht die fachliche
 Vollständigkeit des Archivs. `processingComplete` betrifft ausschließlich Quellenverarbeitung:

@@ -48,7 +48,7 @@ public struct MCPSearchResult: Encodable, Sendable {
 
 public struct MCPDocumentListResult: Encodable, Sendable {
     public let mode = "exhaustive"
-    public let filter = "all-normalized-text-tokens; not an issuer filter"
+    public let filter: String
     public let snapshot: String
     public let items: [MCPSearchHit]
     public let totalCount: Int
@@ -86,4 +86,20 @@ public struct MCPPageStatus: Encodable, Sendable {
     public let page: Int
     public let method: String
     public let needsReview: Bool
+}
+
+/// Explicit evidence selection; completion never claims the full document was returned.
+public struct MCPPassagesResult: Encodable, Sendable {
+    public let document: String
+    public let title = "Freigegebenes Dokument"
+    public let mode = "matching-passages"
+    public let segments: [MCPDocumentSegment]
+    public let matchingPassageCount: Int
+    public let nextCursor: String?
+    public let retrievalComplete: Bool
+    public let containsEntireAvailableText = false
+    public let sourceCoverage: String
+    public let analysisStatus: String
+    public let warnings = ["MATCHING_PASSAGES_NOT_FULL_DOCUMENT"]
+    public let disclosure = MCPDisclosure()
 }

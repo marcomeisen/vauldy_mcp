@@ -1,0 +1,14 @@
+{
+  "installedBefore": "vauldy-mcp 0.7.0",
+  "installedAfter": "vauldy-mcp 0.11.0",
+  "softwareUpdated": true,
+  "existingCommandUnchanged": true,
+  "protectedFilesUnchanged": true,
+  "profileFilesChecked": 2,
+  "localInitializeDiscoveryAndStatusSucceeded": true,
+  "localDiscoveredToolCount": 4,
+  "activeChatToolCatalogVerified": false,
+  "hostedChatConnectionVerified": false,
+  "tunnelConfigurationUnchanged": true,
+  "note": "Post-deployment read-only health diagnosis, not a production-data test fixture. Existing hosts may require MCP reconnect."
+}

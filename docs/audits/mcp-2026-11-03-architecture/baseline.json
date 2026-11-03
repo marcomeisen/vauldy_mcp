@@ -1,0 +1,44 @@
+{
+  "binaryVersion": "0.10.0",
+  "syntheticOnly": true,
+  "cases": [
+    {
+      "documents": 1000,
+      "pagesPerDocument": 4,
+      "snapshotBytes": 3547910,
+      "initialAuditEntries": 1000,
+      "filteredDocuments": 20,
+      "listCalls": 1,
+      "timingsMS": {
+        "initializeMS": 97.46,
+        "statusColdMS": 165.28,
+        "searchColdMS": 706.49,
+        "searchWarmMS": 374.45,
+        "filteredListFirstMS": 1335.46,
+        "filteredListRemainingMS": 0.0,
+        "unfilteredFirstPageMS": 930.97,
+        "statusWarmMedianMS": 167.11
+      },
+      "archiveUnchanged": true
+    },
+    {
+      "documents": 2000,
+      "pagesPerDocument": 4,
+      "snapshotBytes": 7101370,
+      "initialAuditEntries": 1000,
+      "filteredDocuments": 40,
+      "listCalls": 2,
+      "timingsMS": {
+        "initializeMS": 92.65,
+        "statusColdMS": 211.83,
+        "searchColdMS": 983.41,
+        "searchWarmMS": 526.06,
+        "filteredListFirstMS": 1752.06,
+        "filteredListRemainingMS": 1080.29,
+        "unfilteredFirstPageMS": 993.66,
+        "statusWarmMedianMS": 202.87
+      },
+      "archiveUnchanged": true
+    }
+  ]
+}

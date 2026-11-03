@@ -80,6 +80,43 @@ struct MCPAuditLogTests {
         #expect(throws: MCPAuditLog.AuditError.self) { try log.append(.serverStarted) }
         #expect(try Data(contentsOf: foreign) == Data("untouched".utf8))
     }
+    @Test func verifiedTailIsReusedUntilAnotherWriterOrRotationChangesIt() throws {
+        let directory = root(); defer { try? FileManager.default.removeItem(at: directory) }
+        let log = MCPAuditLog(directory: directory, maxBytes: 4096, archives: 2)
+        for _ in 0..<60 { try log.append(.serverStarted) }
+        #expect(log.fullVerificationCount == 1)
+        try MCPAuditLog(directory: directory, maxBytes: 4096, archives: 2).append(.toolsListed)
+        try log.append(.serverStopped)
+        #expect(log.fullVerificationCount == 2)
+        #expect(try log.readVerified().last?.record.sequence == 62)
+    }
+    @Test func sameLengthAuditTamperingWithRestoredMtimeCannotReuseTheCache() throws {
+        let directory = root(); defer { try? FileManager.default.removeItem(at: directory) }
+        let log = MCPAuditLog(directory: directory)
+        try log.append(.serverStarted)
+        let attributes = try FileManager.default.attributesOfItem(atPath: log.currentFile.path)
+        let old = try Data(contentsOf: log.currentFile)
+        let changed = Data(String(decoding: old, as: UTF8.self).replacingOccurrences(of: "serverStarted", with: "serverStopped").utf8)
+        #expect(changed.count == old.count)
+        try changed.write(to: log.currentFile)
+        try FileManager.default.setAttributes([.modificationDate: try #require(attributes[.modificationDate])], ofItemAtPath: log.currentFile.path)
+        #expect(throws: MCPAuditLog.AuditError.self) { try log.append(.toolsListed) }
+        #expect(try Data(contentsOf: log.currentFile) == changed)
+    }
+    @Test func deletionOrArchivedDamageCannotResetAWarmVerifiedChain() throws {
+        let directory = root(); defer { try? FileManager.default.removeItem(at: directory) }
+        let log = MCPAuditLog(directory: directory)
+        try log.append(.serverStarted)
+        try FileManager.default.removeItem(at: log.currentFile)
+        #expect(throws: MCPAuditLog.AuditError.self) { try log.append(.toolsListed) }
+        #expect(throws: MCPAuditLog.AuditError.self) { try log.append(.toolsListed) }
+        let rotated = MCPAuditLog(directory: directory.appendingPathComponent("rotated"), maxBytes: 4096)
+        for _ in 0..<30 { try rotated.append(.serverStarted) }
+        let archive = rotated.directory.appendingPathComponent("audit.1.jsonl")
+        let value = String(decoding: try Data(contentsOf: archive), as: UTF8.self).replacingOccurrences(of: "serverStarted", with: "serverStopped")
+        try Data(value.utf8).write(to: archive)
+        #expect(throws: MCPAuditLog.AuditError.self) { try rotated.append(.toolsListed) }
+    }
     @Test func revocationPersistsEvenIfLoggingIsBlocked() throws {
         let directory = root(); defer { try? FileManager.default.removeItem(at: directory) }
         let installation = MCPInstallation(root: directory)

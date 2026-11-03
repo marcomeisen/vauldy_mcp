@@ -16,6 +16,40 @@ enum MCPSourceExcerpt {
         return placeholders + LocalVault.queryTerms(rest)
     }
 
+    /// All matched windows in source order. Only overlapping source ranges are merged.
+    /// Matching runs after document-wide protection; pseudonyms remain atomic.
+    static func passages(sections: [VaultPageMarkedText.Section], terms: [String]) throws -> [VaultPageMarkedText.Section] {
+        var result: [VaultPageMarkedText.Section] = []
+        var matchCount = 0
+        for section in sections {
+            let text = section.text
+            var matches: [Range<String.Index>] = []
+            for term in terms where !term.isEmpty {
+                var offset = text.startIndex
+                while offset < text.endIndex,
+                      let match = text.range(of: term, options: [.caseInsensitive, .diacriticInsensitive], range: offset..<text.endIndex) {
+                    matchCount += 1
+                    guard matchCount <= 20_000 else { throw MCPAccessError.tooLarge }
+                    matches.append(match); offset = match.upperBound
+                }
+            }
+            var windows: [Range<String.Index>] = []
+            for match in matches.sorted(by: { $0.lowerBound < $1.lowerBound }) {
+                var lower = text.index(match.lowerBound, offsetBy: -180, limitedBy: text.startIndex) ?? text.startIndex
+                var upper = text.index(match.upperBound, offsetBy: 520, limitedBy: text.endIndex) ?? text.endIndex
+                if let open = text[..<lower].lastIndex(of: "["), text[open...].hasPrefix("[V_"), !text[open..<lower].contains("]") { lower = open }
+                if let open = text[lower..<upper].lastIndex(of: "["), text[open...].hasPrefix("[V_"),
+                   !text[open..<upper].contains("]"), let close = text[upper...].firstIndex(of: "]") { upper = text.index(after: close) }
+                if let last = windows.last, lower <= last.upperBound {
+                    windows[windows.count - 1] = last.lowerBound..<max(last.upperBound, upper)
+                } else { windows.append(lower..<upper) }
+            }
+            result += windows.map { .init(page: section.page, text: String(text[$0])) }
+            guard result.count <= 2_000 else { throw MCPAccessError.tooLarge }
+        }
+        return result
+    }
+
     static func select(sections: [VaultPageMarkedText.Section], summary: String,
                        terms: [String], preferredPage: Int?) -> VaultPageMarkedText.Section {
         let readable = sections.filter { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }

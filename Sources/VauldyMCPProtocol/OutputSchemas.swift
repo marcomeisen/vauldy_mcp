@@ -62,4 +62,11 @@ let metadataOutputSchema = object([
                                 "overview": textSchema, "fields": array(analysisFieldSchema), "warnings": array(textSchema)], optional: ["overview"])),
     "hasMore": boolSchema, "nextCursor": textSchema, "warnings": array(textSchema), "disclosure": disclosureSchema
 ], optional: ["engine", "nextCursor"])
-let readOutputSchema: Value = .object(["type": .string("object"), "anyOf": .array([contentOutputSchema, metadataOutputSchema])])
+private let passagesOutputSchema = object([
+    "document": textSchema, "title": textSchema, "mode": textSchema,
+    "segments": array(object(["page": countSchema, "part": countSchema, "text": textSchema, "source": textSchema], optional: ["page"])),
+    "matchingPassageCount": countSchema, "nextCursor": textSchema, "retrievalComplete": boolSchema,
+    "containsEntireAvailableText": boolSchema, "sourceCoverage": textSchema, "analysisStatus": textSchema,
+    "warnings": array(textSchema), "disclosure": disclosureSchema
+], optional: ["nextCursor"])
+let readOutputSchema: Value = .object(["type": .string("object"), "anyOf": .array([contentOutputSchema, metadataOutputSchema, passagesOutputSchema])])

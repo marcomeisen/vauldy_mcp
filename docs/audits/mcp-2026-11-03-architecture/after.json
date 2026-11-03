@@ -1,0 +1,67 @@
+{
+  "binaryVersion": "vauldy-mcp 0.11.0",
+  "syntheticOnly": true,
+  "cases": [
+    {
+      "documents": 1000,
+      "pagesPerDocument": 4,
+      "snapshotBytes": 3547910,
+      "initialAuditEntries": 1000,
+      "filteredDocuments": 20,
+      "listCalls": 1,
+      "compactListCalls": 10,
+      "topicCandidates": 20,
+      "timingsMS": {
+        "initializeMS": 101.66,
+        "statusColdMS": 78.0,
+        "searchColdMS": 592.61,
+        "searchWarmMS": 233.68,
+        "filteredListFirstMS": 1244.51,
+        "filteredListRemainingMS": 0.0,
+        "unfilteredFirstPageMS": 806.15,
+        "statusWarmMedianMS": 60.1,
+        "topicCompactMS": 238.63,
+        "completeCompactInventoryMS": 1293.81
+      },
+      "archiveUnchanged": true,
+      "profileUnchanged": true
+    },
+    {
+      "documents": 2000,
+      "pagesPerDocument": 4,
+      "snapshotBytes": 7101370,
+      "initialAuditEntries": 1000,
+      "filteredDocuments": 40,
+      "listCalls": 2,
+      "compactListCalls": 20,
+      "topicCandidates": 40,
+      "timingsMS": {
+        "initializeMS": 106.35,
+        "statusColdMS": 116.17,
+        "searchColdMS": 875.03,
+        "searchWarmMS": 416.09,
+        "filteredListFirstMS": 1629.5,
+        "filteredListRemainingMS": 871.26,
+        "unfilteredFirstPageMS": 827.22,
+        "statusWarmMedianMS": 95.32,
+        "topicCompactMS": 411.28,
+        "completeCompactInventoryMS": 2537.33
+      },
+      "archiveUnchanged": true,
+      "profileUnchanged": true
+    }
+  ],
+  "longEvidence": {
+    "pages": 100,
+    "fullTextCalls": 34,
+    "targetedCalls": 1,
+    "fullTextColdMS": 2986.37,
+    "targetedColdMS": 2056.49,
+    "independentColdMCPProcesses": true,
+    "verifiedSourcePages": [
+      42,
+      87
+    ],
+    "archiveAndProfileUnchanged": true
+  }
+}

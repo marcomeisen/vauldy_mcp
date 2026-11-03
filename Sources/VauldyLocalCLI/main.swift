@@ -48,6 +48,19 @@ struct VauldyLocalCLI {
             }
             return
         }
+        if args.first == "update-software" {
+            guard args.count == 5, args[1] == "--root", args[2].hasPrefix("/"), args[3] == "--from-app", args[4].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
+            let app = URL(fileURLWithPath: args[4]), resources = app.appendingPathComponent("Contents/Resources")
+            guard let bundle = Bundle(url: app), bundle.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup",
+                  bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String == MCPBuild.version else { throw MCPAccessError.configuration }
+            let installer = MCPInstallation(root: URL(fileURLWithPath: args[2]))
+            try installer.updateSoftware(binary: resources.appendingPathComponent("vauldy-mcp"),
+                                         localCLI: resources.appendingPathComponent("vauldy-local"),
+                                         statusApp: resources.appendingPathComponent("Vauldy MCP Status.app"), setupApp: app)
+            struct Updated: Encodable { let updated = true; let version = MCPBuild.version; let clientRestartRequired = true }
+            try output(Updated())
+            return
+        }
         if args.first == "check-connection" {
             guard args.count == 3, args[1] == "--profile", args[2].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
             let binary = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.deletingLastPathComponent().appendingPathComponent("vauldy-mcp")

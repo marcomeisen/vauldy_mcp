@@ -1,0 +1,74 @@
+{
+  "allPassed": true,
+  "stages": [
+    {
+      "name": "swift-tests",
+      "passed": true
+    },
+    {
+      "name": "package",
+      "passed": true
+    },
+    {
+      "name": "smoke_test",
+      "passed": true
+    },
+    {
+      "name": "base_analysis_wire_test",
+      "passed": true
+    },
+    {
+      "name": "import_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "audit_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "client_install_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "management_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "status_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "watch_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "original_reference_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "oauth_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "scalability_benchmark",
+      "passed": true
+    },
+    {
+      "name": "tunnel_launcher_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "benchmark_ocr",
+      "passed": true
+    },
+    {
+      "name": "retrieval_benchmark",
+      "passed": true
+    }
+  ],
+  "version": "0.11.0",
+  "swiftTests": 146,
+  "swiftSuites": 21,
+  "productionArchivesUsedAsFixtures": false,
+  "liveProviderChatVerified": false
+}

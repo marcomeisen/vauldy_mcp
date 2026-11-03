@@ -14,9 +14,19 @@ public actor ReadOnlyMCPRuntime {
         let fingerprint: Data
         let query: String?
         let pageSize: Int
+        let matchMode: VaultTextMatchMode
+        let includeExcerpts: Bool
         let ids: [UUID]
         var issuedOffsets: Set<Int> = [0]
     }
+    private struct PassageSession {
+        let document: String
+        let fingerprint: Data
+        let query: String
+        var issuedOffsets: Set<Int> = [0]
+    }
+    private var passageSessions: [String: PassageSession] = [:]
+    private var passageOrder: [String] = []
     private var listSessions: [String: ListSession] = [:]
     private var listOrder: [String] = []
     private var currentProfile: MCPAccessProfile?
@@ -35,12 +45,17 @@ public actor ReadOnlyMCPRuntime {
     private var protectedDocuments: [UUID: PreparedDocument] = [:]
     private var protectedOrder: [UUID] = []
     private var leases: [String: Lease] = [:]
-    private let loadVault: @Sendable (String) throws -> [VaultDocument]
+    private let loadVault: (@Sendable (String) throws -> [VaultDocument])?
+    private var fileSnapshots = MCPVaultSnapshotCache()
+    private var sourceVersion: MCPFileVersion?
+    private var authorizedCache: [VaultDocument]?
+    private var fingerprintCache: [UUID: Data] = [:]
+    private var generationCache: Data?
+    private var accessEpoch: UInt64 = 0
+    var snapshotDecodeCount: Int { fileSnapshots.decodeCount }
 
     public init(profiles: any MCPProfileSource,
-                loadVault: @escaping @Sendable (String) throws -> [VaultDocument] = {
-                    try FileVaultSnapshotSource(fileURL: URL(fileURLWithPath: $0)).loadDocuments()
-                }) {
+                loadVault: (@Sendable (String) throws -> [VaultDocument])? = nil) {
         self.profiles = profiles
         self.loadVault = loadVault
     }
@@ -53,8 +68,9 @@ public actor ReadOnlyMCPRuntime {
                                   coverage: MCPProcessingCoverage(documents: [], grantedCount: 0), warnings: [], processingComplete: false, analysisCoverage: MCPAnalysisCoverage([]))
         }
         let documents = try authorizedDocuments(profile)
+        let epoch = accessEpoch
         let coverage = MCPProcessingCoverage(documents: documents, grantedCount: profile.allowedDocumentIDs.count)
-        try recheck(profile)
+        try recheck(profile, epoch: epoch)
         return MCPVaultStatus(access: "explicit-document-grants", available: true,
                               grantedDocumentCount: documents.count,
                               searchableDocumentCount: documents.filter(\.isSearchable).count,
@@ -67,7 +83,9 @@ public actor ReadOnlyMCPRuntime {
               query.utf8.count <= 2_000, (1...10).contains(limit) else { throw MCPAccessError.invalidArguments }
         let profile = try profiles.load()
         let documents = try authorizedDocuments(profile)
+        let epoch = accessEpoch
         let raw = try await searchIndex.search(documents: documents, query: query, limit: limit)
+        guard epoch == accessEpoch else { throw MCPAccessError.stale }
         var output: [MCPSearchHit] = []
         for hit in raw.hits {
             guard let document = documents.first(where: { $0.id == hit.documentId }) else { continue }
@@ -76,7 +94,7 @@ public actor ReadOnlyMCPRuntime {
         let coverage = MCPProcessingCoverage(documents: documents, grantedCount: profile.allowedDocumentIDs.count)
         let count = raw.totalCount ?? output.count
         try Task.checkCancellation()
-        try recheck(profile)
+        try recheck(profile, epoch: epoch)
         return MCPSearchResult(hits: output, limit: limit, totalCount: count, truncated: count > output.count,
                                processingComplete: coverage.processingComplete, coverage: coverage,
                                warnings: ["RANKED_RESULTS_NOT_EXHAUSTIVE"] + (count > output.count ? ["RESULTS_TRUNCATED"] : []) + coverage.warnings + MCPAnalysisCoverage(documents).warnings)
@@ -84,13 +102,15 @@ public actor ReadOnlyMCPRuntime {
 
     /// Complete enumeration of a deterministic text-filtered authorized set. A changed
     /// authorized snapshot expires continuation rather than skipping or duplicating records.
-    public func list(query: String? = nil, pageSize: Int? = nil, cursor: String? = nil) throws -> MCPDocumentListResult {
+    public func list(query: String? = nil, pageSize: Int? = nil, cursor: String? = nil,
+                     matchMode: VaultTextMatchMode? = nil, includeExcerpts: Bool? = nil) throws -> MCPDocumentListResult {
         let query = query?.trimmingCharacters(in: .whitespacesAndNewlines)
         guard query.map({ !$0.isEmpty && $0.utf8.count <= 2_000 && $0.rangeOfCharacter(from: .alphanumerics) != nil }) ?? true,
-              pageSize.map({ (1...25).contains($0) }) ?? true,
+              pageSize.map({ (1...100).contains($0) }) ?? true,
               cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
         let profile = try profiles.load()
         let documents = try authorizedDocuments(profile)
+        let epoch = accessEpoch
         let generation = try snapshotFingerprint(documents)
         let key: String
         let offset: Int
@@ -103,11 +123,17 @@ public actor ReadOnlyMCPRuntime {
             guard session.fingerprint == generation else { throw MCPAccessError.stale }
             guard session.issuedOffsets.contains(offset),
                   query == nil || query == session.query,
-                  pageSize == nil || pageSize == session.pageSize else { throw MCPAccessError.invalidArguments }
+                  pageSize == nil || pageSize == session.pageSize,
+                  matchMode == nil || matchMode == session.matchMode,
+                  includeExcerpts == nil || includeExcerpts == session.includeExcerpts else { throw MCPAccessError.invalidArguments }
         } else {
+            let excerpts = includeExcerpts ?? true, mode = matchMode ?? .allTokens
+            guard (pageSize ?? 20) <= (excerpts ? 25 : 100),
+                  mode != .anyTermSubstring || query.map({ VaultDocumentFilter.validCandidateQuery($0) }) ?? true else { throw MCPAccessError.invalidArguments }
             key = UUID().uuidString.lowercased(); offset = 0
             session = ListSession(fingerprint: generation, query: query, pageSize: pageSize ?? 20,
-                                  ids: documents.filter { VaultDocumentFilter.matches($0, query: query) }
+                                  matchMode: mode, includeExcerpts: excerpts,
+                                  ids: documents.filter { VaultDocumentFilter.matches($0, query: query, mode: mode) }
                                     .map(\.id).sorted { $0.uuidString < $1.uuidString })
             if listOrder.count >= 4 { listSessions.removeValue(forKey: listOrder.removeFirst()) }
             listOrder.append(key)
@@ -116,6 +142,12 @@ public actor ReadOnlyMCPRuntime {
         let byID = Dictionary(uniqueKeysWithValues: documents.map { ($0.id, $0) })
         let items = try session.ids[offset..<end].map { id in
             guard let document = byID[id] else { throw MCPAccessError.stale }
+            if !session.includeExcerpts {
+                let handle = try lease(for: document, profile: profile), state = MCPSourceState(document)
+                return MCPSearchHit(document: handle, title: "Freigegebenes Dokument", page: nil, excerpt: "",
+                                    source: reference(handle, page: nil), processingStatus: state.processingStatus,
+                                    sourceCoverage: state.sourceCoverage, analysisStatus: document.baseAnalysisStatus)
+            }
             return try resultItem(document, profile: profile, query: session.query, preferredPage: nil)
         }
         let more = end < session.ids.count
@@ -123,11 +155,14 @@ public actor ReadOnlyMCPRuntime {
         listSessions[key] = session
         let coverage = MCPProcessingCoverage(documents: documents, grantedCount: profile.allowedDocumentIDs.count)
         try Task.checkCancellation()
-        try recheck(profile)
-        return MCPDocumentListResult(snapshot: key, items: items, totalCount: session.ids.count, hasMore: more,
+        try recheck(profile, epoch: epoch)
+        return MCPDocumentListResult(filter: session.matchMode == .allTokens ? "all-normalized-text-tokens; not an issuer filter" : "any-normalized-term-substring; candidates, not a classification or issuer filter",
+                                     snapshot: key, items: items, totalCount: session.ids.count, hasMore: more,
                                      nextCursor: more ? "\(key):\(end)" : nil, retrievalComplete: !more,
                                      processingComplete: coverage.processingComplete, coverage: coverage,
                                      warnings: ["ORGANIZATION_RELATIONSHIPS_NOT_RESOLVED"]
+                                        + (session.matchMode == .anyTermSubstring ? ["BROAD_TEXT_CANDIDATES_NOT_CLASSIFICATION"] : [])
+                                        + (session.includeExcerpts ? [] : ["EXCERPTS_OMITTED"])
                                         + (session.query == nil ? [] : ["TEXT_FILTER_NOT_ISSUER_ASSIGNMENT"]) + coverage.warnings + MCPAnalysisCoverage(documents).warnings)
     }
 
@@ -135,6 +170,7 @@ public actor ReadOnlyMCPRuntime {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
         let profile = try profiles.load()
         let documents = try authorizedDocuments(profile)
+        let epoch = accessEpoch
         guard let lease = leases[handle], lease.profile == profile,
               let document = documents.first(where: { $0.id == lease.id && $0.isSearchable }),
               try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
@@ -162,7 +198,7 @@ public actor ReadOnlyMCPRuntime {
         let expected = document.pageCount
         let state = MCPSourceState(document)
         try Task.checkCancellation()
-        try recheck(profile)
+        try recheck(profile, epoch: epoch)
         return MCPDocumentResult(document: handle, title: "Freigegebenes Dokument",
                                  segments: Array(segments[offset..<end]), expectedPageCount: expected,
                                  availablePages: Array(Set(pages)).sorted(),
@@ -174,12 +210,57 @@ public actor ReadOnlyMCPRuntime {
                                  } ?? [], analysisStatus: document.baseAnalysisStatus)
     }
 
+    /// Search within one granted document without transferring unrelated source pages.
+    /// Results are literal protected windows, not summaries or a full-document claim.
+    public func passages(document handle: String, query: String? = nil, cursor: String? = nil) throws -> MCPPassagesResult {
+        guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true,
+              query.map({ $0.utf8.count <= 2_000 && VaultDocumentFilter.validCandidateQuery($0) }) ?? true else { throw MCPAccessError.invalidArguments }
+        let profile = try profiles.load(), documents = try authorizedDocuments(profile), epoch = accessEpoch
+        guard let lease = leases[handle], lease.profile == profile,
+              let document = documents.first(where: { $0.id == lease.id && $0.isSearchable }),
+              try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
+        let key: String, offset: Int
+        var selection: PassageSession
+        if let cursor {
+            let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
+            guard parts.count == 3, parts[1] == "p", let value = Int(parts[2]), value >= 0,
+                  let previous = passageSessions[String(parts[0])], previous.document == handle,
+                  previous.fingerprint == lease.fingerprint else { throw MCPAccessError.stale }
+            guard previous.issuedOffsets.contains(value), query == nil || query == previous.query else { throw MCPAccessError.invalidArguments }
+            key = String(parts[0]); offset = value; selection = previous
+        } else {
+            guard let query else { throw MCPAccessError.invalidArguments }
+            key = UUID().uuidString.lowercased(); offset = 0
+            selection = .init(document: handle, fingerprint: lease.fingerprint, query: query)
+            if passageOrder.count >= 16 { passageSessions.removeValue(forKey: passageOrder.removeFirst()) }
+            passageOrder.append(key)
+        }
+        let prepared = try preparedDocument(document, profile: profile)
+        let terms = MCPSourceExcerpt.terms(in: prepared.session.protect(selection.query))
+        let windows = try MCPSourceExcerpt.passages(sections: prepared.sections, terms: terms)
+        var segments: [MCPDocumentSegment] = []
+        for window in windows {
+            for text in chunks(window.text, limit: 1_000) {
+                segments.append(.init(page: window.page, part: segments.count + 1, text: text, source: reference(handle, page: window.page)))
+            }
+        }
+        guard offset <= segments.count else { throw MCPAccessError.invalidArguments }
+        let end = min(offset + 8, segments.count)
+        if end < segments.count { selection.issuedOffsets.insert(end) }
+        passageSessions[key] = selection
+        try recheck(profile, epoch: epoch)
+        return .init(document: handle, segments: Array(segments[offset..<end]), matchingPassageCount: segments.count,
+                     nextCursor: end < segments.count ? "\(key):p:\(end)" : nil, retrievalComplete: end == segments.count,
+                     sourceCoverage: MCPSourceState(document).sourceCoverage, analysisStatus: document.baseAnalysisStatus)
+    }
+
     /// One logical record per metadata page. Continuation is bound to the same
     /// content fingerprint and permission lease as full-text reading.
     public func readMetadata(document handle: String, cursor: String? = nil) throws -> MCPMetadataResult {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
         let profile = try profiles.load()
         let documents = try authorizedDocuments(profile)
+        let epoch = accessEpoch
         guard let lease = leases[handle], lease.profile == profile,
               let document = documents.first(where: { $0.id == lease.id }),
               try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
@@ -204,7 +285,7 @@ public actor ReadOnlyMCPRuntime {
             }, warnings: MCPAnalysisWarnings.safe(card.issues))
         }
         try Task.checkCancellation()
-        try recheck(profile)
+        try recheck(profile, epoch: epoch)
         return MCPMetadataResult(document: handle, analysisStatus: document.baseAnalysisStatus, engine: analysis?.engine.rawValue,
                                  analyzedPages: analysis?.analyzedPages ?? [], logicalDocumentCount: records.count, documents: output,
                                  hasMore: end < records.count, nextCursor: end < records.count ? "\(handle):m:\(end)" : nil,
@@ -219,26 +300,40 @@ public actor ReadOnlyMCPRuntime {
         }
         if currentProfile != profile { clearAccessCaches(); currentProfile = profile }
         do {
-            let all = try loadVault(profile.vaultPath)
+            let all: [VaultDocument]
+            let version: MCPFileVersion?
+            if let loadVault { all = try loadVault(profile.vaultPath); version = nil }
+            else {
+                let loaded = try fileSnapshots.load(profile.vaultPath)
+                if sourceVersion == loaded.version, let authorizedCache { return authorizedCache }
+                all = loaded.documents; version = loaded.version
+            }
             guard all.count <= 20_000, Set(all.map(\.id)).count == all.count else { throw MCPAccessError.unavailable }
             let allowed = all.filter { profile.allowedDocumentIDs.contains($0.id) }
+            if version == nil || sourceVersion != version { fingerprintCache.removeAll(); generationCache = nil; accessEpoch &+= 1 }
+            sourceVersion = version
+            authorizedCache = version != nil && fileSnapshots.retainsDocuments ? allowed : nil
             let ids = Set(allowed.map(\.id))
             protectedDocuments = protectedDocuments.filter { ids.contains($0.key) && $0.value.profile == profile }
             protectedOrder = protectedOrder.filter { protectedDocuments[$0] != nil }
             return allowed
-        } catch { throw MCPAccessError.unavailable }
+        } catch { clearAccessCaches(); throw MCPAccessError.unavailable }
     }
 
-    private func recheck(_ profile: MCPAccessProfile) throws {
-        guard try profiles.load() == profile else {
+    private func recheck(_ profile: MCPAccessProfile, epoch: UInt64) throws {
+        guard epoch == accessEpoch, try profiles.load() == profile,
+              sourceVersion == nil || (try? MCPFileVersion(URL(fileURLWithPath: profile.vaultPath))) == sourceVersion else {
             clearAccessCaches()
             throw MCPAccessError.stale
         }
     }
 
     private func fingerprint(_ document: VaultDocument) throws -> Data {
+        if let existing = fingerprintCache[document.id] { return existing }
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
-        return Data(SHA256.hash(data: try encoder.encode(document)))
+        let value = Data(SHA256.hash(data: try encoder.encode(document)))
+        fingerprintCache[document.id] = value
+        return value
     }
 
     private func lease(for document: VaultDocument, profile: MCPAccessProfile) throws -> String {
@@ -272,17 +367,22 @@ public actor ReadOnlyMCPRuntime {
     }
 
     private func clearAccessCaches() {
+        accessEpoch &+= 1
         leases.removeAll(); handlesByID.removeAll(); protectedDocuments.removeAll(); protectedOrder.removeAll()
-        listSessions.removeAll(); listOrder.removeAll(); currentProfile = nil
+        listSessions.removeAll(); listOrder.removeAll(); passageSessions.removeAll(); passageOrder.removeAll(); currentProfile = nil
+        fileSnapshots.clear(); sourceVersion = nil; authorizedCache = nil
+        fingerprintCache.removeAll(); generationCache = nil
     }
 
     private func snapshotFingerprint(_ documents: [VaultDocument]) throws -> Data {
+        if let generationCache { return generationCache }
         var hash = SHA256()
         for document in documents.sorted(by: { $0.id.uuidString < $1.id.uuidString }) {
             try Task.checkCancellation()
             hash.update(data: try fingerprint(document))
         }
-        return Data(hash.finalize())
+        let value = Data(hash.finalize()); generationCache = value
+        return value
     }
 
     private func resultItem(_ document: VaultDocument, profile: MCPAccessProfile, query: String?, preferredPage: Int?) throws -> MCPSearchHit {

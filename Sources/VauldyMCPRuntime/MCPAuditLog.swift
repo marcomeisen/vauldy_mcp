@@ -74,6 +74,17 @@ public struct MCPAuditLog: Sendable {
     public let session: UUID
     private let maxBytes: Int
     private let archives: Int
+    private struct FileState: Equatable { let url: URL; let version: MCPFileVersion }
+    private final class VerifiedState: @unchecked Sendable {
+        let lock = NSLock()
+        var files: [FileState]?
+        var last: Entry?
+        var verifications = 0
+    }
+    private let verified = VerifiedState()
+    var fullVerificationCount: Int {
+        verified.lock.lock(); defer { verified.lock.unlock() }; return verified.verifications
+    }
 
     public init(directory: URL, session: UUID = UUID(), maxBytes: Int = 1_048_576, archives: Int = 4) {
         self.directory = directory
@@ -91,10 +102,22 @@ public struct MCPAuditLog: Sendable {
                        durationMS: Int? = nil, count: Int? = nil, revision: UUID? = nil, documentHandles: [UUID] = []) throws {
         do {
             try locked {
+                verified.lock.lock(); defer { verified.lock.unlock() }
+                do {
                 let files = try existingFiles()
-                var last: Entry?
-                for file in files.reversed() {
-                    if let entry = try entries(in: file).last { last = entry; break }
+                let states = try fileStates(files)
+                let last: Entry?
+                if verified.files == states { last = verified.last }
+                else {
+                    let entries = try files.flatMap { try self.entries(in: $0) }
+                    try validateSequence(entries)
+                    guard try fileStates(files) == states else { throw AuditError.damaged }
+                    last = entries.last
+                    if let trusted = verified.last {
+                        guard let last, last.record.sequence >= trusted.record.sequence,
+                              last.record.sequence != trusted.record.sequence || last.hash == trusted.hash else { throw AuditError.damaged }
+                    }
+                    verified.verifications += 1
                 }
                 guard (last?.record.sequence ?? 0) < Int.max else { throw AuditError.damaged }
                 let timestamp = ISO8601DateFormatter(); timestamp.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -118,6 +141,8 @@ public struct MCPAuditLog: Sendable {
                 defer { try? handle.close() }
                 guard fchmod(fd, S_IRUSR | S_IWUSR) == 0 else { throw AuditError.unavailable }
                 try handle.write(contentsOf: line); try handle.synchronize()
+                verified.files = try fileStates(existingFiles()); verified.last = entry
+                } catch { verified.files = nil; throw error }
             }
         } catch let error as AuditError { throw error }
         catch { throw AuditError.unavailable }
@@ -127,10 +152,17 @@ public struct MCPAuditLog: Sendable {
     public func readVerified() throws -> [Entry] {
         try locked {
             let all = try existingFiles().flatMap { try entries(in: $0) }
-            for (previous, next) in zip(all, all.dropFirst()) {
-                guard next.previousHash == previous.hash, next.record.sequence == previous.record.sequence + 1 else { throw AuditError.damaged }
-            }
+            try validateSequence(all)
             return all
+        }
+    }
+
+    private func fileStates(_ files: [URL]) throws -> [FileState] {
+        try files.map { try validatePath($0); return FileState(url: $0, version: try MCPFileVersion($0)) }
+    }
+    private func validateSequence(_ entries: [Entry]) throws {
+        for (previous, next) in zip(entries, entries.dropFirst()) {
+            guard next.previousHash == previous.hash, next.record.sequence == previous.record.sequence + 1 else { throw AuditError.damaged }
         }
     }
 
