@@ -1,6 +1,6 @@
 {
-  "binary_sha256": "f2ef129a123c04de686be9db4db9bce71f0a8cf55f445f8a8b048f919809886d",
-  "binary_version": "vauldy-mcp 0.9.1",
+  "binary_sha256": "fd1e42438367de475fd59c96f75d4fa2d25702c5aadfbcaf65dab7e65b0c4562",
+  "binary_version": "vauldy-mcp 0.10.0",
   "fixture": "synthetic; no real archive; no model answer evaluation",
   "measurements": {
     "list_calls": 3,
@@ -17,7 +17,7 @@
     "generic_filename": {
       "exact_lookup_count": 1,
       "readable_lvm_body": false,
-      "search_excerpt": "[V_6B58473DF6F6472283DA41D3A6860979_ORGANISATION_1]\nauditmarkerepson"
+      "search_excerpt": "[V_335000DECF104D249D593F70D003EBC8_ORGANISATION_1]\nauditmarkerepson"
     },
     "substring": {
       "returned": 1,

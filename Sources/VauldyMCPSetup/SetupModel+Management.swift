@@ -63,14 +63,17 @@ extension SetupModel {
     var unsharedCount: Int { documents.filter { !(activeConnection?.allowedDocumentIDs.contains($0.id) ?? false) }.count }
 
     func state(for profile: MCPAccessProfile) -> MCPConnectionState {
-        MCPConnectionState(profile: profile, instances: instances, binding: bindings[profile.connectionID])
+        MCPConnectionState(profile: profile, instances: instances, binding: profile.connectionKind == .oauth ? nil : bindings[profile.connectionID])
     }
-    func client(for profile: MCPAccessProfile) -> MCPDesktopClient? { resolvedClients[profile.connectionID] ?? profile.desktopClient }
+    func client(for profile: MCPAccessProfile) -> MCPDesktopClient? { profile.connectionKind == .oauth ? nil : resolvedClients[profile.connectionID] ?? profile.desktopClient }
     func existingConnection(for client: MCPDesktopClient) -> MCPAccessProfile? {
         connections.first { resolvedClients[$0.connectionID] == client && bindings[$0.connectionID] == .registered }
     }
     func bindingLabel(_ profile: MCPAccessProfile) -> String {
-        switch bindings[profile.connectionID] {
+        if profile.connectionKind == .oauth {
+            return oauthConnections.contains { $0.profileID == profile.connectionID && !$0.revoked } ? "OAuth-Freigabe aktiv" : "Dokumentauswahl bereit · OAuth noch nicht verbunden"
+        }
+        return switch bindings[profile.connectionID] {
         case .registered: "Im Chatbot eingetragen"
         case .notRegistered: "Noch nicht im Chatbot eingetragen"
         case .conflict: "Client-Zuordnung prüfen"
@@ -109,6 +112,7 @@ extension SetupModel {
             if !connections.contains(where: { $0.connectionID == activeConnectionID }) { activeConnectionID = connections.first?.connectionID }
             instances = await Task.detached { try? MCPProcessPresence.serverInstances(root: installer.root) }.value
             managementError = ""
+            await refreshOAuth()
             if let binary = bundledBinary {
                 let stamp = try? installer.binaryURL.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
                 if software == nil || stamp != lastInstalledStamp {
@@ -139,6 +143,7 @@ extension SetupModel {
         let results = await Task.detached {
             var states: [UUID: MCPClientBinding] = [:], clients: [UUID: MCPDesktopClient] = [:]
             for profile in profiles {
+                if profile.connectionKind == .oauth { continue }
                 var fallback: MCPClientBinding = .unavailable
                 let candidates = profile.desktopClient.map { [$0] } ?? MCPDesktopClient.allCases
                 for client in candidates {
@@ -173,7 +178,7 @@ extension SetupModel {
         editing = nil; selected = []; acknowledged = false; configuration = nil
         registrationMessage = ""; connectionName = ""; setupStep = 0
         documentFilter = .all; documentSearch = ""
-        clientSelection = MCPDesktopClient.allCases.first(where: { existingConnection(for: $0) == nil })?.rawValue ?? "manual"
+        clientSelection = "oauth-chatgpt"
         showingSetup = true; failure = false; message = ""
         if documents.isEmpty { openLocalStore() }
     }
@@ -257,11 +262,14 @@ extension SetupModel {
     func finishSetup() {
         guard !busy, acknowledged, selectedReadableCount > 0, let vaultURL, let binary = bundledBinary else { return }
         let ids = selected.intersection(Set(documents.filter(\.isSearchable).map(\.id)))
-        let client = MCPDesktopClient(rawValue: clientSelection)
+        let isOAuth = clientSelection.hasPrefix("oauth-")
+        let chosenClient = MCPDesktopClient(rawValue: clientSelection.replacingOccurrences(of: "oauth-", with: ""))
+        let client = isOAuth ? nil : chosenClient
         var profile = MCPAccessProfile(vaultPath: vaultURL.path, allowedDocumentIDs: ids, enabled: true, acknowledgedCloudDisclosure: true)
         profile.desktopClient = client
+        profile.connectionKind = isOAuth ? .oauth : .local
         let title = connectionName.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.connectionName = title.isEmpty || title == "Mein MCP-Client" ? (client?.title ?? "Mein Chatbot") : String(title.prefix(80))
+        profile.connectionName = title.isEmpty || title == "Mein MCP-Client" ? (chosenClient.map { isOAuth ? ($0 == .chatgpt ? "ChatGPT" : "Claude") : $0.title } ?? "Mein Chatbot") : String(title.prefix(80))
         let final = profile, installer = installation, registrar = registration
         let local = localExecutable, status = bundledStatusApp, setup = Bundle.main.bundleURL
         busy = true; failure = false; message = "Verbindung wird lokal eingerichtet …"
@@ -270,7 +278,10 @@ extension SetupModel {
                 configuration = try await Task.detached { try installer.install(binary: binary, profile: final, localCLI: local, statusApp: status, setupApp: setup) }.value
                 await restartStatusMenu()
                 activeConnectionID = final.connectionID; editing = final
-                if let client {
+                if isOAuth {
+                    configuration = nil
+                    registrationMessage = "Dokumentauswahl gespeichert. Verbinde jetzt deinen Chatbot über OAuth und bestätige die passende Anfrage in Vauldy."
+                } else if let client {
                     do {
                         _ = try await Task.detached { try registrar.register(client, binary: installer.binaryURL, profile: installer.profileURL(final.connectionID)) }.value
                         registrationMessage = "Im Chatbot eingetragen. Eine erste Anfrage muss noch aus dem Chatbot erfolgen."
@@ -279,13 +290,14 @@ extension SetupModel {
                 setupStep = 3; software = nil
                 message = "Die Verbindung wurde vorbereitet. Der lokale Test bestätigt noch keine Anfrage aus deinem Chatbot."
                 await refreshManagement(checkBindings: true)
-                checkConnection(final, present: false)
+                if !isOAuth { checkConnection(final, present: false) }
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht eingerichtet werden.") }
             busy = false
         }
     }
 
     func checkConnection(_ profile: MCPAccessProfile, present: Bool = true) {
+        if profile.connectionKind == .oauth { activeConnectionID = profile.connectionID; section = .oauth; Task { await refreshOAuth() }; return }
         if present { diagnosisProfile = profile }
         guard !probing.contains(profile.connectionID) else { return }
         probing.insert(profile.connectionID); probeErrors[profile.connectionID] = nil

@@ -1,5 +1,6 @@
 import Foundation
 import VauldyCore
+import VauldyOAuth
 import VauldyMCPRuntime
 import VauldyDemoDocuments
 
@@ -14,6 +15,39 @@ struct VauldyLocalCLI {
     }
     static func execute(_ args: [String]) async throws {
         if args == ["--version"] { print("vauldy-local \(MCPBuild.version)"); return }
+        if args.first?.hasPrefix("oauth-") == true {
+            guard args.count >= 3, args[1] == "--root", args[2].hasPrefix("/") else { throw OAuthFailure.invalidRequest }
+            let store = OAuthStore(installation: MCPInstallation(root: URL(fileURLWithPath: args[2])))
+            switch args[0] {
+            case "oauth-configure":
+                guard args.count == 7, args[3] == "--origin", args[5] == "--port", let port = Int(args[6]) else { throw OAuthFailure.invalidRequest }
+                try store.configure(OAuthConfiguration(origin: args[4], port: port))
+                try output(store.configuration())
+            case "oauth-pending":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try output(store.pendingRequests())
+            case "oauth-connections":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try output(store.connections())
+            case "oauth-approve":
+                guard args.count == 9, args[3] == "--request", let id = UUID(uuidString: args[4]), args[5] == "--profile", let profile = UUID(uuidString: args[6]), args[7] == "--revision", let revision = UUID(uuidString: args[8]) else { throw OAuthFailure.invalidRequest }
+                try store.approve(id, profileID: profile, expectedRevision: revision)
+            case "oauth-deny":
+                guard args.count == 5, args[3] == "--request", let id = UUID(uuidString: args[4]) else { throw OAuthFailure.invalidRequest }; try store.deny(id)
+            case "oauth-revoke":
+                guard args.count == 5, args[3] == "--connection", let id = UUID(uuidString: args[4]) else { throw OAuthFailure.invalidRequest }; try store.revoke(connectionID: id)
+            case "oauth-status":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }
+                struct OAuthStatus: Encodable { let running: Bool; let resource: String? }
+                try output(OAuthStatus(running: OAuthServiceController(store: store).isRunning(), resource: store.configuration()?.resource))
+            case "oauth-start":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }
+                let executable = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.deletingLastPathComponent().appendingPathComponent("vauldy-mcp-http")
+                try await OAuthServiceController(store: store).start(executable: executable)
+            case "oauth-stop":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try OAuthServiceController(store: store).stop()
+            default: throw OAuthFailure.invalidRequest
+            }
+            return
+        }
         if args.first == "check-connection" {
             guard args.count == 3, args[1] == "--profile", args[2].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
             let binary = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL.deletingLastPathComponent().appendingPathComponent("vauldy-mcp")

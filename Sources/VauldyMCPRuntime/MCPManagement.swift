@@ -2,16 +2,17 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.9.1" }
+public enum MCPBuild { public static let version = "0.10.0" }
 
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
-    case overview, connections, documents, folders, settings
+    case overview, connections, documents, folders, oauth, settings
     public var title: String {
         switch self {
         case .overview: "Übersicht"
         case .connections: "Verbindungen"
         case .documents: "Dokumente"
         case .folders: "Ordner"
+        case .oauth: "ChatGPT & Claude"
         case .settings: "Einstellungen"
         }
     }
@@ -21,6 +22,7 @@ public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
         case .connections: "bubble.left.and.bubble.right"
         case .documents: "doc.on.doc"
         case .folders: "folder"
+        case .oauth: "link.badge.plus"
         case .settings: "slider.horizontal.3"
         }
     }
@@ -155,6 +157,8 @@ extension MCPInstallation {
         let hash = try Self.hash(binaryURL)
         var current = hash == (try Self.hash(availableBinary))
         var pairs: [(URL, URL)] = []
+        let http = availableBinary.deletingLastPathComponent().appendingPathComponent("vauldy-mcp-http")
+        if FileManager.default.isExecutableFile(atPath: http.path) { pairs.append((httpServerURL, http)) }
         if let localCLI { pairs.append((localCLIURL, localCLI)) }
         if let statusApp { pairs.append((statusAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"), statusApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"))) }
         if let setupApp { pairs.append((setupAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"), setupApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"))) }

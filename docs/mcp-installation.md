@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.9.1)
+# Vauldy MCP einrichten (macOS, Version 0.10.0)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -10,7 +10,7 @@ Assistenten oder `vauldy-local`; die MCP-Schnittstelle bleibt ausschließlich le
 2. In **Übersicht** „Chatbot verbinden“ wählen. Der Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**.
 3. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Einzelimporte werden lokal kopiert, Ordnerimporte referenzieren die Originaldateien; Import allein erteilt keine Freigabe.
 4. Die lesbaren Dokumente einzeln auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
-5. „Freigeben und einrichten“ installiert die lokalen Programme und legt bei ChatGPT oder Claude einen passenden Client-Eintrag an. Bestehende fremde Einträge werden nicht ersetzt; Konflikte bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
+5. „Freigeben und einrichten“ installiert die lokalen Programme und speichert die Dokumentauswahl. Für normale Chats anschließend unter „ChatGPT & Claude“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird stattdessen ein passender Client-Eintrag angelegt. Bestehende fremde Einträge werden nicht ersetzt; Konflikte bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
 6. Der echte lokale Protokolltest prüft Handshake und Freigabestatus, ohne Dokumentinhalte zu lesen. Er bestätigt noch keine Nutzung aus dem Chatbot. Aktiviere Vauldy im Chatbot und starte dessen Verbindung bei Bedarf neu.
 7. Weitere Chatbots über „Verbindung hinzufügen“ separat einrichten. Unter **Verbindungen** lassen sich Zugriffe einzeln pausieren oder nach Bestätigung fortsetzen.
 
@@ -33,15 +33,19 @@ Die Entwicklung erfolgt im eigenständigen Repository `marcomeisen/vauldy_mcp`.
 Es wird kein App-Archiv automatisch gesucht oder übernommen. Ein ausdrücklich ausgewählter
 kompatibler Snapshot kann weiterhin ausschließlich gelesen werden.
 
+## ChatGPT und Claude ohne manuelle API-Schlüssel
+
+Ab 0.10.0 ist OAuth der Standard im Einrichtungsassistenten. Nutzer verbinden den Chatbot und bestätigen die konkrete Auswahl in der lokalen App. Der Betreiber benötigt einmalig einen öffentlichen HTTPS-Anschluss zum neuen `vauldy-mcp-http`; das Paket veröffentlicht selbst keinen Dienst im Internet. [Vollständiger Nutzer- und Betreiberablauf](mcp-oauth.md).
+
 ## Mit ChatGPT verbinden
 
-Stand: 01.11.2026, anhand der [offiziellen OpenAI-Dokumentation](https://learn.chatgpt.com/docs/extend/mcp).
+Stand: 03.11.2026, anhand der [offiziellen OpenAI-Dokumentation](https://learn.chatgpt.com/docs/extend/mcp).
 Der lokale MCP-Host und reguläre gehostete ChatGPT-Gespräche verwenden unterschiedliche Anschlusswege.
 Eine erfolgreiche lokale Prüfung bestätigt keine Verbindung zu einem anderen ChatGPT-Gespräch.
 
 ### Lokaler MCP-Host auf demselben Mac
 
-1. Im Vauldy-Assistenten Dokumente auswählen, **ChatGPT Desktop** wählen und die Weitergabe bestätigen.
+1. Im Vauldy-Assistenten Dokumente auswählen, **ChatGPT · lokaler MCP-Host** wählen und die Weitergabe bestätigen.
 2. „Freigeben und einrichten“ legt `vauldy` in `~/.codex/config.toml` an. Dazu muss die aktuelle
    ChatGPT-App in `/Applications` oder `~/Applications` installiert sein und ihre Codex-CLI enthalten.
 3. Die Verbindung im lokalen Host neu laden und die dort angebotene MCP-Verwaltung prüfen. Der Installer beendet keinen laufenden Chat.
@@ -81,8 +85,7 @@ andere Lösung für Adresswechsel. Eine lokale Adresse wie `192.168.x.x` ist aus
 Bei IPv4 hinter CGNAT/DS-Lite genügt eine Portweiterleitung nicht; die tatsächliche externe
 Erreichbarkeit muss separat geprüft werden. Der Mac muss für Anfragen eingeschaltet, wach und online sein.
 
-Vor einer Router-Freigabe müssen ein Streamable-HTTP-MCP-Adapter und OAuth-Zugriffsschutz eingerichtet
-und lokal geprüft sein. Der aktuelle stdio-Server allein ist kein HTTP-Dienst. Ein HTTPS-Reverse-Proxy
+Vor einer Router-Freigabe den neuen Streamable-HTTP-/OAuth-Dienst `vauldy-mcp-http` konfigurieren und lokal prüfen. Er bindet ausschließlich Loopback; TLS, Domain und Proxy richtet der Betreiber separat ein. Der stdio-Server allein ist kein HTTP-Dienst. Ein HTTPS-Reverse-Proxy
 darf nur den dafür vorgesehenen MCP-/OAuth-Dienst veröffentlichen, niemals den Dokumentordner, die
 Verwaltungsoberfläche des Routers oder beliebige lokale Ports. Die vorhandene Profilprüfung und
 lokale Bereinigung bleiben vor jeder Inhaltsausgabe verpflichtend. Nicht angemeldete Anfragen dürfen
@@ -95,10 +98,11 @@ aus dem Zielgespräch belegt die tatsächliche Verbindung. Siehe
 [eigene MCP-Server](https://developers.openai.com/api/docs/guides/custom-mcp-server) und
 [OAuth-Anforderungen](https://developers.openai.com/plugins/build/auth).
 
-Dieser Abschnitt beschreibt die Einrichtungsvoraussetzungen; er bestätigt weder einen implementierten
-HTTP-/OAuth-Adapter noch eine aktive Router-Freigabe.
+Der HTTP-/OAuth-Adapter ist ab 0.10.0 im Paket enthalten. Eine aktive Router-/HTTPS-Freigabe wird dadurch nicht bestätigt oder automatisch eingerichtet.
 
-#### Optionaler OpenAI-Tunnel
+#### Optionaler OpenAI-Tunnel (Betreiber-/Entwickleroption)
+
+Dieser manuelle Schlüsselweg gehört nicht zum normalen Nutzerablauf. Nutzer verbinden sich über OAuth; technische Transport-Zugangsdaten verwaltet gegebenenfalls der Betreiber.
 
 Ein Eintrag in `~/.codex/config.toml` verbindet den lokalen MCP-Host; er erstellt keine zusätzliche
 ChatGPT-App für gehostete ChatGPT-Gespräche. Auf `chatgpt.com/plugins` führt **Hinzufügen →
@@ -203,7 +207,8 @@ Unter `~/Library/Application Support/VauldyMCP/` liegen:
 - `vault/ocr-cache/`: begrenzte, versionsgebundene Seiten-Ergebnisse; keine neuen Freigaben;
 - `vault/worker/`: private Auftragswarteschlange, Fortschritt und kurzzeitig aufbewahrte Ergebnisse;
 - `vault/writer.lock` und `ocr.lock`: Prozesssperren gegen verlorene Schreibzugriffe und parallele OCR im selben Bestand;
-- `bin/vauldy-mcp` und `bin/vauldy-local`: eigenständige Programme;
+- `bin/vauldy-mcp`, `bin/vauldy-mcp-http` und `bin/vauldy-local`: eigenständige Programme;
+- `oauth/`: nur nach expliziter Einrichtung private OAuth-Konfiguration, verschlüsselte Kurzzeitcodes und gehashte Tokens;
 - `bin/Vauldy MCP Status.app`: die separate Menüleistenanzeige;
 - `Vauldy MCP Einrichtung.app`: die installierte Verwaltungs-App für Menü-Einstiege;
 - `software.json`: Versionsmanifest der installierten Software;

@@ -5,20 +5,35 @@ import MCP
 /// Swift MCP SDK 0.12.1 models experimental client capabilities as String values.
 /// MCP permits arbitrary JSON values. Ignore unsupported experimental extensions;
 /// this read-only server does not implement any of them.
-actor InitializationCompatibilityTransport: Transport {
-    private let base: StdioTransport
-    nonisolated let logger: Logger
+public actor InitializationCompatibilityTransport: Transport {
+    private let base: any Transport
+    private let oauthMetadata: Bool
+    public nonisolated let logger: Logger
 
-    init(base: StdioTransport = StdioTransport()) {
+    public init(base: any Transport = StdioTransport(), oauthMetadata: Bool = false) {
         self.base = base
-        self.logger = base.logger
+        self.oauthMetadata = oauthMetadata
+        self.logger = Logger(label: "vauldy.mcp.compatibility", factory: { _ in SwiftLogNoOpLogHandler() })
     }
 
-    func connect() async throws { try await base.connect() }
-    func disconnect() async { await base.disconnect() }
-    func send(_ data: Data) async throws { try await base.send(data) }
+    public func connect() async throws { try await base.connect() }
+    public func disconnect() async { await base.disconnect() }
+    public func send(_ data: Data) async throws {
+        var output = data
+        if oauthMetadata, var object = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
+           var result = object["result"] as? [String: Any], var tools = result["tools"] as? [[String: Any]] {
+            let schemes: [[String: Any]] = [["type": "oauth2", "scopes": ["documents:read"]]]
+            for index in tools.indices {
+                tools[index]["securitySchemes"] = schemes
+                var meta = tools[index]["_meta"] as? [String: Any] ?? [:]; meta["securitySchemes"] = schemes; tools[index]["_meta"] = meta
+            }
+            result["tools"] = tools; object["result"] = result
+            output = try JSONSerialization.data(withJSONObject: object)
+        }
+        try await base.send(output)
+    }
 
-    func receive() -> AsyncThrowingStream<Data, any Error> {
+    public func receive() -> AsyncThrowingStream<Data, any Error> {
         let (stream, continuation) = AsyncThrowingStream<Data, any Error>.makeStream()
         let task = Task {
             do {

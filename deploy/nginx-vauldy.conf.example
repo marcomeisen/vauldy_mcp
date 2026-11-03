@@ -1,0 +1,31 @@
+# Operator example: replace domain/certificate paths; never enabled by the installer.
+# These limit_req_zone directives belong in the nginx http context.
+limit_req_zone $binary_remote_addr zone=vauldy_requests:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=vauldy_registration:1m rate=1r/m;
+
+server {
+    listen 443 ssl;
+    server_name mcp.example.com;
+    ssl_certificate /operator-managed/fullchain.pem;
+    ssl_certificate_key /operator-managed/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    client_max_body_size 64k;
+    # OAuth URLs/cookies/headers must not enter a generic access log.
+    access_log off;
+
+    location = /oauth/register {
+        limit_req zone=vauldy_registration burst=5 nodelay;
+        proxy_set_header Host $http_host;
+        proxy_set_header Origin $http_origin;
+        proxy_pass http://127.0.0.1:48731;
+    }
+    location ~ ^/(mcp|oauth/(authorize|continue|token|revoke)|\.well-known/oauth-(authorization-server|protected-resource(/mcp)?))$ {
+        limit_req zone=vauldy_requests burst=20 nodelay;
+        proxy_set_header Host $http_host;
+        proxy_set_header Origin $http_origin;
+        proxy_read_timeout 35s;
+        proxy_connect_timeout 3s;
+        proxy_pass http://127.0.0.1:48731;
+    }
+    location / { return 404; }
+}

@@ -12,12 +12,14 @@ let package = Package(
         .library(name: "VauldyDocumentIntelligence", targets: ["VauldyDocumentIntelligence"]),
         .library(name: "VauldyPrivacy", targets: ["VauldyPrivacy"]),
         .library(name: "VauldyMCPRuntime", targets: ["VauldyMCPRuntime"]),
+        .executable(name: "vauldy-mcp-http", targets: ["VauldyMCPHTTP"]),
         .executable(name: "vauldy-mcp", targets: ["VauldyMCPServer"]),
         .executable(name: "vauldy-local", targets: ["VauldyLocalCLI"]),
         .executable(name: "vauldy-mcp-setup", targets: ["VauldyMCPSetup"]),
         .executable(name: "vauldy-mcp-status", targets: ["VauldyMCPStatus"])
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-nio.git", exact: "2.103.0"),
         .package(
             url: "https://github.com/modelcontextprotocol/swift-sdk.git",
             exact: "0.12.1"
@@ -27,21 +29,25 @@ let package = Package(
         .target(name: "VauldyDocumentIntelligence"),
         .target(name: "VauldyCore", dependencies: ["VauldyDocumentIntelligence"]),
         .target(name: "VauldyDemoDocuments"),
-        .executableTarget(name: "VauldyLocalCLI", dependencies: ["VauldyCore", "VauldyDemoDocuments", "VauldyMCPRuntime"]),
+        .executableTarget(name: "VauldyLocalCLI", dependencies: ["VauldyCore", "VauldyDemoDocuments", "VauldyMCPRuntime", "VauldyOAuth"]),
         .target(name: "VauldyPrivacy"),
+        .target(name: "VauldyOAuth", dependencies: ["VauldyMCPRuntime"]),
+        .target(name: "VauldyMCPProtocol", dependencies: ["VauldyMCPRuntime", .product(name: "MCP", package: "swift-sdk")]),
+        .executableTarget(name: "VauldyMCPHTTP", dependencies: ["VauldyOAuth", "VauldyMCPProtocol", .product(name: "NIOCore", package: "swift-nio"), .product(name: "NIOPosix", package: "swift-nio"), .product(name: "NIOHTTP1", package: "swift-nio")]),
         .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyPrivacy"]),
-        .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments"]),
+        .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth"]),
         .executableTarget(name: "VauldyMCPStatus", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
         .executableTarget(
             name: "VauldyMCPServer",
             dependencies: [
+                "VauldyMCPProtocol",
                 "VauldyMCPRuntime",
                 .product(name: "MCP", package: "swift-sdk")
             ]
         ),
         .testTarget(
             name: "VauldyMCPRuntimeTests",
-            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence"],
+            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence", "VauldyOAuth"],
             resources: [.process("Fixtures")]
         )
     ]

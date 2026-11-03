@@ -28,6 +28,7 @@ struct SetupView: View {
                     case .connections: connections
                     case .documents: SetupDocumentsView(model: model)
                     case .folders: SetupFoldersView(model: model)
+                    case .oauth: SetupOAuthView(model: model)
                     case .settings: SetupSettingsView(model: model)
                     }
                     if model.importing { SetupImportProgress(model: model) }
@@ -84,6 +85,7 @@ struct SetupView: View {
         case .connections: "Dokumentzugriff für jeden Chatbot einzeln verwalten."
         case .documents: "Prüfe, welche Inhalte dein Chatbot erhalten darf."
         case .folders: "Automatisch lokal importieren. Dokumente separat freigeben."
+        case .oauth: "Sicher verbinden und Dokumentzugriff bestätigen. Ohne API-Schlüssel."
         case .settings: "Software, Datenschutz und lokale Diagnose."
         }
     }

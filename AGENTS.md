@@ -62,3 +62,18 @@ Pseudonymisierung arbeitet auf ursprünglichen Quellkoordinaten ohne numerische 
 Überlappende Restkennungen begrenzt im gemeinsamen Kontext vervollständigen; Ausgabe zuletzt immer
 validieren und andernfalls sperren. Physische Textabschnitte gehören in denselben Privacy-Kontext.
 Währungs-/Protokollkürzel nur im NER ausschließen, nie explizite persönliche Kennungsregeln umgehen.
+
+## OAuth-Verbindungen ab 0.10.0
+
+Nutzer verbinden ChatGPT/Claude über Standard-OAuth ohne manuelle API-Schlüssel. Die lokale App
+bestätigt Eigentümer und exakte Dokumentauswahl; keine behauptete Chatbot-Identität, kein login_hint
+und kein Clientname ersetzen diese Freigabe. Keine automatische Produktionseinrichtung, keinen
+öffentlichen Port oder TLS-/Routerzustand für Tests ändern. Externe SSO-Anbieterfreigaben nicht erfinden.
+
+VauldyMCPProtocol ist der gemeinsame Dispatcher für stdio und HTTP. HTTP-Sitzung, Tokenfamilie,
+Profilrevision, Resource, Redirect, Client und PKCE getrennt binden. Tokens auch unmittelbar vor
+Antwortausgabe prüfen. Änderungen an der Dokumentauswahl dürfen bestehende Tokens nie erweitern.
+Private Credentialablage atomar und synchronisiert, keine Rohsecrets in Logs/JSON; native Zustimmung
+niemals als HTTP-Endpunkt anbieten. CIMD nur von begrenzten öffentlichen Anbieter-Metadaten beziehen.
+OAuthConnectionTests und oauth_smoke_test.py ergänzen sämtliche bisherigen Regressionen.
+Betreibervertrag, Grenzen und noch erforderliche öffentliche Bereitstellung: docs/mcp-oauth.md.

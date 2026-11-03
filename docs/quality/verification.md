@@ -70,3 +70,20 @@ Dokumentqualität und externe Antwortqualität bleiben getrennte Messaufgaben.
 Das App-Repository wurde nicht geändert. Produktionsarchive, installierte Profile und
 Clientkonfigurationen wurden nicht verwendet oder verändert. Das lokale Paket ist
 Ad-hoc-signiert, nicht als notarisierte öffentliche macOS-Veröffentlichung ausgewiesen.
+
+## Ergänzung: OAuth 0.10.0 (03.11.2026)
+
+Alle 15 aktuellen Regressionsstufen sind bestanden, einschließlich 134 Swift-Tests in 19 Suiten,
+aller nativen Rasterfälle und des bestehenden P0-Tests. Der neue reale HTTP-Wiretest prüft beide
+künstlichen Anbieterclients, 55 künstliche Dokumente mit getrennten Freigaben, vollständige
+Pagination, Privacy, PKCE, Refresh, Replay-Sperre, unabhängigen Widerruf und Dienstneustart.
+
+Ein zusätzliches isoliertes App-Bundle bestätigte die native Freigabe mit eingefrorener Auswahl,
+Tokenausgabe, MCP-Dokumentabruf und UI-Widerruf. Das künstliche Archiv und sein Profil blieben
+bytegleich; keine produktive Verbindung oder Anbieteranmeldung wurde eingerichtet. Der lokale
+macOS-Eigentümer autorisiert den Zugriff. Dies bestätigt keine Anbieteridentität per SSO.
+
+Das Paket enthält den OAuth-HTTP-Dienst und die Bedienoberfläche. Öffentliche HTTPS-Bereitstellung
+und tatsächliche Nutzung aus ChatGPT/Claude sind separate noch ausstehende Abnahmen. Details und
+Reproduktion: [OAuth-Verbindungen](../mcp-oauth.md). Die oben dokumentierten fachlichen und
+OCR-Qualitätsgrenzen bleiben bestehen.

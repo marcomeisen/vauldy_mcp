@@ -2,11 +2,21 @@ import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
 import VauldyCore
+import VauldyOAuth
 import VauldyDemoDocuments
 import VauldyMCPRuntime
 
 @MainActor
 final class SetupModel: ObservableObject {
+    @Published var oauthConfiguration: OAuthConfiguration?
+    @Published var oauthOrigin = ""
+    @Published var oauthPort = "48731"
+    @Published var oauthPending: [OAuthPendingRequest] = []
+    @Published var oauthConnections: [OAuthConnection] = []
+    @Published var oauthProfiles: [UUID: UUID] = [:]
+    @Published var oauthRunning = false
+    @Published var oauthError = ""
+    @Published var oauthApproval: OAuthApprovalSelection?
     @Published var section: MCPSetupSection = .overview
     @Published var activeConnectionID: UUID?
     @Published var instances: [MCPServerInstance]?

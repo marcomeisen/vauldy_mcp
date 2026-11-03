@@ -46,7 +46,7 @@ def main():
             assert len(entries) == 1
             entry = entries[0]
             assert entry['connectionID'].lower() == connection.lower() and entry['diagnostic'] is False
-            assert entry['version'] == '0.9.1' and entry.get('lastRequestAt') is not None
+            assert entry['version'] == '0.10.0' and entry.get('lastRequestAt') is not None
             assert set(entry) <= {'connectionID', 'version', 'diagnostic', 'lastRequestAt'}
             assert document not in json.dumps(entry) and str(root) not in json.dumps(entry)
         finally:

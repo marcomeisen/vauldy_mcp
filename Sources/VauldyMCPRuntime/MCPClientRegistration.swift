@@ -3,7 +3,7 @@ import Foundation
 
 public enum MCPDesktopClient: String, CaseIterable, Codable, Sendable {
     case chatgpt, claude
-    public var title: String { self == .chatgpt ? "ChatGPT Desktop" : "Claude Desktop" }
+    public var title: String { self == .chatgpt ? "ChatGPT · lokaler MCP-Host" : "Claude Desktop · lokaler MCP-Host" }
 }
 
 public enum MCPClientBinding: String, Sendable { case registered, notRegistered, conflict, unavailable }

@@ -1,5 +1,7 @@
 import Foundation
 
+public enum MCPConnectionKind: String, Codable, Sendable { case local, oauth }
+
 /// Local grant, never accepted through tool arguments. Each connection gets its own profile.
 public struct MCPAccessProfile: Codable, Equatable, Sendable {
     public static let currentVersion = 1
@@ -7,6 +9,7 @@ public struct MCPAccessProfile: Codable, Equatable, Sendable {
     public var revision: UUID = UUID()
     public var connectionID: UUID = UUID()
     public var connectionName: String = "MCP-Client"
+    public var connectionKind: MCPConnectionKind? = nil
     public var desktopClient: MCPDesktopClient? = nil
     public var enabled: Bool
     public var vaultPath: String

@@ -10,6 +10,11 @@ struct VauldyMCPSetupApp: App {
     var body: some Scene {
         Window("Vauldy · MCP", id: "main") {
             SetupView(model: model)
+                .onOpenURL { url in
+                    guard url.scheme == "vauldy-mcp", url.host == "oauth", url.query == nil else { return }
+                    model.section = .oauth
+                    Task { await model.refreshOAuth() }
+                }
         }
         .defaultSize(width: 1020, height: 760)
         .windowResizability(.contentMinSize)

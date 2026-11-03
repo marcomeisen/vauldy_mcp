@@ -2,7 +2,7 @@
 
 Eigenständiger lokaler Dokumentendienst für macOS 14+. Import, Texterkennung und
 Basisanalyse laufen lokal. MCP-Clients erhalten ausschließlich ausdrücklich freigegebene,
-bereinigte Dokumentinhalte. Der stdio-Server bietet vier lesende Werkzeuge.
+bereinigte Dokumentinhalte. stdio und OAuth-geschütztes HTTP bieten dieselben vier lesenden Werkzeuge.
 
 Die Entwicklung ist vom Vauldy-App-Repository getrennt. Es werden keine App-Archive,
 Profile oder Provider-Einstellungen automatisch übernommen.
@@ -24,6 +24,11 @@ Mit `--no-open` wird das Bundle nur vorbereitet; `--skip-build` verwendet den vo
 Der Assistent importiert in einen eigenen Bestand, verlangt die lokale Freigabe und
 richtet bei Bedarf einen kompatiblen stdio-Client ein. Das manuelle Starten des Servers
 erfordert `vauldy-mcp --profile /absoluter/pfad/profile.json`.
+
+Normale ChatGPT- und Claude-Chats verbinden sich über OAuth ohne manuelle API-Schlüssel.
+Der Eigentümer bestätigt die Dokumentauswahl in der lokalen App. Dafür benötigt der Betreiber
+eine öffentliche HTTPS-Adresse vor dem lokalen HTTP-Dienst; diese wird nicht automatisch eingerichtet.
+Der Ablauf und seine Grenzen stehen in [OAuth-Verbindungen](docs/mcp-oauth.md).
 
 ```sh
 swift run vauldy-local import --store /absoluter/bestand /absolutes/dokument.pdf
@@ -51,6 +56,7 @@ Sprachmodell und keine fachliche Dokumentprüfung.
 ## Prüfen
 
 ```sh
+python3 scripts/mcp/regression_test.py
 swift test --disable-sandbox
 python3 scripts/mcp/smoke_test.py "$PWD/.build/debug/vauldy-mcp"
 python3 scripts/mcp/import_smoke_test.py "$PWD/.build/debug/vauldy-local" "$PWD/.build/debug/vauldy-mcp"
@@ -64,4 +70,5 @@ benötigt ein macOS-System mit erlaubtem Zugriff auf die Systemdienste.
 - [Architektur und MCP-Vertrag](docs/mcp-mvp.md)
 - [Basisanalyse und Qualitätskorpus](docs/base-analysis.md)
 - [Installation und Widerruf](docs/mcp-installation.md)
+- [ChatGPT und Claude über OAuth](docs/mcp-oauth.md)
 - [Herkunft der Auslagerung](docs/provenance.md)

@@ -57,6 +57,8 @@ struct SetupWizardView: View {
             Text("Welchen Chatbot möchtest du verbinden?").font(.title2.weight(.semibold))
             Text("Für jeden Chatbot speichert Vauldy eine eigene Dokumentauswahl. Bestehende Verbindungen bleiben erhalten.").foregroundStyle(.secondary)
             Picker("Chatbot", selection: $model.clientSelection) {
+                Text("ChatGPT · OAuth im normalen Chat").tag("oauth-chatgpt")
+                Text("Claude · OAuth-Verbindung").tag("oauth-claude")
                 ForEach(MCPDesktopClient.allCases, id: \.rawValue) { Text($0.title).tag($0.rawValue) }
                 Text("Anderer Chatbot · manuell").tag("manual")
             }.pickerStyle(.radioGroup)
@@ -64,13 +66,13 @@ struct SetupWizardView: View {
                 SetupNotice(text: "Für diesen Chatbot ist bereits „\(existing.connectionName)“ eingetragen. Ein bestehender Eintrag wird nicht ersetzt. Verwende „Verbindungen“, um ihn zu bearbeiten.", warning: true)
             }
             TextField("Name der Verbindung (optional)", text: $model.connectionName).textFieldStyle(.roundedBorder)
-            Text("Vauldy startet keinen Chatbot und benötigt kein eigenes Cloud-Konto.").font(.callout).foregroundStyle(.secondary)
+            Text(model.clientSelection.hasPrefix("oauth-") ? "Nach der Dokumentauswahl verbindest du Vauldy im Chatbot und bestätigst den Zugriff hier. Kein API-Schlüssel und kein zusätzliches Passwort. Der Betreiber richtet einmalig den HTTPS-Anschluss ein." : "Dieser Anschluss gilt für einen lokalen MCP-Host. Normale gehostete Chats benötigen den OAuth-Anschluss.").font(.callout).foregroundStyle(.secondary)
         }
     }
     private var consent: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Prüfe deine Freigabe.").font(.title2.weight(.semibold))
-            LabeledContent("Empfänger", value: MCPDesktopClient(rawValue: model.clientSelection)?.title ?? "Dein manuell verbundener Chatbot")
+            LabeledContent("Empfänger", value: model.clientSelection == "oauth-chatgpt" ? "ChatGPT" : model.clientSelection == "oauth-claude" ? "Claude" : MCPDesktopClient(rawValue: model.clientSelection)?.title ?? "Dein manuell verbundener Chatbot")
             LabeledContent("Auswahl", value: model.selectedReadableCount == 1 ? "1 lesbares Dokument" : "\(model.selectedReadableCount) lesbare Dokumente")
             ForEach(model.documents.filter { model.selected.contains($0.id) }, id: \.id) { Text($0.title).font(.callout) }
             Text("Dein Chatbot kann Inhalte aus diesen Dokumenten lesen und an seinen Cloud-Anbieter übertragen. Die Freigabe gilt nur für diese Auswahl. Neue Importe bleiben gesperrt.").foregroundStyle(.secondary)
@@ -82,7 +84,10 @@ struct SetupWizardView: View {
         VStack(alignment: .leading, spacing: 18) {
             Label("Verbindung vorbereitet", systemImage: "checkmark.circle").font(.title2.weight(.semibold))
             Text(model.registrationMessage)
-            if let profile = model.activeConnection {
+            if let profile = model.activeConnection, profile.connectionKind == .oauth {
+                Text("Die gespeicherte Dokumentauswahl allein aktiviert noch keinen Zugriff im Chatbot.")
+                Button("OAuth-Verbindung öffnen") { model.section = .oauth; dismiss() }.buttonStyle(.borderedProminent)
+            } else if let profile = model.activeConnection {
                 SetupStatusBadge(text: model.state(for: profile).headline, tone: model.state(for: profile).tone)
                 if model.probing.contains(profile.connectionID) { ProgressView("Lokaler Protokolltest läuft …") }
                 if model.probeResults[profile.connectionID] != nil { Label("Lokaler MCP-Test erfolgreich", systemImage: "checkmark.circle").foregroundStyle(.green) }

@@ -6,6 +6,7 @@ public struct MCPInstallation: Sendable {
     public init(root: URL = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("Library/Application Support/VauldyMCP", isDirectory: true)) { self.root = root }
     public var binaryURL: URL { root.appendingPathComponent("bin/vauldy-mcp") }
+    public var httpServerURL: URL { root.appendingPathComponent("bin/vauldy-mcp-http") }
     public var localCLIURL: URL { root.appendingPathComponent("bin/vauldy-local") }
     public var statusAppURL: URL { root.appendingPathComponent("bin/" + MCPStatusApp.bundleName, isDirectory: true) }
     public var connectionsURL: URL { root.appendingPathComponent("connections", isDirectory: true) }
@@ -48,6 +49,11 @@ public struct MCPInstallation: Sendable {
                 try Data(contentsOf: localCLI).write(to: localCLIURL, options: [.atomic])
                 try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: localCLIURL.path)
             }
+        }
+        let http = binary.deletingLastPathComponent().appendingPathComponent("vauldy-mcp-http")
+        if FileManager.default.isExecutableFile(atPath: http.path), http.standardizedFileURL != httpServerURL.standardizedFileURL {
+            try Data(contentsOf: http).write(to: httpServerURL, options: [.atomic])
+            try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: httpServerURL.path)
         }
         if let statusApp { try installStatusApp(statusApp) }
     }
