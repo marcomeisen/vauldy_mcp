@@ -13,10 +13,23 @@ import VauldyMCPRuntime
         let installation = MCPInstallation(root: URL(fileURLWithPath: args[3]))
         let store = RelayCredentialStore(installation: installation)
         do {
+            try RelayKeychainInteraction.configure(allow: false)
             if args[1] == "--manage" {
                 let data = try FileHandle.standardInput.read(upToCount: 8001) ?? Data()
                 guard data.count <= 8000 else { throw RelayFailure.unavailable }
                 let request = try JSONDecoder().decode(RelayUIRequest.self, from: data)
+                try RelayKeychainInteraction.configure(allow: request.operation.allowsUserInteraction)
+                let parent = getppid()
+                let watchdog: Task<Void, Never>? = request.operation.allowsUserInteraction ? Task.detached {
+                    do {
+                        for _ in 0..<3000 {
+                            try await Task.sleep(for: .milliseconds(100))
+                            if getppid() != parent || kill(parent, 0) != 0 { Foundation.exit(1) }
+                        }
+                        Foundation.exit(1)
+                    } catch { }
+                } : nil
+                defer { watchdog?.cancel() }
                 let response = await RelayUIManager.handle(request, installation: installation)
                 try FileHandle.standardOutput.write(contentsOf: JSONEncoder().encode(response)); return
             }

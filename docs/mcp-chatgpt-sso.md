@@ -119,3 +119,35 @@ Schlüsselbundeintrag erneut verlangen. Diesen geschützten Systemdialog bestät
 direkt auf seinem Mac. Dafür wird kein API-Schlüssel eingegeben und keine Freigabe für ein
 anderes Programm eingerichtet. Zum dokumentierten Zeitpunkt wartet die abschließende
 Zugangserneuerung auf diesen Systemdialog; der Mac-Dienst ist dafür pausiert.
+
+## 0.12.2: Schlüsselbunddialog ohne Wiederholungsschleife
+
+Der bisherige Status-Timer konnte den Systemdialog alle zwei Sekunden erneut auslösen.
+Zusätzlich brach die Oberfläche den wartenden Helfer bereits nach 25 Sekunden ab und las
+nach einem Fehler erneut aus dem Schlüsselbund. Die Passworteingabe allein konnte diese
+Wiederholung daher nicht beheben.
+
+Alle automatischen Agenten-, Status- und Verwaltungsaufrufe sperren jetzt macOS-Interaktion
+prozessweit. Ausschließlich `--manage authorize`, ausdrücklich über „Schlüsselbundzugriff
+bestätigen“ gestartet, darf einmal interaktiv lesen. Nach Ablehnung oder Abbruch gibt es
+keinen weiteren Leseversuch. Die Verbindung bleibt gespeichert; die Oberfläche stoppt die
+automatischen Statusabfragen und unterscheidet fehlende Freigabe von fehlender Einrichtung.
+Ein manueller Statuscheck bleibt ebenfalls ohne Dialog.
+
+Der explizite Vorgang wartet bis zu fünf Minuten und ist abbrechbar. Sein Helfer beendet sich
+beim Schließen der Oberfläche; Abbruch beendet auch den wartenden Prozess. Nach erfolgreichem
+interaktivem Lesen prüft ein frischer, nichtinteraktiver Helfer den Hintergrundzugriff. Eine
+nur einmalige Freigabe wird dadurch nicht als dauerhafte Betriebsfähigkeit ausgegeben.
+„Immer erlauben“ betrifft ausschließlich den eigenen Eintrag des Agenten; das Programm
+ändert keine Schlüsselbund-ACL und gibt keine Zugangsdaten an die Oberfläche weiter.
+
+Das Entwicklungspaket wird lokal signiert. Eine Softwareaktualisierung kann daher weiterhin
+eine erneute bewusste Freigabe erfordern. Die Reparatur verhindert Wiederholungsschleifen;
+sie ersetzt keine stabile Signatur und keine echte Werkzeugprüfung aus dem normalen Zielchat.
+
+Geprüft und installiert: 0.12.2, alle 19 Regressionen, 159 Swift-Tests in 23 Suiten und
+zehn Worker-Integrationstests. Drei Diagnoseabfragen an den installierten Agenten liefern
+„Freigabe erforderlich“ in 241/28/22 ms, ohne SecurityAgent-Prozess; die sieben geschützten
+Dateien sind seit dem Watcher-Stopp bytegleich. Diese Diagnose ist kein Remote-MCP-Aufruf.
+Die persönliche Prüfung des neuen Freigabeknopfs wartet auf das Entsperren des Macs.
+Zugangserneuerung und Werkzeugaufruf aus dem normalen Chat sind weiterhin offen.

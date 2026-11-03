@@ -9,7 +9,12 @@ struct SetupRelayView: View {
         GroupBox("ChatGPT · mit deinem Konto anmelden") {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Nutze Vauldy in normalen ChatGPT-Chats. Melde dich im Browser mit deinem ChatGPT-Konto an. Du brauchst keinen API- oder Runtime-Schlüssel.")
-                if !model.relayState.provisioned {
+                Group {
+                if model.relayState.keychainNeedsApproval {
+                    Text("Die gespeicherte Verbindung benötigt deine Freigabe im macOS-Schlüsselbund. Automatische Abfragen sind angehalten.")
+                    Text("Wähle bei der Freigabe für den Vauldy-Verbindungsdienst „Immer erlauben“, damit er im Hintergrund arbeiten kann. „Abbrechen“ lässt die Verbindung gespeichert und öffnet keinen neuen Dialog.").font(.callout).foregroundStyle(.secondary)
+                    Button("Schlüsselbundzugriff bestätigen", action: model.authorizeRelay)
+                } else if !model.relayState.provisioned {
                     Text("Die private Verbindung muss einmal auf diesem Mac bereitgestellt werden. Dabei werden Zugangsdaten automatisch im Schlüsselbund hinterlegt; Dokumente werden nicht freigegeben.").foregroundStyle(.secondary)
                 } else if model.relayState.paired {
                     Text(model.relayRunning ? "Verbindungsdienst auf diesem Mac läuft." : "Verbindungsdienst auf diesem Mac gestoppt.")
@@ -41,9 +46,14 @@ struct SetupRelayView: View {
                     }.buttonStyle(.borderedProminent).disabled(model.relayProfileID == nil)
                     Text("Die Anmeldung öffnet sich im Browser. Nur die hier bestätigte Dokumentauswahl wird verbunden. Neue Importe bleiben gesperrt.").font(.callout).foregroundStyle(.secondary)
                 }
-                Button("Status aktualisieren") { Task { await model.refreshRelay() } }
+                Button("Status aktualisieren") { Task { await model.refreshRelay(explicit: true) } }
+                }.disabled(model.busy || model.relayRefreshing)
+                if model.relayAuthorizing {
+                    ProgressView("Warte auf deine Schlüsselbundfreigabe …")
+                    Button("Freigabe abbrechen", role: .cancel, action: model.cancelRelayAuthorization)
+                }
                 if !model.relayError.isEmpty { SetupNotice(text: model.relayError, warning: true) }
-            }.padding(8).disabled(model.busy)
+            }.padding(8)
         }
         .task {
             while !Task.isCancelled {
@@ -62,14 +72,34 @@ struct SetupRelayView: View {
 
 extension SetupModel {
     var relayControl: RelayUIControl { .init(installation: installation) }
-    func refreshRelay() async {
+    func refreshRelay(explicit: Bool = false) async {
+        guard !relayRefreshing, RelayStatusRefreshPolicy.shouldRefresh(approvalNeeded: relayState.keychainNeedsApproval, hasError: !relayError.isEmpty, busy: busy, explicit: explicit) else { return }
+        relayRefreshing = true; defer { relayRefreshing = false }
         do {
             let r = try await relayControl.request(.init(.status))
             relayState = r.state; relayRunning = r.state.running
-            if let error = r.error { relayError = error }
+            relayError = r.error ?? ""
         } catch { relayError = error.localizedDescription }
     }
+    func authorizeRelay() {
+        guard !busy, !relayRefreshing else { return }
+        busy = true; relayAuthorizing = true; relayError = ""
+        relayAuthorizationTask = Task {
+            defer { busy = false; relayAuthorizing = false; relayAuthorizationTask = nil }
+            do {
+                let r = try await relayControl.request(.init(.authorize))
+                guard !Task.isCancelled else { return }
+                relayState = r.state; relayRunning = r.state.running; relayError = r.error ?? ""
+            } catch is CancellationError { }
+            catch { relayError = error.localizedDescription }
+        }
+    }
+    func cancelRelayAuthorization() {
+        relayAuthorizationTask?.cancel()
+        relayError = "Freigabe abgebrochen. Die gespeicherte Verbindung bleibt erhalten."
+    }
     func beginRelay(profile: MCPAccessProfile) {
+        guard !busy, !relayRefreshing else { return }
         busy = true; relayError = ""
         Task {
             defer { busy = false }
@@ -83,13 +113,17 @@ extension SetupModel {
     }
     func resumeRelay() { startRelay() }
     func startRelay() {
+        guard !busy, !relayRefreshing else { return }
+        busy = true; relayError = ""
         Task {
+            defer { busy = false }
             do {
                 let r = try await relayControl.request(.init(.start)); relayState = r.state; relayRunning = r.state.running; relayError = r.error ?? ""
             } catch { relayError = error.localizedDescription }
         }
     }
     func disconnectRelay() {
+        guard !busy, !relayRefreshing else { return }
         busy = true
         Task {
             defer { busy = false }

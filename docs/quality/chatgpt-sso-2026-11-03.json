@@ -1,8 +1,8 @@
 {
-  "version": "0.12.1",
-  "verifiedAt": "2026-11-03T12:12:18.365249+00:00",
-  "swiftTests": 154,
-  "swiftSuites": 22,
+  "version": "0.12.2",
+  "verifiedAt": "2026-11-03T13:13:45.226937+00:00",
+  "swiftTests": 159,
+  "swiftSuites": 23,
   "regressionStages": 19,
   "allRegressionStagesPassed": true,
   "workerSQLIntegrationTests": 10,
@@ -10,7 +10,7 @@
   "nativeStartupLeavesSyntheticSnapshotUnchanged": true,
   "nativeUIHasNoCredentialMaterial": true,
   "keychainOwner": "vauldy-relay only; default ACL unchanged",
-  "installedVersion": "0.12.1",
+  "installedVersion": "0.12.2",
   "serviceProvisionedAutomatically": true,
   "privateSitePublished": true,
   "siteOwnerOnly": true,
@@ -39,10 +39,9 @@
   "nativeDocumentConsentPending": false,
   "browserSSOCompleted": true,
   "normalChatToolCallVerified": false,
-  "regressionReport": "dist/mcp/regression/20261103T120151692782Z",
-  "remainingStep": "Owner confirms the macOS Keychain dialog for the updated vauldy-relay. Pending rotation then resumes the same 147-document grant; authenticated remote status and normal-chat verification remain.",
+  "regressionReport": "dist/mcp/regression/20261103T130759843704Z",
+  "remainingStep": "Unlock Mac; explicitly authorize the updated agent in Vauldy. No automatic password retries. Device rotation, authenticated remote status, and normal-chat tool invocation remain pending owner approval.",
   "confirmedDocumentCount": 147,
-  "devicePaired": true,
   "deviceCredentialTransport": "TLS-protected JSON body; no credential in URL or custom request header",
   "legacyCredentialHeaderRejected": true,
   "credentialRotationPreservesGrantAndExpiry": true,
@@ -50,5 +49,42 @@
   "deviceCredentialRotationPending": true,
   "macServiceTemporarilyPaused": true,
   "browserConnectionCheckUsesDedicatedCSRFProtectedAPI": true,
-  "currentLocalChatToolStatusVerified": true
+  "currentLocalChatToolStatusVerified": true,
+  "keychainLoopRegressionTests": 5,
+  "automaticKeychainInteractionDisabled": true,
+  "explicitAuthorizationFreshBackgroundCheck": true,
+  "nativeKeychainAuthorizationUIVerified": false,
+  "lastComputerUseBlocker": "Mac locked; owner unlock requested",
+  "currentRepairProtectedFilesUnchanged": true,
+  "installedKeychainStatusDiagnostics": {
+    "noninteractiveStatusChecks": [
+      {
+        "seconds": 0.241,
+        "exitCode": 0,
+        "approvalNeeded": true,
+        "provisioned": true,
+        "running": false,
+        "hasError": true
+      },
+      {
+        "seconds": 0.028,
+        "exitCode": 0,
+        "approvalNeeded": true,
+        "provisioned": true,
+        "running": false,
+        "hasError": true
+      },
+      {
+        "seconds": 0.022,
+        "exitCode": 0,
+        "approvalNeeded": true,
+        "provisioned": true,
+        "running": false,
+        "hasError": true
+      }
+    ],
+    "securityAgentProcesses": 0,
+    "protectedFilesUnchangedSinceWatcherStop": true
+  },
+  "devicePairedLastObservedBeforeKeychainBlock": true
 }

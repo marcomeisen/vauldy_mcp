@@ -5,13 +5,14 @@ import Darwin
 import VauldyMCPRuntime
 
 public enum RelayFailure: LocalizedError {
-    case unavailable, notProvisioned, signInRequired, changedGrant, credentials
+    case unavailable, notProvisioned, signInRequired, changedGrant, credentials, ownerApprovalRequired
     public var errorDescription: String? {
         switch self {
         case .unavailable: "Die ChatGPT-Verbindung ist derzeit nicht erreichbar. Bitte erneut versuchen."
         case .notProvisioned: "Die private ChatGPT-Verbindung wurde auf diesem Mac noch nicht eingerichtet."
         case .signInRequired: "Bitte in Vauldy erneut mit ChatGPT anmelden."
         case .changedGrant: "Die lokale Dokumentfreigabe hat sich geändert. Bitte den Zugriff erneut bestätigen."
+        case .ownerApprovalRequired: "Bitte den Schlüsselbundzugriff einmal bewusst in Vauldy bestätigen. Die Verbindung bleibt gespeichert."
         case .credentials: "Die geschützte Verbindungsablage ist nicht verfügbar."
         }
     }
@@ -51,17 +52,18 @@ public struct RelayCredentials: Codable, Sendable {
 /// Separate per installation (including test roots). No secrets in configuration files.
 public struct RelayCredentialStore: Sendable {
     public let installation: MCPInstallation
-    private var account: String { SHA256.hash(data: Data(installation.root.standardizedFileURL.path.utf8)).map { String(format: "%02x", $0) }.joined() }
-    public init(installation: MCPInstallation) { self.installation = installation }
-    private var query: [String: Any] { [kSecClass as String: kSecClassGenericPassword,
-        kSecAttrService as String: "com.marcomeisen.vauldy.mcp-relay", kSecAttrAccount as String: account,
-        kSecAttrSynchronizable as String: false] }
-    public func load() throws -> RelayCredentials? {
-        var q = query; q[kSecReturnData as String] = true; q[kSecMatchLimit as String] = kSecMatchLimitOne
-        var item: CFTypeRef?; let status = SecItemCopyMatching(q as CFDictionary, &item)
-        if status == errSecItemNotFound { return nil }
-        guard status == errSecSuccess, let data = item as? Data, data.count < 16000,
-              let c = try? JSONDecoder().decode(RelayCredentials.self, from: data) else { throw RelayFailure.credentials }
+    private let persistence: any RelayCredentialPersistence
+    public init(installation: MCPInstallation) {
+        self.installation = installation
+        let account = SHA256.hash(data: Data(installation.root.standardizedFileURL.path.utf8)).map { String(format: "%02x", $0) }.joined()
+        persistence = SystemRelayCredentialPersistence(account: account)
+    }
+    init(installation: MCPInstallation, persistence: any RelayCredentialPersistence) {
+        self.installation = installation; self.persistence = persistence
+    }
+    public func load(interactive: Bool = false) throws -> RelayCredentials? {
+        guard let data = try persistence.read(allowUserInteraction: interactive) else { return nil }
+        guard data.count < 16000, let c = try? JSONDecoder().decode(RelayCredentials.self, from: data) else { throw RelayFailure.credentials }
         return c
     }
     private func locked<T>(_ body: () throws -> T) throws -> T {
@@ -72,12 +74,7 @@ public struct RelayCredentialStore: Sendable {
         return try body()
     }
     private func saveUnlocked(_ c: RelayCredentials) throws {
-        let values: [String: Any] = [kSecValueData as String: try JSONEncoder().encode(c)]
-        let status = SecItemUpdate(query as CFDictionary, values as CFDictionary)
-        if status == errSecItemNotFound {
-            var q = query; q.merge(values) { _, v in v }; q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-            guard SecItemAdd(q as CFDictionary, nil) == errSecSuccess else { throw RelayFailure.credentials }
-        } else if status != errSecSuccess { throw RelayFailure.credentials }
+        try persistence.write(JSONEncoder().encode(c))
     }
     public func save(_ c: RelayCredentials) throws { try locked { try saveUnlocked(c) } }
     public func provision(serviceToken: String) throws {

@@ -14,6 +14,9 @@ final class SetupModel: ObservableObject {
     @Published var relayApproval: MCPAccessProfile?
     @Published var relayRunning = false
     @Published var relayError = ""
+    @Published var relayAuthorizing = false
+    var relayRefreshing = false
+    var relayAuthorizationTask: Task<Void, Never>?
     @Published var oauthConfiguration: OAuthConfiguration?
     @Published var oauthOrigin = ""
     @Published var oauthPort = "48731"

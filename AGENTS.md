@@ -127,3 +127,11 @@ Geräterouten, niemals Bodies/Secrets loggen. Erneuerung erhält Besitzer, Gerä
 Profil und Ablaufdatum; verlorene Antworten über privat gespeicherten nächsten Zugang
 idempotent wiederholen. Browser-Statusprüfung läuft über eigenen CSRF-geschützten API-Pfad,
 nicht über den für MCP-Clients reservierten Transportpfad.
+
+Status- und Hintergrundaufrufe dürfen nie Schlüsselbunddialoge öffnen. Prozessweite
+Interaktionssperre im Agenten; ausschließlich bewusstes --manage authorize erlaubt UI.
+Nach Ablehnung/Abbruch kein erneutes Lesen im selben Vorgang und keine Timer-Wiederholung.
+Gespeicherte Verbindung von benötigter Systemfreigabe unterscheiden. Explizite Freigabe
+abbrechbar halten, Parentverlust beenden, frischen nichtinteraktiven Zugriff prüfen.
+Keine ACL-Ausweitung oder Secret-Ausgabe als Umgehung. Synthetische Persistence- und
+Cancellation-Tests in RelayKeychainInteractionTests ersetzen keinen Live-SSO-Nachweis.

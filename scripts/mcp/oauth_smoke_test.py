@@ -126,7 +126,7 @@ def main():
             for provider in ['chatgpt','claude']:
                 flows[provider]=connect(provider)
                 status,initialized=rpc(flows[provider],'initialize',dict(protocolVersion='2025-06-18',clientInfo=dict(name='Synthetic OAuth client',version='1'),capabilities=dict(experimental={'nested':{'ok':True}})))
-                assert status==200 and initialized['result']['serverInfo']['version']=='0.12.1',(status,initialized)
+                assert status==200 and initialized['result']['serverInfo']['version']=='0.12.2',(status,initialized)
                 assert rpc(flows[provider],'notifications/initialized',notify=True)[0]==202
                 status,tools=rpc(flows[provider],'tools/list')
                 assert status==200 and len(tools['result']['tools'])==4
