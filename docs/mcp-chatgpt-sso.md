@@ -151,3 +151,22 @@ zehn Worker-Integrationstests. Drei Diagnoseabfragen an den installierten Agente
 Dateien sind seit dem Watcher-Stopp bytegleich. Diese Diagnose ist kein Remote-MCP-Aufruf.
 Die persönliche Prüfung des neuen Freigabeknopfs wartet auf das Entsperren des Macs.
 Zugangserneuerung und Werkzeugaufruf aus dem normalen Chat sind weiterhin offen.
+
+### Persönliche Freigabe abgeschlossen
+
+Nach dem Entsperren wurde der neue Freigabeknopf tatsächlich geöffnet und vom Eigentümer
+mit „Immer erlauben“ bestätigt. Der frische Hintergrundprozess kann auf seinen eigenen
+Eintrag zugreifen. Die Gerätezugangserneuerung ist erfolgreich abgeschlossen; dabei wurde
+der alte Zugang als abgelehnt geprüft. Dokumentauswahl und Ablaufdatum wurden nicht erweitert.
+Die native Oberfläche zeigt nun dauerhaft „Verbindungsdienst auf diesem Mac läuft“.
+
+Die angemeldete veröffentlichte Browserseite bestätigt über den verschlüsselten Weg zum
+Mac: „Mac erreichbar · 147 Dokumente freigegeben.“ Nach Neuladen steht auch die bestehende
+Verbindung auf „Mac verbunden“. Die sieben geschützten Bestands-/Freigabedateien bleiben
+seit dem Watcher-Stopp bytegleich. Der private Anschluss bleibt auf denselben Eigentümer
+beschränkt; keine erneute Dokumentfreigabe oder neue SSO-Anmeldung war erforderlich.
+
+Ein tatsächlicher Werkzeugaufruf im separaten normalen Chat bleibt offen. Die hiesige
+Computersteuerung darf die ChatGPT-App `com.openai.codex` nicht bedienen. Der Eigentümer
+muss dort Vauldy als Plugin auswählen und den Status abfragen. Die erfolgreiche Browser-
+Diagnose ist ein Nachweis der SSO-/Mac-Strecke, kein Ersatz für diesen Zielchat-Nachweis.

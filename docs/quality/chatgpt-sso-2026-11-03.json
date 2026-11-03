@@ -1,6 +1,6 @@
 {
   "version": "0.12.2",
-  "verifiedAt": "2026-11-03T13:13:45.226937+00:00",
+  "verifiedAt": "2026-11-03T13:44:58.395993+00:00",
   "swiftTests": 159,
   "swiftSuites": 23,
   "regressionStages": 19,
@@ -40,21 +40,21 @@
   "browserSSOCompleted": true,
   "normalChatToolCallVerified": false,
   "regressionReport": "dist/mcp/regression/20261103T130759843704Z",
-  "remainingStep": "Unlock Mac; explicitly authorize the updated agent in Vauldy. No automatic password retries. Device rotation, authenticated remote status, and normal-chat tool invocation remain pending owner approval.",
+  "remainingStep": "In a normal ChatGPT chat, select the existing Vauldy plugin and invoke its status tool. Browser SSO-to-Mac status is verified with 147 documents; separate normal-chat invocation is not yet observed.",
   "confirmedDocumentCount": 147,
   "deviceCredentialTransport": "TLS-protected JSON body; no credential in URL or custom request header",
   "legacyCredentialHeaderRejected": true,
   "credentialRotationPreservesGrantAndExpiry": true,
-  "keychainOSApprovalPending": true,
-  "deviceCredentialRotationPending": true,
-  "macServiceTemporarilyPaused": true,
+  "keychainOSApprovalPending": false,
+  "deviceCredentialRotationPending": false,
+  "macServiceTemporarilyPaused": false,
   "browserConnectionCheckUsesDedicatedCSRFProtectedAPI": true,
   "currentLocalChatToolStatusVerified": true,
   "keychainLoopRegressionTests": 5,
   "automaticKeychainInteractionDisabled": true,
   "explicitAuthorizationFreshBackgroundCheck": true,
-  "nativeKeychainAuthorizationUIVerified": false,
-  "lastComputerUseBlocker": "Mac locked; owner unlock requested",
+  "nativeKeychainAuthorizationUIVerified": true,
+  "lastComputerUseBlocker": null,
   "currentRepairProtectedFilesUnchanged": true,
   "installedKeychainStatusDiagnostics": {
     "noninteractiveStatusChecks": [
@@ -86,5 +86,14 @@
     "securityAgentProcesses": 0,
     "protectedFilesUnchangedSinceWatcherStop": true
   },
-  "devicePairedLastObservedBeforeKeychainBlock": true
+  "devicePairedLastObservedBeforeKeychainBlock": true,
+  "keychainPersistentAuthorizationConfirmed": true,
+  "devicePaired": true,
+  "deviceCredentialRotationCompleted": true,
+  "oldDeviceCredentialRejectedDuringRotation": true,
+  "authenticatedBrowserRemoteStatusVerified": true,
+  "authenticatedBrowserRemoteGrantedDocumentCount": 147,
+  "browserConnectionListMacConnected": true,
+  "nativeUIServiceRunningWithoutRepeatedPrompt": true,
+  "normalChatVerificationBlocker": "Computer Use is prohibited from controlling com.openai.codex. Actual normal-chat invocation requires owner action."
 }
