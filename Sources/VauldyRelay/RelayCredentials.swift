@@ -21,6 +21,7 @@ public struct RelayCredentials: Codable, Sendable {
     public static let origin = "https://vauldy-private-connector.brightibex15.chatgpt.site"
     public var serviceToken: String
     public var deviceToken: String?
+    public var pendingDeviceToken: String?
     public var privateKey: Data?
     public var pairID: String?
     public var verifier: String?
@@ -90,6 +91,21 @@ public struct RelayCredentialStore: Sendable {
             guard expectedID != nil, completed.paired, completed.deviceToken != nil, let current = try load(), current.pairID == expectedID, current.deviceToken == completed.deviceToken else { throw RelayFailure.signInRequired }
             _ = try completed.validatedProfile(installation: installation)
             try saveUnlocked(completed)
+        }
+    }
+    public func prepareDeviceRotation() throws -> RelayCredentials {
+        try locked {
+            guard var c = try load(), c.paired, c.deviceToken != nil else { throw RelayFailure.signInRequired }
+            _ = try c.validatedProfile(installation: installation)
+            if c.pendingDeviceToken == nil { c.pendingDeviceToken = RelayCrypto.token(); try saveUnlocked(c) }
+            return c
+        }
+    }
+    public func completeDeviceRotation(expectedToken: String?, nextToken: String) throws {
+        try locked {
+            guard var c = try load(), c.paired, c.deviceToken == expectedToken, c.pendingDeviceToken == nextToken else { throw RelayFailure.signInRequired }
+            _ = try c.validatedProfile(installation: installation)
+            c.deviceToken = nextToken; c.pendingDeviceToken = nil; try saveUnlocked(c)
         }
     }
     public func clearDevice(expectedToken: String? = nil) throws {

@@ -2,7 +2,7 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.12.0" }
+public enum MCPBuild { public static let version = "0.12.1" }
 
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
     case overview, connections, documents, folders, oauth, settings

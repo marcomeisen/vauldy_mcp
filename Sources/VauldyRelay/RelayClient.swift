@@ -18,16 +18,35 @@ public struct RelayClient: Sendable {
         guard path.hasPrefix("/api/"), !path.contains(".."), body.count <= 256000 else { throw RelayFailure.unavailable }
         let session = URLSession(configuration: .ephemeral, delegate: NoRedirects(), delegateQueue: nil)
         defer { session.invalidateAndCancel() }
-        var req = URLRequest(url: URL(string: RelayCredentials.origin + path)!); req.httpMethod = "POST"; req.timeoutInterval = 15
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.setValue("Bearer " + credentials.serviceToken, forHTTPHeaderField: "OAI-Sites-Authorization")
-        if let token = credentials.deviceToken { req.setValue(token, forHTTPHeaderField: "X-Vauldy-Device") }
-        req.httpBody = body
+        let req = try preparedRequest(path, body: body)
         let (data, response) = try await session.data(for: req)
         guard data.count <= 256000, let response = response as? HTTPURLResponse else { throw RelayFailure.unavailable }
         if response.statusCode == 401 || response.statusCode == 403 { throw RelayFailure.signInRequired }
         guard (200...299).contains(response.statusCode) else { throw RelayFailure.unavailable }
         return (data, response.statusCode)
+    }
+    // Credentials belong only in the TLS-protected request body. Custom headers
+    // can be retained by infrastructure request logs, even without app logging.
+    func preparedRequest(_ path: String, body: Data) throws -> URLRequest {
+        guard path.hasPrefix("/api/"), !path.contains(".."), body.count <= 256000 else { throw RelayFailure.unavailable }
+        var req = URLRequest(url: URL(string: RelayCredentials.origin + path)!); req.httpMethod = "POST"; req.timeoutInterval = 15
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("Bearer " + credentials.serviceToken, forHTTPHeaderField: "OAI-Sites-Authorization")
+        if path.hasPrefix("/api/device/") {
+            guard let token = credentials.deviceToken,
+                  var value = try JSONSerialization.jsonObject(with: body) as? [String: Any] else { throw RelayFailure.signInRequired }
+            value["deviceToken"] = token
+            req.httpBody = try JSONSerialization.data(withJSONObject: value)
+        } else { req.httpBody = body }
+        guard (req.httpBody?.count ?? 0) <= 256000 else { throw RelayFailure.unavailable }
+        return req
+
+    }
+    public func rotate(nextToken: String) async throws {
+        let body = try JSONSerialization.data(withJSONObject: ["nextDeviceToken": nextToken])
+        let (data, _) = try await request("/api/device/rotate", body: body)
+        struct Rotated: Decodable { let rotated: Bool }
+        guard try JSONDecoder().decode(Rotated.self, from: data).rotated else { throw RelayFailure.unavailable }
     }
     public func start(profile: MCPAccessProfile) async throws -> (RelayCredentials, URL) {
         try profile.validate()

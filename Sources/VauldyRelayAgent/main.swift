@@ -32,6 +32,13 @@ import VauldyMCPRuntime
             let service = RelayService(installation: installation), lease = try service.lease()
             defer { withExtendedLifetime(lease) {} }
             guard var credentials = try store.load() else { throw RelayFailure.notProvisioned }
+            if credentials.paired, let next = credentials.pendingDeviceToken {
+                _ = try credentials.validatedProfile(installation: installation)
+                try await RelayClient(credentials: credentials).rotate(nextToken: next)
+                try store.completeDeviceRotation(expectedToken: credentials.deviceToken, nextToken: next)
+                guard let fresh = try store.load() else { throw RelayFailure.credentials }
+                credentials = fresh
+            }
             // This pending state is created only after the native owner confirms
             // an exact existing profile revision. Browser SSO alone grants nothing.
             while !credentials.paired && !service.stopRequested {

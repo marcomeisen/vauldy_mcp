@@ -1,4 +1,4 @@
-# ChatGPT-Verbindung ohne manuelle Schlüssel (0.12)
+# ChatGPT-Verbindung ohne manuelle Schlüssel (0.12.1)
 
 Der eigenständige MCP verwendet für normale ChatGPT-Chats einen privaten,
 verwalteten Sites-MCP mit ChatGPT-Anmeldung. Ein lokaler stdio-Eintrag allein
@@ -97,3 +97,25 @@ Es wurden keine Originaldateien durch die SSO-Implementierung geschrieben oder g
 Die persönliche Dokumentbestätigung, Browseranmeldung und ein echter Aufruf aus dem
 normalen Chat bleiben ein separater letzter Nutzerschritt. Das veröffentlichte Plugin
 allein berechtigt den Dienst noch nicht zum Lesen eines Dokuments.
+
+## 0.12.1: Abschluss der persönlichen Anmeldung
+
+Die native Auswahl von 147 bestehenden Dokumenten und die ChatGPT-Browseranmeldung sind
+bestätigt. Der laufende Mac-Agent hat die Kopplung übernommen. Beim Live-Statuscheck wurde
+die Browserprüfung vom reservierten MCP-Pfad auf einen eigenen, angemeldeten und
+CSRF-geschützten API-Pfad umgestellt; der MCP-Transport bleibt separat geschützt.
+
+Infrastrukturprotokolle können eigene HTTP-Header erfassen. Gerätezugänge werden deshalb
+ab 0.12.1 ausschließlich im TLS-geschützten JSON-Inhalt der privaten Geräterouten übertragen.
+Keine Request-Bodies oder Geheimnisse loggen; Diagnoseausgaben nur mit freigegebenen Feldern,
+niemals vollständige Infrastruktur-Request-Header ausgeben. Legacy-Header authentifizieren
+keine Geräte mehr. Die Erneuerung eines Gerätezugangs hält Besitzer, Geräteidentität, Profil
+und Ablaufdatum konstant und verwirft den alten Zugang; verlorene Antworten sind über einen
+privat im Schlüsselbund gespeicherten nächsten Zugang wiederholbar.
+
+Alle 19 Regressionen mit 154 Swift-Tests und zehn Worker-Integrationstests bestehen.
+macOS kann nach Aktualisierung des lokalen Entwicklungspakets die Freigabe für den eigenen
+Schlüsselbundeintrag erneut verlangen. Diesen geschützten Systemdialog bestätigt der Nutzer
+direkt auf seinem Mac. Dafür wird kein API-Schlüssel eingegeben und keine Freigabe für ein
+anderes Programm eingerichtet. Zum dokumentierten Zeitpunkt wartet die abschließende
+Zugangserneuerung auf diesen Systemdialog; der Mac-Dienst ist dafür pausiert.

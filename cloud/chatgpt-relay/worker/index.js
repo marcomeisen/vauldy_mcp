@@ -23,8 +23,9 @@ async function body(req) {
 function browserWrite(req) {
   if(req.headers.get('origin')!==new URL(req.url).origin || req.headers.get('x-vauldy-action')!=='1') fail(403);
 }
-async function device(req,db) {
-  const token=text(req.headers.get('x-vauldy-device'),100);
+async function device(db,b) {
+  if(typeof b?.deviceToken!=='string'||!b.deviceToken.length||b.deviceToken.length>100)fail(401);
+  const token=b.deviceToken;
   return await first(db,'SELECT * FROM devices WHERE token_hash=? AND revoked=0 AND expires>?',await hash(token),now()) || fail(401);
 }
 async function publicKey(raw) {
@@ -81,7 +82,7 @@ async function mcp(req,db) {
   let result;
   switch(rpc.method){
     case 'server/discover': result={supportedVersions:['2026-07-28'],capabilities:{tools:{}}};break;
-    case 'initialize': result={protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'vauldy',version:'0.12.0'},instructions:INSTRUCTIONS};break;
+    case 'initialize': result={protocolVersion:'2025-11-25',capabilities:{tools:{listChanged:false}},serverInfo:{name:'vauldy',version:'0.12.1'},instructions:INSTRUCTIONS};break;
     case 'ping':result={};break;
     case 'tools/list':result={tools:TOOLS};break;
     case 'tools/call':result=await callMac(db,owner,rpc.params,req.signal);break;
@@ -126,18 +127,31 @@ async function route(req,env) {
       const saved=await first(db,'SELECT token_hash,revoked FROM devices WHERE id=?',did);if(saved?.token_hash!==th||saved.revoked)fail(409);
       return json({paired:true});
     }
+    case '/api/connection-check': {
+      browserWrite(req);const owner=user(req);
+      return json({result:await callMac(db,owner,{name:'get_vault_status',arguments:{}},req.signal)});
+    }
+    case '/api/device/rotate': {
+      const next=text(b.nextDeviceToken,100);if(next.length<40)fail(400);
+      let d;
+      try { d=await device(db,b); }
+      catch(e) { if(e.status!==401)throw e;d=await device(db,{deviceToken:next}); }
+      const r=await run(db,'UPDATE devices SET token_hash=? WHERE id=? AND token_hash=? AND revoked=0 AND expires>?',await hash(next),d.id,d.token_hash,now());
+      if(r.meta.changes!==1)fail(409);
+      return json({rotated:true});
+    }
     case '/api/device/poll': {
-      const d=await device(req,db);await run(db,'UPDATE devices SET last_seen=? WHERE id=? AND revoked=0',now(),d.id);
+      const d=await device(db,b);await run(db,'UPDATE devices SET last_seen=? WHERE id=? AND revoked=0',now(),d.id);
       const job=await first(db,'UPDATE jobs SET claimed=1 WHERE id=(SELECT id FROM jobs WHERE device_id=? AND claimed=0 AND expires>? ORDER BY expires LIMIT 1) AND claimed=0 RETURNING id,public_key,request,expires',d.id,now());
       return json({job:job??null});
     }
     case '/api/device/result': {
-      const d=await device(req,db);const result=text(b.result,250000);
+      const d=await device(db,b);const result=text(b.result,250000);
       const r=await run(db,'UPDATE jobs SET result=? WHERE id=? AND device_id=? AND claimed=1 AND result IS NULL AND expires>?',result,text(b.id,100),d.id,now());
       if(r.meta.changes!==1)fail(409);return json({accepted:true});
     }
     case '/api/device/disconnect': {
-      const d=await device(req,db);await db.batch([db.prepare('UPDATE devices SET revoked=1 WHERE id=?').bind(d.id),db.prepare('DELETE FROM jobs WHERE device_id=?').bind(d.id)]);return json({revoked:true});
+      const d=await device(db,b);await db.batch([db.prepare('UPDATE devices SET revoked=1 WHERE id=?').bind(d.id),db.prepare('DELETE FROM jobs WHERE device_id=?').bind(d.id)]);return json({revoked:true});
     }
     case '/api/connections': {
       browserWrite(req);const owner=user(req);const r=await db.prepare('SELECT id,last_seen,expires FROM devices WHERE owner=? AND revoked=0 AND expires>? ORDER BY created DESC').bind(owner,now()).all();return json({devices:r.results});
@@ -153,7 +167,7 @@ function page() {
   const html=`<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Vauldy mit ChatGPT verbinden</title><style>body{margin:0;background:#f5f3ed;color:#183a36;font:17px/1.6 system-ui}main{max-width:680px;margin:10vh auto;padding:36px}h1{font-size:38px;line-height:1.2}button,a.action{background:#1c6158;color:white;border:0;border-radius:9px;padding:13px 20px;font:inherit;cursor:pointer}button:disabled{opacity:.6}section{background:white;border:1px solid #ddd9cd;border-radius:16px;padding:24px;margin:24px 0}small{display:block;color:#536963}li{margin:15px 0}a{color:#1c6158}</style><main><a href="/">Vauldy</a><h1>Deine Dokumente.<br>In deinem Chat.</h1><p>Du bist mit deinem ChatGPT-Konto angemeldet. Verbinde deinen Mac und wähle dort, welche Dokumente ChatGPT lesen darf.</p><section id="pair" hidden><h2>Mac verbinden</h2><p>Bestätige nur, wenn du die Anmeldung gerade selbst in Vauldy MCP Einrichtung gestartet hast. Den Dokumentzugriff bestätigst du anschließend auf deinem Mac.</p><button id="confirm">Diesen Mac verbinden</button><p id="status" role="status"></p></section><section><h2>Verbindung prüfen</h2><p>Prüfe den Weg von deinem ChatGPT-Konto bis zum freigegebenen Bestand auf deinem Mac.</p><button id="check">Verbindung prüfen</button><p id="check-status" role="status"></p></section><section><h2>Verbindungen</h2><p id="empty" role="status">Verbindungen werden geprüft …</p><ul id="devices"></ul><p>Der Mac muss eingeschaltet und verbunden sein. Neue Dokumente bleiben gesperrt, bis du sie lokal freigibst.</p></section><small>Originaldateien und OCR bleiben auf deinem Mac. Angeforderte, freigegebene Inhalte werden lokal bereinigt und an ChatGPT übergeben. Die Zwischenablage der Verbindung enthält nur kurzlebige verschlüsselte Nachrichten.</small></main><script>
   const call=async(p,b)=>{const r=await fetch(p,{method:'POST',headers:{'content-type':'application/json','x-vauldy-action':'1'},body:JSON.stringify(b)});if(!r.ok)throw Error();return r.json()};
   const id=new URL(location.href).searchParams.get('id');if(id){document.querySelector('#pair').hidden=false;document.querySelector('#confirm').onclick=async()=>{const btn=document.querySelector('#confirm');btn.disabled=true;try{await call('/api/pair/confirm',{id});document.querySelector('#status').textContent='Anmeldung bestätigt. Kehre zu Vauldy auf deinem Mac zurück und bestätige die Dokumentauswahl.';}catch{document.querySelector('#status').textContent='Die Anfrage ist abgelaufen oder wurde schon bestätigt. Starte die Anmeldung in Vauldy erneut.';}};}
-  document.querySelector('#check').onclick=async()=>{const btn=document.querySelector('#check'),status=document.querySelector('#check-status');btn.disabled=true;status.textContent='Mac wird geprüft …';try{const rpc=await call('/mcp',{jsonrpc:'2.0',id:1,method:'tools/call',params:{name:'get_vault_status',arguments:{}}});const r=rpc.result;if(!r||r.isError){status.textContent=r?.content?.[0]?.text||'Verbindung derzeit nicht verfügbar.';}else{const v=r.structuredContent||JSON.parse(r.content[0].text);if(!Number.isInteger(v.grantedDocumentCount))throw Error();status.textContent='Mac erreichbar · '+v.grantedDocumentCount+' Dokumente freigegeben.';}}catch{status.textContent='Die Verbindung konnte nicht geprüft werden. Bitte Anmeldung und Mac-Dienst prüfen.';}finally{btn.disabled=false;}};
+  document.querySelector('#check').onclick=async()=>{const btn=document.querySelector('#check'),status=document.querySelector('#check-status');btn.disabled=true;status.textContent='Mac wird geprüft …';try{const rpc=await call('/api/connection-check',{});const r=rpc.result;if(!r||r.isError){status.textContent=r?.content?.[0]?.text||'Verbindung derzeit nicht verfügbar.';}else{const v=r.structuredContent||JSON.parse(r.content[0].text);if(!Number.isInteger(v.grantedDocumentCount))throw Error();status.textContent='Mac erreichbar · '+v.grantedDocumentCount+' Dokumente freigegeben.';}}catch{status.textContent='Die Verbindung konnte nicht geprüft werden. Bitte Anmeldung und Mac-Dienst prüfen.';}finally{btn.disabled=false;}};
   async function load(){try{const data=await call('/api/connections',{});const list=document.querySelector('#devices');list.replaceChildren();document.querySelector('#empty').textContent=data.devices.length?'':'Noch kein Mac verbunden. Öffne auf deinem Mac Vauldy MCP Einrichtung → ChatGPT.';for(const d of data.devices){const li=document.createElement('li'),btn=document.createElement('button');li.textContent=Date.now()/1000-d.last_seen<20?'Mac verbunden · ':'Mac offline · ';btn.textContent='Verbindung löschen';btn.onclick=async()=>{btn.disabled=true;try{await call('/api/revoke',{id:d.id});await load();}catch{btn.disabled=false;}};li.append(btn);list.append(li);}}catch{document.querySelector('#empty').textContent='Verbindungen derzeit nicht abrufbar. Bitte neu laden.';}}load();
   </script></html>`;
   return new Response(html,{headers:{'content-type':'text/html;charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",'referrer-policy':'no-referrer','x-content-type-options':'nosniff'}});

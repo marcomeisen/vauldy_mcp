@@ -120,3 +120,10 @@ Die Setup-Oberfläche darf beim Öffnen keinen Ordner-/OCR-Worker starten. Vorha
 laufende Worker bleiben unabhängig; neue Starts nur durch ausdrückliche Ordner-/Importaktionen.
 `setup_startup_smoke_test.py` prüft mit synthetischem aktivem Watch-Ordner und gestopptem Worker,
 dass der native Verbindungsstart weder den Worker fortsetzt noch Snapshot/Originale ändert.
+
+Gerätezugänge niemals in URL oder eigenen Request-Headern senden: Infrastrukturprotokolle
+können diese Header vollständig erfassen. Nur TLS-geschützter JSON-Inhalt auf den privaten
+Geräterouten, niemals Bodies/Secrets loggen. Erneuerung erhält Besitzer, Geräteidentität,
+Profil und Ablaufdatum; verlorene Antworten über privat gespeicherten nächsten Zugang
+idempotent wiederholen. Browser-Statusprüfung läuft über eigenen CSRF-geschützten API-Pfad,
+nicht über den für MCP-Clients reservierten Transportpfad.

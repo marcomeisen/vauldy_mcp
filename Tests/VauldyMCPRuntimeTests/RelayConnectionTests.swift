@@ -37,10 +37,26 @@ struct RelayConnectionTests {
         #expect(denied["isError"] as? Bool == true)
         #expect(try Data(contentsOf: vault) == bytes)
     }
+    @Test func deviceAuthenticationNeverUsesURLOrLoggedCustomHeaders() throws {
+        var c = RelayCredentials(serviceToken: "synthetic-service")
+        c.deviceToken = "synthetic-private-device"; c.pendingDeviceToken = "synthetic-private-pending"
+        let client = RelayClient(credentials: c)
+        let request = try client.preparedRequest("/api/device/poll", body: Data("{}".utf8))
+        let headers = request.allHTTPHeaderFields ?? [:]
+        #expect(headers.keys.allSatisfy { $0.lowercased() != "x-vauldy-device" })
+        #expect(!headers.values.contains(c.deviceToken!) && !headers.values.contains(c.pendingDeviceToken!))
+        #expect(!request.url!.absoluteString.contains("synthetic-private"))
+        let body = try #require(request.httpBody)
+        let object = try JSONSerialization.jsonObject(with: body)
+        let payload = try #require(object as? [String: String])
+        #expect(payload["deviceToken"] == c.deviceToken)
+        let pairing = try client.preparedRequest("/api/pair/start", body: Data("{}".utf8))
+        #expect(String(decoding: pairing.httpBody!, as: UTF8.self) == "{}")
+    }
     @Test func nativeUIStateNeverDisclosesCredentialMaterial() throws {
         var c = RelayCredentials(serviceToken: "DO-NOT-DISCLOSE-service")
         c.deviceToken = "DO-NOT-DISCLOSE-device"; c.privateKey = Data("DO-NOT-DISCLOSE-private".utf8)
-        c.verifier = "DO-NOT-DISCLOSE-verifier"; c.pairID = "public-pair-id"
+        c.pendingDeviceToken = "DO-NOT-DISCLOSE-pending"; c.verifier = "DO-NOT-DISCLOSE-verifier"; c.pairID = "public-pair-id"
         let state = RelayUIState(credentials: c, running: true)
         let data = try JSONEncoder().encode(RelayUIResponse(state: state))
         let text = String(decoding: data, as: UTF8.self)

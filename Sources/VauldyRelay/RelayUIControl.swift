@@ -17,7 +17,7 @@ public struct RelayUIState: Codable, Sendable {
     }
 }
 public struct RelayUIRequest: Codable, Sendable {
-    public enum Operation: String, Codable, Sendable { case status, begin, start, disconnect }
+    public enum Operation: String, Codable, Sendable { case status, begin, start, disconnect, rotate }
     public var operation: Operation
     public var profileID: UUID?
     public var revision: UUID?
@@ -59,6 +59,23 @@ public enum RelayUIManager {
                     credentials.paired = true
                 }
                 _ = try credentials.validatedProfile(installation: installation)
+                try service.start(executable: installation.root.appendingPathComponent("bin/vauldy-relay"))
+            case .rotate:
+                try service.requestStop()
+                for _ in 0..<50 {
+                    if !service.isRunning { break }
+                    try await Task.sleep(for: .milliseconds(100))
+                }
+                guard !service.isRunning else { throw RelayFailure.unavailable }
+                let current = try store.prepareDeviceRotation()
+                guard let next = current.pendingDeviceToken else { throw RelayFailure.credentials }
+                try await RelayClient(credentials: current).rotate(nextToken: next)
+                // Confirm invalidation without printing either credential.
+                do {
+                    _ = try await RelayClient(credentials: current).poll()
+                    throw RelayFailure.credentials
+                } catch RelayFailure.signInRequired { }
+                try store.completeDeviceRotation(expectedToken: current.deviceToken, nextToken: next)
                 try service.start(executable: installation.root.appendingPathComponent("bin/vauldy-relay"))
             case .disconnect:
                 try service.requestStop(); try store.clearDevice()
