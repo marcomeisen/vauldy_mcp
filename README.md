@@ -7,6 +7,10 @@ bereinigte Dokumentinhalte. stdio und OAuth-geschütztes HTTP bieten dieselben v
 Die Entwicklung ist vom Vauldy-App-Repository getrennt. Es werden keine App-Archive,
 Profile oder Provider-Einstellungen automatisch übernommen.
 
+Der geführte [Bestandsabgleich](docs/inventory-workflow.md) verbindet Quellenprüfung,
+Qualitätsbericht und erneute Freigabe. Bestehende ChatGPT-Verbindungen erhalten ihre
+Anmeldung und Geräteidentität; Originaldateien bleiben unverändert.
+
 ## Start
 
 Benötigt werden macOS 14+, Swift 6 und Python 3 für die Protokolltests. Die Relay-Regression benötigt zusätzlich Node.js 22.13+ (SQLite und WebCrypto).

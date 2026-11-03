@@ -15,9 +15,7 @@ import VauldyMCPRuntime
         do {
             try RelayKeychainInteraction.configure(allow: false)
             if args[1] == "--manage" {
-                let data = try FileHandle.standardInput.read(upToCount: 8001) ?? Data()
-                guard data.count <= 8000 else { throw RelayFailure.unavailable }
-                let request = try JSONDecoder().decode(RelayUIRequest.self, from: data)
+                let request = try RelayUIInput.request(from: .standardInput)
                 try RelayKeychainInteraction.configure(allow: request.operation.allowsUserInteraction)
                 let parent = getppid()
                 let watchdog: Task<Void, Never>? = request.operation.allowsUserInteraction ? Task.detached {

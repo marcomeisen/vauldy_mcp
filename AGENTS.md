@@ -135,3 +135,28 @@ Gespeicherte Verbindung von benötigter Systemfreigabe unterscheiden. Explizite 
 abbrechbar halten, Parentverlust beenden, frischen nichtinteraktiven Zugriff prüfen.
 Keine ACL-Ausweitung oder Secret-Ausgabe als Umgehung. Synthetische Persistence- und
 Cancellation-Tests in RelayKeychainInteractionTests ersetzen keinen Live-SSO-Nachweis.
+
+
+## Geführter Bestandsabgleich ab 0.13
+
+Bestand abgleichen, Qualitätsbericht und neue Auswahlbestätigung bleiben getrennte Schritte.
+Keine automatische Freigabe durch Import, keine Löschung fehlender Einträge oder Originale.
+Quellenprüfung im Originalzugriff besitzenden Prozess; vollständig inhaltsgleiche, explizit
+neu gewählte Quellen dürfen unlesbare Verweise erneuern und behalten Identität/Text/Freigaben.
+Native Prüfbelege sind nur lokale Verwaltungsautorität, keine Remote-Authentifizierung.
+An Snapshot, Empfänger-Fingerprint, Revision, exakte IDs und kurze Gültigkeit binden. Kein
+HTTP-/MCP-Endpunkt darf diese Verwaltungsanfragen oder Prüfbelege als Zustimmung annehmen.
+
+updateGrant erhält ChatGPT-Geräteidentität, Anmeldung, Client-Eintrag und Cloud-Ablaufdatum.
+Vor Umschalten alten Agenten anhalten. Snapshot unter Writer-Sperre, Profil unter seiner
+Sperre prüfen; alte Handles/Cursor invalidieren. Leere/pausierte Auswahl nicht aktivieren.
+Nach teilweisem Credential-Commit keine automatische Erweiterung: neue Bestätigung bei
+frischem Bericht, weder Verbindung löschen noch Schlüsselbund-ACL lockern.
+
+OCR-Aufträge übergeben ausdrücklich kurzlebige Bookmarks aus dem bereits geöffneten
+schreibgeschützten Originalzugriff. Worker verifizieren Hash und Identität vor/bei OCR,
+halten den Lease bis zum nativen Ende und verwerfen die Übergabe nach Abschluss. Kein
+Pfad-Fallback bei ungültiger Übergabe, keine Weitergabe über MCP/Logs. IPC-Version an
+Prozessinstanz binden; alte Worker nehmen neue Übergaben nicht versehentlich an. Einmaliger
+Abgleich startet keine bisher gestoppten Watch-Ordner. InventoryWorkflowTests plus gesamte
+synthetische Regression prüfen die Grenzen; echte Zielchat-Nutzung ist ein separater Nachweis.

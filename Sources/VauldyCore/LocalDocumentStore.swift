@@ -37,7 +37,7 @@ public struct LocalDocumentStore: Sendable {
         }
     }
 
-    public func stage(file: URL, storage: LocalOriginalStorage = .managedCopy) async throws -> (document: VaultDocument, duplicate: Bool) {
+    public func stage(file: URL, storage: LocalOriginalStorage = .managedCopy, renewOriginalAccess: Bool = false) async throws -> (document: VaultDocument, duplicate: Bool) {
         try await run {
             guard file.isFileURL else { throw LocalImportError.unsupportedFile }
             let ext = file.pathExtension.lowercased()
@@ -62,6 +62,11 @@ public struct LocalDocumentStore: Sendable {
                 if let index = documents.firstIndex(where: { $0.localImport?.contentHash == hash }) {
                     if let reference, documents[index].localImport?.originalReference == nil {
                         documents[index].localImport?.referenceCandidate = reference; changed = true
+                    } else if let reference, renewOriginalAccess {
+                        // Explicit folder re-selection, after matching the complete
+                        // content hash. Preserve identity, text and existing grants.
+                        documents[index].localImport?.originalReference = reference
+                        documents[index].localImport?.originalState = .available; changed = true
                     }
                     if changed { try save(documents) }
                     return (documents[index], true)
@@ -91,13 +96,22 @@ public struct LocalDocumentStore: Sendable {
         try await run { try locked { try LocalWorkerLease(url: root.appendingPathComponent("ocr.lock")) } }
     }
 
-    func start(_ id: UUID, attempt: UUID) async throws -> LocalOriginalAccess {
+    func start(_ id: UUID, attempt: UUID, borrowedAccess: Data? = nil) async throws -> LocalOriginalAccess {
         try await run { try locked {
             var documents = try read()
             guard let index = documents.firstIndex(where: { $0.id == id }),
                   var metadata = documents[index].localImport else { throw LocalImportError.staleAttempt }
             let access: LocalOriginalAccess
-            do { access = try checkedOriginal(metadata) }
+            do {
+                if let borrowedAccess {
+                    let opened = try LocalOriginalAccess.handoff(borrowedAccess, excluding: root, managedOriginal: metadata.originalReference == nil ? managedOriginalURL(metadata) : nil)
+                    do {
+                        try opened.verify(hash: metadata.contentHash)
+                        if let reference = metadata.originalReference { guard try opened.fileIdentity() == reference.identity else { throw LocalOriginalError.changed } }
+                        access = opened
+                    } catch { opened.close(); throw error }
+                } else { access = try checkedOriginal(metadata) }
+            }
             catch let error as LocalOriginalError {
                 documents[index].localImport?.originalState = error.state
                 try save(documents); throw error
@@ -110,12 +124,15 @@ public struct LocalDocumentStore: Sendable {
         } }
     }
 
-    func finish(_ id: UUID, attempt: UUID, result: LocalOCRResult, metrics: LocalImportMetrics? = nil, analysis: DocumentBaseAnalysis? = nil) async throws -> VaultDocument {
+    func finish(_ id: UUID, attempt: UUID, result: LocalOCRResult, metrics: LocalImportMetrics? = nil, analysis: DocumentBaseAnalysis? = nil, access: LocalOriginalAccess? = nil) async throws -> VaultDocument {
         guard !result.pages.isEmpty, result.pages.count <= 200,
               result.pages.map(\.info.page) == Array(1...result.pages.count) else { throw LocalImportError.invalidDocument }
         guard result.pages.reduce(0, { $0 + $1.text.utf8.count }) <= 900_000 else { throw LocalImportError.fileTooLarge }
         return try await update(id, attempt: attempt) { document, metadata in
-            if metadata.originalReference != nil {
+            if let access {
+                try access.verify(hash: metadata.contentHash)
+                if let reference = metadata.originalReference { guard try access.fileIdentity() == reference.identity else { throw LocalImportError.staleAttempt } }
+            } else if metadata.originalReference != nil {
                 let access = try checkedOriginal(metadata); access.close()
             }
             metadata.originalState = .available
@@ -181,6 +198,11 @@ public struct LocalDocumentStore: Sendable {
                 try save(documents); throw error
             }
         } }
+    }
+
+    func borrowOriginal(for id: UUID) async throws -> Data {
+        let access = try await openOriginal(for: id); defer { access.close() }
+        return try access.handoffBookmark()
     }
 
     /// Explicit local availability check; stored OCR is retained even when a source disappears.

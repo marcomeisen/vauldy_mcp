@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 public enum MCPConnectionKind: String, Codable, Sendable { case local, oauth }
 
@@ -80,5 +81,17 @@ public struct FileMCPProfileSource: MCPProfileSource {
         let data = try JSONEncoder().encode(value)
         try data.write(to: url, options: [.atomic])
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+    }
+}
+
+extension MCPAccessProfile {
+    public func disclosureFingerprint() throws -> String {
+        let p = self
+        let value: [String: Any] = ["version": p.version, "revision": p.revision.uuidString,
+            "id": p.connectionID.uuidString, "name": p.connectionName, "kind": p.connectionKind?.rawValue ?? "",
+            "client": p.desktopClient?.rawValue ?? "", "enabled": p.enabled, "vault": p.vaultPath,
+            "documents": p.allowedDocumentIDs.map(\.uuidString).sorted(), "cloud": p.acknowledgedCloudDisclosure]
+        let data = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys])
+        return Data(SHA256.hash(data: data)).base64EncodedString()
     }
 }

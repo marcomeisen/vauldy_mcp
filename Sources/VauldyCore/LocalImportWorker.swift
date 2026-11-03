@@ -4,7 +4,8 @@ import Foundation
 public struct LocalImportWorker: Sendable {
     public let store: LocalDocumentStore
     public let executable: URL
-    public init(store: LocalDocumentStore, executable: URL) { self.store = store; self.executable = executable }
+    public let watchFolders: Bool
+    public init(store: LocalDocumentStore, executable: URL, watchFolders: Bool = true) { self.store = store; self.executable = executable; self.watchFolders = watchFolders }
     private var directory: URL { store.root.appendingPathComponent("worker", isDirectory: true) }
     private var stopURL: URL { directory.appendingPathComponent("stop") }
     private struct Job: Codable {
@@ -13,6 +14,7 @@ public struct LocalImportWorker: Sendable {
         var createdAt = Date()
         var state = "queued"
         var fresh = false
+        var borrowedAccess: Data?
         var progress: LocalImportProgress?
         var outcome: LocalImportOutcome?
         var error: LocalImportError?
@@ -37,9 +39,9 @@ public struct LocalImportWorker: Sendable {
         guard FileManager.default.fileExists(atPath: url.path) else { return [] }
         return try read(url, as: [LocalWatchScanStatus].self)
     }
-    public func importFile(_ file: URL, storage: LocalOriginalStorage = .managedCopy, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
+    public func importFile(_ file: URL, storage: LocalOriginalStorage = .managedCopy, renewOriginalAccess: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
-        let staged = try await store.stage(file: file, storage: storage)
+        let staged = try await store.stage(file: file, storage: storage, renewOriginalAccess: renewOriginalAccess)
         if staged.duplicate, staged.document.localImport?.state != .queued {
             return .init(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
                          reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
@@ -81,8 +83,9 @@ public struct LocalImportWorker: Sendable {
         try Task.checkCancellation()
         try await prepare()
         progress(.init(documentID: id, stage: "Wartet auf lokalen Worker"))
+        let borrowed = try await store.borrowOriginal(for: id)
         let job = try await Task.detached {
-            let job = try enqueue(id, fresh: fresh)
+            let job = try enqueue(id, fresh: fresh, borrowedAccess: borrowed)
             try startIfNeeded()
             return job
         }.value
@@ -106,14 +109,25 @@ public struct LocalImportWorker: Sendable {
             await pause()
         }
     }
-    private func enqueue(_ id: UUID, fresh: Bool = false) throws -> Job {
+    private func enqueue(_ id: UUID, fresh: Bool = false, borrowedAccess: Data? = nil) throws -> Job {
         let lock = try LocalWorkerLease(url: directory.appendingPathComponent("queue.lock"), wait: true)
         defer { lock.release() }
+        if running() {
+            var compatible = false
+            for _ in 0..<20 {
+                if let details = try? read(directory.appendingPathComponent("instance-details"), as: InstanceDetails.self),
+                   let instance = try? read(directory.appendingPathComponent("instance"), as: UUID.self),
+                   details.id == instance, details.protocolVersion == 2 { compatible = true; break }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+            guard compatible else { throw LocalImportError.workerBusy }
+        }
         let existing = try jobs()
         if let active = existing.first(where: { $0.documentID == id && $0.finishedAt == nil }), active.fresh != fresh { throw LocalImportError.workerBusy }
-        let job = existing.first(where: { $0.documentID == id && $0.finishedAt == nil }) ?? Job(id: UUID(), documentID: id, fresh: fresh)
+        var job = existing.first(where: { $0.documentID == id && $0.finishedAt == nil }) ?? Job(id: UUID(), documentID: id, fresh: fresh)
         guard existing.filter({ $0.finishedAt == nil }).count < 200 || existing.contains(where: { $0.id == job.id }) else { throw LocalImportError.workerBusy }
-        if !existing.contains(where: { $0.id == job.id }) { try save(job) }
+        if job.state == "queued", let borrowedAccess { job.borrowedAccess = borrowedAccess }
+        if !existing.contains(where: { $0.id == job.id }) || (job.state == "queued" && borrowedAccess != nil) { try save(job) }
         return job
     }
     private func prepare() async throws {
@@ -128,14 +142,16 @@ public struct LocalImportWorker: Sendable {
         catch { return false }
     }
     private func startIfNeeded() throws {
-        if running() { return }
         let launch = try LocalWorkerLease(url: directory.appendingPathComponent("launch.lock"), wait: true)
         defer { launch.release() }
+        let watchRequest = directory.appendingPathComponent("watch-requested")
+        if watchFolders { try write(Data(), to: watchRequest) }
         if running() { return }
+        if !watchFolders { try? FileManager.default.removeItem(at: watchRequest) }
         guard FileManager.default.isExecutableFile(atPath: executable.path) else { throw LocalImportError.storageUnavailable }
         try? FileManager.default.removeItem(at: stopURL)
         let process = Process(); process.executableURL = executable
-        process.arguments = ["worker", "--store", store.root.path]
+        process.arguments = ["worker", "--store", store.root.path] + (watchFolders ? [] : ["--no-watch"])
         process.standardInput = FileHandle.nullDevice; process.standardOutput = FileHandle.nullDevice; process.standardError = FileHandle.nullDevice
         try process.run()
         // Bounded startup handshake; the process retains no client pipes and survives the requesting UI/CLI.
@@ -146,13 +162,16 @@ public struct LocalImportWorker: Sendable {
         }
         throw LocalImportError.workerBusy
     }
-    public func serve(idleSeconds: Double = 120, ocr: (any LocalDocumentOCR)? = nil, watchInterval: Double = 5) async throws {
+    private struct InstanceDetails: Codable { let id: UUID; var protocolVersion = 2 }
+    public func serve(idleSeconds: Double = 120, ocr: (any LocalDocumentOCR)? = nil, watchInterval: Double = 5, watchFolders: Bool = true) async throws {
         try await prepare()
         let lease: LocalWorkerLease
         do { lease = try LocalWorkerLease(url: directory.appendingPathComponent("worker.lock")) }
         catch LocalImportError.workerBusy { return }
         defer { lease.release() }
-        try write(JSONEncoder().encode(UUID()), to: directory.appendingPathComponent("instance"))
+        let instanceID = UUID()
+        try write(JSONEncoder().encode(instanceID), to: directory.appendingPathComponent("instance"))
+        try write(JSONEncoder().encode(InstanceDetails(id: instanceID)), to: directory.appendingPathComponent("instance-details"))
         try await store.recoverInterrupted()
         var idle = Date()
         let monitor = LocalWatchedFolderMonitor(store: store)
@@ -160,7 +179,7 @@ public struct LocalImportWorker: Sendable {
         var folders: [LocalWatchedFolder] = []
         while !FileManager.default.fileExists(atPath: stopURL.path) {
             try Task.checkCancellation()
-            if Date().timeIntervalSince(lastScan) >= max(0.1, watchInterval) {
+            if (watchFolders || FileManager.default.fileExists(atPath: directory.appendingPathComponent("watch-requested").path)), Date().timeIntervalSince(lastScan) >= max(0.1, watchInterval) {
                 // Invalid configuration stops the worker rather than silently treating it as an empty list.
                 folders = try LocalWatchedFolderStore(store: store).configuredFolders()
                 let statuses = await monitor.scan(folders) { file in
@@ -183,9 +202,9 @@ public struct LocalImportWorker: Sendable {
             lock.release()
             if var job = next {
                 idle = Date(); job.state = "running"; try save(job)
-                let jobID = job.id, documentID = job.documentID, fresh = job.fresh
+                let jobID = job.id, documentID = job.documentID, fresh = job.fresh, borrowedAccess = job.borrowedAccess
                 let task = Task {
-                    try await LocalImportService(store: store, ocr: ocr ?? (fresh ? NativeLocalDocumentOCR() : nil)).retry(documentID: documentID) { update in
+                    try await LocalImportService(store: store, ocr: ocr ?? (fresh ? NativeLocalDocumentOCR() : nil)).retry(documentID: documentID, borrowedAccess: borrowedAccess) { update in
                         // Only this worker writes running-job progress; readers see atomic snapshots.
                         if var current = try? read(jobURL(jobID), as: Job.self) { current.progress = update; try? save(current) }
                     }
@@ -203,7 +222,7 @@ public struct LocalImportWorker: Sendable {
                 // Native cancellation has joined before publishing completion or processing another job.
                 if job.error == .workerBusy { job.state = "queued"; job.error = nil; try save(job); await pause(); continue }
                 if job.error == .cancelled { try await store.cancelPending(job.documentID) }
-                job.state = "finished"; job.finishedAt = Date(); try save(job)
+                job.state = "finished"; job.finishedAt = Date(); job.borrowedAccess = nil; try save(job)
                 try? FileManager.default.removeItem(at: cancellationURL(jobID))
                 idle = Date()
             } else {
@@ -232,7 +251,7 @@ public struct LocalImportWorker: Sendable {
     }
     private func read<T: Decodable>(_ url: URL, as type: T.Type) throws -> T {
         let values = try url.resourceValues(forKeys: [.isSymbolicLinkKey, .isRegularFileKey, .fileSizeKey])
-        guard values.isSymbolicLink != true, values.isRegularFile == true, (values.fileSize ?? Int.max) <= 64_000 else { throw LocalImportError.storageUnavailable }
+        guard values.isSymbolicLink != true, values.isRegularFile == true, (values.fileSize ?? Int.max) <= 160_000 else { throw LocalImportError.storageUnavailable }
         return try JSONDecoder().decode(type, from: Data(contentsOf: url))
     }
     private func pause() async { await Task.detached { try? await Task.sleep(for: .milliseconds(150)) }.value }

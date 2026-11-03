@@ -20,18 +20,18 @@ public struct LocalImportService: Sendable {
         }
         return try await recognize(staged.document.id, progress: progress)
     }
-    public func retry(documentID: UUID,
+    public func retry(documentID: UUID, borrowedAccess: Data? = nil,
                       progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
         try await store.recoverInterrupted()
-        return try await recognize(documentID, progress: progress)
+        return try await recognize(documentID, borrowedAccess: borrowedAccess, progress: progress)
     }
-    private func recognize(_ id: UUID, progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalImportOutcome {
+    private func recognize(_ id: UUID, borrowedAccess: Data? = nil, progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalImportOutcome {
         let lease = try await store.acquireWorker()
         defer { lease.release() }
         let attempt = UUID()
         let clock = LocalStopwatch()
-        let access = try await store.start(id, attempt: attempt)
+        let access = try await store.start(id, attempt: attempt, borrowedAccess: borrowedAccess)
         defer { access.close() }
         let original = access.url
         let validation = clock.milliseconds
@@ -53,7 +53,7 @@ public struct LocalImportService: Sendable {
             try Task.checkCancellation()
             metrics.analysisMilliseconds = analysisClock.milliseconds
             let storageClock = LocalStopwatch()
-            let document = try await store.finish(id, attempt: attempt, result: result, metrics: metrics, analysis: analysis)
+            let document = try await store.finish(id, attempt: attempt, result: result, metrics: metrics, analysis: analysis, access: access)
             metrics.storageMilliseconds = storageClock.milliseconds; metrics.totalMilliseconds = clock.milliseconds
             var outcome = LocalImportOutcome(documentID: id, state: document.localImport?.state ?? .failed,
                                             reusedOriginal: false, pageCount: document.pageCount)

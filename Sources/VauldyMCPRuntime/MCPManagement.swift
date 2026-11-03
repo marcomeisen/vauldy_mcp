@@ -2,7 +2,7 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.12.2" }
+public enum MCPBuild { public static let version = "0.13.0" }
 
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
     case overview, connections, documents, folders, oauth, settings
@@ -75,8 +75,9 @@ extension MCPInstallation {
 
     @discardableResult
     public func updateSelection(_ ids: Set<UUID>, for id: UUID, expectedRevision: UUID,
-                                acknowledgedDisclosure: Bool = false) throws -> MCPAccessProfile {
+                                acknowledgedDisclosure: Bool = false, expectedFingerprint: String? = nil) throws -> MCPAccessProfile {
         try changeProfile(id, expectedRevision: expectedRevision) { value in
+            if let expectedFingerprint { guard try value.disclosureFingerprint() == expectedFingerprint else { throw MCPAccessError.stale } }
             guard ids.isSubset(of: value.allowedDocumentIDs) || acknowledgedDisclosure else { throw MCPAccessError.notAuthorized }
             if acknowledgedDisclosure { value.acknowledgedCloudDisclosure = true }
             value.allowedDocumentIDs = ids

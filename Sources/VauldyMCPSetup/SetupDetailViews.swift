@@ -32,6 +32,7 @@ struct SetupDocumentsView: View {
             } else {
                 Text("Importe erteilen keine Freigabe. Richte eine Verbindung ein, um Dokumente für einen Chatbot auszuwählen.").foregroundStyle(.secondary)
             }
+            Button("Bestand abgleichen und neu freigeben …", action: model.startInventoryWorkflow).disabled(model.busy || model.importing)
             SetupDocumentList(model: model, showsSelectionActions: false)
         }
     }

@@ -120,6 +120,18 @@ struct VauldyLocalCLI {
         let store = LocalDocumentStore(root: URL(fileURLWithPath: args[2]))
         let service = LocalImportWorker(store: store, executable: URL(fileURLWithPath: CommandLine.arguments[0]))
         switch args[0] {
+        case "inventory-quality":
+            guard args.count == 3 else { throw LocalImportError.invalidDocument }
+            let report = try await MCPInventoryQualityService(store: store).report()
+            struct Quality: Encodable {
+                let total: Int, ready: Int, review: Int, blocked: Int
+                let sourceAvailable: Int, sourceChanged: Int, sourceUnavailable: Int
+                let snapshotDigest: String
+            }
+            try output(Quality(total: report.rows.count, ready: report.readyIDs.count, review: report.reviewIDs.count,
+                blocked: report.rows.count - report.eligibleIDs.count, sourceAvailable: report.rows.filter { $0.original == .available }.count,
+                sourceChanged: report.rows.filter { $0.original == .changed }.count, sourceUnavailable: report.rows.filter { $0.original == .unavailable }.count,
+                snapshotDigest: report.snapshotDigest))
         case "watch-add":
             let recursive = args.last == "--recursive"
             let paths = Array(args.dropFirst(3).dropLast(recursive ? 1 : 0))
@@ -149,8 +161,8 @@ struct VauldyLocalCLI {
             try await service.start()
             try output(await service.status())
         case "worker":
-            guard args.count == 3 else { throw LocalImportError.invalidDocument }
-            try await service.serve()
+            guard args.count == 3 || (args.count == 4 && args[3] == "--no-watch") else { throw LocalImportError.invalidDocument }
+            try await service.serve(watchFolders: !args.contains("--no-watch"))
         case "worker-status":
             try output(await service.status())
         case "worker-stop":

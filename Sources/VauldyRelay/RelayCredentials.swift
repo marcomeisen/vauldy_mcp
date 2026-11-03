@@ -3,6 +3,7 @@ import CryptoKit
 import Security
 import Darwin
 import VauldyMCPRuntime
+import VauldyCore
 
 public enum RelayFailure: LocalizedError {
     case unavailable, notProvisioned, signInRequired, changedGrant, credentials, ownerApprovalRequired
@@ -32,14 +33,7 @@ public struct RelayCredentials: Codable, Sendable {
     public var profileFingerprint: String?
     public var paired = false
     public init(serviceToken: String) { self.serviceToken = serviceToken }
-    public static func fingerprint(_ p: MCPAccessProfile) throws -> String {
-        let value: [String: Any] = ["version": p.version, "revision": p.revision.uuidString,
-            "id": p.connectionID.uuidString, "name": p.connectionName, "kind": p.connectionKind?.rawValue ?? "",
-            "client": p.desktopClient?.rawValue ?? "", "enabled": p.enabled, "vault": p.vaultPath,
-            "documents": p.allowedDocumentIDs.map(\.uuidString).sorted(), "cloud": p.acknowledgedCloudDisclosure]
-        let data = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys])
-        return Data(SHA256.hash(data: data)).base64EncodedString()
-    }
+    public static func fingerprint(_ p: MCPAccessProfile) throws -> String { try p.disclosureFingerprint() }
     public func validatedProfile(installation: MCPInstallation) throws -> URL {
         guard paired, let profileID, let revision else { throw RelayFailure.signInRequired }
         let url = installation.profileURL(profileID)
@@ -103,6 +97,29 @@ public struct RelayCredentialStore: Sendable {
             guard var c = try load(), c.paired, c.deviceToken == expectedToken, c.pendingDeviceToken == nextToken else { throw RelayFailure.signInRequired }
             _ = try c.validatedProfile(installation: installation)
             c.deviceToken = nextToken; c.pendingDeviceToken = nil; try saveUnlocked(c)
+        }
+    }
+    /// Only the explicit local confirmation calls this. No cloud row, identity,
+    /// device key, expiry or client registration is replaced. Partial failure is
+    /// fail-closed: a new profile revision cannot run with the old credential binding.
+    func updateGrant(profileID: UUID, expectedRevision: UUID, expectedFingerprint: String? = nil, ids: Set<UUID>, digest: String,
+                     expectedDeviceToken: String?) throws -> RelayCredentials {
+        try locked {
+            guard var c = try load(), c.paired, c.profileID == profileID,
+                  c.deviceToken != nil, c.deviceToken == expectedDeviceToken,
+                  c.pendingDeviceToken == nil else { throw RelayFailure.signInRequired }
+            let profile = try FileMCPProfileSource(url: installation.profileURL(profileID)).load()
+            let snapshot = installation.root.appendingPathComponent("vault/documents.json")
+            guard URL(fileURLWithPath: profile.vaultPath).standardizedFileURL == snapshot.standardizedFileURL,
+                  try LocalInventoryFingerprint.snapshot(snapshot) == digest else { throw LocalInventoryError.changed }
+            let localStore = LocalDocumentStore(root: installation.root.appendingPathComponent("vault"))
+            return try localStore.withUnchangedInventory(digest) {
+                let updated = try installation.updateSelection(ids, for: profileID, expectedRevision: expectedRevision,
+                    acknowledgedDisclosure: true, expectedFingerprint: expectedFingerprint)
+                c.revision = updated.revision; c.profileFingerprint = try RelayCredentials.fingerprint(updated)
+                try saveUnlocked(c)
+                return c
+            }
         }
     }
     public func clearDevice(expectedToken: String? = nil) throws {

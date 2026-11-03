@@ -32,7 +32,7 @@ let package = Package(
         .target(name: "VauldyDemoDocuments"),
         .executableTarget(name: "VauldyLocalCLI", dependencies: ["VauldyCore", "VauldyDemoDocuments", "VauldyMCPRuntime", "VauldyOAuth"]),
         .target(name: "VauldyPrivacy"),
-        .target(name: "VauldyRelay", dependencies: ["VauldyMCPRuntime"]),
+        .target(name: "VauldyRelay", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
         .executableTarget(name: "VauldyRelayAgent", dependencies: ["VauldyRelay", "VauldyMCPRuntime"]),
         .target(name: "VauldyOAuth", dependencies: ["VauldyMCPRuntime"]),
         .target(name: "VauldyMCPProtocol", dependencies: ["VauldyMCPRuntime", "VauldyCore", .product(name: "MCP", package: "swift-sdk")]),

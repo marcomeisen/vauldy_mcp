@@ -84,6 +84,27 @@ public final class LocalOriginalAccess: @unchecked Sendable {
         guard fstat(fd, &info) == 0, info.st_mode & S_IFMT == S_IFREG else { throw LocalOriginalError.unavailable }
         return "\(info.st_dev):\(info.st_ino)"
     }
+    /// Transfer an already opened read-only authority to another process. This
+    /// is an ephemeral OS capability, not a persistent bookmark or a path fallback.
+    func handoffBookmark() throws -> Data {
+        let data = try url.bookmarkData(options: [], includingResourceValuesForKeys: nil, relativeTo: nil)
+        guard !data.isEmpty, data.count <= 65_536 else { throw LocalOriginalError.unavailable }
+        return data
+    }
+    static func handoff(_ data: Data, excluding root: URL, managedOriginal: URL? = nil) throws -> LocalOriginalAccess {
+        guard !data.isEmpty, data.count <= 65_536 else { throw LocalOriginalError.unavailable }
+        do {
+            var stale = false
+            let url = try URL(resolvingBookmarkData: data, options: [.withoutUI, .withoutMounting, .withoutImplicitStartAccessing], relativeTo: nil, bookmarkDataIsStale: &stale)
+            let access = LocalOriginalAccess(url: url)
+            do {
+                if let managedOriginal {
+                    guard url.resolvingSymlinksInPath().standardizedFileURL.path == managedOriginal.resolvingSymlinksInPath().standardizedFileURL.path else { throw LocalOriginalError.unavailable }
+                } else { try access.requireOutside(root) }
+                return access
+            } catch { access.close(); throw error }
+        } catch { throw LocalOriginalError.unavailable }
+    }
     public func readData() throws -> Data {
         let fd = try descriptor()
         let file = FileHandle(fileDescriptor: fd, closeOnDealloc: true); defer { try? file.close() }

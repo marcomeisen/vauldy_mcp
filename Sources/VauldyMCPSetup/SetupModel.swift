@@ -9,6 +9,7 @@ import VauldyMCPRuntime
 
 @MainActor
 final class SetupModel: ObservableObject {
+    @Published var inventoryWorkflow: InventoryWorkflowModel?
     @Published var relayState = RelayUIState()
     @Published var relayProfileID: UUID?
     @Published var relayApproval: MCPAccessProfile?

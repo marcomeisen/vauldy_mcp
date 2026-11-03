@@ -1,9 +1,12 @@
 import Foundation
 import VauldyMCPRuntime
+import VauldyCore
 
 /// Safe local UI protocol. Secrets never leave the credential-owning agent.
 public struct RelayUIState: Codable, Sendable {
     public var keychainNeedsApproval = false
+    public var grantNeedsUpdate = false
+    public var supportsGrantUpdate = true
     public var provisioned = false
     public var paired = false
     public var pairID: String?
@@ -11,6 +14,21 @@ public struct RelayUIState: Codable, Sendable {
     public var profileID: UUID?
     public var running = false
     public init() {}
+    private enum CodingKeys: String, CodingKey {
+        case keychainNeedsApproval, grantNeedsUpdate, supportsGrantUpdate, provisioned, paired, pairID, pairingExpires, profileID, running
+    }
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        keychainNeedsApproval = try c.decodeIfPresent(Bool.self, forKey: .keychainNeedsApproval) ?? false
+        grantNeedsUpdate = try c.decodeIfPresent(Bool.self, forKey: .grantNeedsUpdate) ?? false
+        supportsGrantUpdate = try c.decodeIfPresent(Bool.self, forKey: .supportsGrantUpdate) ?? false
+        provisioned = try c.decodeIfPresent(Bool.self, forKey: .provisioned) ?? false
+        paired = try c.decodeIfPresent(Bool.self, forKey: .paired) ?? false
+        pairID = try c.decodeIfPresent(String.self, forKey: .pairID)
+        pairingExpires = try c.decodeIfPresent(Date.self, forKey: .pairingExpires)
+        profileID = try c.decodeIfPresent(UUID.self, forKey: .profileID)
+        running = try c.decodeIfPresent(Bool.self, forKey: .running) ?? false
+    }
     init(credentials: RelayCredentials?, running: Bool) {
         provisioned = credentials != nil; paired = credentials?.paired ?? false
         pairID = credentials?.pairID; pairingExpires = credentials?.pairingExpires
@@ -18,14 +36,26 @@ public struct RelayUIState: Codable, Sendable {
     }
 }
 public struct RelayUIRequest: Codable, Sendable {
-    public enum Operation: String, Codable, Sendable { case status, begin, start, disconnect, rotate, authorize
+    public enum Operation: String, Codable, Sendable { case status, begin, start, disconnect, rotate, authorize, updateGrant
         public var allowsUserInteraction: Bool { self == .authorize }
-        public var timeoutSeconds: TimeInterval { self == .authorize ? 300 : self == .status ? 5 : 45 } }
+        public var timeoutSeconds: TimeInterval { self == .authorize ? 300 : self == .status ? 5 : self == .updateGrant ? 180 : 45 } }
     public var operation: Operation
     public var profileID: UUID?
     public var revision: UUID?
+    public var nativeVerification: MCPNativeOriginalVerification?
+    public var profileFingerprint: String?
+    public var documentIDs: [UUID]?
+    public var snapshotDigest: String?
+    public var acknowledgedDisclosure: Bool?
+    public var acknowledgedReview: Bool?
     public init(_ operation: Operation, profileID: UUID? = nil, revision: UUID? = nil) {
         self.operation = operation; self.profileID = profileID; self.revision = revision
+    }
+    public init(profileID: UUID, revision: UUID, profileFingerprint: String, documentIDs: Set<UUID>, snapshotDigest: String, nativeVerification: MCPNativeOriginalVerification,
+                acknowledgedReview: Bool) {
+        operation = .updateGrant; self.profileID = profileID; self.revision = revision; self.profileFingerprint = profileFingerprint
+        self.documentIDs = documentIDs.sorted { $0.uuidString < $1.uuidString }; self.snapshotDigest = snapshotDigest
+        acknowledgedDisclosure = true; self.acknowledgedReview = acknowledgedReview; self.nativeVerification = nativeVerification
     }
 }
 public struct RelayUIResponse: Codable, Sendable {
@@ -55,6 +85,32 @@ public enum RelayUIManager {
             snapshot = credentials
             switch request.operation {
             case .status: break
+            case .updateGrant:
+                guard let credentials, credentials.paired, let id = request.profileID, credentials.profileID == id,
+                      let revision = request.revision, let fingerprint = request.profileFingerprint, let requested = request.documentIDs, requested.count <= 20_000,
+                      Set(requested).count == requested.count, let digest = request.snapshotDigest,
+                      request.acknowledgedDisclosure == true, let verification = request.nativeVerification else { throw RelayFailure.changedGrant }
+                let localStore = LocalDocumentStore(root: installation.root.appendingPathComponent("vault"))
+                let profile = try FileMCPProfileSource(url: installation.profileURL(id)).load()
+                guard profile.revision == revision, try profile.disclosureFingerprint() == fingerprint, URL(fileURLWithPath: profile.vaultPath).standardizedFileURL == localStore.snapshotURL else { throw RelayFailure.changedGrant }
+                let report = try await MCPInventoryQualityService(store: localStore).report(using: verification)
+                guard report.snapshotDigest == digest else { throw LocalInventoryError.changed }
+                try report.validateSelection(Set(requested), acknowledgedReview: request.acknowledgedReview == true)
+                try service.requestStop()
+                for _ in 0..<100 {
+                    if !service.isRunning { break }
+                    try await Task.sleep(for: .milliseconds(100))
+                }
+                guard !service.isRunning else { throw RelayFailure.unavailable }
+                try Task.checkCancellation()
+                let updated = try store.updateGrant(profileID: id, expectedRevision: revision, expectedFingerprint: fingerprint, ids: Set(requested), digest: digest, expectedDeviceToken: credentials.deviceToken)
+                snapshot = updated
+                let current = try FileMCPProfileSource(url: installation.profileURL(id)).load()
+                if current.enabled, !current.allowedDocumentIDs.isEmpty {
+                    _ = try updated.validatedProfile(installation: installation)
+                    try service.start(executable: installation.root.appendingPathComponent("bin/vauldy-relay"))
+                }
+
             case .authorize:
                 guard credentials != nil else { throw RelayFailure.notProvisioned }
                 // A fresh, noninteractive process verifies background access. A
@@ -106,6 +162,11 @@ public enum RelayUIManager {
             ownerApprovalNeeded = true; problem = RelayFailure.ownerApprovalRequired.errorDescription
         } catch { problem = (error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht geändert werden." }
         var state = RelayUIState(credentials: snapshot, running: service.isRunning)
+        if let c = snapshot, c.paired {
+            if let id = c.profileID, let p = try? FileMCPProfileSource(url: installation.profileURL(id)).load() {
+                state.grantNeedsUpdate = p.revision != c.revision || (try? RelayCredentials.fingerprint(p)) != c.profileFingerprint
+            } else { state.grantNeedsUpdate = true }
+        }
         state.keychainNeedsApproval = ownerApprovalNeeded
         if ownerApprovalNeeded { state.provisioned = true }
         return .init(state: state, authorizationURL: url, error: problem)
@@ -117,6 +178,7 @@ public struct RelayUIControl: Sendable {
     public init(installation: MCPInstallation) { self.installation = installation }
     public func request(_ request: RelayUIRequest) async throws -> RelayUIResponse {
         let installation = installation, bytes = try JSONEncoder().encode(request)
+        guard bytes.count <= 3_000_000 else { throw RelayFailure.unavailable }
         let task = Task.detached { () async throws -> RelayUIResponse in
             let executable = installation.root.appendingPathComponent("bin/vauldy-relay")
             guard FileManager.default.isExecutableFile(atPath: executable.path) else { return .init(state: .init()) }
@@ -145,5 +207,17 @@ public struct RelayUIControl: Sendable {
 public enum RelayStatusRefreshPolicy {
     public static func shouldRefresh(approvalNeeded: Bool, hasError: Bool, busy: Bool, explicit: Bool) -> Bool {
         !busy && (explicit || (!approvalNeeded && !hasError))
+    }
+}
+
+public enum RelayUIInput {
+    /// Pipe reads may return fragments. Decode only after EOF, with a hard bound.
+    public static func request(from input: FileHandle) throws -> RelayUIRequest {
+        var data = Data()
+        while let part = try input.read(upToCount: min(65_536, 3_000_001 - data.count)), !part.isEmpty {
+            data.append(part)
+            guard data.count <= 3_000_000 else { throw RelayFailure.unavailable }
+        }
+        return try JSONDecoder().decode(RelayUIRequest.self, from: data)
     }
 }

@@ -39,6 +39,7 @@ struct SetupView: View {
         .navigationTitle("Vauldy · MCP")
         .toolbar { ToolbarItem(placement: .primaryAction) { Button("Verbindung hinzufügen", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
         .frame(minWidth: 860, minHeight: 640)
+        .sheet(item: $model.inventoryWorkflow) { workflow in InventoryWorkflowView(model: workflow) }
         .sheet(isPresented: $model.showingSetup) { SetupWizardView(model: model) }
         .sheet(item: $model.diagnosisProfile) { profile in SetupDiagnosisView(model: model, profileID: profile.connectionID) }
         .alert("Dokumentzugriff fortsetzen?", isPresented: Binding(get: { model.resumeCandidate != nil }, set: { if !$0 { model.resumeCandidate = nil } })) {

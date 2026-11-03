@@ -1,8 +1,16 @@
-# Vauldy MCP einrichten (macOS, Version 0.11.0)
+# Vauldy MCP einrichten (macOS, Version 0.13.0)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
 Assistenten oder `vauldy-local`; die MCP-Schnittstelle bleibt ausschließlich lesend.
+
+## Bestehenden Bestand und Chatfreigabe aktualisieren
+
+Ab 0.13 führt „Dokumente → Bestand abgleichen und neu freigeben …“ durch Quellenabgleich,
+Qualitätsbericht und ausdrückliche Auswahlbestätigung. Bei bestehender ChatGPT-Anmeldung
+steht derselbe Ablauf unter „ChatGPT & Claude“. Die Verbindung muss nicht gelöscht werden;
+Anmeldung und Ablaufdatum bleiben erhalten. Zuerst unter „Einstellungen“ die installierte
+MCP-Software aktualisieren. [Ablauf und Grenzen](inventory-workflow.md).
 
 ## Einrichtung ohne bestehende App
 

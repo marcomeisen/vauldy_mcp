@@ -30,7 +30,7 @@ struct RelayKeychainInteractionTests {
         .init(root: FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-keychain-synthetic-" + UUID().uuidString))
     }
     @Test func onlyExplicitAuthorizationCanOpenSystemUI() {
-        for operation in [RelayUIRequest.Operation.status, .begin, .start, .disconnect, .rotate, .authorize] {
+        for operation in [RelayUIRequest.Operation.status, .begin, .start, .disconnect, .rotate, .updateGrant, .authorize] {
             #expect(operation.allowsUserInteraction == (operation == .authorize))
         }
         #expect(RelayUIRequest.Operation.authorize.timeoutSeconds == 300)
