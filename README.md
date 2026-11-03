@@ -9,7 +9,7 @@ Profile oder Provider-Einstellungen automatisch übernommen.
 
 ## Start
 
-Benötigt werden macOS 14+, Swift 6 und Python 3 für die Protokolltests.
+Benötigt werden macOS 14+, Swift 6 und Python 3 für die Protokolltests. Die Relay-Regression benötigt zusätzlich Node.js 22.13+ (SQLite und WebCrypto).
 
 ```sh
 python3 scripts/mcp/run_ui.py
@@ -25,10 +25,12 @@ Der Assistent importiert in einen eigenen Bestand, verlangt die lokale Freigabe 
 richtet bei Bedarf einen kompatiblen stdio-Client ein. Das manuelle Starten des Servers
 erfordert `vauldy-mcp --profile /absoluter/pfad/profile.json`.
 
-Normale ChatGPT- und Claude-Chats verbinden sich über OAuth ohne manuelle API-Schlüssel.
-Der Eigentümer bestätigt die Dokumentauswahl in der lokalen App. Dafür benötigt der Betreiber
-eine öffentliche HTTPS-Adresse vor dem lokalen HTTP-Dienst; diese wird nicht automatisch eingerichtet.
-Der Ablauf und seine Grenzen stehen in [OAuth-Verbindungen](docs/mcp-oauth.md).
+Für normale ChatGPT-Chats enthält 0.12 eine private Sites-Verbindung mit ChatGPT-Anmeldung
+und ausgehendem Mac-Agenten. Die Betreiberbereitstellung erfolgt automatisch; Nutzer geben
+keinen API- oder Runtime-Schlüssel ein. Der Eigentümer bestätigt eine exakte Dokumentauswahl
+in der lokalen App. [SSO-Verbindung und Betriebsgrenzen](docs/mcp-chatgpt-sso.md).
+Standard-OAuth mit eigenem HTTPS-Endpunkt bleibt für Claude und eigene Deployments verfügbar:
+[OAuth-Verbindungen](docs/mcp-oauth.md). Eine lokale Installation bestätigt keine aktive Cloud-Verbindung.
 
 ```sh
 swift run vauldy-local import --store /absoluter/bestand /absolutes/dokument.pdf

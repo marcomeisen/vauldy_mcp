@@ -55,6 +55,14 @@ public struct MCPInstallation: Sendable {
             try Data(contentsOf: http).write(to: httpServerURL, options: [.atomic])
             try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: httpServerURL.path)
         }
+        let relay = binary.deletingLastPathComponent().appendingPathComponent("vauldy-relay")
+        if FileManager.default.isExecutableFile(atPath: relay.path) {
+            let destination = binaryURL.deletingLastPathComponent().appendingPathComponent("vauldy-relay")
+            if relay.standardizedFileURL != destination.standardizedFileURL {
+                try Data(contentsOf: relay).write(to: destination, options: [.atomic])
+                try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: destination.path)
+            }
+        }
         if let statusApp { try installStatusApp(statusApp) }
     }
 

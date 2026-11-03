@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "VauldyDocumentIntelligence", targets: ["VauldyDocumentIntelligence"]),
         .library(name: "VauldyPrivacy", targets: ["VauldyPrivacy"]),
         .library(name: "VauldyMCPRuntime", targets: ["VauldyMCPRuntime"]),
+        .executable(name: "vauldy-relay", targets: ["VauldyRelayAgent"]),
         .executable(name: "vauldy-mcp-http", targets: ["VauldyMCPHTTP"]),
         .executable(name: "vauldy-mcp", targets: ["VauldyMCPServer"]),
         .executable(name: "vauldy-local", targets: ["VauldyLocalCLI"]),
@@ -31,11 +32,13 @@ let package = Package(
         .target(name: "VauldyDemoDocuments"),
         .executableTarget(name: "VauldyLocalCLI", dependencies: ["VauldyCore", "VauldyDemoDocuments", "VauldyMCPRuntime", "VauldyOAuth"]),
         .target(name: "VauldyPrivacy"),
+        .target(name: "VauldyRelay", dependencies: ["VauldyMCPRuntime"]),
+        .executableTarget(name: "VauldyRelayAgent", dependencies: ["VauldyRelay", "VauldyMCPRuntime"]),
         .target(name: "VauldyOAuth", dependencies: ["VauldyMCPRuntime"]),
         .target(name: "VauldyMCPProtocol", dependencies: ["VauldyMCPRuntime", "VauldyCore", .product(name: "MCP", package: "swift-sdk")]),
         .executableTarget(name: "VauldyMCPHTTP", dependencies: ["VauldyOAuth", "VauldyMCPProtocol", .product(name: "NIOCore", package: "swift-nio"), .product(name: "NIOPosix", package: "swift-nio"), .product(name: "NIOHTTP1", package: "swift-nio")]),
         .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyPrivacy"]),
-        .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth"]),
+        .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth", "VauldyRelay"]),
         .executableTarget(name: "VauldyMCPStatus", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
         .executableTarget(
             name: "VauldyMCPServer",
@@ -47,7 +50,7 @@ let package = Package(
         ),
         .testTarget(
             name: "VauldyMCPRuntimeTests",
-            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence", "VauldyOAuth"],
+            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence", "VauldyOAuth", "VauldyRelay"],
             resources: [.process("Fixtures")]
         )
     ]

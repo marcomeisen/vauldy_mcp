@@ -43,10 +43,12 @@ def main():
         if args.skip_build:
             command.append('--skip-build')
         run('package', command)
+        run('relay-worker-tests', ['node', '--test', ROOT / 'cloud/chatgpt-relay/tests/relay.mjs'])
         app = ROOT / 'dist/mcp/Vauldy MCP Einrichtung.app'
         resources = app / 'Contents/Resources'
         local, server = resources / 'vauldy-local', resources / 'vauldy-mcp'
         scripts = ROOT / 'scripts/mcp'
+        run('relay-tool-parity', [sys.executable, scripts / 'export_relay_tools.py', server, '--check'])
         for name, arguments in [
             ('smoke_test', [server]),
             ('base_analysis_wire_test', [local, server, originals, '--include-raster']),
@@ -56,6 +58,7 @@ def main():
             ('management_smoke_test', [resources]),
             ('status_smoke_test', [local, server, resources / 'Vauldy MCP Status.app']),
             ('watch_smoke_test', [local, server]),
+            ('setup_startup_smoke_test', [app]),
             ('original_reference_smoke_test', [local, server]),
             ('oauth_smoke_test', [local, resources / 'vauldy-mcp-http']),
             ('scalability_benchmark', [server, output / 'scalability.json']),

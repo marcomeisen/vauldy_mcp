@@ -1,5 +1,7 @@
 # ChatGPT und Claude über OAuth verbinden (0.10.0)
 
+Für ChatGPT mit verwalteter Anmeldung ab 0.12 siehe [ChatGPT-SSO](mcp-chatgpt-sso.md). Dieses Dokument beschreibt den weiterhin verfügbaren Standard-OAuth-Anschluss für eigene HTTPS-Deployments und Claude.
+
 ## Nutzerablauf
 
 1. In **Verbindung hinzufügen** „ChatGPT · OAuth im normalen Chat“ oder „Claude · OAuth-Verbindung“ wählen.

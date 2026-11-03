@@ -3,11 +3,17 @@ import SwiftUI
 import UniformTypeIdentifiers
 import VauldyCore
 import VauldyOAuth
+import VauldyRelay
 import VauldyDemoDocuments
 import VauldyMCPRuntime
 
 @MainActor
 final class SetupModel: ObservableObject {
+    @Published var relayState = RelayUIState()
+    @Published var relayProfileID: UUID?
+    @Published var relayApproval: MCPAccessProfile?
+    @Published var relayRunning = false
+    @Published var relayError = ""
     @Published var oauthConfiguration: OAuthConfiguration?
     @Published var oauthOrigin = ""
     @Published var oauthPort = "48731"
@@ -55,7 +61,7 @@ final class SetupModel: ObservableObject {
     @Published var failure = false
     @Published var configuration: URL?
     @Published var connections: [MCPAccessProfile] = []
-    @Published var clientSelection = "chatgpt"
+    @Published var clientSelection = "oauth-chatgpt"
     @Published var registrationMessage = ""
     let registration: MCPClientRegistration
     @Published var connectionName = ""

@@ -2,7 +2,7 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.11.0" }
+public enum MCPBuild { public static let version = "0.12.0" }
 
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
     case overview, connections, documents, folders, oauth, settings
@@ -159,6 +159,8 @@ extension MCPInstallation {
         var pairs: [(URL, URL)] = []
         let http = availableBinary.deletingLastPathComponent().appendingPathComponent("vauldy-mcp-http")
         if FileManager.default.isExecutableFile(atPath: http.path) { pairs.append((httpServerURL, http)) }
+        let relay = availableBinary.deletingLastPathComponent().appendingPathComponent("vauldy-relay")
+        if FileManager.default.isExecutableFile(atPath: relay.path) { pairs.append((binaryURL.deletingLastPathComponent().appendingPathComponent("vauldy-relay"), relay)) }
         if let localCLI { pairs.append((localCLIURL, localCLI)) }
         if let statusApp { pairs.append((statusAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"), statusApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"))) }
         if let setupApp { pairs.append((setupAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"), setupApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"))) }

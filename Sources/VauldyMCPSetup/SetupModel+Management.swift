@@ -88,7 +88,9 @@ extension SetupModel {
         monitoring = Task { [weak self] in
             guard let self else { return }
             await refreshManagement(checkBindings: true)
-            await refreshWatchedFolders(resume: true)
+            // Opening connection management is observational. Starting folder imports
+            // remains an explicit action in the folder view or import commands.
+            await refreshWatchedFolders()
             if documents.isEmpty { try? await refreshLocalDocuments() }
             while !Task.isCancelled {
                 do { try await Task.sleep(for: .seconds(3)) } catch { return }
@@ -280,7 +282,7 @@ extension SetupModel {
                 activeConnectionID = final.connectionID; editing = final
                 if isOAuth {
                     configuration = nil
-                    registrationMessage = "Dokumentauswahl gespeichert. Verbinde jetzt deinen Chatbot über OAuth und bestätige die passende Anfrage in Vauldy."
+                    registrationMessage = chosenClient == .chatgpt ? "Dokumentauswahl gespeichert. Öffne jetzt die ChatGPT-Anmeldung und verbinde deinen Mac über dein Konto." : "Dokumentauswahl gespeichert. Verbinde Claude über OAuth und bestätige die passende Anfrage in Vauldy."
                 } else if let client {
                     do {
                         _ = try await Task.detached { try registrar.register(client, binary: installer.binaryURL, profile: installer.profileURL(final.connectionID)) }.value

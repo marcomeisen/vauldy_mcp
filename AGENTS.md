@@ -94,3 +94,29 @@ die Verfügbarkeit im Zielchat. Zusätzliche Gates: MCPScalabilityTests, MCPPass
 Fundstellen sind wörtliche Fenster nach vollständiger Privacy-Prüfung; nur überlappende Quellbereiche
 vereinigen. Auswahlvollständigkeit niemals als vollständigen Dokumenttext ausweisen. Neue Auditwerte
 nicht ohne Leser-/Deployment-Kompatibilitätsprüfung einführen.
+
+## Private ChatGPT-Verbindung ab 0.12
+
+Sites-Deployment bleibt owner-private. Servicezugang ist keine SSO-Identität und darf
+`/mcp` ohne verwaltete Benutzeridentität niemals autorisieren. Betreibercredential nur
+über verborgenes stdin automatisch in den nativen, nicht synchronisierten Schlüsselbund;
+keine geheimen Werte in Paket, Quellcode, Argumenten, Verbindungs-JSON oder Logs.
+Nur der Agent darf auf seinen Schlüsselbundeintrag zugreifen. Native UI über --manage
+mit begrenzten, geheimnisfreien DTOs; keine Erweiterung der Schlüsselbund-ACL.
+
+Native Zustimmung vor Geräte-Kopplung; Pairing-Verifier, einmalige Browseridentität,
+Gerätetoken und exakte Profilrevision binden. Profiländerung nie als Zugriffserweiterung
+übernehmen. Abbruch und Pairingabschluss unter derselben Prozesssperre serialisieren.
+Ein persistenter lokaler stdio-Server bleibt die einzige Dokument-/Privacy-Grenze.
+
+Relay persistiert nur verschlüsselte, kurzlebige Jobs. Anfrage und Antwort kryptografisch
+an Kennung und Richtung binden; pro Aufruf privaten Serverschlüssel nie speichern.
+Offline/Widerruf/Timeout sind Fehler, niemals leere Erfolgslisten. Tests mit synthetischen
+Identitäten und Beständen; keine produktive Kopplung als Test verwenden. Gesamte Regression
+enthält RelayConnectionTests, Worker-SQL-Integration und exakte Werkzeug-Parität.
+Lokale Tests ersetzen weder private Publikation noch einen echten Aufruf aus dem Zielchat.
+
+Die Setup-Oberfläche darf beim Öffnen keinen Ordner-/OCR-Worker starten. Vorhandene
+laufende Worker bleiben unabhängig; neue Starts nur durch ausdrückliche Ordner-/Importaktionen.
+`setup_startup_smoke_test.py` prüft mit synthetischem aktivem Watch-Ordner und gestopptem Worker,
+dass der native Verbindungsstart weder den Worker fortsetzt noch Snapshot/Originale ändert.

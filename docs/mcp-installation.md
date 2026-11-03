@@ -44,7 +44,11 @@ kompatibler Snapshot kann weiterhin ausschließlich gelesen werden.
 
 ## ChatGPT und Claude ohne manuelle API-Schlüssel
 
-Ab 0.10.0 ist OAuth der Standard im Einrichtungsassistenten. Nutzer verbinden den Chatbot und bestätigen die konkrete Auswahl in der lokalen App. Der Betreiber benötigt einmalig einen öffentlichen HTTPS-Anschluss zum neuen `vauldy-mcp-http`; das Paket veröffentlicht selbst keinen Dienst im Internet. [Vollständiger Nutzer- und Betreiberablauf](mcp-oauth.md).
+Ab 0.12 bietet ChatGPT eine private, verwaltete Anmeldung samt ausgehendem Mac-Agenten.
+Nutzer bestätigen ihre Dokumentauswahl und melden sich im Browser mit ihrem ChatGPT-Konto an.
+Die Betreiberbereitstellung hinterlegt Zugangsdaten automatisch im Schlüsselbund; Nutzer
+kopieren keine API- oder Runtime-Schlüssel. [ChatGPT-SSO und Betriebsgrenzen](mcp-chatgpt-sso.md).
+Claude und eigene HTTPS-Deployments behalten den [Standard-OAuth-Ablauf](mcp-oauth.md).
 
 ## Mit ChatGPT verbinden
 
@@ -70,6 +74,10 @@ App/Plugin-Verbindung für reguläre gehostete ChatGPT-Gespräche, auch wenn die
 angezeigt werden.
 
 ### Reguläre gehostete ChatGPT-Gespräche
+
+Der vorgesehene Weg ab 0.12 ist die [private ChatGPT-Anmeldung](mcp-chatgpt-sso.md).
+Die folgenden Abschnitte beschreiben alternative Betreiberanschlüsse. Sie sind keine
+zusätzlichen Schritte für Nutzer des verwalteten Anschlusses.
 
 Das lokale Programm kann nicht einfach als Server-URL eingetragen werden. ChatGPT web verbindet
 MCP über Plugins mit HTTPS oder einen **Secure MCP Tunnel**. Der Tunnel kann einen lokalen stdio-Server
@@ -383,7 +391,7 @@ erscheinen beim Ordnerstatus. Datei-Anbieter müssen die Dateien lokal lesbar be
 
 Bei aktiven Ordnern läuft der Worker auch nach Schließen des Einrichtungsfensters weiter. Der Mac muss
 aktiv und der Ordner erreichbar sein. „Worker nach Auftrag beenden“ stoppt auch die Überwachung.
-Nach Neustart oder Prozessabbruch die Einrichtung öffnen oder `watch-start` ausführen; es wird kein
+Nach Neustart oder Prozessabbruch in der Einrichtung unter „Ordner“ ausdrücklich „Ordnerüberwachung starten“ wählen oder `watch-start` ausführen. Das Öffnen der Einrichtung startet keine Importe. Es wird kein
 Login-Dienst installiert. Eine veraltete Installation kann gültige neuere Auditereignisse nicht lesen und beim Start `auditUnavailable` melden. Dafür die Software aktualisieren; keine Logs oder Freigaben löschen. Die Aktualisierung ist auch über den CLI-Helfer aus dem neuen Paket möglich:
 
 ```sh

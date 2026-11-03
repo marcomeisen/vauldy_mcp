@@ -5,7 +5,9 @@ struct SetupOAuthView: View {
     @ObservedObject var model: SetupModel
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Verbinde Vauldy in deinem Chatbot und bestätige anschließend hier den Dokumentzugriff. Du brauchst keinen API-Schlüssel und kein zusätzliches Passwort.").foregroundStyle(.secondary)
+            SetupRelayView(model: model)
+            DisclosureGroup("Weitere Anbieter und eigener HTTPS-Anschluss") {
+            Text("Standard-OAuth für selbst betriebene Anschlüsse und Claude.").foregroundStyle(.secondary)
             if let configuration = model.oauthConfiguration {
                 LabeledContent("Verbindungsadresse", value: configuration.resource).textSelection(.enabled)
                 Text(model.oauthRunning ? "Verbindungsdienst läuft auf diesem Mac · öffentlicher Anschluss separat prüfen" : "Verbindungsdienst gestoppt").font(.callout)
@@ -65,6 +67,7 @@ struct SetupOAuthView: View {
             }
             if !model.oauthError.isEmpty { SetupNotice(text: model.oauthError, warning: true) }
             Text("Originale und OCR bleiben auf diesem Mac. Angeforderte, freigegebene Inhalte werden lokal bereinigt und dem Chatbot übergeben. Du kannst den Zugriff hier jederzeit widerrufen.").font(.caption).foregroundStyle(.secondary)
+            }
         }
         .task { await model.refreshOAuth() }
         .confirmationDialog("Dokumentzugriff für diesen Chatbot bestätigen?", isPresented: Binding(get: { model.oauthApproval != nil }, set: { if !$0 { model.oauthApproval = nil } }), titleVisibility: .visible) {

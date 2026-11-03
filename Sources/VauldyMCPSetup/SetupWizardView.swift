@@ -57,7 +57,7 @@ struct SetupWizardView: View {
             Text("Welchen Chatbot möchtest du verbinden?").font(.title2.weight(.semibold))
             Text("Für jeden Chatbot speichert Vauldy eine eigene Dokumentauswahl. Bestehende Verbindungen bleiben erhalten.").foregroundStyle(.secondary)
             Picker("Chatbot", selection: $model.clientSelection) {
-                Text("ChatGPT · OAuth im normalen Chat").tag("oauth-chatgpt")
+                Text("ChatGPT · mit deinem Konto anmelden").tag("oauth-chatgpt")
                 Text("Claude · OAuth-Verbindung").tag("oauth-claude")
                 ForEach(MCPDesktopClient.allCases, id: \.rawValue) { Text($0.title).tag($0.rawValue) }
                 Text("Anderer Chatbot · manuell").tag("manual")
@@ -66,7 +66,7 @@ struct SetupWizardView: View {
                 SetupNotice(text: "Für diesen Chatbot ist bereits „\(existing.connectionName)“ eingetragen. Ein bestehender Eintrag wird nicht ersetzt. Verwende „Verbindungen“, um ihn zu bearbeiten.", warning: true)
             }
             TextField("Name der Verbindung (optional)", text: $model.connectionName).textFieldStyle(.roundedBorder)
-            Text(model.clientSelection.hasPrefix("oauth-") ? "Nach der Dokumentauswahl verbindest du Vauldy im Chatbot und bestätigst den Zugriff hier. Kein API-Schlüssel und kein zusätzliches Passwort. Der Betreiber richtet einmalig den HTTPS-Anschluss ein." : "Dieser Anschluss gilt für einen lokalen MCP-Host. Normale gehostete Chats benötigen den OAuth-Anschluss.").font(.callout).foregroundStyle(.secondary)
+            Text(model.clientSelection == "oauth-chatgpt" ? "Nach der Dokumentauswahl meldest du dich im Browser mit deinem ChatGPT-Konto an. Der Mac verbindet sich ausgehend; du gibst keinen API- oder Runtime-Schlüssel ein." : model.clientSelection == "oauth-claude" ? "Claude nutzt Standard-OAuth. Der Betreiber benötigt einen erreichbaren HTTPS-Anschluss; du bestätigst den Dokumentzugriff lokal." : "Dieser Anschluss gilt für einen lokalen MCP-Host. Für normale ChatGPT-Chats wähle die Anmeldung mit deinem Konto.").font(.callout).foregroundStyle(.secondary)
         }
     }
     private var consent: some View {
@@ -86,7 +86,7 @@ struct SetupWizardView: View {
             Text(model.registrationMessage)
             if let profile = model.activeConnection, profile.connectionKind == .oauth {
                 Text("Die gespeicherte Dokumentauswahl allein aktiviert noch keinen Zugriff im Chatbot.")
-                Button("OAuth-Verbindung öffnen") { model.section = .oauth; dismiss() }.buttonStyle(.borderedProminent)
+                Button(model.clientSelection == "oauth-chatgpt" ? "ChatGPT-Anmeldung öffnen" : "OAuth-Verbindung öffnen") { model.relayProfileID = profile.connectionID; model.section = .oauth; dismiss() }.buttonStyle(.borderedProminent)
             } else if let profile = model.activeConnection {
                 SetupStatusBadge(text: model.state(for: profile).headline, tone: model.state(for: profile).tone)
                 if model.probing.contains(profile.connectionID) { ProgressView("Lokaler Protokolltest läuft …") }
