@@ -30,6 +30,27 @@ Programm mit denselben Dateizugriffsrechten.
 
 ## MCP-Vertrag
 
+### Vauldy-Werkzeugvertrag v1
+
+Der Werkzeugvertrag hat eine eigene Versionslinie. `v1` bezeichnet die vier Werkzeugnamen, Eingabe- und Ausgabeschemas sowie ihre Lese-Annotationen. Er ist unabhängig von Vauldys Paketversion, der ausgehandelten MCP-Protokollversion und dem Format der lokalen Dateien. Clients entdecken die Werkzeuge bei der Verbindung. Der stdio-Vertragstest prüft die vorhandene Form gegen einen festen Fingerabdruck. Die Relay-Kopie wird separat mit dem tatsächlichen Server verglichen. Eine inkompatible Änderung braucht eine neue Vertragsversion und eine Prüfung der betroffenen Clients. Der `v1`-Vertrag bleibt dabei als eigener Kompatibilitätsstand prüfbar.
+
+| Ebene | Zuständigkeit | Bedeutung für den Chat |
+| --- | --- | --- |
+| Lokale Dokumentidentität | `VauldyCore` speichert die UUID im Snapshot. | Der Chat behandelt `document` als flüchtige Lesekennung. Die interne UUID bleibt lokal. |
+| Seitenbeleg | `VauldyDocumentCore` liest gespeicherte Seitenmarken. `VauldyMCPRuntime` prüft ihre Verwendbarkeit und schützt den Text. | `[Quelle:<handle>:S.<seite>]` verweist auf eine physische, ab 1 gezählte Seite. Ohne eindeutige Seitenmarke gibt es einen Dokumentbeleg ohne Seitenzahl. |
+| Trefferumfang | `VauldyMCPRuntime` bindet Pagination an Filter, Freigabe und Datenstand. | Der Chat unterscheidet Rangsuche, vollständig abgerufene Textkandidaten, Fundstellenauswahl und OCR-/Analyseabdeckung. |
+| Ausgabe und Widerruf | `VauldyMCPRuntime` prüft Freigabe und Quellenstand. `VauldyMCPProtocol` serialisiert die vorbereiteten Ergebnisobjekte. | Der Dispatcher prüft Quelle und Freigabe nach Serialisierung und Audit erneut. Ein Fehler liefert `isError=true` ohne strukturierte Dokumentdaten. |
+
+Archiv-UUID, Lesekennung, Quellenbeleg und Cursor sind verschiedene Werte. Ein Handle kann für denselben Datensatz im gleichen Serverprozess wiederverwendet werden, solange Dokumentinhalt und Freigabe passen. Handles und Cursor sind für den Client undurchsichtige Kennungen. Nach Neustart, Widerruf oder einem veralteten Handle muss der Client die Dokumente erneut ermitteln. Wurde ein Handle oder Listencursor wegen abweichender Daten zurückgewiesen, wird er im Prozess verworfen. Die interne UUID bleibt im lokalen Bestand erhalten.
+
+OCR-Text bleibt bei ungültigen, doppelten oder außerhalb der deklarierten Seitenzahl liegenden Marken lesbar. Die betroffenen Abschnitte erscheinen ohne Seitenzahl. Die Quellenabdeckung bleibt in diesen Fällen ausdrücklich unvollständig oder unbekannt. Ein Fundstellenbeleg bezieht sich auf bereinigten OCR-Text. Historischer Text und unlesbare Seiten müssen im Chat als solche behandelt werden.
+
+### Referenzauftrag für den Recherchepilot
+
+Ein synthetischer Versicherungsbestand soll einen belegten Vertrag, einen reinen Textkandidaten und einen Vertrag mit fehlender Frist enthalten. Der Referenzablauf ruft alle Folgeseiten von `list_documents` ab, liest vorhandene Felder über `read_document(view="metadata")` und prüft relevante Stellen mit `read_document(view="passages")`. Der Chat trennt Kandidaten von belegten Verträgen und lässt fehlende Werte offen. Für die spätere Messung werden erwartete Treffer, Felder und Fundstellen vorab festgehalten. Vor der Ausgabe eines mehrstufigen Ergebnisses muss der Ablauf die verwendeten Quellen nochmals über den MCP prüfen.
+
+### Werkzeuge
+
 | Tool | Eingabe | Ausgabe |
 | --- | --- | --- |
 | `get_vault_status` | keine | Status, getrennte Quellen- und Analyseabdeckung sowie Anzahlen ausschließlich freigegebener Dokumente |
@@ -101,9 +122,9 @@ Fehlertexte enthalten keine ursprünglichen Decoder-/Dateisystemmeldungen.
 Das ist heuristische Pseudonymisierung, keine Anonymisierung oder allgemeine DSGVO-Freigabe.
 Auch die ausdrücklich freigegebenen fachlichen Inhalte können personenbezogen bleiben.
 
-Grenzen: Snapshot höchstens 128 MiB/20.000 Dokumente; Datenschutzkontext eines ausgegebenen
-Dokuments höchstens 1 MB; höchstens 32 Dokumentkennungen pro Prozess; Segmente höchstens 6.000
-Zeichen, Antworten höchstens 180 KB. Überschreitungen führen zu ausdrücklichen Fehlern.
+Der Snapshot ist auf 128 MiB und 20.000 Dokumente begrenzt. Der Datenschutzkontext eines Dokuments
+ist auf 1 MB begrenzt. Textsegmente sind höchstens 6.000 Zeichen lang, Antworten höchstens 180 KB.
+Überschreitungen führen zu ausdrücklichen Fehlern.
 Der Kern liest Such-Snapshots pro Anfrage. Ein begrenzter prozesslokaler Suchindex bereitet nur
 geänderte Dokumente neu vor; bereinigte Textfassungen werden versions- und freigabegebunden wiederverwendet.
 

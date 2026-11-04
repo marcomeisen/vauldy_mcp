@@ -140,6 +140,7 @@ struct MCPRetrievalCompletenessTests {
             try f.write(changed)
             await #expect(throws: MCPAccessError.stale) { try await f.runtime.list(cursor: cursor) }
             try f.write(documents)
+            await #expect(throws: MCPAccessError.stale) { try await f.runtime.list(cursor: cursor) }
             var profile = f.profile; profile.enabled = false; profile.revision = UUID()
             try FileMCPProfileSource(url: f.profileURL).save(profile)
             await #expect(throws: MCPAccessError.notAuthorized) { try await f.runtime.list(cursor: cursor) }

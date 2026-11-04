@@ -162,6 +162,32 @@ Der erste Pilot ist ein Recherche-Agent auf dem Mac des Kunden. Der Chatbot nimm
 
 Der Pilot nutzt die bestehende Werkzeugschnittstelle. Ein synthetischer Versicherungsbestand dient als Vergleich zwischen direktem Chatablauf und Agent. Geprüft werden Trefferabdeckung, korrekte Feldbelege, Laufzeit, Werkzeugaufrufe, Abbruch und Offline-Ausführung. Ein gezieltes Extraktionswerkzeug folgt bei einer belegten Lücke in den verfügbaren Metadaten oder Fundstellen. Der Chat bleibt die Oberfläche für den gesamten Ablauf.
 
+### Grundlage aus Iteration 5
+
+Der [Werkzeugvertrag v1](mcp-mvp.md#vauldy-werkzeugvertrag-v1) beschreibt Handles, Seitenbelege, Vollständigkeit und Widerruf. Die vier Werkzeugnamen und ihre Schemas sind im stdio-Test festgehalten. Der SQLite-Pilot verwirft die frühere Cache-Schemaversion, damit alte Listenmetadaten neu berechnet werden. Der lokale JSON-Bestand bleibt lesbar.
+
+```sh
+export CLANG_MODULE_CACHE_PATH=/tmp/vauldy-mcp-clang-cache
+export SWIFTPM_MODULECACHE_OVERRIDE=/tmp/vauldy-mcp-module-cache
+swift test --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none \
+  --filter 'MCPPrivacyBoundaryTests|MCPRetrievalCompletenessTests|MCPPassageTests|MCPScalabilityTests|OAuthConnectionTests|annotatedPDFOriginalsPersistCorrectRolesAcrossDocumentDomains|metadataIsProtectedPaginatedAndRevocableWithoutMutatingTheStore|metadataSharesContentPrivacyMappingAndCannotExposeRecipientOrIdentifiers|warningCodesCannotCarryArbitrarySourceText'
+swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none
+python3 scripts/mcp/smoke_test.py .build/release/vauldy-mcp
+python3 scripts/mcp/export_relay_tools.py .build/release/vauldy-mcp --check
+python3 scripts/mcp/index_recovery_smoke_test.py .build/release/vauldy-mcp
+python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp dist/mcp/iteration-5-scaling.json --documents 1000 2000
+```
+
+Der separate native OCR-Test lief mit Zugriff auf macOS Vision. Der lokale OAuth-Protokolltest lief über einen temporären Loopback-Port. Beide verwendeten synthetische Bestände.
+
+```sh
+swift test --skip-build --disable-sandbox --disable-automatic-resolution \
+  --filter rasterOriginalsUseNativeOCRBeforeTheSameAnalysisPipeline
+python3 scripts/mcp/oauth_smoke_test.py .build/debug/vauldy-local .build/debug/vauldy-mcp-http
+```
+
+54 gezielte Swift-Tests, der separate Rastertest mit acht PDF-Originalen, der Release-Build, die stdio-Prüfungen und der lokale OAuth-Test waren erfolgreich. Der zusätzliche Protokolllauf las die Metadaten von 25 synthetischen PDF-Originalen. Die Skalierungsprobe lieferte die kompakten Inventare mit 1.000 und 2.000 Einträgen vollständig in 10 und 20 Aufrufen. In der Fundstellenprobe lieferte ein Aufruf Belege auf den erwarteten Seiten 42 und 87.
+
 ## Priorisierte Abnahmetickets
 
 | Reihenfolge | Ticket | Abnahme |
@@ -169,7 +195,7 @@ Der Pilot nutzt die bestehende Werkzeugschnittstelle. Ein synthetischer Versiche
 | 1 | P0 · Vertrauenswürdiger Release und CI | Paketzusammenbau, Versions- und Architekturprüfung, Regression und Schema-Parität auf sauberem macOS-Runner. Team-ID, Gatekeeper und Ticket auf frischem Kunden-Mac belegen. Signierung und Notarisierung erst mit autorisierter Release-Umgebung ausführen. |
 | 2 | P0 · Kundenabnahme von Update und Rückweg | Zwei kompatible Developer-ID-Releases auf frischem Kunden-Mac prüfen. Rückkehr mit bewusstem Neustart, unabhängige Offline-Probe und kontrollierten Stromausfalltest ausführen. |
 | 3 | P0 · Agensi-Pilot | In einem Zielclient das Anweisungspaket und bestehenden lokalen Vauldy MCP getrennt laden. Synthetische Recherche über mehrere Inventar- und Leseseiten, Quellen und Widerruf prüfen. Bei Agensi den vorhandenen lokalen MCP unter „Needs access“ ausweisen. [Agensi-Format und Angebotsgrenzen](https://www.agensi.io/docs/what-you-can-sell) |
-| 4 | P1 · MCP-Verträge für den Chatbetrieb | Dokument-IDs, Seitenbelege, Suchvollständigkeit und Freigaben eindeutig beschreiben. Bestehende lokale Daten und Werkzeugantworten anhand synthetischer Testfälle auf Kompatibilität prüfen. Einen belegten Rechercheablauf mit den bestehenden Werkzeugen erproben. |
+| 4 | P1 · MCP-Verträge für den Chatbetrieb | Werkzeugvertrag v1 und Referenzauftrag sind dokumentiert. Kompatibilität, Seitenbelege, Vollständigkeit und Freigaben werden anhand synthetischer Testfälle geprüft. Die vergleichende Ausführung des Rechercheablaufs gehört zu Iteration 6. |
 | 5 | P1 · 20.000 Dokumente | Größenreihe auf Referenz-Mac mit Freigaben, realistischen Dokumentlängen, Speicherspitzen, Wiederholungen, Suchbelegen und Worker-/Importlast ausführen. Zielwerte vor Abnahme festlegen. Vergleichbarer read-only Indexversuch nur bei belegtem Engpass. Alte JSON-Daten weiter lesen, Backup/Restore und Abbruch testen. |
 | 6 | P1 · Resilienz | Synthetische Crash-/Cancel-Proben mit tatsächlicher nativer OCR, kontrollierten CPU-/Speichergrenzen und Wiederaufnahme. Diagnosen auf technische Zähler begrenzen. |
 | 7 | Optional · Remote und Lizenz | Separaten Architekturvorschlag mit Zweck, widerrufbarer Zustimmung, Gerätebindung, Aufbewahrung und Offline-Test liefern. Lokaler stdio-Betrieb bleibt unabhängig. |

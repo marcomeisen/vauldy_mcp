@@ -11,6 +11,17 @@ import tempfile
 import time
 import uuid
 
+# Vauldy's published v1 tool contract. Independent of the relay's discovery mirror.
+V1_DISCOVERY_SHA256 = '1c2d67d0bc94c20fb9efe2755d8bd67cf11a77eaeba769f775925371045fd9fa'
+
+
+def assert_v1_discovery(tools):
+    keys = ('name', 'inputSchema', 'outputSchema', 'annotations')
+    contract = [{key: tool[key] for key in keys} for tool in sorted(tools, key=lambda tool: tool['name'])]
+    canonical = json.dumps(contract, sort_keys=True, separators=(',', ':')).encode()
+    assert hashlib.sha256(canonical).hexdigest() == V1_DISCOVERY_SHA256, 'Vauldy v1 tool contract changed'
+
+
 class Client:
     def __init__(self, binary, profile, stderr=subprocess.DEVNULL, capabilities=None, *, protocol_version="2025-11-25", server_options=()):
         self.process = subprocess.Popen([str(binary), '--profile', str(profile), *server_options], stdin=subprocess.PIPE,
@@ -110,20 +121,21 @@ def main():
         try:
             assert compatibility_client.initialization['protocolVersion'] == '2025-11-25'
             assert compatibility_client.initialization['serverInfo']['name'] == 'vauldy'
-            assert len(compatibility_client.request('tools/list', {})['tools']) == 4
+            assert_v1_discovery(compatibility_client.request('tools/list', {})['tools'])
             assert payload(compatibility_client.call('get_vault_status'))['grantedDocumentCount'] == 0
         finally: compatibility_client.close()
         for version in ['2024-11-05', '2025-03-26', '2025-06-18']:
             legacy_client = Client(args.binary.resolve(), profile_file, protocol_version=version)
             try:
                 assert legacy_client.initialization['protocolVersion'] == version
-                assert len(legacy_client.request('tools/list', {})['tools']) == 4
+                assert_v1_discovery(legacy_client.request('tools/list', {})['tools'])
                 assert payload(legacy_client.call('get_vault_status'))['grantedDocumentCount'] == 0
             finally:
                 legacy_client.close()
         client = Client(args.binary.resolve(), profile_file)
         try:
             tools = client.request('tools/list', {})['tools']
+            assert_v1_discovery(tools)
             assert {t['name'] for t in tools} == {'get_vault_status', 'search_documents', 'list_documents', 'read_document'}
             assert all(t['annotations']['readOnlyHint'] for t in tools)
             assert all('outputSchema' in t for t in tools)
@@ -162,6 +174,11 @@ def main():
             # Exhaust the list using only continuation cursors, then revoke a live one.
             profile.update(revision=str(uuid.uuid4()), allowedDocumentIDs=[doc_id, second_id])
             profile_file.write_text(json.dumps(profile))
+            legacy = payload(client.call('search_documents', query='Wartungsprotokoll'), schemas['search_documents'])
+            legacy_handle = legacy['hits'][0]['document']
+            assert legacy_handle.lower() != second_id.lower()
+            legacy_content = payload(client.call('read_document', document=legacy_handle), schemas['read_document'])
+            assert legacy_content['availablePages'] == [1] and legacy_content['segments'][0]['source'] == f'[Quelle:{legacy_handle}:S.1]'
             first_page = payload(client.call('list_documents', pageSize=1), schemas['list_documents'])
             cursor = first_page['nextCursor']
             assert first_page['totalCount'] == 2 and first_page['hasMore'] and not first_page['retrievalComplete']
@@ -179,7 +196,9 @@ def main():
             assert client.call('read_document', document=doc_id)['isError']
             assert client.call('delete_document', document=handle)['isError']
             profile['enabled'] = False; profile['revision'] = str(uuid.uuid4()); profile_file.write_text(json.dumps(profile))
-            assert client.call('read_document', document=handle)['isError']
+            for options in ({}, {'view': 'metadata'}, {'view': 'passages', 'query': 'Wartung'}):
+                denied = client.call('read_document', document=handle, **options)
+                assert denied['isError'] and 'structuredContent' not in denied
             assert client.call('list_documents', cursor=cursor)['isError']
             assert payload(client.call('get_vault_status'))['grantedDocumentCount'] == 0
             profile.update(enabled=True, revision=str(uuid.uuid4()))

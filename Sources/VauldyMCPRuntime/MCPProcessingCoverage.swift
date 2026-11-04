@@ -1,5 +1,6 @@
 import Foundation
 import VauldyCore
+import VauldyDocumentCore
 
 /// Counts only explicitly granted records. Completeness concerns source processing,
 /// never OCR accuracy, organization classification or factual AI analysis.
@@ -44,10 +45,24 @@ struct MCPSourceState {
               analysisStatus: document.baseAnalysisStatus, searchable: document.isSearchable)
     }
 
+    static func physicalPage(_ page: Int, declaredCount: Int?) -> Bool {
+        (1...10_000).contains(page) && (declaredCount.map { page <= $0 } ?? true)
+    }
+
+    static func sourceSections(_ document: VaultDocument) -> [VauldyDocumentCore.VaultPageMarkedText.Section] {
+        let sections = VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText)
+        let occurrences = Dictionary(grouping: sections.compactMap(\.page), by: { $0 })
+        return sections.map { section in
+            guard let page = section.page, physicalPage(page, declaredCount: document.pageCount),
+                  occurrences[page]?.count == 1 else { return .init(page: nil, text: section.text) }
+            return section
+        }
+    }
+
     init(_ document: VaultDocument) {
-        let sections = VaultPageMarkedText.sections(in: document.ocrText)
+        let sections = Self.sourceSections(document)
         var complete = false
-        if let count = document.pageCount, (1...10_000).contains(count), sections.compactMap(\.page) == Array(1...count) {
+        if let count = document.pageCount, (1...10_000).contains(count), sections.map(\.page) == (1...count).map(Optional.some) {
             if let info = document.localImport {
                 complete = info.state == .completed && info.pages.map(\.page) == Array(1...count)
                     && info.pages.allSatisfy { page in

@@ -18,10 +18,12 @@ public enum VauldyMCPServerFactory {
             let operation = MCPAuditLog.Operation(tool: parameters.name)
             let started = ContinuousClock.now
             do {
+                let initialProfile = try? profile.load()
                 try audit.append(.requestStarted, operation: operation, request: request,
-                                 revision: try? profile.load().revision)
+                                 revision: initialProfile?.revision)
                 observedRequest()
                 let args = parameters.arguments ?? [:]
+                let access = initialProfile.flatMap { try? MCPResponseAccess(profile: $0) }
                 let response: CallTool.Result
                 var count = 0
                 var handles: [UUID] = []
@@ -77,6 +79,8 @@ public enum VauldyMCPServerFactory {
                 // Persist before disclosure. "Prepared" does not claim the client received the response.
                 try audit.append(.responsePrepared, operation: operation, request: request,
                                  durationMS: elapsedMS(since: started), count: count, documentHandles: handles)
+                guard let access else { throw MCPAccessError.stale }
+                try access.verify(using: profile)
                 return response
             } catch {
                 let code = MCPAuditLog.Code(error: error)

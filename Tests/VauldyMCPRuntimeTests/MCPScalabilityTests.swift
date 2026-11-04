@@ -127,10 +127,15 @@ struct MCPScalabilityTests {
             let mode = try FileManager.default.attributesOfItem(atPath: database.path)[.posixPermissions] as? Int
             #expect(mode == 0o600)
 
-            let reopened = runtime()
+            var reopened = runtime()
             #expect(try await reopened.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 1)
             try #require(FileManager.default.fileExists(atPath: database.path), "Reopened database exists")
             #expect(try Data(contentsOf: database) == initial)
+            let previousVersionInode = try MCPFileVersion(database).inode
+            try mutateIndex(database, sql: "PRAGMA user_version = 1")
+            reopened = runtime()
+            #expect(try await reopened.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 1)
+            #expect(try MCPFileVersion(database).inode != previousVersionInode)
             let inode = try MCPFileVersion(database).inode
 
             document.ocrText = "Brot Quittung"
@@ -140,7 +145,7 @@ struct MCPScalabilityTests {
             #expect(try MCPFileVersion(database).inode == inode)
 
             // A structurally valid FTS edit still fails the cache's payload-digest validation.
-            try replaceIndexTokens(database)
+            try mutateIndex(database, sql: "UPDATE tokens SET body = 'damaged'")
             let interrupted = directory.appendingPathComponent(".build-" + UUID().uuidString)
             try Data("partial build".utf8).write(to: interrupted)
             try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: interrupted.path)
@@ -286,11 +291,11 @@ struct MCPScalabilityTests {
     }
 }
 
-private func replaceIndexTokens(_ url: URL) throws {
+private func mutateIndex(_ url: URL, sql: String) throws {
     var connection: OpaquePointer?
     try #require(sqlite3_open_v2(url.path, &connection, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK)
     defer { sqlite3_close(connection) }
-    try #require(sqlite3_exec(connection, "UPDATE tokens SET body = 'damaged'", nil, nil, nil) == SQLITE_OK)
+    try #require(sqlite3_exec(connection, sql, nil, nil, nil) == SQLITE_OK)
 }
 
 private func documentWithText(_ text: String) -> VaultDocument { .init(title: "Beleg", sourceName: "source", ocrText: text) }

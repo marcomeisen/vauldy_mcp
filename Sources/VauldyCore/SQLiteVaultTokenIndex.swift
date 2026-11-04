@@ -22,12 +22,13 @@ package final class SQLiteVaultTokenIndex {
     private var entries: [UUID: Entry] = [:]
     private var nextRowID: Int64 = 1
 
-    private static let schemaVersion: Int64 = 1
+    // Changes to stored projection semantics require regeneration even if the SQL columns are unchanged.
+    private static let schemaVersion: Int64 = 2
     private static let applicationID: Int64 = 0x564D4350
     private static let schema = """
         PRAGMA page_size = 4096;
-        PRAGMA application_id = 1447904080;
-        PRAGMA user_version = 1;
+        PRAGMA application_id = \(applicationID);
+        PRAGMA user_version = \(schemaVersion);
         CREATE VIRTUAL TABLE tokens USING fts5(body, tokenize='ascii', detail=none, columnsize=0);
         CREATE TABLE inventory(rowid INTEGER PRIMARY KEY, id TEXT NOT NULL UNIQUE,
                                fingerprint TEXT NOT NULL, projection TEXT, payload_digest TEXT NOT NULL);

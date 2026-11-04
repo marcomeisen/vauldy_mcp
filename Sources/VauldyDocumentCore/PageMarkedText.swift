@@ -25,10 +25,10 @@ public enum VaultPageMarkedText {
         }
         for (index, match) in matches.enumerated() {
             guard let numberRange = Range(match.range(at: 1), in: text),
-                  let page = Int(text[numberRange]),
                   let markerRange = Range(match.range, in: text) else {
                 continue
             }
+            let page = Int(text[numberRange])
 
             let contentEnd: String.Index
             if index + 1 < matches.count,
@@ -54,5 +54,5 @@ public enum VaultPageMarkedText {
             ?? "[Ref:\(documentId.uuidString)]"
     }
 
-    private static let markerPattern = #"(?m)^---\s*Seite\s*(\d+)\s*---\s*$"#
+    private static let markerPattern = #"(?m)^---\s*Seite\s*(-?\d+)\s*---\s*$"#
 }

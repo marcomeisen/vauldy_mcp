@@ -26,6 +26,25 @@ struct MCPFileVersion: Equatable, Sendable {
     }
 }
 
+/// Pins the authority used for an outgoing tool reply across encoding and audit I/O.
+package struct MCPResponseAccess {
+    private let profile: MCPAccessProfile
+    private let version: MCPFileVersion?
+
+    package init(profile: MCPAccessProfile) throws {
+        self.profile = profile
+        version = profile.enabled ? try MCPFileVersion(URL(fileURLWithPath: profile.vaultPath)) : nil
+    }
+
+    package func verify(using source: any MCPProfileSource) throws {
+        try Task.checkCancellation()
+        guard version == nil || (try? MCPFileVersion(URL(fileURLWithPath: profile.vaultPath))) == version,
+              try source.load() == profile else {
+            throw MCPAccessError.stale
+        }
+    }
+}
+
 /// One bounded in-memory source, no extra archive or persistent raw index. Owned by the runtime actor.
 struct MCPVaultSnapshotCache {
     private let maximumBytes: Int64

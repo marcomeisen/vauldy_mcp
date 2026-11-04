@@ -219,7 +219,13 @@ public actor ReadOnlyMCPRuntime {
                             matchMode: VaultTextMatchMode?, includeExcerpts: Bool?) throws -> (String, Int, ListSession) {
         let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
         guard parts.count == 2, let offset = Int(parts[1]), offset >= 0,
-              let session = listSessions[String(parts[0])], session.fingerprint == generation else {
+              let session = listSessions[String(parts[0])] else {
+            throw MCPAccessError.stale
+        }
+        let key = String(parts[0])
+        guard session.fingerprint == generation else {
+            listSessions.removeValue(forKey: key)
+            listOrder.removeAll { $0 == key }
             throw MCPAccessError.stale
         }
         guard session.issuedOffsets.contains(offset),
@@ -227,7 +233,7 @@ public actor ReadOnlyMCPRuntime {
               pageSize == nil || pageSize == session.pageSize,
               matchMode == nil || matchMode == session.matchMode,
               includeExcerpts == nil || includeExcerpts == session.includeExcerpts else { throw MCPAccessError.invalidArguments }
-        return (String(parts[0]), offset, session)
+        return (key, offset, session)
     }
 
     private func listPage(key: String, offset: Int, session: ListSession, profile: MCPAccessProfile, epoch: UInt64,
@@ -299,9 +305,8 @@ public actor ReadOnlyMCPRuntime {
         let profile = try loadProfile()
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
-        guard let lease = leases[handle], lease.profile == profile,
-              let document = documents.first(where: { $0.id == lease.id && $0.isSearchable }),
-              try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
+        let (document, _) = try resolve(handle, in: documents, profile: profile)
+        guard document.isSearchable else { throw MCPAccessError.stale }
         let offset: Int
         if let cursor {
             let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
@@ -310,7 +315,6 @@ public actor ReadOnlyMCPRuntime {
             }
             offset = value
         } else { offset = 0 }
-        let sections = VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText)
         let prepared = try preparedDocument(document, profile: profile)
         var segments: [MCPDocumentSegment] = []
         for section in prepared.sections {
@@ -322,8 +326,8 @@ public actor ReadOnlyMCPRuntime {
         guard !segments.isEmpty else { throw MCPAccessError.unavailable }
         guard offset < segments.count else { throw MCPAccessError.invalidArguments }
         let end = min(offset + 3, segments.count)
-        let pages = sections.compactMap(\.page)
-        let expected = document.pageCount
+        let pages = prepared.sections.compactMap(\.page)
+        let expected = document.pageCount.flatMap { $0 > 0 ? $0 : nil }
         let state = MCPSourceState(document)
         try Task.checkCancellation()
         try recheck(profile, epoch: epoch)
@@ -333,8 +337,9 @@ public actor ReadOnlyMCPRuntime {
                                  sourceCoverage: state.sourceCoverage,
                                  nextCursor: end < segments.count ? "\(handle):\(end)" : nil,
                                  containsEntireAvailableText: offset == 0 && end == segments.count,
-                                 pageStatus: document.localImport?.pages.map {
-                                     MCPPageStatus(page: $0.page, method: $0.method.rawValue, needsReview: $0.needsReview)
+                                 pageStatus: document.localImport?.pages.compactMap {
+                                     guard MCPSourceState.physicalPage($0.page, declaredCount: document.pageCount) else { return nil }
+                                     return MCPPageStatus(page: $0.page, method: $0.method.rawValue, needsReview: $0.needsReview)
                                  } ?? [], analysisStatus: document.baseAnalysisStatus)
     }
 
@@ -344,9 +349,8 @@ public actor ReadOnlyMCPRuntime {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true,
               query.map({ $0.utf8.count <= 2_000 && VaultDocumentFilter.validCandidateQuery($0) }) ?? true else { throw MCPAccessError.invalidArguments }
         let profile = try loadProfile(), documents = try authorizedDocuments(profile), epoch = accessEpoch
-        guard let lease = leases[handle], lease.profile == profile,
-              let document = documents.first(where: { $0.id == lease.id && $0.isSearchable }),
-              try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
+        let (document, lease) = try resolve(handle, in: documents, profile: profile)
+        guard document.isSearchable else { throw MCPAccessError.stale }
         let key: String, offset: Int
         var selection: PassageSession
         if let cursor {
@@ -389,9 +393,7 @@ public actor ReadOnlyMCPRuntime {
         let profile = try loadProfile()
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
-        guard let lease = leases[handle], lease.profile == profile,
-              let document = documents.first(where: { $0.id == lease.id }),
-              try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
+        let (document, _) = try resolve(handle, in: documents, profile: profile)
         let analysis = document.currentBaseAnalysis
         let records = analysis?.documents ?? []
         let offset: Int
@@ -515,6 +517,18 @@ public actor ReadOnlyMCPRuntime {
         try lease(id: document.id, fingerprint: fingerprint(document), profile: profile)
     }
 
+    private func resolve(_ handle: String, in documents: [VaultDocument],
+                         profile: MCPAccessProfile) throws -> (VaultDocument, Lease) {
+        guard let lease = leases[handle], lease.profile == profile else { throw MCPAccessError.stale }
+        guard let document = documents.first(where: { $0.id == lease.id }),
+              try fingerprint(document) == lease.fingerprint else {
+            leases.removeValue(forKey: handle)
+            handlesByID.removeValue(forKey: lease.id)
+            throw MCPAccessError.stale
+        }
+        return (document, lease)
+    }
+
     private func lease(id: UUID, fingerprint: Data, profile: MCPAccessProfile) -> String {
         if let handle = handlesByID[id], let existing = leases[handle],
            existing.fingerprint == fingerprint, existing.profile == profile { return handle }
@@ -531,7 +545,7 @@ public actor ReadOnlyMCPRuntime {
         protectedDocuments.removeValue(forKey: document.id); protectedOrder.removeAll { $0 == document.id }
         let session = try privacySession(document)
         privacyBuildCount += 1
-        let sections = try VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText).map {
+        let sections = try MCPSourceState.sourceSections(document).map {
             VauldyDocumentCore.VaultPageMarkedText.Section(page: $0.page, text: try protect($0.text, using: session))
         }
         let result = PreparedDocument(fingerprint: hash, profile: profile, sections: sections,

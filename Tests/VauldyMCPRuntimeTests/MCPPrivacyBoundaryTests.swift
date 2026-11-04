@@ -83,6 +83,63 @@ struct MCPPrivacyBoundaryTests {
             var changed = f.document; changed.ocrText += "\nKorrigierter Inhalt."
             try f.write([changed])
             await #expect(throws: MCPAccessError.stale) { try await f.runtime.read(document: hit.document) }
+            try f.write([f.document])
+            await #expect(throws: MCPAccessError.stale) { try await f.runtime.readMetadata(document: hit.document) }
+            let fresh = try #require(try await f.runtime.search(query: "Rechnung").hits.first)
+            #expect(fresh.document != hit.document)
+        }
+    }
+
+    @Test func outgoingResponseRejectsAChangedSourceOrGrant() async throws {
+        try await fixture { f in
+            let source = FileMCPProfileSource(url: f.profileURL)
+            let access = try MCPResponseAccess(profile: source.load())
+            _ = try await f.runtime.search(query: "Rechnung")
+            try access.verify(using: source)
+            var changed = f.document; changed.ocrText += " Änderung."
+            try f.write([changed])
+            #expect(throws: MCPAccessError.stale) { try access.verify(using: source) }
+
+            let next = try MCPResponseAccess(profile: source.load())
+            _ = try await f.runtime.search(query: "Rechnung")
+            var profile = f.profile; profile.enabled = false; profile.revision = UUID()
+            try f.save(profile)
+            #expect(throws: MCPAccessError.stale) { try next.verify(using: source) }
+        }
+    }
+
+    @Test func invalidOrAmbiguousPageMarkersPreserveTextWithoutInventingCitations() async throws {
+        var document = sample()
+        document.pageCount = 3
+        document.ocrText = """
+        --- Seite 0 ---
+        Nullmarke Vertragsbeleg
+        --- Seite 1 ---
+        Gültige Seite Rechnung
+        --- Seite 2 ---
+        Mehrdeutige Seite Vertragsbeleg
+        --- Seite 2 ---
+        Weitere mehrdeutige Seite Vertragsbeleg
+        --- Seite 4 ---
+        Außerhalb Vertragsbeleg
+        --- Seite -1 ---
+        Negative Marke Vertragsbeleg
+        --- Seite 999999999999999999999999999 ---
+        Prüftext Vertragsbeleg 49,99 EUR
+        """
+        try await fixture(document) { f in
+            let hit = try #require(try await f.runtime.search(query: "Nullmarke").hits.first)
+            #expect(hit.page == nil)
+            #expect(hit.source == "[Quelle:\(hit.document)]")
+            let result = try await f.runtime.read(document: hit.document)
+            #expect(result.sourceCoverage == "incomplete-or-unknown")
+            #expect(result.availablePages == [1])
+            #expect(result.segments.first?.text.contains("Nullmarke") == true)
+            let passages = try await f.runtime.passages(document: hit.document, query: "vertragsbeleg")
+            #expect(passages.segments.count == 6)
+            #expect(passages.segments.contains { $0.text.contains("49,99 EUR") })
+            let hasPageClaim = passages.segments.contains { $0.page != nil || $0.source != "[Quelle:\(hit.document)]" }
+            #expect(!hasPageClaim)
         }
     }
 
