@@ -89,7 +89,7 @@ Kundenstatus **offen**. Die Sitzung sah keine gültige Developer-ID-Application-
 
 [Entwicklungsaufgaben und Iterationsstand](local-first-todo.md)
 
-`VauldyDocumentCore` ist das erste eigenständige Swift-Modul für den Seitenmarkierungsvertrag. `VauldyCore` exportiert denselben Typ weiterhin über den bisherigen Namen. Die App kann dieses Modul später über einen gepinnten Stand beziehen. Aktuell wird nur der MCP-Branch umgebaut.
+`VauldyDocumentCore` ist das eigenständige Swift-Modul für den Seitenmarkierungsvertrag im MCP. `VauldyCore` exportiert denselben Typ weiterhin über den bisherigen Namen. Die Entwicklung findet im eigenständigen MCP statt. Der Chatbot ist die Oberfläche für die Dokumentarbeit. Der lokale MCP verantwortet Dokumentzugriff, Freigaben, Quellenbindung und die strukturierte Ausgabe an den Chatclient.
 
 ### Wiederaufbaubarer SQLite-Index
 
@@ -163,7 +163,7 @@ Alle 39 gezielten Swift-Tests, der Release-Build, beide stdio-Tests und der Verg
 | 1 | P0 · Vertrauenswürdiger Release und CI | Paketzusammenbau, Versions- und Architekturprüfung, Regression und Schema-Parität auf sauberem macOS-Runner. Team-ID, Gatekeeper und Ticket auf frischem Kunden-Mac belegen. Signierung und Notarisierung erst mit autorisierter Release-Umgebung ausführen. |
 | 2 | P0 · Kundenabnahme von Update und Rückweg | Zwei kompatible Developer-ID-Releases auf frischem Kunden-Mac prüfen. Rückkehr mit bewusstem Neustart, unabhängige Offline-Probe und kontrollierten Stromausfalltest ausführen. |
 | 3 | P0 · Agensi-Pilot | In einem Zielclient das Anweisungspaket und bestehenden lokalen Vauldy MCP getrennt laden. Synthetische Recherche über mehrere Inventar- und Leseseiten, Quellen und Widerruf prüfen. Bei Agensi den vorhandenen lokalen MCP unter „Needs access“ ausweisen. [Agensi-Format und Angebotsgrenzen](https://www.agensi.io/docs/what-you-can-sell) |
-| 4 | P1 · Gemeinsamer Core | Je gemeinsamem Pfad Eigentümer und API bestimmen. Ein erstes identisches Modell oder einen kleinen Quellenvertrag extrahieren. App- und MCP-Adapter gegen Altfixtures prüfen, anschließend nur belegte Duplikate entfernen. Veröffentlichung gemeinsamer Quellen separat entscheiden. |
+| 4 | P1 · MCP-Verträge für den Chatbetrieb | Dokument-IDs, Seitenbelege, Suchvollständigkeit und Freigaben eindeutig beschreiben. Bestehende lokale Daten und Werkzeugantworten anhand synthetischer Testfälle auf Kompatibilität prüfen. Einen belegten Rechercheablauf mit den bestehenden Werkzeugen erproben. |
 | 5 | P1 · 20.000 Dokumente | Größenreihe auf Referenz-Mac mit Freigaben, realistischen Dokumentlängen, Speicherspitzen, Wiederholungen, Suchbelegen und Worker-/Importlast ausführen. Zielwerte vor Abnahme festlegen. Vergleichbarer read-only Indexversuch nur bei belegtem Engpass. Alte JSON-Daten weiter lesen, Backup/Restore und Abbruch testen. |
 | 6 | P1 · Resilienz | Synthetische Crash-/Cancel-Proben mit tatsächlicher nativer OCR, kontrollierten CPU-/Speichergrenzen und Wiederaufnahme. Diagnosen auf technische Zähler begrenzen. |
 | 7 | Optional · Remote und Lizenz | Separaten Architekturvorschlag mit Zweck, widerrufbarer Zustimmung, Gerätebindung, Aufbewahrung und Offline-Test liefern. Lokaler stdio-Betrieb bleibt unabhängig. |

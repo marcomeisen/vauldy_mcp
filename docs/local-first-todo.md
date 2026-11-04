@@ -2,6 +2,8 @@
 
 Arbeitsbranch `codex/local-first-product-readiness`. Jede Verbindung nutzt den MCP auf dem Mac des jeweiligen Kunden. JSON und das vorhandene Backup bleiben führend. Die Kundenabnahme folgt auf die intern geprüfte lokale Architektur.
 
+Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der Chatbot ist die einzige Oberfläche für die Dokumentarbeit. Die Vauldy-Hauptapp ist aus dem Entwicklungsumfang ausgeschieden. Der vorhandene MCP-Einrichtungsassistent ist ein technischer Installations- und Verbindungsweg. Die künftige Einrichtung und Freigabeverwaltung werden separat vom Chatbetrieb festgelegt.
+
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
 ## Abgeschlossen
@@ -22,11 +24,11 @@ Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächl
 - [x] Cachegröße, kompakte Projektion und FTS5 getrennt an 20.000 synthetischen Dokumenten messen. Die Größen 1.000, 2.000, 5.000, 10.000 und 20.000 prüfen. Latenz einschließlich P95, Peak-RSS, Vollständigkeit und Wiederverwendung über Prozessneustarts erfassen.
 - [x] Index bei gleichzeitigem Freigabewiderruf, Entfernen einer Verbindung und Prozessabbruch absichern. Stagingreste, SQLite-Journal und liegen gebliebenen getrennten Cache beim Wiederanlauf prüfen.
 - [x] Kompakte Pagination im lokalen stdio-Server als Standard für `includeExcerpts=false` aktivieren. Der Dateiindex bleibt optional. JSON bleibt führend. Eine spätere Formatänderung braucht eine eigene Backup- und Restore-Abnahme.
-- [ ] Gemeinsame Swift-Verträge für IDs, OCR, Suche und Privacy einzeln klassifizieren. Modellbesitz, Versionsregeln und Altfixtures festhalten.
-- [ ] App-Anbindung und belegte Duplikate getrennt übernehmen, sobald Arbeit im App-Repo wieder freigegeben ist. App-spezifische KI und Altformate gegen dieselben Fixtures absichern.
+- [ ] Verträge des eigenständigen MCP für Dokument-IDs, Seitenbelege, Suchvollständigkeit, Datenschutz und Widerruf festlegen. Interne Swift-Modelle und versionierte Werkzeugantworten abgrenzen. Kompatibilität mit bestehenden Clients und lokalen Daten anhand synthetischer Testfälle prüfen.
+- [ ] Einen Rechercheablauf im Chat mit bestehenden Werkzeugen prüfen. Relevante Dokumente finden, vorhandene Metadaten und Fundstellen lesen und Ergebnisse mit Belegen ausgeben. Fehlende Felder sichtbar machen und daraus den Bedarf für ein gezieltes Extraktionswerkzeug ableiten.
 - [ ] Lokalen Import und OCR-Worker unter kontrollierter Last messen. Vor einer Kundenfreigabe Referenz-Mac, Dokumentmix, P95, Durchsatz, Speichergrenzen und Suchqualität festlegen.
 - [ ] Lokale Worker-Parallelität begrenzen, Abbruch und Wiederaufnahme nach Absturz belegen und einen Diagnosebericht mit technischen Zählern prüfen.
-- [ ] Sichtbare Fortschrittsanzeige des Ordnerimports in der isolierten Oberfläche bestätigen.
+- [ ] Festlegen, wie ein bewusst gestarteter lokaler Import und sein Gesamtfortschritt im Chat sichtbar werden. Technische Einrichtung und Freigaben separat betrachten.
 
 ## Nach der Architektur
 
@@ -45,4 +47,4 @@ Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächl
 | 2 · Persistenz und Projektion | Abgeschlossen | 21 gezielte Swift-Tests bestanden. Geprüft sind unter anderem Neustart, inkrementelle Änderungen, Korruptionsreparatur, Cursor und Widerruf. |
 | 3 · Variantenmessung | Abgeschlossen | Fünf Varianten bei fünf Bestandsgrößen. Bei 20.000 Dokumenten lieferte der Dateimodus alle 200 Seiten in 30,62 s und verwendete den Index nach Neustart bytegleich wieder. [Messwerte](local-first-release.md#variantenmessung) |
 | 4 · Widerruf, Wiederanlauf und Standardbetrieb | Abgeschlossen | Der gestoppte Indexschreiber liefert nach Widerruf keine Treffer. Nach zwei realen `SIGKILL`-Abbrüchen sind Bestand und Berechtigungen intakt. Kompakte Pagination ist lokaler Standard. Im 20.000er-Vergleich sank der Median der ersten zehn Folgeseiten von 703 auf 126 ms. [Prüfbefehle](local-first-release.md#prüfbefehle) |
-| 5 · Gemeinsame Swift-Verträge | Als Nächstes | IDs, OCR, Suche und Privacy im MCP-Branch klassifizieren. Verantwortliche Module, Versionsregeln und gemeinsame Altfixtures festhalten. |
+| 5 · MCP-Verträge für den Chatbetrieb | Als Nächstes | IDs, OCR-Quellen, Suchvollständigkeit und Freigaben im MCP-Branch absichern. Den anschließenden Rechercheablauf mit bestehenden Werkzeugen vorbereiten. |
