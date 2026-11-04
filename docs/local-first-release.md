@@ -172,7 +172,7 @@ Vor der Ausgabe prüft der Pilot den Status und wiederholt die vollständige Kan
 
 Der optionale Planner verwendet Apples vorhandenes [On-Device-Modell](https://developer.apple.com/documentation/FoundationModels/adding-server-side-intelligence-with-private-cloud-compute/). Er erhält den Auftrag und ergänzt den festen Suchwortsatz aus einer begrenzten Auswahl. Dokumenttexte und Werkzeugergebnisse gehen ausschließlich durch den lokalen MCP und den regelbasierten Belegpfad. Ein nicht verfügbares Modell beendet den modellgestützten Auftrag mit einem ausdrücklichen Status. Der Pilot kann auch ausdrücklich mit dem festen Auftrag ohne Modell gestartet werden.
 
-Die folgenden Befehle sind für den Entwicklungsnachweis. Der Test legt ein eigenes Profil und ausschließlich synthetische Bestände an. Der direkte Referenzablauf bildet eine Skriptfolge derselben MCP-Werkzeuge ab und liest die Kandidaten vollständig. Die interaktive Anbindung an einen Zielchat gehört zu einem separaten Abnahmeschritt.
+Die folgenden Befehle sind für den Entwicklungsnachweis. Der Test legt ein eigenes Profil und ausschließlich synthetische Bestände an. Der direkte Referenzablauf bildet eine Skriptfolge derselben MCP-Werkzeuge ab und liest die Kandidaten vollständig. Die technische Anbindung im lokalen Zielhost wird separat geprüft.
 
 ```sh
 python3 scripts/mcp/research_agent_smoke_test.py .build/release/vauldy-mcp
@@ -198,6 +198,39 @@ Im Lauf mit gesperrtem Prozessnetz lieferten beide Varianten die drei erwarteten
 | Agent mit lokalem Modellplaner | 17 | 9 | 5.405 Byte | 2,98 s |
 
 Die Zeiten sind Einzelmessungen auf demselben Mac. Die Agentenzeit umfasst den Modellaufruf. Der separate Lauf mit festem Suchwortsatz dauerte beim Agenten 1,04 s. Die Textmenge umfasst ausschließlich die Textsegmente aus `read_document`. Die Negativtests bestätigten, dass Widerruf, Quelländerung, `SIGINT`, ein angehaltener MCP-Prozess am Zeitlimit und das Aufruflimit jeweils keine Dokumentzeilen ausgeben. Der synthetische Bestand und die ursprüngliche Freigabe blieben bytegleich.
+
+### Anbindung an den lokalen Codex-Host
+
+`vauldy-research-mcp` bietet das optionale Werkzeug `research_insurance_contracts` über stdio an. Das Werkzeug hat eine leere Eingabe. Die lokale Startkonfiguration bestimmt Python, Agentenskript, Vauldy-Binary, Profil und optional den Modellplaner. Das Chatmodell kann diese Pfade im Werkzeugaufruf nicht ändern. Der bisherige MCP bleibt die Instanz für Dokumentzugriff und Datenschutz und bietet weiterhin die vier Werkzeuge aus Vertrag v1 an.
+
+Eine erfolgreiche Antwort enthält eine deutsche Tabelle mit Seitenbelegen und strukturierte Daten. Pseudonymisierung, widersprüchliche oder fehlende Angaben und OCR-Lücken werden sichtbar. Bei Widerruf, paralleler Recherche oder Zeitlimit enthält die Antwort einen Fehlergrund und keine Dokumentzeilen. Bei einer MCP-Abbruchnachricht wird der Agent beendet und die verspätete Antwort verworfen. Die Freigabe und der Quellenstand werden auch am Chat-Adapter vor der Ausgabe erneut geprüft.
+
+Der Adapter ist ein separates Entwicklungsprogramm. Beispiel für die Konfiguration eines lokalen Testhosts mit absoluten Pfaden.
+
+```toml
+[mcp_servers.vauldy_research_test]
+command = "/absoluter/pfad/vauldy-research-mcp"
+args = [
+  "--python", "/absoluter/pfad/python3",
+  "--agent", "/absoluter/pfad/scripts/mcp/research_agent.py",
+  "--server", "/absoluter/pfad/vauldy-mcp",
+  "--profile", "/absoluter/pfad/zum/testprofil.json",
+  "--planner", "/absoluter/pfad/research-planner",
+]
+tool_timeout_sec = 65
+```
+
+Der optionale Modellplaner wird wie oben gebaut. Der Abnahmetest erzeugt die Konfiguration, den Testthread und die Dokumente selbst. Er verwendet die installierte Codex-CLI über ihre lokale App-Server-Schnittstelle.
+
+```sh
+swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none
+python3 scripts/mcp/research_chat_smoke_test.py .build/release/vauldy-research-mcp .build/release/vauldy-mcp
+/usr/bin/sandbox-exec -p '(version 1) (allow default) (deny network*)' \
+  python3 scripts/mcp/research_chat_smoke_test.py .build/release/vauldy-research-mcp .build/release/vauldy-mcp \
+  --planner /tmp/vauldy-iteration6-planner --codex "$(command -v codex)" --require-network-denied
+```
+
+Der installierte lokale Codex-Host erkannte das Werkzeug in einem flüchtigen Testthread und lieferte drei belegte Verträge. Nach Widerruf lieferte derselbe Host einen Fehler ohne Dokumentzeilen. Der Lauf sperrte Netzwerkzugriffe und nutzte das lokale Apple-Modell für die Suchplanung. Ein separater stdio-Test belegt, dass nach Abbruch keine Antwort folgt und der wartende Modellprozess endet. Die automatische Werkzeugwahl aus einem Freitextturn und die Darstellung durch das Chatmodell sind ein eigener Abnahmeschritt.
 
 ### Grundlage aus Iteration 5
 

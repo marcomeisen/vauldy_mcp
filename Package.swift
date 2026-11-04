@@ -16,6 +16,7 @@ let package = Package(
         .executable(name: "vauldy-relay", targets: ["VauldyRelayAgent"]),
         .executable(name: "vauldy-mcp-http", targets: ["VauldyMCPHTTP"]),
         .executable(name: "vauldy-mcp", targets: ["VauldyMCPServer"]),
+        .executable(name: "vauldy-research-mcp", targets: ["VauldyResearchMCP"]),
         .executable(name: "vauldy-local", targets: ["VauldyLocalCLI"]),
         .executable(name: "vauldy-mcp-setup", targets: ["VauldyMCPSetup"]),
         .executable(name: "vauldy-mcp-status", targets: ["VauldyMCPStatus"])
@@ -42,6 +43,9 @@ let package = Package(
         .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyDocumentCore", "VauldyPrivacy"]),
         .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth", "VauldyRelay"]),
         .executableTarget(name: "VauldyMCPStatus", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
+        .executableTarget(name: "VauldyResearchMCP", dependencies: [
+            "VauldyMCPRuntime", "VauldyMCPProtocol", .product(name: "MCP", package: "swift-sdk"),
+        ]),
         .executableTarget(
             name: "VauldyMCPServer",
             dependencies: [

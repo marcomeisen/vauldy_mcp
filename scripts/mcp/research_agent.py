@@ -5,6 +5,7 @@ from collections import Counter
 import json
 from pathlib import Path
 import re
+import signal
 import subprocess
 import time
 
@@ -238,6 +239,7 @@ def stopped(reason):
 
 
 def main():
+    signal.signal(signal.SIGINT, signal.default_int_handler)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("binary", type=lambda path: Path(path).resolve())
     parser.add_argument("--profile", required=True, type=lambda path: Path(path).absolute())
@@ -248,7 +250,11 @@ def main():
     args = parser.parse_args()
     report = research(args.binary, args.profile, mode=args.mode, planner=args.planner,
                       request=args.request, seconds=args.timeout)
-    print(json.dumps(report, ensure_ascii=False))
+    encoded = json.dumps(report, ensure_ascii=False)
+    if len(encoded.encode()) > 180_000:
+        report = stopped("output-limit")
+        encoded = json.dumps(report)
+    print(encoded)
     return 0 if report["status"] == "complete" else 2
 
 
