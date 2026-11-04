@@ -85,6 +85,29 @@ Auf dem Entwicklungs-Mac (arm64, macOS 27.2) wurden 0.13.0 und ein isolierter 0.
 
 Kundenstatus **offen**. Die Sitzung sah keine gültige Developer-ID-Application-Identität, kein benanntes Notarisierungsprofil und keinen erreichbaren frischen Test-Mac. Die Kundenprüfung wurde am Offline-Gate beendet.
 
+## Lokale Architektur im MCP-Branch
+
+`VauldyDocumentCore` ist das erste eigenständige Swift-Modul für den Seitenmarkierungsvertrag. `VauldyCore` exportiert denselben Typ weiterhin über den bisherigen Namen. Die App kann dieses Modul später über einen gepinnten Stand beziehen. Aktuell wird nur der MCP-Branch umgebaut.
+
+Der lokale stdio-Server kann einen SQLite/FTS5-Index für exakte Wortfilter von `list_documents` nutzen. Aktiviere ihn für eine lokale Testverbindung über ein zusätzliches Startargument:
+
+```sh
+vauldy-mcp --profile /absoluter/pfad/profile.json --experimental-sqlite-index
+```
+
+Der Pilot verwendet ausschließlich bereits freigegebene Datensätze und hält den FTS-Index im Prozessspeicher. Änderungen an Dokumenten werden transaktional inkrementell eingearbeitet. Kandidaten werden vor der Ausgabe mit dem bisherigen Wortfilter abgeglichen. Beim Ändern oder Widerrufen des Profils wird der Index verworfen. Falls FTS5 fehlt oder sein Budget erreicht, läuft die bisherige vollständige Filterung weiter. Rangsuche, Teilwortmodus und der Datenschutzpfad behalten ihre bisherigen Verträge. Vauldy legt dafür keine Indexdatei an. Die JSON-Snapshots und deren Backup bleiben führend.
+
+Der Pilot erhöht das Limit für den gehaltenen JSON-Snapshot von 64 auf 96 MiB und begrenzt die SQLite-Datenbank auf 32 MiB. Das sind zwei getrennte Effekte auf Latenz und Speicher. Mit Entfernen des Startarguments gilt wieder der bisherige Pfad. Ein zusätzlicher Server oder Netzwerkport ist dafür nicht erforderlich.
+
+```sh
+python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp \
+  dist/mcp/sqlite-index-pilot.json --documents 1000 20000 --experimental-sqlite-index
+```
+
+Im synthetischen Release-Lauf vom 4. November 2026 war das kompakte Inventar für 20.000 Dokumente nach 200 Seiten vollständig. Es dauerte 98,22 s bei 478 MiB Peak-RSS. Die warme Rangsuche lag bei P95 5,01 s. Der frühere JSON-Lauf brauchte 160,24 s für das Inventar, bei 536 MiB Peak-RSS und P95 6,80 s. Das ist ein Vergleich mit einer historischen Baseline. Das ungefilterte Inventar und die Rangsuche nutzen FTS5 nicht. Diese Werte belegen daher keinen isolierten FTS5-Gewinn.
+
+Vor einer dauerhaften Indexdatei folgen Vergleichsmessungen auf Referenz-Macs mit vielfältigen Textlängen. Danach sind Indexlebenszyklus, inkrementeller Wiederaufbau, Korrektheit nach Crash und Datenschutz beim Löschen separat zu prüfen. Eine Migration der führenden Bestandsdaten erfordert einen eigenen Backup- und Wiederherstellungsnachweis.
+
 ## Priorisierte Abnahmetickets
 
 | Reihenfolge | Ticket | Abnahme |

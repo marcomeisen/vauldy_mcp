@@ -10,9 +10,11 @@ enum VauldyMCPMain {
         if arguments.count == 2 && arguments[1] == "--version" {
             print("vauldy-mcp \(MCPBuild.version)"); return
         }
-        guard arguments.count == 3, arguments[1] == "--profile", arguments[2].hasPrefix("/") else {
+        let experimentalSQLiteIndex = arguments.count == 4 && arguments[3] == "--experimental-sqlite-index"
+        guard (arguments.count == 3 || experimentalSQLiteIndex),
+              arguments[1] == "--profile", arguments[2].hasPrefix("/") else {
             diagnostic(.configuration)
-            FileHandle.standardError.write(Data("Aufruf: vauldy-mcp --profile /absoluter/pfad/profile.json\n".utf8))
+            FileHandle.standardError.write(Data("Aufruf: vauldy-mcp --profile /absoluter/pfad/profile.json [--experimental-sqlite-index]\n".utf8))
             Foundation.exit(64)
         }
         let profileURL = URL(fileURLWithPath: arguments[2])
@@ -29,7 +31,10 @@ enum VauldyMCPMain {
             FileHandle.standardError.write(Data("Vauldy MCP: statusUnavailable\n".utf8))
         }
         defer { presence?.stop() }
-        let server = await VauldyMCPServerFactory.make(profile: profile, audit: audit) { presence?.recordRequest() }
+        let server = await VauldyMCPServerFactory.make(profile: profile, audit: audit,
+                                                       experimentalSQLiteIndex: experimentalSQLiteIndex) {
+            presence?.recordRequest()
+        }
         do {
             // Keep the SDK's default no-op logger: SDK metadata can contain untrusted request text.
             try await server.start(transport: InitializationCompatibilityTransport())

@@ -20,7 +20,10 @@ parser.add_argument('binary', type=lambda value: Path(value).resolve())
 parser.add_argument('destination', type=Path)
 parser.add_argument('--documents', type=int, nargs='+', choices=[1000, 2000, 5000, 10000, 20000],
                     default=[1000, 2000])
+parser.add_argument('--experimental-sqlite-index', action='store_true',
+                    help='Enable the process-local SQLite FTS5 pilot for exact list filters')
 args = parser.parse_args()
+server_options = ('--experimental-sqlite-index',) if args.experimental_sqlite_index else ()
 binary, destination, results = args.binary, args.destination, []
 
 
@@ -45,6 +48,7 @@ def write_report(long_evidence=None):
     report = dict(
         binaryVersion=subprocess.check_output([str(binary), '--version'], text=True).strip(),
         platform=platform.platform(), syntheticOnly=True, requestedSizes=args.documents,
+        experimentalSQLiteIndex=args.experimental_sqlite_index,
         cases=results, longEvidence=long_evidence,
     )
     destination.write_text(json.dumps(report, indent=2) + '\n')
@@ -69,7 +73,7 @@ for count in args.documents:
     output.write(json.dumps(dict(record=record,previousHash=previous,hash=digest),sort_keys=True,separators=(',',':'))+'\n');previous=digest
   os.chmod(logs/'audit.jsonl',0o600)
   before=hashlib.sha256(vault.read_bytes()).hexdigest();before_profile=profile.read_bytes();timings={}
-  start=time.perf_counter();client=Client(binary,profile);timings['initializeMS']=(time.perf_counter()-start)*1000
+  start=time.perf_counter();client=Client(binary,profile,server_options=server_options);timings['initializeMS']=(time.perf_counter()-start)*1000
   def call(label,name,**arguments):
    start=time.perf_counter();result=payload(client.call(name,**arguments));timings[label]=(time.perf_counter()-start)*1000;return result
   try:
@@ -83,6 +87,8 @@ for count in args.documents:
     warm_search.append(timings['searchWarmMS'])
    timings['searchWarmP95MS']=sorted(warm_search)[math.ceil(0.95*len(warm_search))-1]
    page=call('filteredListFirstMS','list_documents',query='Themenmarker',pageSize=25);assert page['totalCount']==count//50
+   warm_first = call('filteredListWarmFirstMS', 'list_documents', query='Themenmarker', pageSize=25)
+   assert warm_first['totalCount'] == page['totalCount']
    list_calls=1;hits=list(page['items']);t=time.perf_counter()
    while page.get('nextCursor'):
     page=payload(client.call('list_documents',cursor=page['nextCursor']));hits.extend(page['items']);list_calls+=1
@@ -142,7 +148,7 @@ if supports_passages:
   profile.write_text(json.dumps(dict(version=1,revision=str(uuid.uuid4()),connectionID=str(uuid.uuid4()),connectionName='Synthetic long evidence',enabled=True,vaultPath=str(vault),allowedDocumentIDs=[identity],acknowledgedCloudDisclosure=True)))
   before=vault.read_bytes(),profile.read_bytes()
   def open_client():
-   client=Client(binary,profile)
+   client=Client(binary,profile,server_options=server_options)
    hit=payload(client.call('list_documents',includeExcerpts=False))['items'][0]
    return client,hit['document']
   client,handle=open_client()

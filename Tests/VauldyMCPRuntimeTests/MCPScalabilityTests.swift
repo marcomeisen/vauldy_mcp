@@ -59,6 +59,52 @@ struct MCPScalabilityTests {
         }
     }
 
+    @Test func sqliteTokenPilotPreservesTextMatchingAndRevocation() async throws {
+        try await withScalingFixture { root in
+            var document = documentWithText("Käse Rechnung")
+            let nearMatch = documentWithText("Käse Rechnungen")
+            let fixture = try ScalingFixture(root: root, documents: [document, nearMatch], experimentalSQLiteIndex: true)
+            let runtime = fixture.runtime
+            try fixture.save([document, nearMatch, documentWithText("Käse Rechnung ohne Freigabe")])
+
+            let result = try await runtime.list(query: "KÄSE rechnung", includeExcerpts: false)
+            #expect(result.totalCount == 1)
+            #expect(await runtime.hasSQLiteTokenIndex)
+            let handle = try #require(result.items.first?.document)
+            #expect(try await runtime.list(query: "rechn", matchMode: .anyTermSubstring).totalCount == 2)
+
+            document.ocrText = "Brot Quittung"
+            try fixture.save([document, nearMatch], atomic: true)
+            #expect(try await runtime.list(query: "Käse Rechnung").totalCount == 0)
+            #expect(try await runtime.list(query: "Brot Quittung").totalCount == 1)
+            await #expect(throws: MCPAccessError.stale) { try await runtime.read(document: handle) }
+            try fixture.pause()
+            await #expect(throws: MCPAccessError.notAuthorized) { try await runtime.list(query: "Brot") }
+            #expect(await !runtime.hasSQLiteTokenIndex)
+        }
+    }
+
+    @Test func sqliteTokenUpdateCommitsOnlyChangedRowsAndRollsBackFailedReconcile() throws {
+        let index = try SQLiteVaultTokenIndex()
+        var first = documentWithText("Brot")
+        let second = documentWithText("Käse")
+        let initial = [(first, Data([1])), (second, Data([2]))]
+        #expect(try index.reconcile(initial) == 2)
+        #expect(try index.reconcile(initial) == 0)
+        #expect(try index.matchingIDs(for: "Käse") == [second.id])
+
+        first.ocrText = String(repeating: "a", count: 4097)
+        #expect(throws: (any Error).self) { try index.reconcile([(first, Data([3]))]) }
+        #expect(try index.matchingIDs(for: "Brot") == [first.id])
+        #expect(try index.matchingIDs(for: "Käse") == [second.id])
+
+        first.ocrText = "Milch"
+        #expect(try index.reconcile([(first, Data([4]))]) == 2)
+        #expect(try index.matchingIDs(for: "Brot").isEmpty)
+        #expect(try index.matchingIDs(for: "Käse").isEmpty)
+        #expect(try index.matchingIDs(for: "Milch") == [first.id])
+    }
+
     @Test func sameSizeEditWithRestoredModificationDateInvalidatesSnapshotCursorAndHandle() async throws {
         try await withScalingFixture { root in
             var document = VaultDocument(title: "Beleg", sourceName: "source", ocrText: "Fahrrad")
@@ -116,10 +162,11 @@ private struct ScalingFixture {
     let profileURL: URL
     let profile: MCPAccessProfile
     let runtime: ReadOnlyMCPRuntime
-    init(root: URL, documents: [VaultDocument]) throws {
+    init(root: URL, documents: [VaultDocument], experimentalSQLiteIndex: Bool = false) throws {
         self.documents = documents; vault = root.appendingPathComponent("documents.json"); profileURL = root.appendingPathComponent("profile.json")
         profile = MCPAccessProfile(vaultPath: vault.path, allowedDocumentIDs: Set(documents.map(\.id)), enabled: true, acknowledgedCloudDisclosure: true)
-        runtime = ReadOnlyMCPRuntime(profiles: FileMCPProfileSource(url: profileURL))
+        runtime = ReadOnlyMCPRuntime(profiles: FileMCPProfileSource(url: profileURL),
+                                     experimentalSQLiteIndex: experimentalSQLiteIndex)
         try FileMCPProfileSource(url: profileURL).save(profile); try save(documents)
     }
     func encoded(_ documents: [VaultDocument]) throws -> Data { let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601; return try encoder.encode(documents) }

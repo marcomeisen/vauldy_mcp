@@ -11,17 +11,13 @@ public enum VaultDocumentFilter {
     public static func matches(_ document: VaultDocument, query: String?, mode: VaultTextMatchMode = .allTokens) -> Bool {
         guard let query else { return true }
         let requested = Set(tokens(query))
-        let fields = [document.title, document.sourceName, document.ocrText, document.summary, document.category]
-            + document.entities.flatMap { [$0.value, $0.normalizedValue ?? ""] }
-            + document.contentFacts.flatMap { [$0.label, $0.value, $0.normalizedValue ?? ""] }
-            + document.deadlines.flatMap { [$0.title, $0.sourceSnippet] }
         if mode == .anyTermSubstring {
-            return fields.contains { field in
+            return searchableFields(document).contains { field in
                 let text = normalized(field)
                 return requested.contains { text.contains($0) }
             }
         }
-        let available = Set(fields.flatMap(tokens))
+        let available = wholeTokens(in: document)
         return !requested.isEmpty && requested.isSubset(of: available)
     }
 
@@ -29,7 +25,18 @@ public enum VaultDocumentFilter {
         let values = tokens(query)
         return !values.isEmpty && values.count <= 24 && values.allSatisfy { $0.count >= 3 }
     }
-    private static func tokens(_ value: String) -> [String] {
+    static func wholeTokens(in document: VaultDocument) -> Set<String> {
+        Set(searchableFields(document).flatMap(tokens))
+    }
+
+    private static func searchableFields(_ document: VaultDocument) -> [String] {
+        [document.title, document.sourceName, document.ocrText, document.summary, document.category]
+            + document.entities.flatMap { [$0.value, $0.normalizedValue ?? ""] }
+            + document.contentFacts.flatMap { [$0.label, $0.value, $0.normalizedValue ?? ""] }
+            + document.deadlines.flatMap { [$0.title, $0.sourceSnippet] }
+    }
+
+    static func tokens(_ value: String) -> [String] {
         normalized(value).components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
     }
     private static func normalized(_ value: String) -> String {

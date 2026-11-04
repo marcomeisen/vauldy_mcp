@@ -28,6 +28,8 @@ struct MCPFileVersion: Equatable, Sendable {
 
 /// One bounded in-memory source, no extra archive or persistent raw index. Owned by the runtime actor.
 struct MCPVaultSnapshotCache {
+    private let maximumBytes: Int64
+    init(maximumBytes: Int64 = 64 * 1_024 * 1_024) { self.maximumBytes = maximumBytes }
     private var path: String?
     private var version: MCPFileVersion?
     private var documents: [VaultDocument]?
@@ -43,7 +45,7 @@ struct MCPVaultSnapshotCache {
             let value = try FileVaultSnapshotSource(fileURL: url).loadDocuments()
             decodeCount += 1
             guard try MCPFileVersion(url) == before else { throw MCPAccessError.stale }
-            if before.size <= 64 * 1_024 * 1_024 { self.path = path; version = before; documents = value }
+            if before.size <= maximumBytes { self.path = path; version = before; documents = value }
             return (value, before)
         } catch { clear(); throw error }
     }

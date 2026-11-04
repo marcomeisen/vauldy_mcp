@@ -12,8 +12,8 @@ import time
 import uuid
 
 class Client:
-    def __init__(self, binary, profile, stderr=subprocess.DEVNULL, capabilities=None, *, protocol_version="2025-11-25"):
-        self.process = subprocess.Popen([str(binary), '--profile', str(profile)], stdin=subprocess.PIPE,
+    def __init__(self, binary, profile, stderr=subprocess.DEVNULL, capabilities=None, *, protocol_version="2025-11-25", server_options=()):
+        self.process = subprocess.Popen([str(binary), '--profile', str(profile), *server_options], stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, stderr=stderr)
         self.counter = 0
         self.pending = b''

@@ -46,18 +46,24 @@ public actor ReadOnlyMCPRuntime {
     private var protectedOrder: [UUID] = []
     private var leases: [String: Lease] = [:]
     private let loadVault: (@Sendable (String) throws -> [VaultDocument])?
-    private var fileSnapshots = MCPVaultSnapshotCache()
+    private var fileSnapshots: MCPVaultSnapshotCache
+    private let experimentalSQLiteIndex: Bool
+    private var tokenIndex: SQLiteVaultTokenIndex?
+    private var tokenIndexGeneration: Data?
     private var sourceVersion: MCPFileVersion?
     private var authorizedCache: [VaultDocument]?
     private var fingerprintCache: [UUID: Data] = [:]
     private var generationCache: Data?
     private var accessEpoch: UInt64 = 0
     var snapshotDecodeCount: Int { fileSnapshots.decodeCount }
+    var hasSQLiteTokenIndex: Bool { tokenIndex != nil }
 
-    public init(profiles: any MCPProfileSource,
+    public init(profiles: any MCPProfileSource, experimentalSQLiteIndex: Bool = false,
                 loadVault: (@Sendable (String) throws -> [VaultDocument])? = nil) {
         self.profiles = profiles
         self.loadVault = loadVault
+        self.experimentalSQLiteIndex = experimentalSQLiteIndex
+        fileSnapshots = MCPVaultSnapshotCache(maximumBytes: (experimentalSQLiteIndex ? 96 : 64) * 1_024 * 1_024)
     }
 
     public func status() throws -> MCPVaultStatus {
@@ -133,8 +139,7 @@ public actor ReadOnlyMCPRuntime {
             key = UUID().uuidString.lowercased(); offset = 0
             session = ListSession(fingerprint: generation, query: query, pageSize: pageSize ?? 20,
                                   matchMode: mode, includeExcerpts: excerpts,
-                                  ids: documents.filter { VaultDocumentFilter.matches($0, query: query, mode: mode) }
-                                    .map(\.id).sorted { $0.uuidString < $1.uuidString })
+                                  ids: try listIDs(documents, query: query, mode: mode, generation: generation))
             if listOrder.count >= 4 { listSessions.removeValue(forKey: listOrder.removeFirst()) }
             listOrder.append(key)
         }
@@ -292,6 +297,41 @@ public actor ReadOnlyMCPRuntime {
                                  warnings: MCPAnalysisWarnings.safe(analysis?.issues ?? [document.baseAnalysis == nil ? "NOT_ANALYZED" : "STALE_ANALYSIS"]))
     }
 
+    private func listIDs(_ documents: [VaultDocument], query: String?, mode: VaultTextMatchMode,
+                         generation: Data) throws -> [UUID] {
+        let candidates: Set<UUID>?
+        if experimentalSQLiteIndex, let query, mode == .allTokens {
+            candidates = try indexedCandidates(documents, query: query, generation: generation)
+        } else {
+            candidates = nil
+        }
+        // Intersect with the active grant and apply the same text contract before any result is produced.
+        return documents.filter {
+            (candidates?.contains($0.id) ?? true) && VaultDocumentFilter.matches($0, query: query, mode: mode)
+        }.map(\.id).sorted { $0.uuidString < $1.uuidString }
+    }
+
+    private func indexedCandidates(_ documents: [VaultDocument], query: String,
+                                   generation: Data) throws -> Set<UUID>? {
+        do {
+            if tokenIndexGeneration != generation {
+                let index = try tokenIndex ?? SQLiteVaultTokenIndex()
+                let records = try documents.map { (document: $0, fingerprint: try fingerprint($0)) }
+                try index.reconcile(records)
+                tokenIndex = index
+                tokenIndexGeneration = generation
+            }
+            return try tokenIndex?.matchingIDs(for: query)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            // FTS5 availability and resource limits must not affect contract completeness.
+            tokenIndex = nil
+            tokenIndexGeneration = generation
+            return nil
+        }
+    }
+
     private func authorizedDocuments(_ profile: MCPAccessProfile) throws -> [VaultDocument] {
         try profile.validate()
         guard profile.enabled, profile.acknowledgedCloudDisclosure else {
@@ -371,6 +411,7 @@ public actor ReadOnlyMCPRuntime {
         leases.removeAll(); handlesByID.removeAll(); protectedDocuments.removeAll(); protectedOrder.removeAll()
         listSessions.removeAll(); listOrder.removeAll(); passageSessions.removeAll(); passageOrder.removeAll(); currentProfile = nil
         fileSnapshots.clear(); sourceVersion = nil; authorizedCache = nil
+        tokenIndex = nil; tokenIndexGeneration = nil
         fingerprintCache.removeAll(); generationCache = nil
     }
 

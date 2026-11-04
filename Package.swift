@@ -8,6 +8,7 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
+        .library(name: "VauldyDocumentCore", targets: ["VauldyDocumentCore"]),
         .library(name: "VauldyCore", targets: ["VauldyCore"]),
         .library(name: "VauldyDocumentIntelligence", targets: ["VauldyDocumentIntelligence"]),
         .library(name: "VauldyPrivacy", targets: ["VauldyPrivacy"]),
@@ -28,7 +29,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "VauldyDocumentIntelligence"),
-        .target(name: "VauldyCore", dependencies: ["VauldyDocumentIntelligence"]),
+        .target(name: "VauldyDocumentCore"),
+        .target(name: "VauldyCore", dependencies: ["VauldyDocumentCore", "VauldyDocumentIntelligence"]),
         .target(name: "VauldyDemoDocuments"),
         .executableTarget(name: "VauldyLocalCLI", dependencies: ["VauldyCore", "VauldyDemoDocuments", "VauldyMCPRuntime", "VauldyOAuth"]),
         .target(name: "VauldyPrivacy"),
