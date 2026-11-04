@@ -36,6 +36,7 @@ final class SetupModel: ObservableObject {
     @Published var managementError = ""
     @Published var documentSearch = ""
     @Published var documentFilter: SetupDocumentFilter = .all
+    @Published var showingInstallation = false
     @Published var showingSetup = false
     @Published var setupStep = 0
     @Published var resumeCandidate: MCPAccessProfile?
@@ -96,7 +97,9 @@ final class SetupModel: ObservableObject {
             registration = MCPClientRegistration(home: root.appendingPathComponent("test-client-home"))
         } else { installation = MCPInstallation(); registration = MCPClientRegistration() }
         refreshConnections()
-        showStatusMenu()
+        if FileManager.default.isExecutableFile(atPath: installation.binaryURL.path) {
+            showStatusMenu()
+        }
         startMonitoring()
     }
     func refreshConnections() {

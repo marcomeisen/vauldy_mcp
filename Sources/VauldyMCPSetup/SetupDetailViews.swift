@@ -183,7 +183,12 @@ struct SetupSettingsView: View {
                     LabeledContent("Installierter Server", value: model.software?.installedVersion ?? "Noch nicht verifiziert")
                     Text(model.software?.state == .current ? "Die installierten Programme entsprechen dieser App." : "Installiere die Programme aus dieser App. Freigaben, pausierte Zugriffe und Client-Einträge bleiben erhalten.").foregroundStyle(.secondary)
                     HStack {
-                        Button(model.software?.state == .notInstalled ? "Serverprogramme installieren" : "Software aktualisieren", action: model.updateSoftware).disabled(model.busy || model.software?.state == .current)
+                        if model.software?.state == .notInstalled {
+                            Button("Installation starten") { model.showingInstallation = true }.disabled(model.busy)
+                        } else {
+                            Button("Software aktualisieren", action: model.updateSoftware)
+                                .disabled(model.busy || model.software?.state != .updateAvailable)
+                        }
                         if model.software?.canRollback == true {
                             Button("Vorversion wiederherstellen") { confirmRollback = true }
                                 .disabled(model.busy)

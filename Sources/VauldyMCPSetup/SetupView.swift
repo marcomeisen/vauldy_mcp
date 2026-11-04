@@ -40,6 +40,7 @@ struct SetupView: View {
         .toolbar { ToolbarItem(placement: .primaryAction) { Button("Verbindung hinzufügen", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
         .frame(minWidth: 860, minHeight: 640)
         .sheet(item: $model.inventoryWorkflow) { workflow in InventoryWorkflowView(model: workflow) }
+        .sheet(isPresented: $model.showingInstallation) { SoftwareInstallationWizard(model: model) }
         .sheet(isPresented: $model.showingSetup) { SetupWizardView(model: model) }
         .sheet(item: $model.diagnosisProfile) { profile in SetupDiagnosisView(model: model, profileID: profile.connectionID) }
         .alert("Dokumentzugriff fortsetzen?", isPresented: Binding(get: { model.resumeCandidate != nil }, set: { if !$0 { model.resumeCandidate = nil } })) {
@@ -94,11 +95,24 @@ struct SetupView: View {
     @ViewBuilder private var overview: some View {
         if model.connections.isEmpty && model.managementError.isEmpty {
             VStack(alignment: .leading, spacing: 18) {
-                Image(systemName: "bubble.left.and.bubble.right").font(.system(size: 36)).foregroundStyle(.blue)
-                Text("Verbinde deinen ersten Chatbot.").font(.title2.weight(.semibold))
-                Text("Wähle einen Chatbot und die Dokumente, die er lesen darf. Vauldy bereitet die Inhalte lokal auf diesem Mac vor.").foregroundStyle(.secondary)
-                Button("Chatbot verbinden", action: model.newConnection).buttonStyle(.borderedProminent)
-                Text("Du kannst zuerst ein unverfängliches Beispieldokument ausprobieren.").font(.callout).foregroundStyle(.secondary)
+                if model.software?.state == .notInstalled {
+                    Image(systemName: "arrow.down.circle").font(.system(size: 36)).foregroundStyle(.blue)
+                    Text("Vauldy auf diesem Mac einrichten").font(.title2.weight(.semibold))
+                    Text("Installiere zuerst die lokale Software. Danach kannst du einen Chatbot verbinden oder Vauldy ohne Verbindung nutzen.").foregroundStyle(.secondary)
+                    Button("Installation starten") { model.showingInstallation = true }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(model.busy)
+                        .accessibilityIdentifier("software-installation-open")
+                } else if model.software == nil {
+                    ProgressView("Installationsstatus wird geprüft …").controlSize(.small)
+                } else {
+                    softwareBanner
+                    Image(systemName: "bubble.left.and.bubble.right").font(.system(size: 36)).foregroundStyle(.blue)
+                    Text("Verbinde deinen ersten Chatbot.").font(.title2.weight(.semibold))
+                    Text("Wähle einen Chatbot und die Dokumente, die er lesen darf. Vauldy bereitet die Inhalte lokal auf diesem Mac vor.").foregroundStyle(.secondary)
+                    Button("Chatbot verbinden", action: model.newConnection).buttonStyle(.borderedProminent)
+                    Text("Du kannst zuerst ein unverfängliches Beispieldokument ausprobieren.").font(.callout).foregroundStyle(.secondary)
+                }
             }.padding(.vertical, 22)
         } else {
             softwareBanner

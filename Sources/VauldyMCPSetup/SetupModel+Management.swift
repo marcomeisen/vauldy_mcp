@@ -243,6 +243,24 @@ extension SetupModel {
         }
     }
 
+    func installLocalSoftware() async throws -> String {
+        guard !busy else { throw MCPAccessError.unavailable }
+        busy = true
+        defer { busy = false }
+        let version = try await activateBundledSoftware()
+        software = nil
+        await refreshManagement()
+        return version
+    }
+
+    private func activateBundledSoftware(rollback: Bool = false) async throws -> String {
+        let installer = installation, setup = Bundle.main.bundleURL
+        return try await Task.detached {
+            if rollback { return try installer.rollbackSoftware(allowAdHoc: true) }
+            return try installer.updateSoftware(fromApp: setup, allowAdHoc: true)
+        }.value
+    }
+
     func updateSoftware() { changeSoftware(rollback: false) }
 
     func rollbackSoftware() { changeSoftware(rollback: true) }
@@ -252,13 +270,9 @@ extension SetupModel {
         busy = true
         message = rollback ? "Vorversion wird geprüft …" : "Software wird lokal aktualisiert …"
         failure = false
-        let installer = installation, setup = Bundle.main.bundleURL
         Task {
             do {
-                let version = try await Task.detached {
-                    if rollback { return try installer.rollbackSoftware(allowAdHoc: true) }
-                    return try installer.updateSoftware(fromApp: setup, allowAdHoc: true)
-                }.value
+                let version = try await activateBundledSoftware(rollback: rollback)
                 await restartStatusMenu()
                 software = nil
                 message = rollback ? "Vorversion \(version) ist aktiv." : "Software \(version) ist aktiv."

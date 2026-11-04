@@ -14,13 +14,13 @@ MCP-Software aktualisieren. [Ablauf und Grenzen](inventory-workflow.md).
 
 ## Einrichtung ohne bestehende App
 
-1. `Vauldy-MCP-macOS.zip` entpacken und `Vauldy MCP Einrichtung.app` nach Programme verschieben.
-2. In **Übersicht** „Chatbot verbinden“ wählen. Der Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**.
-3. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Einzelimporte werden lokal kopiert, Ordnerimporte referenzieren die Originaldateien; Import allein erteilt keine Freigabe.
-4. Die lesbaren Dokumente einzeln auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
-5. „Freigeben und einrichten“ installiert die lokalen Programme und speichert die Dokumentauswahl. Für normale Chats anschließend unter „ChatGPT & Claude“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird stattdessen ein passender Client-Eintrag angelegt. Bestehende fremde Einträge werden nicht ersetzt; Konflikte bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
-6. Der echte lokale Protokolltest prüft Handshake und Freigabestatus, ohne Dokumentinhalte zu lesen. Er bestätigt noch keine Nutzung aus dem Chatbot. Aktiviere Vauldy im Chatbot und starte dessen Verbindung bei Bedarf neu.
-7. Weitere Chatbots über „Verbindung hinzufügen“ separat einrichten. Unter **Verbindungen** lassen sich Zugriffe einzeln pausieren oder nach Bestätigung fortsetzen.
+1. `Vauldy-MCP-macOS.zip` entpacken, `Vauldy MCP Einrichtung.app` nach Programme verschieben und öffnen.
+2. In **Übersicht** oder **Einstellungen** „Installation starten“ wählen. Der Installationsassistent zeigt Version und Speicherort. Mit **„Installieren“** werden die lokalen Programme geprüft, eingerichtet und mit einem synthetischen Profil gestartet. Der Abschluss zeigt die installierte Version und das Ergebnis des lokalen Starttests. Für diesen Schritt brauchst du kein Konto.
+3. Optional in **Übersicht** „Chatbot verbinden“ wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**.
+4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Einzelimporte werden lokal kopiert, Ordnerimporte referenzieren die Originaldateien. Import allein erteilt keine Freigabe.
+5. Lesbare Dokumente auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
+6. „Freigeben und einrichten“ speichert die Dokumentauswahl. Für normale Chats anschließend unter „ChatGPT & Claude“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird ein passender Client-Eintrag angelegt. Konflikte mit bestehenden Einträgen bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
+7. Der lokale Protokolltest prüft Handshake und Freigabestatus. Aktiviere Vauldy anschließend im Chatbot und starte dessen Verbindung bei Bedarf neu. Unter **Verbindungen** kannst du einzelne Zugriffe pausieren oder nach Bestätigung fortsetzen.
 
 **Dokumente** bietet Suche, Auswahl-/Qualitätsfilter und eine lokale Vorschau importierter Originale.
 **„Alle auswählen“** markiert den gesamten geladenen lesbaren Bestand, auch außerhalb der aktuellen Suche oder des Filters; beide werden dabei zurückgesetzt. Dokumente ohne durchsuchbaren Text bleiben unausgewählt. „Auswahl aufheben“ leert den Entwurf. Die Freigabebestätigung und „Auswahl speichern“ stehen oberhalb der Liste. Erst das Speichern ändert die Freigabe; neue Importe werden weiterhin nicht automatisch ausgewählt.
