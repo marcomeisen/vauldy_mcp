@@ -156,6 +156,12 @@ Alle 39 gezielten Swift-Tests, der Release-Build, beide stdio-Tests und der Verg
 - **Agensi · NO-GO für Freigabe.** Der Test im Zielclient mit Inventar, Quellenbelegen und Widerruf steht aus.
 - **Kunden-Mac · NO-GO für Freigabe.** Die zwei Developer-ID-signierten und notarisierten Pakete und deren Offline-Abnahme stehen aus.
 
+## Agenten im Chatbetrieb
+
+Der erste Pilot ist ein Recherche-Agent auf dem Mac des Kunden. Der Chatbot nimmt den Auftrag entgegen. Der Agent koordiniert Suche, Pagination, vorhandene Metadaten und Fundstellen über den lokalen MCP. Der MCP prüft jede Abfrage gegen die aktuelle Freigabe und begrenzt die ausgegebenen Inhalte. Vor der Rückgabe einer zusammengeführten Antwort muss der Agent die Quellenfreigabe erneut über den MCP prüfen. Bei Widerruf oder Abbruch verwirft er die noch ausstehende Antwort.
+
+Der Pilot nutzt die bestehende Werkzeugschnittstelle. Ein synthetischer Versicherungsbestand dient als Vergleich zwischen direktem Chatablauf und Agent. Geprüft werden Trefferabdeckung, korrekte Feldbelege, Laufzeit, Werkzeugaufrufe, Abbruch und Offline-Ausführung. Ein gezieltes Extraktionswerkzeug folgt bei einer belegten Lücke in den verfügbaren Metadaten oder Fundstellen. Der Chat bleibt die Oberfläche für den gesamten Ablauf.
+
 ## Priorisierte Abnahmetickets
 
 | Reihenfolge | Ticket | Abnahme |
