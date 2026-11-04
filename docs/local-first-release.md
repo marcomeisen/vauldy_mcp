@@ -58,6 +58,33 @@ swift test --disable-sandbox --disable-automatic-resolution --jobs 4 \
 ```
 
 
+## Abnahme von zwei Kundenpaketen
+
+Auf dem autorisierten Build-Mac werden zwei saubere Stände des MCP-Branches mit aufsteigender Produktversion und gleicher Software-Epoche gebaut. Der ältere Stand muss den verwalteten Updater bereits enthalten. Für beide Builds dieselbe gültige Developer-ID-Application-Identität und das bereits eingerichtete Notarisierungsprofil nutzen. Identität und Profilname aus der lokalen Release-Umgebung beziehen. Die eigentlichen Apple-Zugangsdaten bleiben dort.
+
+```sh
+# Aus dem Checkout von Version A und separat aus dem Checkout von Version B.
+python3 scripts/mcp/package.py --output "$release_output" \
+  --identity "$VAULDY_DEVELOPER_ID" --notary-profile "$VAULDY_NOTARY_PROFILE"
+```
+
+Verwende je Version eine neue Ausgabeablage. Halte Git-Commit, Apple-Notarisierungsergebnis und finale SHA-256 getrennt fest. Prüfe Apples Notarisierungslog und validiere das Ticket an der aus dem finalen ZIP entpackten App auf dem Build-Mac. Übertrage die beiden finalen ZIPs, ihre unabhängig bestätigten Prüfsummen und die beiden Python-Testdateien `customer_release_smoke_test.py` und `smoke_test.py` auf einen sauberen Test-Mac oder eine frisch zurückgesetzte macOS-VM mit unterstützter Architektur und vorbereitetem Python 3. Trenne dort WLAN, Ethernet und gegebenenfalls den virtuellen Netzwerkadapter, bevor eine der Apps entpackt oder gestartet wird. [Apple-Verfahren für die Offline-Distribution](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution)
+
+```sh
+python3 scripts/mcp/customer_release_smoke_test.py "$zip_a" "$zip_b" \
+  --sha-a "$sha_a" --sha-b "$sha_b" --team-id "$apple_team_id" --fresh-test-mac
+```
+
+`--fresh-test-mac` bestätigt die frische Umgebung durch den Betreiber. Der Test verweigert die Kundenabnahme bei unklarem oder aktivem Netzwerkstatus und prüft den Status mehrmals. Er verifiziert die ZIP-Integrität, vollständige Signatur, Team-ID und die macOS-Distributionsprüfung beider entpackter Apps. A wird mit seiner CLI installiert. Die installierte CLI aktiviert B und stellt anschließend A wieder her. Jede Generation beantwortet über den stabilen stdio-Pfad Discovery, Status, ein vollständiges Inventar über zwei Seiten und beide Quellenlesungen. Jede Softwareoperation muss die synthetischen Original-, Archiv-, Profil-, Audit-, Geräte- und Clientdateien bytegleich erhalten. Die abschließende JSON-Zeile ist der maschinenlesbare Nachweis. Den tatsächlichen ersten GUI-Start aus dem vorgesehenen Vertriebskanal auf dem Test-Mac separat beobachten.
+
+`--local-ad-hoc` führt denselben Versionswechsel mit intern signierten Test-ZIPs aus und kennzeichnet das Ergebnis als lokale Probe. Dieser Modus ersetzt weder Apples Vertrauensprüfung noch die Abnahme auf einem frischen Offline-Mac.
+
+### Prüflauf vom 4. November 2026
+
+Auf dem Entwicklungs-Mac (arm64, macOS 27.2) wurden 0.13.0 und ein isolierter 0.13.1-Testbuild separat kompiliert und Ad-hoc-signiert. Die lokale Probe 0.13.0 → 0.13.1 → 0.13.0 bestand mit realer stdio-Discovery, vollständiger Pagination, Quellenlesung und unveränderten Fixtures. Falsche Prüfsumme, gleiche Versionen, fehlender verifizierbarer Offline-Status und eine Ad-hoc-Signatur im Developer-ID-Prüfschritt wurden abgewiesen. Der Testbuild 0.13.1 ist eine Fixture. Die Versionsquelle des Branches bleibt bei 0.13.0.
+
+Kundenstatus **offen**. Die Sitzung sah keine gültige Developer-ID-Application-Identität, kein benanntes Notarisierungsprofil und keinen erreichbaren frischen Test-Mac. Die Kundenprüfung wurde am Offline-Gate beendet.
+
 ## Priorisierte Abnahmetickets
 
 | Reihenfolge | Ticket | Abnahme |
