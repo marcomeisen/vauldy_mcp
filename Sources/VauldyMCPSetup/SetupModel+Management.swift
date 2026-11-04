@@ -243,19 +243,28 @@ extension SetupModel {
         }
     }
 
-    func updateSoftware() {
-        guard !busy, let binary = bundledBinary else { return }
+    func updateSoftware() { changeSoftware(rollback: false) }
+
+    func rollbackSoftware() { changeSoftware(rollback: true) }
+
+    private func changeSoftware(rollback: Bool) {
+        guard !busy, bundledBinary != nil else { return }
         busy = true
-        message = "Software wird lokal aktualisiert …"; failure = false
-        let installer = installation, local = localExecutable, status = bundledStatusApp, setup = Bundle.main.bundleURL
+        message = rollback ? "Vorversion wird geprüft …" : "Software wird lokal aktualisiert …"
+        failure = false
+        let installer = installation, setup = Bundle.main.bundleURL
         Task {
             do {
-                try await Task.detached { try installer.updateSoftware(binary: binary, localCLI: local, statusApp: status, setupApp: setup) }.value
+                let version = try await Task.detached {
+                    if rollback { return try installer.rollbackSoftware(allowAdHoc: true) }
+                    return try installer.updateSoftware(fromApp: setup, allowAdHoc: true)
+                }.value
                 await restartStatusMenu()
                 software = nil
-                message = "Software aktualisiert. Freigaben und pausierte Zugriffe bleiben erhalten. Bereits laufende Vauldy-Verbindungen bitte im Chatbot neu starten."
+                message = rollback ? "Vorversion \(version) ist aktiv." : "Software \(version) ist aktiv."
+                message += " Bitte starte bereits laufende Vauldy-Verbindungen im Chatbot neu."
                 failure = false
-            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Das Softwareupdate ist fehlgeschlagen. Bitte erneut versuchen.") }
+            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Software konnte nicht gewechselt werden.") }
             busy = false
             await refreshManagement()
         }

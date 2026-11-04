@@ -22,18 +22,48 @@ Abnahme auf einem frischen Mac jeder unterstützten Architektur mit geplanter Mi
 
 ## Update und Rückweg
 
-Der vorhandene explizite Softwareupdatepfad hält eine Prozesssperre und ersetzt einzelne Dateien atomar. Er prüft mitgelieferte CLI, Status-App und Setup-Bundle-Kennung vor dem ersten Programmaustausch. Die bestehende Konfiguration und der Vault gehören nicht zum Update. Das Bundlemanifest ist Build-Evidenz. Es ist noch kein signierter Updatefeed und kein Laufzeit-Kompatibilitätsnachweis.
+Update aus einer vertrauenswürdigen Setup-App öffnen oder per CLI auslösen. Die CLI darf aus der bereits installierten Generation oder aus einem vertrauenswürdigen Paket kommen. Für interne Ad-hoc-Artefakte ist in der CLI zusätzlich `--allow-ad-hoc` erforderlich. Ein Developer-ID-Updater akzeptiert weiterhin ausschließlich Developer ID Application desselben Apple-Teams. Die lokale Prüfung verwendet die von Apple definierte Anforderung für Developer ID Application. [Apple TN3127](https://developer.apple.com/documentation/technotes/tn3127-inside-code-signing-requirements)
 
-Vor einem freigegebenen Update das vorherige verifizierte Release aufbewahren. Je Release die Matrix für Profilformat, Storeformat, Worker-IPC und MCP-Discovery festhalten. Der aktuelle Stand akzeptiert Profilformat 1, der eigenständige Store verwendet Marker 2, der lokale Worker meldet IPC 2. Produktversion und MCP-Protokollversion sind davon unabhängig. Die App und der eigenständige Store haben unterschiedliche Eigentümer und dürfen sich keinen Writer teilen.
+```sh
+"/pfad/zu/vauldy-local" update-software --root "/pfad/zum/Installationsroot" \
+  --from-app "/pfad/zu/Vauldy MCP Einrichtung.app"
+"/pfad/zu/vauldy-local" rollback-software --root "/pfad/zum/Installationsroot"
+```
 
-Software-Rückkehr vorerst nur nach einem erfolgreich geprobten Rückweg mit derselben Formatmatrix. Lokale Client-/Workerprozesse für die isolierte Probe kontrolliert beenden. Vorheriges vollständiges Release über dessen eigene vertrauenswürdige CLI in den synthetischen Installationsroot einspielen, die vier Werkzeuge und den Start neu prüfen und Archiv, Profil, Originale und Clientdateien byteweise vergleichen. Bei inkompatiblen oder unbekannten Formaten bleibt der Stand gesperrt, bis ein freigegebener kompatibler Reparaturpfad vorliegt. Keine Archiv-/Profilkopie als Bestandteil eines Software-Rollbacks zurückspielen.
+Der Updater kopiert das vollständige Bundle in eine private Ablage und prüft dort verschachtelte Signaturen, Herausgeber, Produktversion und Kompatibilitäts-Epoche. Vor und nach dem Wechsel startet er den lokalen Server mit einem leeren synthetischen Profil und prüft Protokoll, Version, vier Tools und Status. Ein fehlgeschlagener Start nach dem Wechsel tauscht das vorherige Verzeichnis zurück. Die Verzeichnisse liegen auf demselben Volume. Der atomare Austausch hält `bin/vauldy-mcp` und die übrigen Clientpfade stabil. Ein Wiederholungsaufruf desselben gültigen Pakets behält den Rückweg. Die aktuelle Setup-App des verwalteten Satzes liegt innerhalb von `bin/`. Verwende nach dem Wechsel diesen Pfad oder das neu gestartete Statusmenü. Der bisherige Setup-Pfad gehört zu älteren Installationen. Nach erfolgreichem Wechsel bereits laufende MCP-Verbindungen neu starten.
+
+Der Rückweg verwendet genau eine vorherige geprüfte Generation mit gleicher Epoche. Er prüft Signatur, Komponenten-Integrität und stdio-Start erneut. Ein Altbestand ohne Generationsnachweis bleibt bis zum ersten erfolgreichen Austausch als Wiederherstellungsstand für einen fehlgeschlagenen Start verfügbar. Die manuelle Rückkehr beginnt nach zwei erfolgreichen verwalteten Installationen. Direkte Downgrades werden abgewiesen. Bei unbekannten Einträgen im Softwareordner bricht die Aktivierung ab. Der bekannte optionale Tunnel-Helfer wird bytegleich mitgeführt. Hat er sich zwischen den Generationen geändert, wird die Rückkehr gesperrt.
+
+Die Epoche in `MCPBuild.swift` und im signierten Release-Manifest umfasst Profil-, Store-, Audit- und Anmeldedatenformate sowie Worker- und Relay-IPC. Sie muss sich ändern, sobald die Abwärtskompatibilität eines solchen Vertrags entfällt. Ein Epochenwechsel erfordert eine gesonderte Upgrade- und Migrationsentscheidung. Der Updater hat keinen Zugriffspfad zu Nutzerprofilen, Archiven, Originalen, OAuth-Geräten, Schlüsselbund oder Client-Konfiguration. Der optionale Relay-Agent wird beim Test weder gestartet noch mit Zugangsdaten versorgt.
+
+Die lokale Regression prüft Wiederholung, beschädigte Signatur, fremde Epoche, direkten Downgrade, Startfehler nach Aktivierung, SIGKILL vor und nach Aktivierung, parallele Aufrufe und echte Rückkehr samt stdio-Lesung. Eine absichtliche Prozessunterbrechung ersetzt keine Stromausfallprobe. Die Developer-ID-Kette und der Kunden-Mac bleiben separate Release-Gates.
+
+### Lokaler Nachweis
+
+Die Wire-Regression verwendet zwei getrennt Ad-hoc-signierte Generationen mit derselben Produktversion, verschiedenen Signaturen und verschiedenen Serverbytes. Sie bestätigt auch, dass eine manipulierte Vorversion und ein zwischenzeitlich geänderter Tunnel-Helfer den Rückweg blockieren. Profil, Snapshot, synthetisches Original, Audit, Geräte-Datei und Host-Konfiguration werden byteweise verglichen.
+
+```sh
+testdir=$(mktemp -d /tmp/vauldy-update-final.XXXXXX)
+export CLANG_MODULE_CACHE_PATH="$testdir" SWIFTPM_MODULECACHE_OVERRIDE="$testdir"
+swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none
+python3 scripts/mcp/package.py --skip-build --output dist/mcp/safe-update
+app='dist/mcp/safe-update/Vauldy MCP Einrichtung.app'
+resources="$app/Contents/Resources"
+python3 scripts/mcp/software_update_smoke_test.py "$app"
+python3 scripts/mcp/management_smoke_test.py "$resources"
+python3 scripts/mcp/smoke_test.py "$resources/vauldy-mcp"
+python3 scripts/mcp/export_relay_tools.py "$resources/vauldy-mcp" --check
+swift test --disable-sandbox --disable-automatic-resolution --jobs 4 \
+  --filter 'MCPManagementTests|MCPInstallationTests|MCPScalabilityTests|MCPPassageTests'
+```
+
 
 ## Priorisierte Abnahmetickets
 
 | Reihenfolge | Ticket | Abnahme |
 | --- | --- | --- |
 | 1 | P0 · Vertrauenswürdiger Release und CI | Paketzusammenbau, Versions- und Architekturprüfung, Regression und Schema-Parität auf sauberem macOS-Runner. Team-ID, Gatekeeper und Ticket auf frischem Kunden-Mac belegen. Signierung und Notarisierung erst mit autorisierter Release-Umgebung ausführen. |
-| 2 | P0 · Vollständiges Softwareupdate und Rückweg | Signierten Herausgeber, Hashes und Kompatibilität vor Aktivierung prüfen. Alle Softwarebestandteile gemeinsam aktivieren, Probe vor und nach Umschalten, Rückkehr bei Fehler. Falsche Signatur, falsche Version, Schreibfehler, Stromausfall und parallele Updates mit Fixtures prüfen. Daten, Profile, Audit, OAuth, Keychain und Host-Konfiguration bytegleich halten. |
+| 2 | P0 · Kundenabnahme von Update und Rückweg | Zwei kompatible Developer-ID-Releases auf frischem Kunden-Mac prüfen. Rückkehr mit bewusstem Neustart, unabhängige Offline-Probe und kontrollierten Stromausfalltest ausführen. |
 | 3 | P0 · Agensi-Pilot | In einem Zielclient das Anweisungspaket und bestehenden lokalen Vauldy MCP getrennt laden. Synthetische Recherche über mehrere Inventar- und Leseseiten, Quellen und Widerruf prüfen. Bei Agensi den vorhandenen lokalen MCP unter „Needs access“ ausweisen. [Agensi-Format und Angebotsgrenzen](https://www.agensi.io/docs/what-you-can-sell) |
 | 4 | P1 · Gemeinsamer Core | Je gemeinsamem Pfad Eigentümer und API bestimmen. Ein erstes identisches Modell oder einen kleinen Quellenvertrag extrahieren. App- und MCP-Adapter gegen Altfixtures prüfen, anschließend nur belegte Duplikate entfernen. Veröffentlichung gemeinsamer Quellen separat entscheiden. |
 | 5 | P1 · 20.000 Dokumente | Größenreihe auf Referenz-Mac mit Freigaben, realistischen Dokumentlängen, Speicherspitzen, Wiederholungen, Suchbelegen und Worker-/Importlast ausführen. Zielwerte vor Abnahme festlegen. Vergleichbarer read-only Indexversuch nur bei belegtem Engpass. Alte JSON-Daten weiter lesen, Backup/Restore und Abbruch testen. |

@@ -19,7 +19,11 @@ public struct MCPInstallation: Sendable {
         guard !FileManager.default.fileExists(atPath: removedConnectionsURL.appendingPathComponent(profile.connectionID.uuidString).path) else { throw MCPAccessError.stale }
         try profile.validate()
         guard binary.isFileURL, FileManager.default.isExecutableFile(atPath: binary.path) else { throw MCPAccessError.configuration }
-        try updateSoftware(binary: binary, localCLI: localCLI, statusApp: statusApp, setupApp: setupApp)
+        if let setupApp {
+            try updateSoftware(fromApp: setupApp, allowAdHoc: true)
+        } else {
+            try updateSoftware(binary: binary, localCLI: localCLI, statusApp: statusApp)
+        }
         try privateDirectory(connectionsURL)
         let path = profileURL(profile.connectionID)
         try privateDirectory(path.deletingLastPathComponent())

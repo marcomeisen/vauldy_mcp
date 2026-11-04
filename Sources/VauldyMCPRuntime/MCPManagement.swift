@@ -42,8 +42,9 @@ public struct MCPSoftwareStatus: Sendable {
     public var state: MCPSoftwareState
     public var installedVersion: String?
     public var availableVersion: String
-    public init(state: MCPSoftwareState, installedVersion: String?, availableVersion: String = MCPBuild.version) {
-        self.state = state; self.installedVersion = installedVersion; self.availableVersion = availableVersion
+    public var canRollback: Bool
+    public init(state: MCPSoftwareState, installedVersion: String?, availableVersion: String = MCPBuild.version, canRollback: Bool = false) {
+        self.state = state; self.installedVersion = installedVersion; self.availableVersion = availableVersion; self.canRollback = canRollback
     }
 }
 
@@ -60,7 +61,11 @@ struct MCPManagementLock {
 }
 
 extension MCPInstallation {
-    public var setupAppURL: URL { root.appendingPathComponent("Vauldy MCP Einrichtung.app", isDirectory: true) }
+    public var setupAppURL: URL {
+        let managed = softwareDirectory.appendingPathComponent(Self.setupBundleName, isDirectory: true)
+        return FileManager.default.fileExists(atPath: managed.path) ? managed
+            : root.appendingPathComponent(Self.setupBundleName, isDirectory: true)
+    }
 
     @discardableResult
     public func setAccess(_ enabled: Bool, for id: UUID, expectedRevision: UUID? = nil) throws -> MCPAccessProfile {
@@ -133,11 +138,12 @@ extension MCPInstallation {
     }
 
     /// Separate from installation/consent. No profile or client configuration is rewritten.
-    public func updateSoftware(binary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws {
+    func updateSoftware(binary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws {
         guard binary.isFileURL, FileManager.default.isExecutableFile(atPath: binary.path) else { throw MCPAccessError.configuration }
         try prepareSoftwareDirectories()
         let lock = try MCPManagementLock(root.appendingPathComponent("software-update.lock"))
         defer { lock.release() }
+        guard try softwareGeneration() == nil else { throw MCPUpdateError.compatibility }
         if let localCLI {
             guard FileManager.default.isExecutableFile(atPath: localCLI.path) else { throw MCPAccessError.configuration }
         }
@@ -155,10 +161,8 @@ extension MCPInstallation {
 
     public func softwareStatus(availableBinary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws -> MCPSoftwareStatus {
         guard FileManager.default.fileExists(atPath: binaryURL.path) else { return .init(state: .notInstalled, installedVersion: nil) }
-        struct Manifest: Decodable { var version: String; var serverHash: String }
-        let url = root.appendingPathComponent("software.json")
-        let manifest = try? JSONDecoder().decode(Manifest.self, from: readManaged(url, limit: 4_096))
         let hash = try Self.hash(binaryURL)
+        let generation = try softwareGeneration()
         var current = hash == (try Self.hash(availableBinary))
         var pairs: [(URL, URL)] = []
         let http = availableBinary.deletingLastPathComponent().appendingPathComponent("vauldy-mcp-http")
@@ -167,13 +171,32 @@ extension MCPInstallation {
         if FileManager.default.isExecutableFile(atPath: relay.path) { pairs.append((binaryURL.deletingLastPathComponent().appendingPathComponent("vauldy-relay"), relay)) }
         if let localCLI { pairs.append((localCLIURL, localCLI)) }
         if let statusApp { pairs.append((statusAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"), statusApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-status"))) }
-        if let setupApp { pairs.append((setupAppURL.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"), setupApp.appendingPathComponent("Contents/MacOS/vauldy-mcp-setup"))) }
+        if let setupApp {
+            let installed = setupAppURL
+            let executable = "Contents/MacOS/vauldy-mcp-setup"
+            pairs.append((installed.appendingPathComponent(executable), setupApp.appendingPathComponent(executable)))
+            let seal = "Contents/_CodeSignature/CodeResources"
+            let availableSeal = setupApp.appendingPathComponent(seal)
+            if FileManager.default.fileExists(atPath: availableSeal.path) {
+                pairs.append((installed.appendingPathComponent(seal), availableSeal))
+            }
+        }
         for (installed, available) in pairs {
             if !FileManager.default.fileExists(atPath: installed.path) { current = false }
             else if try Self.hash(installed) != Self.hash(available) { current = false }
         }
-        let verifiedVersion = manifest?.serverHash == hash ? manifest?.version : nil
-        return .init(state: current ? .current : .updateAvailable, installedVersion: current ? MCPBuild.version : verifiedVersion)
+        let version = generation?.version ?? (try? recordedSoftwareVersion())
+        return .init(state: current ? .current : .updateAvailable,
+                     installedVersion: version ?? (current ? MCPBuild.version : nil), canRollback: hasSoftwareRollback)
+    }
+
+    func recordedSoftwareVersion() throws -> String? {
+        struct Manifest: Decodable { let version: String; let serverHash: String }
+        let url = root.appendingPathComponent("software.json")
+        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+        let manifest = try JSONDecoder().decode(Manifest.self, from: readManaged(url, limit: 4_096))
+        guard try manifest.serverHash == Self.hash(binaryURL) else { throw MCPUpdateError.compatibility }
+        return manifest.version
     }
 
     public func requestSetup(_ request: MCPSetupRequest) throws {
@@ -195,14 +218,14 @@ extension MCPInstallation {
         return request
     }
 
-    private static func hash(_ url: URL) throws -> String {
+    static func hash(_ url: URL) throws -> String {
         let values = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
         guard values.isRegularFile == true, values.isSymbolicLink != true,
               (values.fileSize ?? Int.max) <= 100 * 1_024 * 1_024 else { throw MCPAccessError.configuration }
         return SHA256.hash(data: try Data(contentsOf: url, options: .mappedIfSafe)).map { String(format: "%02x", $0) }.joined()
     }
 
-    private func readManaged(_ url: URL, limit: Int) throws -> Data {
+    func readManaged(_ url: URL, limit: Int) throws -> Data {
         let values = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
         guard values.isRegularFile == true, values.isSymbolicLink != true,
               (values.fileSize ?? Int.max) <= limit else { throw MCPAccessError.configuration }

@@ -48,17 +48,23 @@ struct VauldyLocalCLI {
             }
             return
         }
-        if args.first == "update-software" {
-            guard args.count == 5, args[1] == "--root", args[2].hasPrefix("/"), args[3] == "--from-app", args[4].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
-            let app = URL(fileURLWithPath: args[4]), resources = app.appendingPathComponent("Contents/Resources")
-            guard let bundle = Bundle(url: app), bundle.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup",
-                  bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String == MCPBuild.version else { throw MCPAccessError.configuration }
-            let installer = MCPInstallation(root: URL(fileURLWithPath: args[2]))
-            try installer.updateSoftware(binary: resources.appendingPathComponent("vauldy-mcp"),
-                                         localCLI: resources.appendingPathComponent("vauldy-local"),
-                                         statusApp: resources.appendingPathComponent("Vauldy MCP Status.app"), setupApp: app)
-            struct Updated: Encodable { let updated = true; let version = MCPBuild.version; let clientRestartRequired = true }
-            try output(Updated())
+        if args.first == "update-software" || args.first == "rollback-software" {
+            let allowAdHoc = args.last == "--allow-ad-hoc"
+            let parameters = allowAdHoc ? Array(args.dropLast()) : args
+            let rollback = parameters.first == "rollback-software"
+            guard parameters.count == (rollback ? 3 : 5), parameters[1] == "--root",
+                  parameters[2].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
+            let installer = MCPInstallation(root: URL(fileURLWithPath: parameters[2]))
+            if rollback {
+                let version = try installer.rollbackSoftware(allowAdHoc: allowAdHoc)
+                struct RolledBack: Encodable { let rolledBack = true; let version: String; let clientRestartRequired = true }
+                try output(RolledBack(version: version))
+            } else {
+                guard parameters[3] == "--from-app", parameters[4].hasPrefix("/") else { throw MCPAccessError.invalidArguments }
+                let version = try installer.updateSoftware(fromApp: URL(fileURLWithPath: parameters[4]), allowAdHoc: allowAdHoc)
+                struct Updated: Encodable { let updated = true; let version: String; let clientRestartRequired = true }
+                try output(Updated(version: version))
+            }
             return
         }
         if args.first == "check-connection" {

@@ -173,6 +173,7 @@ struct SetupFoldersView: View {
 
 struct SetupSettingsView: View {
     @ObservedObject var model: SetupModel
+    @State private var confirmRollback = false
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             GroupBox {
@@ -183,6 +184,13 @@ struct SetupSettingsView: View {
                     Text(model.software?.state == .current ? "Die installierten Programme entsprechen dieser App." : "Installiere die Programme aus dieser App. Freigaben, pausierte Zugriffe und Client-Einträge bleiben erhalten.").foregroundStyle(.secondary)
                     HStack {
                         Button(model.software?.state == .notInstalled ? "Serverprogramme installieren" : "Software aktualisieren", action: model.updateSoftware).disabled(model.busy || model.software?.state == .current)
+                        if model.software?.canRollback == true {
+                            Button("Vorversion wiederherstellen") { confirmRollback = true }
+                                .disabled(model.busy)
+                                .confirmationDialog("Vorherigen Programmsatz aktivieren?", isPresented: $confirmRollback) {
+                                    Button("Vorversion aktivieren", action: model.rollbackSoftware)
+                                }
+                        }
                         Button("Erneut prüfen") { model.software = nil; Task { await model.refreshManagement(checkBindings: true) } }
                     }
                     Text("Bereits laufende Server verwenden ihre bisherige Version bis zum nächsten Start durch den Chatbot.").font(.caption).foregroundStyle(.secondary)

@@ -56,6 +56,7 @@ def main():
             ('audit_smoke_test', [local]),
             ('client_install_smoke_test', [local]),
             ('management_smoke_test', [resources]),
+            ('software_update_smoke_test', [app]),
             ('status_smoke_test', [local, server, resources / 'Vauldy MCP Status.app']),
             ('watch_smoke_test', [local, server]),
             ('setup_startup_smoke_test', [app]),

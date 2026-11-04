@@ -45,7 +45,7 @@ def main():
         client_config = root/'test-client-config.toml'; client_config.write_text('# Foreign client settings\n')
         saved_profile, saved_config = profile.read_bytes(), client_config.read_bytes()
         app = args.resources.resolve().parent.parent
-        updated = json.loads(subprocess.check_output([str(args.resources.resolve()/'vauldy-local'), 'update-software', '--root', str(root), '--from-app', str(app)], timeout=30))
+        updated = json.loads(subprocess.check_output([str(args.resources.resolve()/'vauldy-local'), 'update-software', '--root', str(root), '--from-app', str(app), '--allow-ad-hoc'], timeout=30))
         assert updated == dict(updated=True, version='0.13.0', clientRestartRequired=True)
         assert profile.read_bytes() == saved_profile and vault.read_bytes() == original and client_config.read_bytes() == saved_config
         for name in ['vauldy-mcp', 'vauldy-local', 'vauldy-mcp-http']:
@@ -53,7 +53,7 @@ def main():
         import plistlib
         wrong_app = root/'Wrong Version.app'; (wrong_app/'Contents').mkdir(parents=True)
         (wrong_app/'Contents/Info.plist').write_bytes(plistlib.dumps(dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-setup', CFBundleShortVersionString='0.1.0')))
-        bad = subprocess.run([str(local), 'update-software', '--root', str(root), '--from-app', str(wrong_app)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        bad = subprocess.run([str(local), 'update-software', '--root', str(root), '--from-app', str(wrong_app), '--allow-ad-hoc'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         assert bad.returncode != 0 and profile.read_bytes() == saved_profile and vault.read_bytes() == original
         host = Client(server, profile)
         try:

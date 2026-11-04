@@ -11,7 +11,7 @@ public struct MCPLocalProbeResult: Codable, Sendable {
 
 /// A real, content-free stdio handshake. This is explicitly a local diagnostic, never a host/cloud proof.
 public enum MCPLocalProbe {
-    public static func run(binary: URL, profile: URL, timeout: TimeInterval = 12) throws -> MCPLocalProbeResult {
+    public static func run(binary: URL, profile: URL, timeout: TimeInterval = 12, expectedVersion: String = MCPBuild.version) throws -> MCPLocalProbeResult {
         guard FileManager.default.isExecutableFile(atPath: binary.path) else { throw MCPAccessError.configuration }
         let stage = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-probe-\(UUID())")
         try FileManager.default.createDirectory(at: stage, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
@@ -59,14 +59,15 @@ public enum MCPLocalProbe {
             "protocolVersion": "2025-11-25", "capabilities": [:] as [String: String],
             "clientInfo": ["name": "Vauldy local diagnostic", "version": MCPBuild.version]]])
         let initialized = try response(1)
-        guard let server = initialized["serverInfo"] as? [String: Any], let version = server["version"] as? String,
-              version == MCPBuild.version else { throw MCPAccessError.unavailable }
+        guard initialized["protocolVersion"] as? String == "2025-11-25",
+              let server = initialized["serverInfo"] as? [String: Any], server["name"] as? String == "vauldy",
+              let version = server["version"] as? String, version == expectedVersion else { throw MCPAccessError.unavailable }
         try send(["jsonrpc": "2.0", "method": "notifications/initialized"])
         try send(["jsonrpc": "2.0", "id": 3, "method": "tools/list", "params": [:] as [String: String]])
         let discovery = try response(3)
         guard let tools = discovery["tools"] as? [[String: Any]] else { throw MCPAccessError.unavailable }
         let names = tools.compactMap { $0["name"] as? String }.sorted()
-        guard Set(names) == ["get_vault_status", "list_documents", "search_documents", "read_document"] else { throw MCPAccessError.unavailable }
+        guard tools.count == 4, Set(names) == ["get_vault_status", "list_documents", "search_documents", "read_document"] else { throw MCPAccessError.unavailable }
         try send(["jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": ["name": "get_vault_status", "arguments": [:] as [String: String]]])
         let result = try response(2)
         guard result["isError"] as? Bool != true, let content = result["structuredContent"] as? [String: Any],

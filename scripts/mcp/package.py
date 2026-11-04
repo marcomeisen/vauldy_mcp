@@ -27,12 +27,13 @@ def capture(command, **kwargs):
     return subprocess.check_output(command, text=True, **kwargs).strip()
 
 
-def source_version():
-    source = ROOT / 'Sources/VauldyMCPRuntime/MCPBuild.swift'
-    match = re.search(r'^    public static let version = "([0-9]+\.[0-9]+\.[0-9]+)"$', source.read_text(), re.M)
-    if not match:
-        raise SystemExit('MCPBuild.swift must declare a numeric major.minor.patch product version.')
-    return match[1]
+def release_values():
+    source = (ROOT / 'Sources/VauldyMCPRuntime/MCPBuild.swift').read_text()
+    match = re.search(r'^    public static let version = "([0-9]+\.[0-9]+\.[0-9]+)"$', source, re.M)
+    epoch = re.search(r'^    public static let softwareCompatibilityEpoch = ([1-9][0-9]*)$', source, re.M)
+    if not match or not epoch:
+        raise SystemExit('MCPBuild.swift must declare a numeric product version and compatibility epoch.')
+    return match[1], int(epoch[1])
 
 
 def verify_product_versions(binary_dir, version, env):
@@ -79,7 +80,7 @@ def main():
     parser.add_argument('--notary-profile', help='Existing notarytool keychain profile, used only when explicitly supplied')
     parser.add_argument('--skip-build', action='store_true', help='Package an already-built release (developer use)')
     args = parser.parse_args()
-    version = source_version()
+    version, compatibility_epoch = release_values()
     signed = args.identity != '-'
     if args.notary_profile and not signed:
         parser.error('Notarization requires a Developer ID Application identity.')
@@ -130,6 +131,7 @@ def main():
         for guide in ['base-analysis.md', 'mcp-mvp.md', 'provenance.md', 'mcp-oauth.md', 'mcp-chatgpt-sso.md']:
             shutil.copy2(ROOT / 'docs' / guide, resources / guide)
         release_info = dict(manifestVersion=1, productVersion=version, sourceCommit=commit,
+                            softwareCompatibilityEpoch=compatibility_epoch,
                             packageLockSHA256=hashlib.sha256((ROOT / 'Package.resolved').read_bytes()).hexdigest(),
                             swift=capture(['swift', '--version']), xcode=capture(['xcodebuild', '-version']),
                             architectures=architectures, minimumMacOS=MINIMUM_MACOS,
