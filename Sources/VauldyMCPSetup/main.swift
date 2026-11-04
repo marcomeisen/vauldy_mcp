@@ -1,8 +1,20 @@
 import AppKit
 import SwiftUI
+import Foundation
 import VauldyMCPRuntime
 
 @main
+@MainActor
+enum VauldyMCPSetupMain {
+    static func main() {
+        if CommandLine.arguments.dropFirst().elementsEqual(["--version"]) {
+            print("vauldy-mcp-setup \(MCPBuild.version)")
+            return
+        }
+        VauldyMCPSetupApp.main()
+    }
+}
+
 @MainActor
 struct VauldyMCPSetupApp: App {
     @NSApplicationDelegateAdaptor(SetupDelegate.self) var delegate

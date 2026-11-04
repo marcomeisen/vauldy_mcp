@@ -5,6 +5,10 @@ import VauldyMCPRuntime
 @main enum VauldyMCPStatusMain {
     @MainActor static func main() {
         let args = CommandLine.arguments
+        if args.dropFirst().elementsEqual(["--version"]) {
+            print("vauldy-mcp-status \(MCPBuild.version)")
+            return
+        }
         guard args.count == 3, args[1] == "--root", args[2].hasPrefix("/") else { return }
         let root = URL(fileURLWithPath: args[2])
         guard let presence = try? MCPProcessPresence(root: root, menu: true) else { return }

@@ -9,6 +9,10 @@ import VauldyMCPRuntime
 @main enum RelayMain {
     static func main() async {
         let args = CommandLine.arguments
+        if args.dropFirst().elementsEqual(["--version"]) {
+            print("vauldy-relay \(MCPBuild.version)")
+            return
+        }
         guard args.count == 4, ["--provision", "--run", "--manage"].contains(args[1]), args[2] == "--root", args[3].hasPrefix("/") else { exit(64) }
         let installation = MCPInstallation(root: URL(fileURLWithPath: args[3]))
         let store = RelayCredentialStore(installation: installation)

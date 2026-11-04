@@ -20,10 +20,19 @@ def main():
         try: tools=client.request('tools/list',{})['tools']
         finally: client.close()
     path=ROOT/'cloud/chatgpt-relay/worker/index.js'; source=path.read_text()
-    updated=re.sub(r'const TOOLS = /\* VAULDY_TOOLS \*/ .*?;\n',lambda _: 'const TOOLS = /* VAULDY_TOOLS */ '+json.dumps(tools,ensure_ascii=False,separators=(',',':'))+';\n',source,count=1)
-    assert source!=updated or args.check, 'Export marker missing or discovery already exported'
-    if args.check: assert source==updated,'Relay tool schemas differ from installed local server'
-    else: path.write_text(updated)
+    updated, markers = re.subn(
+        r'^const TOOLS = /\* VAULDY_TOOLS \*/ .*?;\n',
+        lambda _: 'const TOOLS = /* VAULDY_TOOLS */ '
+        + json.dumps(tools, ensure_ascii=False, separators=(',', ':')) + ';\n',
+        source, flags=re.M,
+    )
+    if markers != 1:
+        raise SystemExit('Expected exactly one relay discovery export marker.')
+    if args.check:
+        if source != updated:
+            raise SystemExit('Relay tool schemas differ from local MCP.')
+    else:
+        path.write_text(updated)
     print('PASS: exact four-tool relay discovery matches local MCP')
 
 if __name__=='__main__':main()

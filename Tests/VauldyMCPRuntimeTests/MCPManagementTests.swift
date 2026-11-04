@@ -39,6 +39,29 @@ struct MCPManagementTests {
         #expect(try f.installer.profiles().first?.desktopClient == .claude)
     }
 
+    @Test func invalidUpdateCompanionLeavesInstalledServerAndManifestUntouched() throws {
+        let f = try Fixture()
+        let installed = f.installer.binaryURL
+        let manifest = f.installer.root.appendingPathComponent("software.json")
+        let originalServer = try Data(contentsOf: installed)
+        let originalManifest = try Data(contentsOf: manifest)
+        let originalProfile = try Data(contentsOf: f.path)
+        try Data("#!/bin/sh\nexit 1\n".utf8).write(to: f.binary)
+
+        #expect(throws: MCPAccessError.configuration) {
+            try f.installer.updateSoftware(binary: f.binary, localCLI: f.root.appendingPathComponent("missing-cli"))
+        }
+        #expect(throws: MCPAccessError.configuration) {
+            try f.installer.updateSoftware(binary: f.binary, statusApp: f.root.appendingPathComponent("invalid-status.app"))
+        }
+        #expect(throws: MCPAccessError.configuration) {
+            try f.installer.updateSoftware(binary: f.binary, setupApp: f.root.appendingPathComponent("invalid-setup.app"))
+        }
+        #expect(try Data(contentsOf: installed) == originalServer)
+        #expect(try Data(contentsOf: manifest) == originalManifest)
+        #expect(try Data(contentsOf: f.path) == originalProfile)
+    }
+
     @Test func selectionPreservesPauseAndExpansionRequiresFreshConsent() throws {
         let f = try Fixture(), ids = f.profile.allowedDocumentIDs.union([UUID()])
         #expect(throws: MCPAccessError.notAuthorized) { try f.installer.updateSelection(ids, for: f.profile.connectionID, expectedRevision: f.profile.revision) }

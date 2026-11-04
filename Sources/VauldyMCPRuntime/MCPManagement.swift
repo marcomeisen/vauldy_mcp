@@ -2,8 +2,6 @@ import CryptoKit
 import Darwin
 import Foundation
 
-public enum MCPBuild { public static let version = "0.13.0" }
-
 public enum MCPSetupSection: String, CaseIterable, Codable, Sendable {
     case overview, connections, documents, folders, oauth, settings
     public var title: String {
@@ -140,11 +138,16 @@ extension MCPInstallation {
         try prepareSoftwareDirectories()
         let lock = try MCPManagementLock(root.appendingPathComponent("software-update.lock"))
         defer { lock.release() }
-        try copySoftware(binary: binary, localCLI: localCLI, statusApp: statusApp)
-        if let setupApp, setupApp.standardizedFileURL != setupAppURL.standardizedFileURL {
-            guard Bundle(url: setupApp)?.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup" else { throw MCPAccessError.configuration }
-            try replaceBundle(setupApp, at: setupAppURL)
+        if let localCLI {
+            guard FileManager.default.isExecutableFile(atPath: localCLI.path) else { throw MCPAccessError.configuration }
         }
+        if let statusApp { try validateStatusApp(statusApp) }
+        let replacementSetup = setupApp.flatMap { $0.standardizedFileURL == setupAppURL.standardizedFileURL ? nil : $0 }
+        if let replacementSetup {
+            guard Bundle(url: replacementSetup)?.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup" else { throw MCPAccessError.configuration }
+        }
+        try copySoftware(binary: binary, localCLI: localCLI, statusApp: statusApp)
+        if let replacementSetup { try replaceBundle(replacementSetup, at: setupAppURL) }
         struct Manifest: Codable { let version: String; let serverHash: String }
         let manifest = Manifest(version: MCPBuild.version, serverHash: try Self.hash(binaryURL))
         try writeManaged(JSONEncoder().encode(manifest), to: root.appendingPathComponent("software.json"))

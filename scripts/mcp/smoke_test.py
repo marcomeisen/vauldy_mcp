@@ -12,15 +12,16 @@ import time
 import uuid
 
 class Client:
-    def __init__(self, binary, profile, stderr=subprocess.DEVNULL, capabilities=None):
+    def __init__(self, binary, profile, stderr=subprocess.DEVNULL, capabilities=None, *, protocol_version="2025-11-25"):
         self.process = subprocess.Popen([str(binary), '--profile', str(profile)], stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, stderr=stderr)
         self.counter = 0
         self.pending = b''
         self.selector = selectors.DefaultSelector()
         self.selector.register(self.process.stdout, selectors.EVENT_READ)
-        self.request('initialize', {'protocolVersion': '2025-11-25', 'capabilities': capabilities or {},
-                                   'clientInfo': {'name': 'independent-wire-test', 'version': '1'}})
+        self.initialization = self.request(
+            'initialize', {'protocolVersion': protocol_version, 'capabilities': capabilities or {},
+                           'clientInfo': {'name': 'independent-wire-test', 'version': '1'}})
         self.send({'jsonrpc': '2.0', 'method': 'notifications/initialized'})
     def send(self, obj):
         self.process.stdin.write(json.dumps(obj).encode() + b'\n'); self.process.stdin.flush()
@@ -92,7 +93,10 @@ def main():
         vault = root / 'documents.json'; profile_file = root / 'profile.json'
         document = dict(id=doc_id, title='Rechnung Erika Musterfrau', sourceName='secret-file.pdf', status='indexed',
                         pageCount=1, ocrText='--- Seite 1 ---\nFahrradwartung 49,99 EUR.\nName: Erika Musterfrau\nE-Mail: erika@example.com\nIBAN: DE89370400440532013000\n12345 Testort Dr: eine lange vertrauliche Zusatzangabe.\nName: Dr: eine lange vertrauliche Zusatzangabe.')
-        vault.write_text(json.dumps([document]))
+        second_id = str(uuid.uuid4())
+        second = dict(id=second_id, title='Wartungsprotokoll', status='indexed', pageCount=1,
+                      ocrText='--- Seite 1 ---\nSynthetisches Wartungsprotokoll.')
+        vault.write_text(json.dumps([document, second]))
         before = hashlib.sha256(vault.read_bytes()).hexdigest()
         profile = dict(version=1, revision=str(uuid.uuid4()), connectionID=str(uuid.uuid4()), connectionName='Wire test',
                        enabled=False, vaultPath=str(vault), allowedDocumentIDs=[doc_id], acknowledgedCloudDisclosure=True)
@@ -104,9 +108,19 @@ def main():
             'experimental': {'example/extension': {'supported': True},
                              'example/array': [1, False], 'example/string': '1'}})
         try:
+            assert compatibility_client.initialization['protocolVersion'] == '2025-11-25'
+            assert compatibility_client.initialization['serverInfo']['name'] == 'vauldy'
             assert len(compatibility_client.request('tools/list', {})['tools']) == 4
             assert payload(compatibility_client.call('get_vault_status'))['grantedDocumentCount'] == 0
         finally: compatibility_client.close()
+        for version in ['2024-11-05', '2025-03-26', '2025-06-18']:
+            legacy_client = Client(args.binary.resolve(), profile_file, protocol_version=version)
+            try:
+                assert legacy_client.initialization['protocolVersion'] == version
+                assert len(legacy_client.request('tools/list', {})['tools']) == 4
+                assert payload(legacy_client.call('get_vault_status'))['grantedDocumentCount'] == 0
+            finally:
+                legacy_client.close()
         client = Client(args.binary.resolve(), profile_file)
         try:
             tools = client.request('tools/list', {})['tools']
@@ -144,12 +158,31 @@ def main():
                 assert secret not in json.dumps(passages)
             assert client.call('read_document', document=handle, view='metadata', query='Fahrrad')['isError']
             assert result['containsEntireAvailableText']
+
+            # Exhaust the list using only continuation cursors, then revoke a live one.
+            profile.update(revision=str(uuid.uuid4()), allowedDocumentIDs=[doc_id, second_id])
+            profile_file.write_text(json.dumps(profile))
+            first_page = payload(client.call('list_documents', pageSize=1), schemas['list_documents'])
+            cursor = first_page['nextCursor']
+            assert first_page['totalCount'] == 2 and first_page['hasMore'] and not first_page['retrievalComplete']
+            final_page = payload(client.call('list_documents', cursor=cursor), schemas['list_documents'])
+            assert final_page['retrievalComplete'] and not final_page['hasMore'] and not final_page.get('nextCursor')
+            assert len(first_page['items']) == len(final_page['items']) == 1
+            assert first_page['items'][0]['document'] != final_page['items'][0]['document']
+            handle = final_page['items'][0]['document']
+            cursor = payload(client.call('list_documents', pageSize=1), schemas['list_documents'])['nextCursor']
             assert client.call('search_documents', query='Fahrradwartung', vaultPath='/arbitrary')['isError']
             assert client.call('read_document', document=doc_id)['isError']
             assert client.call('delete_document', document=handle)['isError']
             profile['enabled'] = False; profile['revision'] = str(uuid.uuid4()); profile_file.write_text(json.dumps(profile))
             assert client.call('read_document', document=handle)['isError']
+            assert client.call('list_documents', cursor=cursor)['isError']
             assert payload(client.call('get_vault_status'))['grantedDocumentCount'] == 0
+            profile.update(enabled=True, revision=str(uuid.uuid4()))
+            profile_file.write_text(json.dumps(profile))
+            assert client.call('list_documents', cursor=cursor)['isError']
+            assert client.call('read_document', document=handle)['isError']
+            assert payload(client.call('list_documents'), schemas['list_documents'])['totalCount'] == 2
             assert hashlib.sha256(vault.read_bytes()).hexdigest() == before
             print('PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive.')
         finally: client.close()

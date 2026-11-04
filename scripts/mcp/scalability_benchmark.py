@@ -1,11 +1,56 @@
 #!/usr/bin/env python3
-"""Synthetic 1k/2k real-MCP scaling benchmark; no user archives or installations."""
-import sys,json,time,uuid,tempfile,hashlib,os,statistics,subprocess
+"""Synthetic real-MCP scaling benchmark; no user archives or installations."""
+import argparse
+import hashlib
+import json
+import math
+import os
 from pathlib import Path
-sys.dont_write_bytecode=True;sys.path.insert(0,str(Path(__file__).resolve().parent))
-from smoke_test import Client,payload
-binary=Path(sys.argv[1]);destination=Path(sys.argv[2]);results=[]
-for count in [1000,2000]:
+import platform
+import statistics
+import subprocess
+import tempfile
+import time
+import uuid
+
+from smoke_test import Client, payload
+
+parser = argparse.ArgumentParser()
+parser.add_argument('binary', type=lambda value: Path(value).resolve())
+parser.add_argument('destination', type=Path)
+parser.add_argument('--documents', type=int, nargs='+', choices=[1000, 2000, 5000, 10000, 20000],
+                    default=[1000, 2000])
+args = parser.parse_args()
+binary, destination, results = args.binary, args.destination, []
+
+
+def peak_resident_bytes(client):
+    # Darwin wait4 gives this exact child process's high-water RSS in bytes.
+    # Let it exit normally on EOF and leave forced cleanup to Client.close.
+    process = client.process
+    process.stdin.close()
+    deadline = time.monotonic() + 3
+    while time.monotonic() < deadline:
+        pid, status, usage = os.wait4(process.pid, os.WNOHANG)
+        if pid:
+            process.returncode = os.waitstatus_to_exitcode(status)
+            assert process.returncode == 0
+            return usage.ru_maxrss
+        time.sleep(0.02)
+    return None
+
+
+def write_report(long_evidence=None):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    report = dict(
+        binaryVersion=subprocess.check_output([str(binary), '--version'], text=True).strip(),
+        platform=platform.platform(), syntheticOnly=True, requestedSizes=args.documents,
+        cases=results, longEvidence=long_evidence,
+    )
+    destination.write_text(json.dumps(report, indent=2) + '\n')
+
+
+for count in args.documents:
  with tempfile.TemporaryDirectory(prefix='vauldy-architecture-scale-') as temp:
   root=Path(temp);vault=root/'documents.json';profile=root/'profile.json';records=[]
   for index in range(count):
@@ -30,7 +75,13 @@ for count in [1000,2000]:
   try:
    status=call('statusColdMS','get_vault_status');assert status['grantedDocumentCount']==count
    search=call('searchColdMS','search_documents',query='Krankenversicherung',limit=5)
-   call('searchWarmMS','search_documents',query='Krankenversicherung',limit=5)
+   assert search['totalCount']==count//50 and len(search['hits'])==5
+   assert all('Krankenversicherung' in hit['excerpt'] for hit in search['hits'])
+   warm_search=[]
+   for _ in range(20):
+    call('searchWarmMS','search_documents',query='Krankenversicherung',limit=5)
+    warm_search.append(timings['searchWarmMS'])
+   timings['searchWarmP95MS']=sorted(warm_search)[math.ceil(0.95*len(warm_search))-1]
    page=call('filteredListFirstMS','list_documents',query='Themenmarker',pageSize=25);assert page['totalCount']==count//50
    list_calls=1;hits=list(page['items']);t=time.perf_counter()
    while page.get('nextCursor'):
@@ -49,16 +100,33 @@ for count in [1000,2000]:
    compact_calls=None;topic_count=None
    if 'includeExcerpts' in schema:
     topic=call('topicCompactMS','list_documents',query='kranken polic',matchMode='any-term-substring',includeExcerpts=False,pageSize=100)
-    topic_count=topic['totalCount'];assert topic_count==count//50 and topic['retrievalComplete']
-    assert all(not x['excerpt'] for x in topic['items'])
+    topic_count = topic['totalCount']
+    assert topic_count == count // 50
+    topic_items=list(topic['items'])
+    while topic.get('nextCursor'):
+     topic=payload(client.call('list_documents',cursor=topic['nextCursor']))
+     topic_items.extend(topic['items'])
+    assert len({item['document'] for item in topic_items})==topic_count and topic['retrievalComplete']
+    assert all(not x['excerpt'] for x in topic_items)
     start=time.perf_counter();compact=payload(client.call('list_documents',pageSize=100,includeExcerpts=False));seen={x['document'] for x in compact['items']};compact_calls=1
     while compact.get('nextCursor'):
      compact=payload(client.call('list_documents',cursor=compact['nextCursor']));seen.update(x['document'] for x in compact['items']);compact_calls+=1
     timings['completeCompactInventoryMS']=(time.perf_counter()-start)*1000
     assert len(seen)==count and compact['retrievalComplete'] and compact_calls==count//100
-    assert timings['completeCompactInventoryMS'] < 15_000 and timings['topicCompactMS'] < 3_000, 'Synthetic scale budget exceeded'
-   result=dict(documents=count,pagesPerDocument=4,snapshotBytes=vault.stat().st_size,initialAuditEntries=1000,filteredDocuments=len(hits),listCalls=list_calls,compactListCalls=compact_calls,topicCandidates=topic_count,timingsMS={k:round(v,2) for k,v in timings.items()},archiveUnchanged=True,profileUnchanged=True)
-   results.append(result);print(json.dumps(result),flush=True)
+    if count <= 2000:
+     assert timings['completeCompactInventoryMS'] < 15_000 and timings['topicCompactMS'] < 3_000, 'Synthetic scale budget exceeded'
+   assert hashlib.sha256(vault.read_bytes()).hexdigest()==before and profile.read_bytes()==before_profile
+   result = dict(
+       documents=count, pagesPerDocument=4, snapshotBytes=vault.stat().st_size,
+       initialAuditEntries=1000, filteredDocuments=len(hits), listCalls=list_calls,
+       compactListCalls=compact_calls, topicCandidates=topic_count,
+       timingsMS={name: round(duration, 2) for name, duration in timings.items()},
+       warmSearchSamples=len(warm_search), peakServerRSSBytes=peak_resident_bytes(client),
+       archiveUnchanged=True, profileUnchanged=True,
+   )
+   results.append(result)
+   write_report()
+   print(json.dumps(result), flush=True)
   finally:client.close()
 long_evidence=None
 if supports_passages:
@@ -94,4 +162,4 @@ if supports_passages:
    long_evidence=dict(pages=100,fullTextCalls=calls,targetedCalls=1,fullTextColdMS=round(full_ms,2),targetedColdMS=round(target_ms,2),independentColdMCPProcesses=True,verifiedSourcePages=[42,87],archiveAndProfileUnchanged=True)
    print(json.dumps({'longEvidence':long_evidence}),flush=True)
   finally:client.close()
-destination.parent.mkdir(parents=True,exist_ok=True);destination.write_text(json.dumps(dict(binaryVersion=subprocess.check_output([str(binary),'--version'],text=True).strip(),syntheticOnly=True,cases=results,longEvidence=long_evidence),indent=2))
+write_report(long_evidence)

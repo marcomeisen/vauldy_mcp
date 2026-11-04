@@ -44,7 +44,6 @@ public struct MCPInstallation: Sendable {
             try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: binaryURL.path)
         }
         if let localCLI {
-            guard FileManager.default.isExecutableFile(atPath: localCLI.path) else { throw MCPAccessError.configuration }
             if localCLI.standardizedFileURL != localCLIURL.standardizedFileURL {
                 try Data(contentsOf: localCLI).write(to: localCLIURL, options: [.atomic])
                 try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: localCLIURL.path)
@@ -63,10 +62,10 @@ public struct MCPInstallation: Sendable {
                 try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: destination.path)
             }
         }
-        if let statusApp { try installStatusApp(statusApp) }
+        if let statusApp { try replaceBundle(statusApp, at: statusAppURL) }
     }
 
-    private func installStatusApp(_ source: URL) throws {
+    func validateStatusApp(_ source: URL) throws {
         guard let bundle = Bundle(url: source), bundle.bundleIdentifier == "com.marcomeisen.vauldy.mcp-status",
               bundle.object(forInfoDictionaryKey: "CFBundleExecutable") as? String == "vauldy-mcp-status",
               FileManager.default.isExecutableFile(atPath: source.appendingPathComponent("Contents/MacOS/vauldy-mcp-status").path),
@@ -78,7 +77,6 @@ public struct MCPInstallation: Sendable {
             count += 1; bytes += values.fileSize ?? 0
             guard values.isSymbolicLink != true, count <= 64, bytes <= 100 * 1_024 * 1_024 else { throw MCPAccessError.configuration }
         }
-        try replaceBundle(source, at: statusAppURL)
     }
 
     func replaceBundle(_ source: URL, at destination: URL) throws {
