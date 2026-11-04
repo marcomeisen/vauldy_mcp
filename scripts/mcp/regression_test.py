@@ -51,6 +51,7 @@ def main():
         run('relay-tool-parity', [sys.executable, scripts / 'export_relay_tools.py', server, '--check'])
         for name, arguments in [
             ('smoke_test', [server]),
+            ('index_recovery_smoke_test', [server]),
             ('base_analysis_wire_test', [local, server, originals, '--include-raster']),
             ('import_smoke_test', [local, server]),
             ('audit_smoke_test', [local]),

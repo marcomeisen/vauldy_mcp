@@ -170,7 +170,11 @@ def main():
             assert len(first_page['items']) == len(final_page['items']) == 1
             assert first_page['items'][0]['document'] != final_page['items'][0]['document']
             handle = final_page['items'][0]['document']
-            cursor = payload(client.call('list_documents', pageSize=1), schemas['list_documents'])['nextCursor']
+            compact = payload(client.call('list_documents', pageSize=1, includeExcerpts=False), schemas['list_documents'])
+            cursor = compact['nextCursor']
+            compact_end = payload(client.call('list_documents', cursor=cursor), schemas['list_documents'])
+            assert compact_end['retrievalComplete'] and compact_end['items'][0]['document'] == handle
+            assert compact['items'][0]['excerpt'] == compact_end['items'][0]['excerpt'] == ''
             assert client.call('search_documents', query='Fahrradwartung', vaultPath='/arbitrary')['isError']
             assert client.call('read_document', document=doc_id)['isError']
             assert client.call('delete_document', document=handle)['isError']
@@ -184,6 +188,7 @@ def main():
             assert client.call('read_document', document=handle)['isError']
             assert payload(client.call('list_documents'), schemas['list_documents'])['totalCount'] == 2
             assert hashlib.sha256(vault.read_bytes()).hexdigest() == before
+            assert not any(root.glob('.vauldy-index-*')), 'Default pagination must not create a persistent index'
             print('PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive.')
         finally: client.close()
 

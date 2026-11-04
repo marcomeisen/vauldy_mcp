@@ -14,16 +14,21 @@ enum VauldyMCPMain {
             "--experimental-sqlite-index": [.largerSnapshotCache, .memoryTokenIndex],
             "--large-snapshot-cache": .largerSnapshotCache,
             "--compact-list-projection": .compactProjection,
+            "--no-compact-list-projection": [],
             "--memory-sqlite-index": .memoryTokenIndex,
             "--persistent-sqlite-index": .persistentTokenIndex,
         ]
+        let flags = arguments.dropFirst(3)
+        let legacyPagination = flags.contains("--no-compact-list-projection")
         guard arguments.count >= 3, arguments[1] == "--profile", arguments[2].hasPrefix("/"),
-              arguments.dropFirst(3).allSatisfy({ options[$0] != nil }) else {
+              flags.allSatisfy({ options[$0] != nil }),
+              !legacyPagination || (!flags.contains("--persistent-sqlite-index") && !flags.contains("--compact-list-projection")) else {
             diagnostic(.configuration)
             FileHandle.standardError.write(Data("Aufruf: vauldy-mcp --profile /absoluter/pfad/profile.json [--persistent-sqlite-index]\n".utf8))
             Foundation.exit(64)
         }
-        let indexFeatures = arguments.dropFirst(3).compactMap { options[$0] }.reduce(into: MCPIndexFeatures()) { $0.formUnion($1) }
+        let indexFeatures = flags.compactMap { options[$0] }.reduce(into: MCPIndexFeatures()) { $0.formUnion($1) }
+            .union(legacyPagination ? [] : .compactProjection)
         let profileURL = URL(fileURLWithPath: arguments[2])
         let profile = FileMCPProfileSource(url: profileURL)
         let audit = MCPAuditLog(profileURL: profileURL)

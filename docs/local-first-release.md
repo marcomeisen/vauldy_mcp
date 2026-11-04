@@ -101,11 +101,11 @@ vauldy-mcp --profile /absoluter/pfad/profile.json --persistent-sqlite-index
 
 Der Cache liegt neben dem Profil in einem privaten, versionsgebundenen Verzeichnis. Die Datei `index-v1.sqlite` ist auf 64 MiB begrenzt. Sie enthält gehashte Suchwörter, interne Dokumentkennungen, Prüffingerabdrücke und kompakte Statusfelder. Gehashte Suchwörter sind weiterhin sensible Ableitungen. Die Datei enthält keine Originale, vollständigen OCR-Texte, Pfade oder reversiblen Pseudonym-Zuordnungen. JSON und dessen Backup bleiben führend.
 
-Das Öffnen bindet den Cache an den vollständigen Fingerabdruck der Freigabe und vergleicht ihn mit dem aktuellen autorisierten JSON-Bestand. Geänderte, neue und entfernte Zeilen werden zusammen mit der Generation transaktional gespeichert. Bei beschädigten Inhalten baut Vauldy den Cache in einer separaten Datei auf und tauscht diese atomar ein. Ein unvollständiger Aufbau und eine vorübergehende Cache-Sperre blockieren die Suche nicht. SQLite-Fehler führen zur bisherigen Filterung. Gespeicherte Profiländerungen stoßen die Bereinigung des Cache an. Bei belegter Sperre ist diese Bereinigung im Pilotbetrieb bestmöglich. Ein konkurrierender Schreiber prüft das Profil erneut. Der Nachweis für verwaiste Dateien nach gleichzeitigem Entfernen oder Prozessabbruch steht aus. Bei direkter Bearbeitung einer Profildatei greift die neue Freigabe beim nächsten Aufruf, und der Cache wird bei der nächsten Nutzung neu gebunden. [SQLite FTS5](https://www.sqlite.org/fts5.html)
+Das Öffnen bindet den Cache an den vollständigen Fingerabdruck der Freigabe und vergleicht ihn mit dem aktuellen autorisierten JSON-Bestand. Geänderte, neue und entfernte Zeilen werden zusammen mit der Generation transaktional gespeichert. Bei beschädigten Inhalten baut Vauldy den Cache in einer separaten Datei auf und tauscht diese atomar ein. Ein unvollständiger Aufbau und eine vorübergehende Cache-Sperre blockieren die Suche nicht. SQLite-Fehler führen zur bisherigen Filterung. Bei einer verwalteten Profiländerung wird der Cacheordner atomar aus dem aktiven Pfad verschoben. Das gelingt auch bei belegter SQLite-Schreibsperre. Die leere Sperrdatei liegt außerhalb des Cacheordners und verhindert, dass ein anderer Schreiber den aktiven Pfad vorzeitig neu anlegt. Sie bleibt als gemeinsamer Sperrpunkt erhalten. Der laufende Schreiber prüft das aktuelle Profil vor und nach der Veröffentlichung. Der nächste Indexaufruf räumt eigene Stagingreste und getrennte Cacheordner auf. Ein deaktiviertes Profil löst die Bereinigung beim nächsten Zugriff auch ohne Indexoption aus. Bei direkter Bearbeitung eines weiterhin aktiven Profils bindet der nächste Indexaufruf die Datei an die neue Freigabe. [SQLite FTS5](https://www.sqlite.org/fts5.html)
 
-Bei kompakten Folgeseiten verwendet der Prozess Statusfelder der zuvor geprüften Generation. Er prüft Profil und Dateistand vor der Ausgabe erneut. Ändert sich der autorisierte Bestand, läuft der Cursor über den bisherigen Prüfpfad und wird bei abweichender Generation abgewiesen. Für Treffer werden weiterhin der bestehende Textfilter und die Privacy-Grenze angewendet. Rangsuche und Teilwortmodus verwenden ihre bisherigen Suchverträge.
+Der lokale stdio-Server verwendet die kompakte Projektion standardmäßig für Anfragen mit `includeExcerpts=false`. Die Projektion bleibt im Arbeitsspeicher. Bei Folgeseiten verwendet der Prozess Statusfelder der zuvor geprüften Generation. Er prüft Profil und Dateistand vor der Ausgabe erneut. Ändert sich der autorisierte Bestand, läuft der Cursor über den bisherigen Prüfpfad und wird bei abweichender Generation abgewiesen. Für Treffer werden weiterhin der bestehende Textfilter und die Privacy-Grenze angewendet. Rangsuche und Teilwortmodus verwenden ihre bisherigen Suchverträge.
 
-Die Entwicklungsoptionen `--large-snapshot-cache`, `--compact-list-projection` und `--memory-sqlite-index` erlauben Einzelvergleiche. Der frühere Schalter `--experimental-sqlite-index` kombiniert größeren Cache und Speicherindex wie bisher. `--persistent-sqlite-index` kombiniert den Dateiindex mit der kompakten Projektion. Er erhöht das JSON-Cache-Limit erst zusammen mit `--large-snapshot-cache`. Alle Optionen gelten für den lokalen stdio-Aufruf. Entferne die Zusatzoptionen, wenn du eine ältere Version ohne diese Schalter startest.
+Für Vergleiche stellt `--no-compact-list-projection` die bisherige Pagination wieder her. `--compact-list-projection` bleibt als ausdrückliche Wahl des Standards gültig. `--persistent-sqlite-index` aktiviert den optionalen Dateiindex mit kompakter Projektion. `--large-snapshot-cache` erhöht das JSON-Cache-Limit. `--memory-sqlite-index` aktiviert FTS5 im Arbeitsspeicher. `--experimental-sqlite-index` kombiniert weiterhin größeren Cache und Speicherindex. Alle Optionen gelten für den lokalen stdio-Aufruf.
 
 ```sh
 python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp \
@@ -114,7 +114,7 @@ python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp \
 
 ### Variantenmessung
 
-Ein Release-Lauf mit `vauldy-mcp 0.13.0` verglich dieselben synthetischen Bestände mit 1.000, 2.000, 5.000, 10.000 und 20.000 Einträgen. Das Archiv und die Ausgangsprofildatei waren bytegleich. Die Varianten nutzten getrennte Prozesse und Profilkopien.
+In Iteration 3 verglich ein Release-Lauf mit `vauldy-mcp 0.13.0` dieselben synthetischen Bestände mit 1.000, 2.000, 5.000, 10.000 und 20.000 Einträgen. Das Archiv und die Ausgangsprofildatei waren bytegleich. Die Varianten nutzten getrennte Prozesse und Profilkopien.
 
 | Variante bei 20.000 Dokumenten | Erste Inventarseite | Median erste 10 Folgeseiten | P95 Folgeseiten | Median exakte Suche warm | Peak-RSS |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -128,19 +128,27 @@ Die vier Einzelvarianten messen bei 20.000 Einträgen je zehn Folgeseiten. Der D
 
 Die kompakte Projektion erzielte den größten Gewinn bei der Pagination. Der Dateimodus beschleunigte den exakten Textfilter und beanspruchte in diesem Lauf mehr Arbeitsspeicher. Der Index bleibt optional. Die Messreihe deckt synthetische MCP-Abfragen ab. Importlast, native OCR, Suchqualität auf Kundenarchiven und Backup/Restore werden separat geprüft.
 
+Iteration 4 verglich den neuen Standard erneut bei 20.000 synthetischen Dokumenten mit dem ausdrücklichen Rückweg. Der Median der ersten zehn Folgeseiten sank von 703 auf 126 ms. Die erste Inventarseite dauerte 1,35 s mit bisheriger Pagination und 1,38 s mit Projektion. Beide Varianten lieferten 400 Treffer für die Testanfrage und einen Beleg auf Seite 1. Der optionale Dateimodus lieferte alle 200 Seiten in 30,31 s und verwendete den Index nach Neustart bytegleich wieder.
+
+```sh
+python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp \
+  dist/mcp/iteration-4-index-variants.json --documents 20000 --compare-index-variants
+```
+
 ### Prüfbefehle
 
 ```sh
 export CLANG_MODULE_CACHE_PATH=/tmp/vauldy-mcp-clang-cache
 export SWIFTPM_MODULECACHE_OVERRIDE=/tmp/vauldy-mcp-module-cache
 swift test --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none \
-  --filter 'MCPScalabilityTests|MCPRetrievalCompletenessTests|MCPPassageTests'
+  --filter 'MCPScalabilityTests|MCPRetrievalCompletenessTests|MCPPassageTests|MCPConnectionRemovalTests|MCPPrivacyBoundaryTests'
 swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none
+python3 scripts/mcp/index_recovery_smoke_test.py .build/release/vauldy-mcp
 python3 scripts/mcp/smoke_test.py .build/release/vauldy-mcp
 python3 scripts/mcp/export_relay_tools.py .build/release/vauldy-mcp --check
 ```
 
-Die 21 gezielten Swift-Tests, der Release-Build, der stdio-Test und die Übereinstimmung der vier Relay-Werkzeuge sind bestanden.
+Alle 39 gezielten Swift-Tests, der Release-Build, beide stdio-Tests und der Vergleich der Relay-Werkzeuge waren erfolgreich. Die Swift-Tests prüfen Pausieren und Entfernen während einer echten SQLite-Stagingphase. Der stdio-Test hält einen realen Server während des Aufbaus an und widerruft die Freigabe. Weitere Serverprozesse werden beim Aufbau und während einer inkrementellen Transaktion mit `SIGKILL` beendet. Der Neustart wird gegen die synthetischen JSON-Daten geprüft. Ein bereits getrennter, liegen gebliebener Cacheordner wird als eigener Wiederanlauffall simuliert. Bereinigung bedeutet Entfernen der abgeleiteten Dateien auf Dateisystemebene. Stromausfall und forensische Löschung sind eigene Fragestellungen.
 
 ### Abnahmestand
 

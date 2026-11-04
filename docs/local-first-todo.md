@@ -20,8 +20,8 @@ Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächl
 - [x] Privat abgelegten, aus JSON wiederaufbaubaren SQLite-Index für ausdrücklich freigegebene Datensätze implementieren. Inkrementelle Änderungen, Profilbindung und Korruptionsrückweg absichern.
 - [x] Kompakte Listenmetadaten mit gültigem JSON-Stand und Profil verbinden. Gleichheit der Antworten, Cursor und Quellen prüfen.
 - [x] Cachegröße, kompakte Projektion und FTS5 getrennt an 20.000 synthetischen Dokumenten messen. Die Größen 1.000, 2.000, 5.000, 10.000 und 20.000 prüfen. Latenz einschließlich P95, Peak-RSS, Vollständigkeit und Wiederverwendung über Prozessneustarts erfassen.
-- [ ] Index beim gleichzeitigen Freigabewiderruf, Entfernen einer Verbindung und Prozessabbruch prüfen. Der Zugriffsverlust muss sofort wirksam sein. Der Pilot braucht für verwaiste Indexdateien einen nachweisbaren Bereinigungspfad.
-- [ ] Standardbetrieb anhand der Ressourcen- und Datenschutzgrenzen entscheiden. Kompakte Projektion und Dateiindex getrennt bewerten. Eine Änderung des führenden Formats braucht eine eigene Backup- und Restore-Abnahme.
+- [x] Index bei gleichzeitigem Freigabewiderruf, Entfernen einer Verbindung und Prozessabbruch absichern. Stagingreste, SQLite-Journal und liegen gebliebenen getrennten Cache beim Wiederanlauf prüfen.
+- [x] Kompakte Pagination im lokalen stdio-Server als Standard für `includeExcerpts=false` aktivieren. Der Dateiindex bleibt optional. JSON bleibt führend. Eine spätere Formatänderung braucht eine eigene Backup- und Restore-Abnahme.
 - [ ] Gemeinsame Swift-Verträge für IDs, OCR, Suche und Privacy einzeln klassifizieren. Modellbesitz, Versionsregeln und Altfixtures festhalten.
 - [ ] App-Anbindung und belegte Duplikate getrennt übernehmen, sobald Arbeit im App-Repo wieder freigegeben ist. App-spezifische KI und Altformate gegen dieselben Fixtures absichern.
 - [ ] Lokalen Import und OCR-Worker unter kontrollierter Last messen. Vor einer Kundenfreigabe Referenz-Mac, Dokumentmix, P95, Durchsatz, Speichergrenzen und Suchqualität festlegen.
@@ -44,4 +44,5 @@ Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächl
 | 1 · Architekturpilot | Abgeschlossen | Seitenvertrag und zuschaltbarer FTS5-Speicherindex. Synthetisches Inventar mit 20.000 Dokumenten vollständig. |
 | 2 · Persistenz und Projektion | Abgeschlossen | 21 gezielte Swift-Tests bestanden. Geprüft sind unter anderem Neustart, inkrementelle Änderungen, Korruptionsreparatur, Cursor und Widerruf. |
 | 3 · Variantenmessung | Abgeschlossen | Fünf Varianten bei fünf Bestandsgrößen. Bei 20.000 Dokumenten lieferte der Dateimodus alle 200 Seiten in 30,62 s und verwendete den Index nach Neustart bytegleich wieder. [Messwerte](local-first-release.md#variantenmessung) |
-| 4 · Entscheidung über den Standardbetrieb | Als Nächstes | Konkurrierenden Widerruf und verwaiste Dateien prüfen. Projektion unabhängig vom Dateiindex bewerten. |
+| 4 · Widerruf, Wiederanlauf und Standardbetrieb | Abgeschlossen | Der gestoppte Indexschreiber liefert nach Widerruf keine Treffer. Nach zwei realen `SIGKILL`-Abbrüchen sind Bestand und Berechtigungen intakt. Kompakte Pagination ist lokaler Standard. Im 20.000er-Vergleich sank der Median der ersten zehn Folgeseiten von 703 auf 126 ms. [Prüfbefehle](local-first-release.md#prüfbefehle) |
+| 5 · Gemeinsame Swift-Verträge | Als Nächstes | IDs, OCR, Suche und Privacy im MCP-Branch klassifizieren. Verantwortliche Module, Versionsregeln und gemeinsame Altfixtures festhalten. |

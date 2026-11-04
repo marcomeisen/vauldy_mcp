@@ -59,10 +59,10 @@ def write_report(long_evidence=None):
 
 def compare_index_variants(root, profile, count):
     variants = {
-        'jsonBaseline': (),
-        'largerCacheOnly': ('--large-snapshot-cache',),
-        'compactProjectionOnly': ('--compact-list-projection',),
-        'memoryFTS5Only': ('--memory-sqlite-index',),
+        'jsonBaseline': ('--no-compact-list-projection',),
+        'largerCacheOnly': ('--no-compact-list-projection', '--large-snapshot-cache'),
+        'compactProjectionOnly': (),
+        'memoryFTS5Only': ('--no-compact-list-projection', '--memory-sqlite-index'),
         'persistentFTS5AndProjection': ('--persistent-sqlite-index',),
     }
     result = {}

@@ -96,12 +96,18 @@ public actor ReadOnlyMCPRuntime {
     private func loadProfile() throws -> MCPAccessProfile {
         do {
             let profile = try profiles.load()
-            if !profile.enabled { persistentIndex?.purgeIfPresent() }
+            if !profile.enabled { purgeRevokedIndex() }
             return profile
         } catch {
-            persistentIndex?.purgeIfPresent()
+            purgeRevokedIndex()
             clearAccessCaches()
             throw error
+        }
+    }
+
+    private func purgeRevokedIndex() {
+        if let fileProfile = profiles as? FileMCPProfileSource {
+            PersistentMCPIndex(profileURL: fileProfile.url).purgeIfPresent()
         }
     }
 

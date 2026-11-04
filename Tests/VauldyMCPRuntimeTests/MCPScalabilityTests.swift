@@ -118,7 +118,7 @@ struct MCPScalabilityTests {
             let first = runtime()
             #expect(try await first.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 1)
             let directory = try #require(FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
-                .first { $0.lastPathComponent.hasPrefix(".vauldy-index-") })
+                .first { $0.lastPathComponent.hasPrefix(".vauldy-index-") && !$0.lastPathComponent.hasSuffix(".lock") })
             let database = directory.appendingPathComponent("index-v1.sqlite")
             try #require(FileManager.default.fileExists(atPath: database.path), "First build published a database")
             let initial = try Data(contentsOf: database)
@@ -190,6 +190,49 @@ struct MCPScalabilityTests {
             let current = try #require(fresh.nextCursor)
             try fixture.pause()
             await #expect(throws: MCPAccessError.notAuthorized) { try await projected.list(cursor: current) }
+        }
+    }
+
+    @Test(arguments: [false, true])
+    func managedRevocationRetiresAnActiveBuildBeforeItCanPublish(removeConnection: Bool) async throws {
+        try await withScalingFixture { root in
+            let document = documentWithText("Synthetischer Beleg")
+            let fixture = try ScalingFixture(root: root, documents: [document])
+            let installation = MCPInstallation(root: root.appendingPathComponent("installation"))
+            let profileURL = installation.profileURL(fixture.profile.connectionID)
+            let source = FileMCPProfileSource(url: profileURL)
+            try source.save(fixture.profile)
+            let archiveBytes = try Data(contentsOf: fixture.vault)
+            var index = PersistentMCPIndex(profileURL: profileURL)
+            var revokedWhileStaged = false
+
+            #expect(throws: MCPAccessError.stale) {
+                _ = try index.query("Beleg", profile: fixture.profile, generation: Data(repeating: 7, count: 32),
+                                    records: [(document, Data(repeating: 2, count: 32))]) {
+                    let directory = profileURL.deletingLastPathComponent()
+                    let cacheDirectories = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+                        .filter { $0.lastPathComponent.hasPrefix(".vauldy-index-") && !$0.lastPathComponent.hasSuffix(".lock") }
+                    if let active = cacheDirectories.first,
+                       try FileManager.default.contentsOfDirectory(atPath: active.path).contains(where: { $0.hasPrefix(".build-") }) {
+                        let resultDirectory: URL
+                        if removeConnection {
+                            resultDirectory = try installation.removeConnection(fixture.profile.connectionID, expectedRevision: fixture.profile.revision)
+                        } else {
+                            _ = try installation.setAccess(false, for: fixture.profile.connectionID, expectedRevision: fixture.profile.revision)
+                            resultDirectory = directory
+                        }
+                        revokedWhileStaged = true
+                        let remaining = try FileManager.default.contentsOfDirectory(atPath: resultDirectory.path)
+                        let derivedFiles = remaining.filter { $0.hasPrefix(".vauldy-index-") && !$0.hasSuffix(".lock") }
+                        #expect(derivedFiles.isEmpty)
+                    }
+                    guard (try? source.load()) == fixture.profile else { throw MCPAccessError.stale }
+                }
+            }
+            #expect(revokedWhileStaged)
+            let runtime = ReadOnlyMCPRuntime(profiles: source)
+            await #expect(throws: MCPAccessError.notAuthorized) { try await runtime.list(includeExcerpts: false) }
+            #expect(try Data(contentsOf: fixture.vault) == archiveBytes)
         }
     }
 
