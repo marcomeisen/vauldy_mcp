@@ -26,6 +26,35 @@ struct LocalWatchedFolderTests {
         }
     }
 
+    @Test func oneTimeFolderBatchCountsNestedAndOverlappingSelectionsOnce() async throws {
+        try await fixture { root, store in
+            let source = try directory(root, "source"), nested = try directory(source, "nested")
+            let other = try directory(root, "other")
+            let direct = source.appendingPathComponent("direct.pdf")
+            let child = nested.appendingPathComponent("nested.png")
+            let second = other.appendingPathComponent("second.pdf")
+            for file in [direct, child, second, nested.appendingPathComponent("ignored.txt")] {
+                try Data("synthetic scan fixture".utf8).write(to: file)
+            }
+            try FileManager.default.createSymbolicLink(at: source.appendingPathComponent("linked.pdf"), withDestinationURL: second)
+            let worker = LocalImportWorker(store: store, executable: root.appendingPathComponent("unused"), watchFolders: false)
+
+            let flat = try await worker.folderImportBatch([source, other], recursive: false)
+            defer { flat.close() }
+            #expect(flat.files.map(\.lastPathComponent) == ["direct.pdf", "second.pdf"])
+            #expect(flat.unavailableFolderCount == 0)
+
+            let recursive = try await worker.folderImportBatch(
+                [source, nested, other, root.appendingPathComponent("missing")], recursive: true
+            )
+            defer { recursive.close() }
+            #expect(recursive.files.map(\.lastPathComponent) == ["direct.pdf", "nested.png", "second.pdf"])
+            #expect(recursive.unavailableFolderCount == 1)
+            #expect(try await store.documents().isEmpty)
+            #expect(try await LocalWatchedFolderStore(store: store).folders().isEmpty)
+        }
+    }
+
     @Test func rejectsVaultOverlapMissingFoldersAndDamagedConfiguration() async throws {
         try await fixture { root, store in
             let registry = LocalWatchedFolderStore(store: store)

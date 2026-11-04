@@ -71,6 +71,9 @@ final class SetupModel: ObservableObject {
     let registration: MCPClientRegistration
     @Published var connectionName = ""
     @Published var importProgress: LocalImportProgress?
+    @Published var importTotal: Int?
+    @Published var importProcessed = 0
+    private var importProgressToken: UUID?
     @Published var importing = false
     @Published var watchedFolders: [LocalWatchedFolder] = []
     @Published var watchScans: [LocalWatchScanStatus] = []
@@ -235,51 +238,80 @@ final class SetupModel: ObservableObject {
         }
     }
 
-    func importFiles(_ urls: [URL], retry: UUID? = nil, folder: Bool = false) {
-        guard !importing else { return }
-        importing = true; failure = false; configuration = nil
-        message = "Originale und Texterkennung bleiben auf diesem Mac."
-        guard let executable = Bundle.main.resourceURL?.appendingPathComponent("vauldy-local") else {
-            importing = false; showError("Das lokale Importprogramm fehlt im Paket."); return
+    func importFiles(_ urls: [URL], retry: UUID? = nil, folderRecursive: Bool? = nil) {
+        guard !importing, retry != nil || !urls.isEmpty else { return }
+        guard let executable = localExecutable else {
+            showError("Das lokale Importprogramm fehlt im Paket."); return
         }
-        let service = LocalImportWorker(store: localStore, executable: executable)
+        importing = true; failure = false; configuration = nil
+        importProcessed = 0
+        importTotal = folderRecursive == nil ? (retry == nil ? urls.count : 1) : nil
+        message = "Originale und Texterkennung bleiben auf diesem Mac."
+        let service = LocalImportWorker(store: localStore, executable: executable, watchFolders: false)
         importTask = Task { [self] in
             var completed = 0; var review = 0; var failed = 0; var reused = 0
             var analyzed = 0; var analysisReview = 0
             var lastError: String?
-            let updates: @Sendable (LocalImportProgress) -> Void = { [weak self] update in
-                Task { @MainActor in if self?.importing == true { self?.importProgress = update } }
-            }
             do {
-                for index in 0..<(retry == nil ? urls.count : 1) {
+                let batch: LocalFolderImportBatch?
+                if let folderRecursive { batch = try await service.folderImportBatch(urls, recursive: folderRecursive) }
+                else { batch = nil }
+                defer { batch?.close() }
+                let files = batch?.files ?? urls
+                let total = retry == nil ? files.count : 1
+                let unavailableFolders = batch?.unavailableFolderCount ?? 0
+                importTotal = total
+
+                for index in 0..<total {
                     try Task.checkCancellation()
-                    do {
-                        let outcomes: [LocalImportOutcome]
-                        if let retry { outcomes = [try await service.retry(documentID: retry, fresh: true, progress: updates)] }
-                        else if folder { outcomes = try await service.importFolder(urls[index], recursive: watchRecursive, progress: updates) }
-                        else { outcomes = [try await service.importFile(urls[index], progress: updates)] }
-                        for outcome in outcomes {
-                            if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
-                            if outcome.reusedOriginal { reused += 1 }
-                            if outcome.state == .completed { completed += 1 }
-                            else if outcome.state == .partial { review += 1 }
-                            else { failed += 1 }
+                    let token = UUID()
+                    importProgressToken = token
+                    importProgress = nil
+                    let updates: @Sendable (LocalImportProgress) -> Void = { [weak self] update in
+                        Task { @MainActor in
+                            guard let self, self.importProgressToken == token else { return }
+                            self.importProgress = update
                         }
+                    }
+                    do {
+                        let outcome: LocalImportOutcome
+                        if let retry { outcome = try await service.retry(documentID: retry, fresh: true, progress: updates) }
+                        else {
+                            outcome = try await service.importFile(files[index], storage: batch == nil ? .managedCopy : .referenced,
+                                                                   progress: updates)
+                        }
+                        if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
+                        if outcome.reusedOriginal { reused += 1 }
+                        if outcome.state == .completed { completed += 1 }
+                        else if outcome.state == .partial { review += 1 }
+                        else { failed += 1 }
                     } catch is CancellationError { throw CancellationError() }
                     catch {
                         failed += 1
                         lastError = (error as? LocalizedError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden."
                     }
+                    importProgressToken = nil
+                    importProgress = nil
+                    importProcessed += 1
                 }
-                message = "Text erfasst: \(completed) · OCR prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Basisanalyse vorhanden: \(analyzed) · Basisanalyse prüfen: \(analysisReview). Neue Dokumente bitte unten ausdrücklich freigeben."
+                if total == 0 {
+                    message = "Keine unterstützten Dokumente gefunden."
+                } else {
+                    message = "\(importProcessed) von \(total) Dokumenten verarbeitet. Text erfasst: \(completed) · OCR prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Basisanalyse vorhanden: \(analyzed) · Basisanalyse prüfen: \(analysisReview). Neue Dokumente bitte ausdrücklich freigeben."
+                }
+                if unavailableFolders > 0 { message += " Ordner nicht lesbar: \(unavailableFolders)." }
                 if let lastError { message += " " + lastError }
-                failure = failed > 0 || review > 0 || analysisReview > 0
+                failure = failed > 0 || review > 0 || analysisReview > 0 || unavailableFolders > 0
+            } catch is CancellationError {
+                let count = importTotal.map { " nach \(importProcessed) von \($0) Dokumenten" } ?? ""
+                message = "Import\(count) abgebrochen. Gesicherte Originale bleiben erhalten. Ausstehende Texterkennung kann erneut gestartet werden."
             } catch {
-                message = "Import abgebrochen. Gesicherte Originale bleiben erhalten; ausstehende Texterkennung kann erneut gestartet werden."
+                showError((error as? LocalizedError)?.errorDescription ?? "Die ausgewählten Ordner konnten nicht gelesen werden.")
             }
+            importProgressToken = nil; importProgress = nil
             do { try await refreshLocalDocuments() }
             catch { showError((error as? LocalImportError)?.errorDescription ?? "Der Bestand konnte nicht neu geladen werden.") }
-            importProgress = nil; importing = false; importTask = nil
+            importTotal = nil; importing = false; importTask = nil
         }
     }
 

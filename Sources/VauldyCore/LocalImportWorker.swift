@@ -51,15 +51,50 @@ public struct LocalImportWorker: Sendable {
     public func importFolder(_ url: URL, recursive: Bool = false,
                              progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> [LocalImportOutcome] {
         _ = try await store.documents()
-        let folder = try LocalWatchedFolder.authorizing(url, recursive: recursive)
-        let access = try folder.openDirectory(); defer { access.close() }
-        let files = try await Task.detached { try LocalWatchedFolderMonitor.files(folder, excluding: store.root, directory: access.url) }.value
+        let (access, files) = try await Task.detached { try folderFiles(url, recursive: recursive) }.value
+        defer { access.close() }
         var outcomes: [LocalImportOutcome] = []
         for file in files {
             try Task.checkCancellation()
             outcomes.append(try await importFile(file, storage: .referenced, progress: progress))
         }
         return outcomes
+    }
+
+    /// Counts every distinct supported file before import and keeps folder access open until the caller finishes.
+    public func folderImportBatch(_ urls: [URL], recursive: Bool) async throws -> LocalFolderImportBatch {
+        _ = try await store.documents()
+        // The detached scan is joined on cancellation so no folder access outlives the request.
+        let scan = Task.detached {
+            var files: [URL] = []
+            var seen: Set<String> = []
+            var accesses: [LocalOriginalAccess] = []
+            var unavailable = 0
+            for url in urls {
+                try Task.checkCancellation()
+                let source: (LocalOriginalAccess, [URL])
+                do { source = try folderFiles(url, recursive: recursive) }
+                catch is CancellationError { throw CancellationError() }
+                catch LocalWatchError.scanLimit { throw LocalWatchError.scanLimit }
+                catch { unavailable += 1; continue }
+                let count = files.count
+                for file in source.1 where seen.insert(file.resolvingSymlinksInPath().path).inserted {
+                    guard files.count < 20_000 else { throw LocalWatchError.scanLimit }
+                    files.append(file)
+                }
+                if files.count > count { accesses.append(source.0) }
+            }
+            try Task.checkCancellation()
+            return LocalFolderImportBatch(files: files, unavailableFolderCount: unavailable, accesses: accesses)
+        }
+        return try await withTaskCancellationHandler { try await scan.value } onCancel: { scan.cancel() }
+    }
+
+    private func folderFiles(_ url: URL, recursive: Bool) throws -> (LocalOriginalAccess, [URL]) {
+        let folder = try LocalWatchedFolder.authorizing(url, recursive: recursive)
+        let access = try folder.openDirectory()
+        let files = try LocalWatchedFolderMonitor.files(folder, excluding: store.root, directory: access.url)
+        return (access, files)
     }
 
     public func retry(documentID: UUID, fresh: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
@@ -255,4 +290,13 @@ public struct LocalImportWorker: Sendable {
         return try JSONDecoder().decode(type, from: Data(contentsOf: url))
     }
     private func pause() async { await Task.detached { try? await Task.sleep(for: .milliseconds(150)) }.value }
+}
+
+
+public struct LocalFolderImportBatch: Sendable {
+    public let files: [URL]
+    public let unavailableFolderCount: Int
+    fileprivate let accesses: [LocalOriginalAccess]
+
+    public func close() { accesses.forEach { $0.close() } }
 }

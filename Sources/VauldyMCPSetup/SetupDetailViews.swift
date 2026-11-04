@@ -62,7 +62,8 @@ struct SetupDocumentSource: View {
     @ObservedObject var model: SetupModel
     var body: some View {
         HStack(spacing: 12) {
-            Button("Dokumente importieren", systemImage: "square.and.arrow.down", action: model.chooseImports).disabled(model.importing)
+            Button("Dokumente importieren", systemImage: "square.and.arrow.down", action: model.chooseImports)
+            Button("Ordner importieren …", systemImage: "folder", action: model.chooseFolderImport)
             Menu("Weitere Quellen") {
                 Button("Lokalen MCP-Bestand laden", action: model.openLocalStore)
                 Button("Beispieldokument ausprobieren", action: model.useExample).disabled(model.importing)
@@ -71,7 +72,7 @@ struct SetupDocumentSource: View {
             }.fixedSize()
             Spacer()
             Text("\(model.documents.count) lokal verfügbar").font(.callout).foregroundStyle(.secondary)
-        }.disabled(model.busy)
+        }.disabled(model.busy || model.importing)
     }
 }
 

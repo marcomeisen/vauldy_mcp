@@ -47,12 +47,13 @@ extension LocalWatchedFolder {
 }
 
 public enum LocalWatchError: String, Error, LocalizedError, Sendable {
-    case invalidFolder, invalidConfiguration, tooManyFolders
+    case invalidFolder, invalidConfiguration, tooManyFolders, scanLimit
     public var errorDescription: String? {
         switch self {
         case .invalidFolder: "Bitte einen lesbaren Ordner außerhalb des lokalen Vauldy-Bestands wählen. Der Bestand darf auch nicht in diesem Ordner liegen."
         case .invalidConfiguration: "Die Ordnerliste ist beschädigt oder nicht zugänglich. Sie wurde nicht überschrieben."
         case .tooManyFolders: "Es können höchstens 32 Ordner beobachtet werden."
+        case .scanLimit: "Dieser Import überschreitet die Grenze von 20.000 Einträgen. Wähle einen kleineren Bestand."
         }
     }
 }
@@ -215,7 +216,7 @@ actor LocalWatchedFolderMonitor {
                         next[key] = observation
                     } catch { status.issue = .importFailed }
                 }
-            } catch let error as ScanFailure { status.issue = error == .limit ? .scanLimit : .unavailable }
+            } catch LocalWatchError.scanLimit { status.issue = .scanLimit }
             catch { status.issue = .unavailable }
             statuses.append(status)
         }
@@ -223,7 +224,7 @@ actor LocalWatchedFolderMonitor {
         return statuses
     }
 
-    private enum ScanFailure: Error { case unavailable, limit }
+    private enum ScanFailure: Error { case unavailable }
     static func files(_ folder: LocalWatchedFolder, excluding root: URL, directory: URL) throws -> [URL] {
         let resolved = try canonicalWatchPath(directory)
         let vault = try canonicalWatchPath(root)
@@ -238,8 +239,9 @@ actor LocalWatchedFolderMonitor {
                                                            errorHandler: { _, _ in failed = true; return false }) else { throw ScanFailure.unavailable }
         var files: [URL] = []; var count = 0
         for case let file as URL in iterator {
+            try Task.checkCancellation()
             count += 1
-            guard count <= 20_000 else { throw ScanFailure.limit }
+            guard count <= 20_000 else { throw LocalWatchError.scanLimit }
             let values = try file.resourceValues(forKeys: Set(keys))
             if values.isSymbolicLink == true { iterator.skipDescendants(); continue }
             if values.isRegularFile == true, LocalDocumentStore.supportedExtensions.contains(file.pathExtension.lowercased()) { files.append(file) }

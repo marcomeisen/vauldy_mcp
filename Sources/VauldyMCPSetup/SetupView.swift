@@ -23,6 +23,7 @@ struct SetupView: View {
                     header
                     if model.busy { ProgressView("Wird lokal verarbeitet …").controlSize(.small) }
                     if !model.managementError.isEmpty { SetupNotice(text: model.managementError, warning: true) }
+                    if model.importing { SetupImportProgress(model: model) }
                     switch model.section {
                     case .overview: overview
                     case .connections: connections
@@ -31,7 +32,6 @@ struct SetupView: View {
                     case .oauth: SetupOAuthView(model: model)
                     case .settings: SetupSettingsView(model: model)
                     }
-                    if model.importing { SetupImportProgress(model: model) }
                     if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
                 }.padding(28).frame(maxWidth: 940, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
             }.background(Color(nsColor: .windowBackgroundColor))
@@ -235,10 +235,21 @@ struct SetupImportProgress: View {
     @ObservedObject var model: SetupModel
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            if let total = model.importTotal {
+                let label = "\(model.importProcessed) von \(total) Dokumenten verarbeitet"
+                if total > 0 {
+                    ProgressView(value: Double(model.importProcessed), total: Double(total)) { Text(label) }
+                        .accessibilityIdentifier("batch-import-progress")
+                } else {
+                    Text(label).font(.callout)
+                }
+            } else {
+                ProgressView("Ordner werden nach Dokumenten durchsucht …")
+            }
             if let progress = model.importProgress {
-                Text("\(progress.stage) · \(progress.completedPages)/\(progress.totalPages) Seiten").font(.callout)
-                if progress.totalPages > 0 { ProgressView(value: Double(progress.completedPages), total: Double(progress.totalPages)) }
-            } else { ProgressView("Lokaler Import wird vorbereitet …") }
+                let pages = progress.totalPages > 0 ? " · \(progress.completedPages)/\(progress.totalPages) Seiten" : ""
+                Text("Aktuelles Dokument: \(progress.stage)\(pages)").font(.caption).foregroundStyle(.secondary)
+            }
             HStack { Text("Dokumentzugriffe bleiben während des Imports verwaltbar.").font(.caption).foregroundStyle(.secondary); Spacer(); Button("Import abbrechen", action: model.cancelImport) }
         }.padding(16).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
     }

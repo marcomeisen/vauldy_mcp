@@ -5,7 +5,12 @@ extension SetupModel {
     func chooseFolderImport() {
         let panel = sourceFoldersPanel(title: "Ordner einmal importieren")
         panel.message = "Die Dateien bleiben an ihrem Ort. Vauldy speichert Dateiverweise, OCR und Basisanalyse; keine zusätzliche Originalkopie."
-        if panel.runModal() == .OK { importFiles(panel.urls, folder: true) }
+        let includeSubfolders = NSButton(checkboxWithTitle: "Unterordner einbeziehen", target: nil, action: nil)
+        includeSubfolders.state = .on
+        includeSubfolders.sizeToFit()
+        panel.accessoryView = includeSubfolders
+        panel.isAccessoryViewDisclosed = true
+        if panel.runModal() == .OK { importFiles(panel.urls, folderRecursive: includeSubfolders.state == .on) }
     }
     private func sourceFoldersPanel(title: String) -> NSOpenPanel {
         let panel = NSOpenPanel(); panel.title = title

@@ -18,6 +18,7 @@ struct SetupWizardView: View {
                 }
             }
             Divider()
+            if model.setupStep == 1 && model.importing { SetupImportProgress(model: model) }
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     if model.busy { ProgressView("Wird lokal vorbereitet …").controlSize(.small) }
@@ -31,7 +32,6 @@ struct SetupWizardView: View {
                     case 2: consent
                     default: completion
                     }
-                    if model.importing { SetupImportProgress(model: model) }
                     if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
                 }.padding(2)
             }
@@ -45,7 +45,7 @@ struct SetupWizardView: View {
                     if let existing {
                         Button("Bestehende Verbindung verwalten") { model.activeConnectionID = existing.connectionID; model.section = .connections; dismiss() }.buttonStyle(.borderedProminent)
                     } else { Button("Dokumente auswählen") { model.setupStep = 1 }.buttonStyle(.borderedProminent) }
-                case 1: Button("Freigabe prüfen") { model.setupStep = 2 }.buttonStyle(.borderedProminent).disabled(model.selectedReadableCount == 0 || model.busy)
+                case 1: Button("Freigabe prüfen") { model.setupStep = 2 }.buttonStyle(.borderedProminent).disabled(model.selectedReadableCount == 0 || model.busy || model.importing)
                 case 2: Button("Freigeben und einrichten", action: model.finishSetup).buttonStyle(.borderedProminent).disabled(!model.acknowledged || model.busy)
                 default: EmptyView()
                 }
