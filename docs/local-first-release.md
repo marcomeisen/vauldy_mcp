@@ -162,6 +162,43 @@ Der erste Pilot ist ein Recherche-Agent auf dem Mac des Kunden. Der Chatbot nimm
 
 Der Pilot nutzt die bestehende Werkzeugschnittstelle. Ein synthetischer Versicherungsbestand dient als Vergleich zwischen direktem Chatablauf und Agent. Geprüft werden Trefferabdeckung, korrekte Feldbelege, Laufzeit, Werkzeugaufrufe, Abbruch und Offline-Ausführung. Ein gezieltes Extraktionswerkzeug folgt bei einer belegten Lücke in den verfügbaren Metadaten oder Fundstellen. Der Chat bleibt die Oberfläche für den gesamten Ablauf.
 
+### Recherche-Pilot aus Iteration 6
+
+Der Pilot akzeptiert den festgelegten Auftrag „Finde meine Versicherungsverträge und erstelle eine Tabelle mit Versicherer, Vertragsnummer und Kündigungsfrist.“ Ein neuer MCP-Prozess wird für genau ein vorgegebenes Profil gestartet. Der Pilot prüft Status und Zugriff, sammelt alle kompakten Listenseiten und liest pro Kandidat Metadaten und gezielte Fundstellen. Die Ausgabe ist ein JSON-Bericht mit Zeilen, Feldern, Seitenbelegen und Angaben zur Abdeckung. Für die geplante Chat-Anbindung steht dieser Bericht als Ergebnis des lokalen Auftrags bereit.
+
+Die Felder stammen aus passenden Rollen in gespeicherten Metadaten und aus ausdrücklich beschrifteten Zeilen in den bereitgestellten Quellen. Eine eindeutige Vertragsüberschrift muss belegt sein. Kandidaten mit mehrdeutiger Dokumentstruktur werden separat gezählt. Die Tabelle unterscheidet belegte, pseudonymisierte, fehlende und widersprüchliche Werte. Ein vollständig abgerufenes Textinventar sagt nichts über die Vollständigkeit der OCR oder die fachliche Erkennung aller Verträge aus.
+
+Vor der Ausgabe prüft der Pilot den Status und wiederholt die vollständige Kandidatenliste. Er vergleicht die aktuellen Lesekennungen und Verarbeitungszustände, auch für ausgeschlossene Kandidaten. Widerruf, Quelländerung, Abbruch oder ein überschrittenes Zeit-, Kandidaten- oder Aufruflimit führen zu einem unvollständigen Ergebnis ohne Dokumentzeilen.
+
+Der optionale Planner verwendet Apples vorhandenes [On-Device-Modell](https://developer.apple.com/documentation/FoundationModels/adding-server-side-intelligence-with-private-cloud-compute/). Er erhält den Auftrag und ergänzt den festen Suchwortsatz aus einer begrenzten Auswahl. Dokumenttexte und Werkzeugergebnisse gehen ausschließlich durch den lokalen MCP und den regelbasierten Belegpfad. Ein nicht verfügbares Modell beendet den modellgestützten Auftrag mit einem ausdrücklichen Status. Der Pilot kann auch ausdrücklich mit dem festen Auftrag ohne Modell gestartet werden.
+
+Die folgenden Befehle sind für den Entwicklungsnachweis. Der Test legt ein eigenes Profil und ausschließlich synthetische Bestände an. Der direkte Referenzablauf bildet eine Skriptfolge derselben MCP-Werkzeuge ab und liest die Kandidaten vollständig. Die interaktive Anbindung an einen Zielchat gehört zu einem separaten Abnahmeschritt.
+
+```sh
+python3 scripts/mcp/research_agent_smoke_test.py .build/release/vauldy-mcp
+CLANG_MODULE_CACHE_PATH=/tmp/vauldy-mcp-clang-cache xcrun swiftc -parse-as-library \
+  -target arm64-apple-macos26.0 scripts/mcp/research_planner.swift -o /tmp/vauldy-iteration6-planner
+/usr/bin/sandbox-exec -p '(version 1) (allow default) (deny network*)' \
+  python3 scripts/mcp/research_agent_smoke_test.py .build/release/vauldy-mcp \
+  --planner /tmp/vauldy-iteration6-planner --require-network-denied
+```
+
+Der lokale Pilot kann für ein ausdrücklich ausgewähltes Testprofil auch einzeln aufgerufen werden.
+
+```sh
+python3 scripts/mcp/research_agent.py .build/release/vauldy-mcp \
+  --profile /absoluter/pfad/zum/testprofil.json --planner /tmp/vauldy-iteration6-planner
+```
+
+Im Lauf mit gesperrtem Prozessnetz lieferten beide Varianten die drei erwarteten Verträge. Ein thematischer Flyer blieb Textkandidat und ein Dokument mit fehlgeschlagener OCR wurde separat gezählt. Die Vertragsnummern waren pseudonymisiert. Eine Frist fehlte und eine zweite war widersprüchlich belegt. Der zweite Widerspruchsbeleg lag auf Seite 12 hinter dem ersten Fundstellencursor.
+
+| Ablauf | MCP-Aufrufe gesamt | Leseaufrufe | Abgerufener Text in Segmenten | Gesamtlauf |
+| --- | ---: | ---: | ---: | ---: |
+| Direkt mit vollständiger Textlesung | 26 | 18 | 41.085 Byte | 1,18 s |
+| Agent mit lokalem Modellplaner | 17 | 9 | 5.405 Byte | 2,98 s |
+
+Die Zeiten sind Einzelmessungen auf demselben Mac. Die Agentenzeit umfasst den Modellaufruf. Der separate Lauf mit festem Suchwortsatz dauerte beim Agenten 1,04 s. Die Textmenge umfasst ausschließlich die Textsegmente aus `read_document`. Die Negativtests bestätigten, dass Widerruf, Quelländerung, `SIGINT`, ein angehaltener MCP-Prozess am Zeitlimit und das Aufruflimit jeweils keine Dokumentzeilen ausgeben. Der synthetische Bestand und die ursprüngliche Freigabe blieben bytegleich.
+
 ### Grundlage aus Iteration 5
 
 Der [Werkzeugvertrag v1](mcp-mvp.md#vauldy-werkzeugvertrag-v1) beschreibt Handles, Seitenbelege, Vollständigkeit und Widerruf. Die vier Werkzeugnamen und ihre Schemas sind im stdio-Test festgehalten. Der SQLite-Pilot verwirft die frühere Cache-Schemaversion, damit alte Listenmetadaten neu berechnet werden. Der lokale JSON-Bestand bleibt lesbar.

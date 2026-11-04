@@ -52,6 +52,7 @@ def main():
         for name, arguments in [
             ('smoke_test', [server]),
             ('index_recovery_smoke_test', [server]),
+            ('research_agent_smoke_test', [server]),
             ('base_analysis_wire_test', [local, server, originals, '--include-raster']),
             ('import_smoke_test', [local, server]),
             ('audit_smoke_test', [local]),
