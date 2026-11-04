@@ -81,6 +81,7 @@ public struct FileMCPProfileSource: MCPProfileSource {
         let data = try JSONEncoder().encode(value)
         try data.write(to: url, options: [.atomic])
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+        PersistentMCPIndex(profileURL: url).purgeIfPresent()
     }
 }
 

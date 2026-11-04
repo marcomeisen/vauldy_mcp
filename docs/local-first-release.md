@@ -87,26 +87,66 @@ Kundenstatus **offen**. Die Sitzung sah keine gültige Developer-ID-Application-
 
 ## Lokale Architektur im MCP-Branch
 
+[Entwicklungsaufgaben und Iterationsstand](local-first-todo.md)
+
 `VauldyDocumentCore` ist das erste eigenständige Swift-Modul für den Seitenmarkierungsvertrag. `VauldyCore` exportiert denselben Typ weiterhin über den bisherigen Namen. Die App kann dieses Modul später über einen gepinnten Stand beziehen. Aktuell wird nur der MCP-Branch umgebaut.
 
-Der lokale stdio-Server kann einen SQLite/FTS5-Index für exakte Wortfilter von `list_documents` nutzen. Aktiviere ihn für eine lokale Testverbindung über ein zusätzliches Startargument:
+### Wiederaufbaubarer SQLite-Index
+
+Aktiviere den persistenten Index nur für eine lokale Verbindung mit eigenem privaten Profilordner:
 
 ```sh
-vauldy-mcp --profile /absoluter/pfad/profile.json --experimental-sqlite-index
+vauldy-mcp --profile /absoluter/pfad/profile.json --persistent-sqlite-index
 ```
 
-Der Pilot verwendet ausschließlich bereits freigegebene Datensätze und hält den FTS-Index im Prozessspeicher. Änderungen an Dokumenten werden transaktional inkrementell eingearbeitet. Kandidaten werden vor der Ausgabe mit dem bisherigen Wortfilter abgeglichen. Beim Ändern oder Widerrufen des Profils wird der Index verworfen. Falls FTS5 fehlt oder sein Budget erreicht, läuft die bisherige vollständige Filterung weiter. Rangsuche, Teilwortmodus und der Datenschutzpfad behalten ihre bisherigen Verträge. Vauldy legt dafür keine Indexdatei an. Die JSON-Snapshots und deren Backup bleiben führend.
+Der Cache liegt neben dem Profil in einem privaten, versionsgebundenen Verzeichnis. Die Datei `index-v1.sqlite` ist auf 64 MiB begrenzt. Sie enthält gehashte Suchwörter, interne Dokumentkennungen, Prüffingerabdrücke und kompakte Statusfelder. Gehashte Suchwörter sind weiterhin sensible Ableitungen. Die Datei enthält keine Originale, vollständigen OCR-Texte, Pfade oder reversiblen Pseudonym-Zuordnungen. JSON und dessen Backup bleiben führend.
 
-Der Pilot erhöht das Limit für den gehaltenen JSON-Snapshot von 64 auf 96 MiB und begrenzt die SQLite-Datenbank auf 32 MiB. Das sind zwei getrennte Effekte auf Latenz und Speicher. Mit Entfernen des Startarguments gilt wieder der bisherige Pfad. Ein zusätzlicher Server oder Netzwerkport ist dafür nicht erforderlich.
+Das Öffnen bindet den Cache an den vollständigen Fingerabdruck der Freigabe und vergleicht ihn mit dem aktuellen autorisierten JSON-Bestand. Geänderte, neue und entfernte Zeilen werden zusammen mit der Generation transaktional gespeichert. Bei beschädigten Inhalten baut Vauldy den Cache in einer separaten Datei auf und tauscht diese atomar ein. Ein unvollständiger Aufbau und eine vorübergehende Cache-Sperre blockieren die Suche nicht. SQLite-Fehler führen zur bisherigen Filterung. Gespeicherte Profiländerungen stoßen die Bereinigung des Cache an. Bei belegter Sperre ist diese Bereinigung im Pilotbetrieb bestmöglich. Ein konkurrierender Schreiber prüft das Profil erneut. Der Nachweis für verwaiste Dateien nach gleichzeitigem Entfernen oder Prozessabbruch steht aus. Bei direkter Bearbeitung einer Profildatei greift die neue Freigabe beim nächsten Aufruf, und der Cache wird bei der nächsten Nutzung neu gebunden. [SQLite FTS5](https://www.sqlite.org/fts5.html)
+
+Bei kompakten Folgeseiten verwendet der Prozess Statusfelder der zuvor geprüften Generation. Er prüft Profil und Dateistand vor der Ausgabe erneut. Ändert sich der autorisierte Bestand, läuft der Cursor über den bisherigen Prüfpfad und wird bei abweichender Generation abgewiesen. Für Treffer werden weiterhin der bestehende Textfilter und die Privacy-Grenze angewendet. Rangsuche und Teilwortmodus verwenden ihre bisherigen Suchverträge.
+
+Die Entwicklungsoptionen `--large-snapshot-cache`, `--compact-list-projection` und `--memory-sqlite-index` erlauben Einzelvergleiche. Der frühere Schalter `--experimental-sqlite-index` kombiniert größeren Cache und Speicherindex wie bisher. `--persistent-sqlite-index` kombiniert den Dateiindex mit der kompakten Projektion. Er erhöht das JSON-Cache-Limit erst zusammen mit `--large-snapshot-cache`. Alle Optionen gelten für den lokalen stdio-Aufruf. Entferne die Zusatzoptionen, wenn du eine ältere Version ohne diese Schalter startest.
 
 ```sh
 python3 scripts/mcp/scalability_benchmark.py .build/release/vauldy-mcp \
-  dist/mcp/sqlite-index-pilot.json --documents 1000 20000 --experimental-sqlite-index
+  dist/mcp/persistent-index-variants.json --documents 1000 2000 5000 10000 20000 --compare-index-variants
 ```
 
-Im synthetischen Release-Lauf vom 4. November 2026 war das kompakte Inventar für 20.000 Dokumente nach 200 Seiten vollständig. Es dauerte 98,22 s bei 478 MiB Peak-RSS. Die warme Rangsuche lag bei P95 5,01 s. Der frühere JSON-Lauf brauchte 160,24 s für das Inventar, bei 536 MiB Peak-RSS und P95 6,80 s. Das ist ein Vergleich mit einer historischen Baseline. Das ungefilterte Inventar und die Rangsuche nutzen FTS5 nicht. Diese Werte belegen daher keinen isolierten FTS5-Gewinn.
+### Variantenmessung
 
-Vor einer dauerhaften Indexdatei folgen Vergleichsmessungen auf Referenz-Macs mit vielfältigen Textlängen. Danach sind Indexlebenszyklus, inkrementeller Wiederaufbau, Korrektheit nach Crash und Datenschutz beim Löschen separat zu prüfen. Eine Migration der führenden Bestandsdaten erfordert einen eigenen Backup- und Wiederherstellungsnachweis.
+Ein Release-Lauf mit `vauldy-mcp 0.13.0` verglich dieselben synthetischen Bestände mit 1.000, 2.000, 5.000, 10.000 und 20.000 Einträgen. Das Archiv und die Ausgangsprofildatei waren bytegleich. Die Varianten nutzten getrennte Prozesse und Profilkopien.
+
+| Variante bei 20.000 Dokumenten | Erste Inventarseite | Median erste 10 Folgeseiten | P95 Folgeseiten | Median exakte Suche warm | Peak-RSS |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| JSON-Basis | 1,35 s | 690 ms | 751 ms | 2,42 s | 325 MiB |
+| Größerer JSON-Cache | 1,32 s | 495 ms | 537 ms | 2,18 s | 309 MiB |
+| Kompakte Projektion | 1,37 s | 133 ms | 151 ms | 2,05 s | 301 MiB |
+| FTS5 im Speicher | 1,33 s | 703 ms | 729 ms | 0,82 s | 352 MiB |
+| Datei-FTS5 und Projektion | 3,73 s | 136 ms | 157 ms | 0,63 s | 421 MiB |
+
+Die vier Einzelvarianten messen bei 20.000 Einträgen je zehn Folgeseiten. Der Dateimodus misst alle 199 Folgeseiten und liefert in 30,62 s insgesamt 20.000 unterschiedliche Dokumente. In allen Varianten ergeben sich 400 Treffer für die Testanfrage und ein überprüfter Beleg auf Seite 1. Die Indexdatei misst 20,91 MiB und wurde nach Neustart bytegleich wiederverwendet. Die erste exakte Suche nach Neustart dauerte 1,38 s.
+
+Die kompakte Projektion erzielte den größten Gewinn bei der Pagination. Der Dateimodus beschleunigte den exakten Textfilter und beanspruchte in diesem Lauf mehr Arbeitsspeicher. Der Index bleibt optional. Die Messreihe deckt synthetische MCP-Abfragen ab. Importlast, native OCR, Suchqualität auf Kundenarchiven und Backup/Restore werden separat geprüft.
+
+### Prüfbefehle
+
+```sh
+export CLANG_MODULE_CACHE_PATH=/tmp/vauldy-mcp-clang-cache
+export SWIFTPM_MODULECACHE_OVERRIDE=/tmp/vauldy-mcp-module-cache
+swift test --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none \
+  --filter 'MCPScalabilityTests|MCPRetrievalCompletenessTests|MCPPassageTests'
+swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none
+python3 scripts/mcp/smoke_test.py .build/release/vauldy-mcp
+python3 scripts/mcp/export_relay_tools.py .build/release/vauldy-mcp --check
+```
+
+Die 21 gezielten Swift-Tests, der Release-Build, der stdio-Test und die Übereinstimmung der vier Relay-Werkzeuge sind bestanden.
+
+### Abnahmestand
+
+- **20.000 synthetische Dokumente · GO für weitere Architekturtests.** Der Nachweis für reale Bestände unter paralleler Import- und OCR-Last steht aus.
+- **Agensi · NO-GO für Freigabe.** Der Test im Zielclient mit Inventar, Quellenbelegen und Widerruf steht aus.
+- **Kunden-Mac · NO-GO für Freigabe.** Die zwei Developer-ID-signierten und notarisierten Pakete und deren Offline-Abnahme stehen aus.
 
 ## Priorisierte Abnahmetickets
 

@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import platform
 import statistics
+import shutil
 import subprocess
 import tempfile
 import time
@@ -22,6 +23,8 @@ parser.add_argument('--documents', type=int, nargs='+', choices=[1000, 2000, 500
                     default=[1000, 2000])
 parser.add_argument('--experimental-sqlite-index', action='store_true',
                     help='Enable the process-local SQLite FTS5 pilot for exact list filters')
+parser.add_argument('--compare-index-variants', action='store_true',
+                    help='Isolate cache, compact projection and FTS5 on the same synthetic snapshot')
 args = parser.parse_args()
 server_options = ('--experimental-sqlite-index',) if args.experimental_sqlite_index else ()
 binary, destination, results = args.binary, args.destination, []
@@ -48,10 +51,85 @@ def write_report(long_evidence=None):
     report = dict(
         binaryVersion=subprocess.check_output([str(binary), '--version'], text=True).strip(),
         platform=platform.platform(), syntheticOnly=True, requestedSizes=args.documents,
-        experimentalSQLiteIndex=args.experimental_sqlite_index,
+        experimentalSQLiteIndex=args.experimental_sqlite_index, compareIndexVariants=args.compare_index_variants,
         cases=results, longEvidence=long_evidence,
     )
     destination.write_text(json.dumps(report, indent=2) + '\n')
+
+
+def compare_index_variants(root, profile, count):
+    variants = {
+        'jsonBaseline': (),
+        'largerCacheOnly': ('--large-snapshot-cache',),
+        'compactProjectionOnly': ('--compact-list-projection',),
+        'memoryFTS5Only': ('--memory-sqlite-index',),
+        'persistentFTS5AndProjection': ('--persistent-sqlite-index',),
+    }
+    result = {}
+
+    for label, flags in variants.items():
+        variant = root / label
+        variant.mkdir(mode=0o700)
+        (variant / 'logs').mkdir(mode=0o700)
+        shutil.copyfile(root / 'logs/audit.jsonl', variant / 'logs/audit.jsonl')
+        (variant / 'logs/audit.jsonl').chmod(0o600)
+        local_profile = variant / 'profile.json'
+        local_profile.write_bytes(profile.read_bytes())
+        durable = '--persistent-sqlite-index' in flags
+        client = Client(binary, local_profile, server_options=flags)
+        try:
+            def timed(**parameters):
+                start = time.perf_counter()
+                output = payload(client.call('list_documents', **parameters))
+                return output, (time.perf_counter() - start) * 1000
+
+            page, first_ms = timed(pageSize=100, includeExcerpts=False)
+            assert page['totalCount'] == count
+            handles = {item['document'] for item in page['items']}
+            latencies = []
+            pages = 1
+            while page.get('nextCursor') and (durable or pages <= 10):
+                page, elapsed = timed(cursor=page['nextCursor'])
+                handles.update(item['document'] for item in page['items'])
+                latencies.append(elapsed)
+                pages += 1
+            assert len(handles) == min(count, pages * 100)
+            if durable:
+                assert page['retrievalComplete'] and len(handles) == count
+            exact, exact_cold = timed(query='Themenmarker', pageSize=100, includeExcerpts=False)
+            assert exact['totalCount'] == count // 50
+            warm = []
+            for _ in range(5):
+                exact, elapsed = timed(query='Themenmarker', pageSize=100, includeExcerpts=False)
+                assert exact['totalCount'] == count // 50
+                warm.append(elapsed)
+            evidence = payload(client.call('read_document', document=exact['items'][0]['document']))
+            assert any('Themenmarker' in item['text'] and item['page'] == 1 for item in evidence['segments'])
+            continuation_p95 = statistics.quantiles(latencies, n=20, method='inclusive')[18] if len(latencies) > 1 else None
+            result[label] = dict(firstCompactPageMS=round(first_ms, 2), compactPages=pages,
+                                 continuationFirst10MedianMS=round(statistics.median(latencies[:10]), 2) if latencies else None,
+                                 continuationP95MS=round(continuation_p95, 2) if continuation_p95 is not None else None,
+                                 compactComplete=page['retrievalComplete'],
+                                 completeCompactMS=round(first_ms + sum(latencies), 2) if page['retrievalComplete'] else None,
+                                 exactColdMS=round(exact_cold, 2), exactWarmMedianMS=round(statistics.median(warm), 2),
+                                 exactCandidates=exact['totalCount'], peakServerRSSBytes=peak_resident_bytes(client))
+        finally:
+            client.close()
+
+        if durable:
+            database, = variant.glob('.vauldy-index-*/index-v1.sqlite')
+            saved = database.read_bytes()
+            restarted = Client(binary, local_profile, server_options=flags)
+            try:
+                start = time.perf_counter()
+                page = payload(restarted.call('list_documents', query='Themenmarker', pageSize=100, includeExcerpts=False))
+                assert page['totalCount'] == count // 50 and database.read_bytes() == saved
+                result[label]['restartExactMS'] = round((time.perf_counter() - start) * 1000, 2)
+                result[label]['sqliteBytes'] = len(saved)
+            finally:
+                restarted.close()
+        print(json.dumps(dict(variant=label, **result[label])), flush=True)
+    return result
 
 
 for count in args.documents:
@@ -73,6 +151,13 @@ for count in args.documents:
     output.write(json.dumps(dict(record=record,previousHash=previous,hash=digest),sort_keys=True,separators=(',',':'))+'\n');previous=digest
   os.chmod(logs/'audit.jsonl',0o600)
   before=hashlib.sha256(vault.read_bytes()).hexdigest();before_profile=profile.read_bytes();timings={}
+  if args.compare_index_variants:
+   measured = compare_index_variants(root, profile, count)
+   assert hashlib.sha256(vault.read_bytes()).hexdigest() == before and profile.read_bytes() == before_profile
+   results.append(dict(documents=count, snapshotBytes=vault.stat().st_size, variants=measured,
+                       archiveUnchanged=True, profileUnchanged=True))
+   write_report()
+   continue
   start=time.perf_counter();client=Client(binary,profile,server_options=server_options);timings['initializeMS']=(time.perf_counter()-start)*1000
   def call(label,name,**arguments):
    start=time.perf_counter();result=payload(client.call(name,**arguments));timings[label]=(time.perf_counter()-start)*1000;return result
@@ -135,7 +220,7 @@ for count in args.documents:
    print(json.dumps(result), flush=True)
   finally:client.close()
 long_evidence=None
-if supports_passages:
+if not args.compare_index_variants and supports_passages:
  with tempfile.TemporaryDirectory(prefix='vauldy-architecture-long-') as temp:
   root=Path(temp);vault=root/'documents.json';profile=root/'profile.json';identity=str(uuid.uuid4())
   sections=[]

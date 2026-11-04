@@ -39,7 +39,7 @@ let package = Package(
         .target(name: "VauldyOAuth", dependencies: ["VauldyMCPRuntime"]),
         .target(name: "VauldyMCPProtocol", dependencies: ["VauldyMCPRuntime", "VauldyCore", .product(name: "MCP", package: "swift-sdk")]),
         .executableTarget(name: "VauldyMCPHTTP", dependencies: ["VauldyOAuth", "VauldyMCPProtocol", .product(name: "NIOCore", package: "swift-nio"), .product(name: "NIOPosix", package: "swift-nio"), .product(name: "NIOHTTP1", package: "swift-nio")]),
-        .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyPrivacy"]),
+        .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyDocumentCore", "VauldyPrivacy"]),
         .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth", "VauldyRelay"]),
         .executableTarget(name: "VauldyMCPStatus", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
         .executableTarget(

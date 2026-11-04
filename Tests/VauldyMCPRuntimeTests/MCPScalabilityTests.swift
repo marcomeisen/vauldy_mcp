@@ -1,4 +1,5 @@
 import Foundation
+import SQLite3
 import Testing
 import VauldyCore
 @testable import VauldyMCPRuntime
@@ -105,6 +106,93 @@ struct MCPScalabilityTests {
         #expect(try index.matchingIDs(for: "Milch") == [first.id])
     }
 
+    @Test func persistentSQLiteReusesUpdatesRebuildsAndPurgesItsPrivateCache() async throws {
+        try await withScalingFixture { root in
+            var document = documentWithText("Käse Rechnung")
+            let second = documentWithText("Käse Rechnungen")
+            let fixture = try ScalingFixture(root: root, documents: [document, second])
+            let source = FileMCPProfileSource(url: fixture.profileURL)
+            func runtime() -> ReadOnlyMCPRuntime {
+                ReadOnlyMCPRuntime(profiles: source, indexFeatures: [.persistentTokenIndex])
+            }
+            let first = runtime()
+            #expect(try await first.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 1)
+            let directory = try #require(FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+                .first { $0.lastPathComponent.hasPrefix(".vauldy-index-") })
+            let database = directory.appendingPathComponent("index-v1.sqlite")
+            try #require(FileManager.default.fileExists(atPath: database.path), "First build published a database")
+            let initial = try Data(contentsOf: database)
+            #expect(initial.starts(with: Data("SQLite format 3".utf8)))
+            #expect(initial.range(of: Data("Rechnung".utf8)) == nil)
+            let mode = try FileManager.default.attributesOfItem(atPath: database.path)[.posixPermissions] as? Int
+            #expect(mode == 0o600)
+
+            let reopened = runtime()
+            #expect(try await reopened.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 1)
+            try #require(FileManager.default.fileExists(atPath: database.path), "Reopened database exists")
+            #expect(try Data(contentsOf: database) == initial)
+            let inode = try MCPFileVersion(database).inode
+
+            document.ocrText = "Brot Quittung"
+            try fixture.save([document, second], atomic: true)
+            #expect(try await reopened.list(query: "Käse Rechnung", includeExcerpts: false).totalCount == 0)
+            #expect(try await reopened.list(query: "Brot Quittung", includeExcerpts: false).totalCount == 1)
+            #expect(try MCPFileVersion(database).inode == inode)
+
+            // A structurally valid FTS edit still fails the cache's payload-digest validation.
+            try replaceIndexTokens(database)
+            let interrupted = directory.appendingPathComponent(".build-" + UUID().uuidString)
+            try Data("partial build".utf8).write(to: interrupted)
+            try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: interrupted.path)
+            let rebuilt = runtime()
+            #expect(try await rebuilt.list(query: "Brot Quittung", includeExcerpts: false).totalCount == 1)
+            #expect(try MCPFileVersion(database).inode != inode)
+            #expect(!FileManager.default.fileExists(atPath: interrupted.path))
+
+            let before = try Data(contentsOf: fixture.vault)
+            try Data("corrupt sqlite file".utf8).write(to: database)
+            #expect(try await rebuilt.list(query: "Brot Quittung", includeExcerpts: false).totalCount == 1)
+            #expect(try Data(contentsOf: database).starts(with: Data("SQLite format 3".utf8)))
+            #expect(try Data(contentsOf: fixture.vault) == before)
+            try fixture.pause()
+            #expect(!FileManager.default.fileExists(atPath: database.path))
+            await #expect(throws: MCPAccessError.notAuthorized) { try await rebuilt.list(query: "Brot") }
+        }
+    }
+
+    @Test func compactProjectionPreservesCoverageAndStopsWhenTheSourceOrGrantChanges() async throws {
+        try await withScalingFixture { root in
+            var document = VaultDocument(title: "Beleg", sourceName: "source", ocrText: "--- Seite 1 ---\nBrot", pageCount: 1)
+            let second = documentWithText("Käse")
+            let fixture = try ScalingFixture(root: root, documents: [document, second])
+            let projected = ReadOnlyMCPRuntime(profiles: FileMCPProfileSource(url: fixture.profileURL),
+                                               indexFeatures: [.compactProjection])
+            let expected = try await fixture.runtime.list(pageSize: 1, includeExcerpts: false)
+            let actual = try await projected.list(pageSize: 1, includeExcerpts: false)
+            let next = try #require(actual.nextCursor)
+            let expectedCursor = try #require(expected.nextCursor)
+            let expectedNext = try await fixture.runtime.list(cursor: expectedCursor)
+            let actualNext = try await projected.list(cursor: next)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.sortedKeys]
+            #expect(try encoder.encode(expected.coverage) == encoder.encode(actual.coverage))
+            #expect(actual.warnings == expected.warnings)
+            #expect(actual.items.first?.processingStatus == expected.items.first?.processingStatus)
+            #expect(actualNext.items.first?.sourceCoverage == expectedNext.items.first?.sourceCoverage)
+            #expect(actualNext.retrievalComplete)
+            let handle = try #require(actual.items.first?.document)
+            #expect(try await projected.read(document: handle).document == handle)
+
+            document.ocrText = "geändert"
+            try fixture.save([document, second], atomic: true)
+            await #expect(throws: MCPAccessError.stale) { try await projected.list(cursor: next) }
+            let fresh = try await projected.list(pageSize: 1, includeExcerpts: false)
+            let current = try #require(fresh.nextCursor)
+            try fixture.pause()
+            await #expect(throws: MCPAccessError.notAuthorized) { try await projected.list(cursor: current) }
+        }
+    }
+
     @Test func sameSizeEditWithRestoredModificationDateInvalidatesSnapshotCursorAndHandle() async throws {
         try await withScalingFixture { root in
             var document = VaultDocument(title: "Beleg", sourceName: "source", ocrText: "Fahrrad")
@@ -155,6 +243,13 @@ struct MCPScalabilityTests {
     }
 }
 
+private func replaceIndexTokens(_ url: URL) throws {
+    var connection: OpaquePointer?
+    try #require(sqlite3_open_v2(url.path, &connection, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK)
+    defer { sqlite3_close(connection) }
+    try #require(sqlite3_exec(connection, "UPDATE tokens SET body = 'damaged'", nil, nil, nil) == SQLITE_OK)
+}
+
 private func documentWithText(_ text: String) -> VaultDocument { .init(title: "Beleg", sourceName: "source", ocrText: text) }
 private struct ScalingFixture {
     let documents: [VaultDocument]
@@ -188,7 +283,7 @@ private final class ChangingProfileSource: MCPProfileSource, @unchecked Sendable
 }
 private func withScalingFixture(_ body: (URL) async throws -> Void) async throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-scaling-test-" + UUID().uuidString)
-    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
     defer { try? FileManager.default.removeItem(at: root) }
     try await body(root)
 }

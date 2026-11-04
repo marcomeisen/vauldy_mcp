@@ -19,21 +19,30 @@ public struct MCPProcessingCoverage: Encodable, Sendable {
     var warnings: [String] { processingComplete ? [] : ["SOURCE_PROCESSING_GAPS"] }
 
     init(documents: [VaultDocument], grantedCount: Int) {
-        authorizedDocumentCount = documents.count
-        searchableDocumentCount = documents.filter(\.isSearchable).count
-        let states = documents.map(MCPSourceState.init)
-        completeSourceDocumentCount = states.filter { $0.processingStatus == "source-ready" }.count
-        pendingDocumentCount = states.filter { $0.processingStatus == "pending" }.count
-        failedDocumentCount = states.filter { $0.processingStatus == "failed" }.count
-        reviewDocumentCount = states.filter { $0.processingStatus == "needs-review" }.count
-        unknownCoverageDocumentCount = states.filter { $0.processingStatus == "unknown" }.count
-        missingGrantedDocumentCount = max(0, grantedCount - documents.count)
+        self.init(statuses: documents.map { MCPSourceState($0).processingStatus },
+                  searchableCount: documents.filter(\.isSearchable).count, grantedCount: grantedCount)
+    }
+
+    init(statuses: [String], searchableCount: Int, grantedCount: Int) {
+        authorizedDocumentCount = statuses.count
+        searchableDocumentCount = searchableCount
+        completeSourceDocumentCount = statuses.count { $0 == "source-ready" }
+        pendingDocumentCount = statuses.count { $0 == "pending" }
+        failedDocumentCount = statuses.count { $0 == "failed" }
+        reviewDocumentCount = statuses.count { $0 == "needs-review" }
+        unknownCoverageDocumentCount = statuses.count { $0 == "unknown" }
+        missingGrantedDocumentCount = max(0, grantedCount - statuses.count)
     }
 }
 
 struct MCPSourceState {
     let sourceCoverage: String
     let processingStatus: String
+
+    func projection(for document: VaultDocument) -> VaultIndexProjection {
+        .init(processingStatus: processingStatus, sourceCoverage: sourceCoverage,
+              analysisStatus: document.baseAnalysisStatus, searchable: document.isSearchable)
+    }
 
     init(_ document: VaultDocument) {
         let sections = VaultPageMarkedText.sections(in: document.ocrText)

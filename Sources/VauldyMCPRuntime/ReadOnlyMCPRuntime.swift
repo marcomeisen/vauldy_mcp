@@ -1,7 +1,17 @@
 import Foundation
 import CryptoKit
 import VauldyCore
+import VauldyDocumentCore
 import VauldyPrivacy
+
+public struct MCPIndexFeatures: OptionSet, Sendable {
+    public let rawValue: UInt8
+    public init(rawValue: UInt8) { self.rawValue = rawValue }
+    public static let largerSnapshotCache = Self(rawValue: 1 << 0)
+    public static let compactProjection = Self(rawValue: 1 << 1)
+    public static let memoryTokenIndex = Self(rawValue: 1 << 2)
+    public static let persistentTokenIndex = Self(rawValue: 1 << 3)
+}
 
 /// The only content boundary used by MCP. Raw domain records never become tool results.
 public actor ReadOnlyMCPRuntime {
@@ -18,6 +28,16 @@ public actor ReadOnlyMCPRuntime {
         let includeExcerpts: Bool
         let ids: [UUID]
         var issuedOffsets: Set<Int> = [0]
+    }
+    private struct CompactProjection {
+        struct Row {
+            let fingerprint: Data
+            let metadata: VaultIndexProjection
+        }
+        let generation: Data
+        let rows: [UUID: Row]
+        let coverage: MCPProcessingCoverage
+        let analysisWarnings: [String]
     }
     private struct PassageSession {
         let document: String
@@ -36,7 +56,7 @@ public actor ReadOnlyMCPRuntime {
     private struct PreparedDocument {
         let fingerprint: Data
         let profile: MCPAccessProfile
-        let sections: [VaultPageMarkedText.Section]
+        let sections: [VauldyDocumentCore.VaultPageMarkedText.Section]
         let summary: String
         let session: IdentifierPrivacySession
         var bytes: Int { sections.reduce(summary.utf8.count) { $0 + $1.text.utf8.count } }
@@ -47,7 +67,9 @@ public actor ReadOnlyMCPRuntime {
     private var leases: [String: Lease] = [:]
     private let loadVault: (@Sendable (String) throws -> [VaultDocument])?
     private var fileSnapshots: MCPVaultSnapshotCache
-    private let experimentalSQLiteIndex: Bool
+    private let indexFeatures: MCPIndexFeatures
+    private var persistentIndex: PersistentMCPIndex?
+    private var compactProjection: CompactProjection?
     private var tokenIndex: SQLiteVaultTokenIndex?
     private var tokenIndexGeneration: Data?
     private var sourceVersion: MCPFileVersion?
@@ -59,15 +81,32 @@ public actor ReadOnlyMCPRuntime {
     var hasSQLiteTokenIndex: Bool { tokenIndex != nil }
 
     public init(profiles: any MCPProfileSource, experimentalSQLiteIndex: Bool = false,
+                indexFeatures: MCPIndexFeatures = [],
                 loadVault: (@Sendable (String) throws -> [VaultDocument])? = nil) {
         self.profiles = profiles
         self.loadVault = loadVault
-        self.experimentalSQLiteIndex = experimentalSQLiteIndex
-        fileSnapshots = MCPVaultSnapshotCache(maximumBytes: (experimentalSQLiteIndex ? 96 : 64) * 1_024 * 1_024)
+        let features = experimentalSQLiteIndex ? indexFeatures.union([.largerSnapshotCache, .memoryTokenIndex]) : indexFeatures
+        self.indexFeatures = features
+        fileSnapshots = MCPVaultSnapshotCache(maximumBytes: (features.contains(.largerSnapshotCache) ? 96 : 64) * 1_024 * 1_024)
+        if features.contains(.persistentTokenIndex), loadVault == nil, let fileProfile = profiles as? FileMCPProfileSource {
+            persistentIndex = PersistentMCPIndex(profileURL: fileProfile.url)
+        }
+    }
+
+    private func loadProfile() throws -> MCPAccessProfile {
+        do {
+            let profile = try profiles.load()
+            if !profile.enabled { persistentIndex?.purgeIfPresent() }
+            return profile
+        } catch {
+            persistentIndex?.purgeIfPresent()
+            clearAccessCaches()
+            throw error
+        }
     }
 
     public func status() throws -> MCPVaultStatus {
-        let profile = try profiles.load()
+        let profile = try loadProfile()
         guard profile.enabled else {
             clearAccessCaches()
             return MCPVaultStatus(access: "disabled", available: false, grantedDocumentCount: 0, searchableDocumentCount: 0,
@@ -87,7 +126,7 @@ public actor ReadOnlyMCPRuntime {
     public func search(query: String, limit: Int = 5) async throws -> MCPSearchResult {
         guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               query.utf8.count <= 2_000, (1...10).contains(limit) else { throw MCPAccessError.invalidArguments }
-        let profile = try profiles.load()
+        let profile = try loadProfile()
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
         let raw = try await searchIndex.search(documents: documents, query: query, limit: limit)
@@ -114,51 +153,107 @@ public actor ReadOnlyMCPRuntime {
         guard query.map({ !$0.isEmpty && $0.utf8.count <= 2_000 && $0.rangeOfCharacter(from: .alphanumerics) != nil }) ?? true,
               pageSize.map({ (1...100).contains($0) }) ?? true,
               cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
-        let profile = try profiles.load()
+        let profile = try loadProfile()
+        if let cursor, let projection = compactProjection, currentProfile == profile,
+           let version = sourceVersion, (try? MCPFileVersion(URL(fileURLWithPath: profile.vaultPath))) == version {
+            let (key, offset, session) = try listCursor(cursor, generation: projection.generation, query: query,
+                                                       pageSize: pageSize, matchMode: matchMode, includeExcerpts: includeExcerpts)
+            if !session.includeExcerpts {
+                return try listPage(key: key, offset: offset, session: session, profile: profile,
+                                    epoch: accessEpoch, documents: [], projection: projection)
+            }
+        }
+
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
         let generation = try snapshotFingerprint(documents)
-        let key: String
-        let offset: Int
-        var session: ListSession
         if let cursor {
-            let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
-            guard parts.count == 2, let value = Int(parts[1]), value >= 0,
-                  let existing = listSessions[String(parts[0])] else { throw MCPAccessError.stale }
-            key = String(parts[0]); offset = value; session = existing
-            guard session.fingerprint == generation else { throw MCPAccessError.stale }
-            guard session.issuedOffsets.contains(offset),
-                  query == nil || query == session.query,
-                  pageSize == nil || pageSize == session.pageSize,
-                  matchMode == nil || matchMode == session.matchMode,
-                  includeExcerpts == nil || includeExcerpts == session.includeExcerpts else { throw MCPAccessError.invalidArguments }
-        } else {
-            let excerpts = includeExcerpts ?? true, mode = matchMode ?? .allTokens
-            guard (pageSize ?? 20) <= (excerpts ? 25 : 100),
-                  mode != .anyTermSubstring || query.map({ VaultDocumentFilter.validCandidateQuery($0) }) ?? true else { throw MCPAccessError.invalidArguments }
-            key = UUID().uuidString.lowercased(); offset = 0
-            session = ListSession(fingerprint: generation, query: query, pageSize: pageSize ?? 20,
-                                  matchMode: mode, includeExcerpts: excerpts,
-                                  ids: try listIDs(documents, query: query, mode: mode, generation: generation))
-            if listOrder.count >= 4 { listSessions.removeValue(forKey: listOrder.removeFirst()) }
-            listOrder.append(key)
+            let (key, offset, session) = try listCursor(cursor, generation: generation, query: query,
+                                                       pageSize: pageSize, matchMode: matchMode, includeExcerpts: includeExcerpts)
+            return try listPage(key: key, offset: offset, session: session, profile: profile, epoch: epoch,
+                                documents: documents, projection: nil)
         }
+
+        let excerpts = includeExcerpts ?? true, mode = matchMode ?? .allTokens
+        guard (pageSize ?? 20) <= (excerpts ? 25 : 100),
+              mode != .anyTermSubstring || query.map({ VaultDocumentFilter.validCandidateQuery($0) }) ?? true
+        else { throw MCPAccessError.invalidArguments }
+        let exactQuery = mode == .allTokens ? query : nil
+        let usesProjection = !excerpts && sourceVersion != nil
+            && (indexFeatures.contains(.compactProjection) || persistentIndex != nil)
+        let needsProjection = usesProjection && compactProjection?.generation != generation
+        let persisted = (exactQuery != nil || needsProjection)
+            ? try diskCandidates(documents, query: exactQuery, profile: profile, generation: generation) : nil
+        if needsProjection {
+            compactProjection = try makeProjection(documents, profile: profile, generation: generation,
+                                                   persisted: persisted?.projections)
+        }
+        let candidates: Set<UUID>?
+        if let persisted {
+            candidates = persisted.candidates
+        } else if let exactQuery, indexFeatures.contains(.memoryTokenIndex) {
+            candidates = try indexedCandidates(documents, query: exactQuery, generation: generation)
+        } else {
+            candidates = nil
+        }
+        // SQLite candidates are intersected with the current grant and verified with the original text filter.
+        let ids = documents.filter {
+            (candidates?.contains($0.id) ?? true) && VaultDocumentFilter.matches($0, query: query, mode: mode)
+        }.map(\.id).sorted { $0.uuidString < $1.uuidString }
+        let key = UUID().uuidString.lowercased()
+        let session = ListSession(fingerprint: generation, query: query, pageSize: pageSize ?? 20,
+                                  matchMode: mode, includeExcerpts: excerpts, ids: ids)
+        if listOrder.count >= 4 { listSessions.removeValue(forKey: listOrder.removeFirst()) }
+        listOrder.append(key)
+        return try listPage(key: key, offset: 0, session: session, profile: profile, epoch: epoch,
+                            documents: documents, projection: usesProjection ? compactProjection : nil)
+    }
+
+    private func listCursor(_ cursor: String, generation: Data, query: String?, pageSize: Int?,
+                            matchMode: VaultTextMatchMode?, includeExcerpts: Bool?) throws -> (String, Int, ListSession) {
+        let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
+        guard parts.count == 2, let offset = Int(parts[1]), offset >= 0,
+              let session = listSessions[String(parts[0])], session.fingerprint == generation else {
+            throw MCPAccessError.stale
+        }
+        guard session.issuedOffsets.contains(offset),
+              query == nil || query == session.query,
+              pageSize == nil || pageSize == session.pageSize,
+              matchMode == nil || matchMode == session.matchMode,
+              includeExcerpts == nil || includeExcerpts == session.includeExcerpts else { throw MCPAccessError.invalidArguments }
+        return (String(parts[0]), offset, session)
+    }
+
+    private func listPage(key: String, offset: Int, session: ListSession, profile: MCPAccessProfile, epoch: UInt64,
+                          documents: [VaultDocument], projection: CompactProjection?) throws -> MCPDocumentListResult {
+        var session = session
         let end = min(offset + session.pageSize, session.ids.count)
-        let byID = Dictionary(uniqueKeysWithValues: documents.map { ($0.id, $0) })
-        let items = try session.ids[offset..<end].map { id in
-            guard let document = byID[id] else { throw MCPAccessError.stale }
-            if !session.includeExcerpts {
-                let handle = try lease(for: document, profile: profile), state = MCPSourceState(document)
-                return MCPSearchHit(document: handle, title: "Freigegebenes Dokument", page: nil, excerpt: "",
-                                    source: reference(handle, page: nil), processingStatus: state.processingStatus,
-                                    sourceCoverage: state.sourceCoverage, analysisStatus: document.baseAnalysisStatus)
+        let items: [MCPSearchHit]
+        let coverage: MCPProcessingCoverage
+        let analysisWarnings: [String]
+        if let projection {
+            items = try session.ids[offset..<end].map { id in
+                guard let row = projection.rows[id], profile.allowedDocumentIDs.contains(id) else { throw MCPAccessError.stale }
+                return compactItem(id: id, fingerprint: row.fingerprint, metadata: row.metadata, profile: profile)
             }
-            return try resultItem(document, profile: profile, query: session.query, preferredPage: nil)
+            coverage = projection.coverage
+            analysisWarnings = projection.analysisWarnings
+        } else {
+            let byID = Dictionary(uniqueKeysWithValues: documents.map { ($0.id, $0) })
+            items = try session.ids[offset..<end].map { id in
+                guard let document = byID[id] else { throw MCPAccessError.stale }
+                if !session.includeExcerpts {
+                    return compactItem(id: id, fingerprint: try fingerprint(document),
+                                       metadata: MCPSourceState(document).projection(for: document), profile: profile)
+                }
+                return try resultItem(document, profile: profile, query: session.query, preferredPage: nil)
+            }
+            coverage = MCPProcessingCoverage(documents: documents, grantedCount: profile.allowedDocumentIDs.count)
+            analysisWarnings = MCPAnalysisCoverage(documents).warnings
         }
         let more = end < session.ids.count
         if more { session.issuedOffsets.insert(end) }
         listSessions[key] = session
-        let coverage = MCPProcessingCoverage(documents: documents, grantedCount: profile.allowedDocumentIDs.count)
         try Task.checkCancellation()
         try recheck(profile, epoch: epoch)
         return MCPDocumentListResult(filter: session.matchMode == .allTokens ? "all-normalized-text-tokens; not an issuer filter" : "any-normalized-term-substring; candidates, not a classification or issuer filter",
@@ -168,12 +263,34 @@ public actor ReadOnlyMCPRuntime {
                                      warnings: ["ORGANIZATION_RELATIONSHIPS_NOT_RESOLVED"]
                                         + (session.matchMode == .anyTermSubstring ? ["BROAD_TEXT_CANDIDATES_NOT_CLASSIFICATION"] : [])
                                         + (session.includeExcerpts ? [] : ["EXCERPTS_OMITTED"])
-                                        + (session.query == nil ? [] : ["TEXT_FILTER_NOT_ISSUER_ASSIGNMENT"]) + coverage.warnings + MCPAnalysisCoverage(documents).warnings)
+                                        + (session.query == nil ? [] : ["TEXT_FILTER_NOT_ISSUER_ASSIGNMENT"]) + coverage.warnings + analysisWarnings)
+    }
+
+    private func compactItem(id: UUID, fingerprint: Data, metadata: VaultIndexProjection, profile: MCPAccessProfile) -> MCPSearchHit {
+        let handle = lease(id: id, fingerprint: fingerprint, profile: profile)
+        return MCPSearchHit(document: handle, title: "Freigegebenes Dokument", page: nil, excerpt: "",
+                            source: reference(handle, page: nil), processingStatus: metadata.processingStatus,
+                            sourceCoverage: metadata.sourceCoverage, analysisStatus: metadata.analysisStatus)
+    }
+
+    private func makeProjection(_ documents: [VaultDocument], profile: MCPAccessProfile, generation: Data,
+                                persisted: [UUID: VaultIndexProjection]?) throws -> CompactProjection {
+        var rows: [UUID: CompactProjection.Row] = [:]
+        for document in documents {
+            try Task.checkCancellation()
+            let metadata = persisted?[document.id] ?? MCPSourceState(document).projection(for: document)
+            rows[document.id] = .init(fingerprint: try fingerprint(document), metadata: metadata)
+        }
+        let coverage = MCPProcessingCoverage(statuses: rows.values.map { $0.metadata.processingStatus },
+                                             searchableCount: rows.values.count { $0.metadata.searchable },
+                                             grantedCount: profile.allowedDocumentIDs.count)
+        return CompactProjection(generation: generation, rows: rows, coverage: coverage,
+                                 analysisWarnings: MCPAnalysisCoverage(documents).warnings)
     }
 
     public func read(document handle: String, cursor: String? = nil) throws -> MCPDocumentResult {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
-        let profile = try profiles.load()
+        let profile = try loadProfile()
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
         guard let lease = leases[handle], lease.profile == profile,
@@ -187,7 +304,7 @@ public actor ReadOnlyMCPRuntime {
             }
             offset = value
         } else { offset = 0 }
-        let sections = VaultPageMarkedText.sections(in: document.ocrText)
+        let sections = VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText)
         let prepared = try preparedDocument(document, profile: profile)
         var segments: [MCPDocumentSegment] = []
         for section in prepared.sections {
@@ -220,7 +337,7 @@ public actor ReadOnlyMCPRuntime {
     public func passages(document handle: String, query: String? = nil, cursor: String? = nil) throws -> MCPPassagesResult {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true,
               query.map({ $0.utf8.count <= 2_000 && VaultDocumentFilter.validCandidateQuery($0) }) ?? true else { throw MCPAccessError.invalidArguments }
-        let profile = try profiles.load(), documents = try authorizedDocuments(profile), epoch = accessEpoch
+        let profile = try loadProfile(), documents = try authorizedDocuments(profile), epoch = accessEpoch
         guard let lease = leases[handle], lease.profile == profile,
               let document = documents.first(where: { $0.id == lease.id && $0.isSearchable }),
               try fingerprint(document) == lease.fingerprint else { throw MCPAccessError.stale }
@@ -263,7 +380,7 @@ public actor ReadOnlyMCPRuntime {
     /// content fingerprint and permission lease as full-text reading.
     public func readMetadata(document handle: String, cursor: String? = nil) throws -> MCPMetadataResult {
         guard handle.count <= 64, cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
-        let profile = try profiles.load()
+        let profile = try loadProfile()
         let documents = try authorizedDocuments(profile)
         let epoch = accessEpoch
         guard let lease = leases[handle], lease.profile == profile,
@@ -297,18 +414,28 @@ public actor ReadOnlyMCPRuntime {
                                  warnings: MCPAnalysisWarnings.safe(analysis?.issues ?? [document.baseAnalysis == nil ? "NOT_ANALYZED" : "STALE_ANALYSIS"]))
     }
 
-    private func listIDs(_ documents: [VaultDocument], query: String?, mode: VaultTextMatchMode,
-                         generation: Data) throws -> [UUID] {
-        let candidates: Set<UUID>?
-        if experimentalSQLiteIndex, let query, mode == .allTokens {
-            candidates = try indexedCandidates(documents, query: query, generation: generation)
-        } else {
-            candidates = nil
+    private func diskCandidates(_ documents: [VaultDocument], query: String?, profile: MCPAccessProfile,
+                                generation: Data) throws -> PersistentMCPIndex.Result? {
+        guard var index = persistentIndex, let version = sourceVersion else { return nil }
+        let source = profiles
+        do {
+            let records = try documents.map { (document: $0, fingerprint: try fingerprint($0)) }
+            let result = try index.query(query, profile: profile, generation: generation, records: records) {
+                guard (try? source.load()) == profile,
+                      (try? MCPFileVersion(URL(fileURLWithPath: profile.vaultPath))) == version else {
+                    throw MCPAccessError.stale
+                }
+            }
+            persistentIndex = index
+            return result
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch MCPAccessError.stale {
+            clearAccessCaches()
+            throw MCPAccessError.stale
+        } catch {
+            return nil
         }
-        // Intersect with the active grant and apply the same text contract before any result is produced.
-        return documents.filter {
-            (candidates?.contains($0.id) ?? true) && VaultDocumentFilter.matches($0, query: query, mode: mode)
-        }.map(\.id).sorted { $0.uuidString < $1.uuidString }
     }
 
     private func indexedCandidates(_ documents: [VaultDocument], query: String,
@@ -350,7 +477,9 @@ public actor ReadOnlyMCPRuntime {
             }
             guard all.count <= 20_000, Set(all.map(\.id)).count == all.count else { throw MCPAccessError.unavailable }
             let allowed = all.filter { profile.allowedDocumentIDs.contains($0.id) }
-            if version == nil || sourceVersion != version { fingerprintCache.removeAll(); generationCache = nil; accessEpoch &+= 1 }
+            if version == nil || sourceVersion != version {
+                fingerprintCache.removeAll(); generationCache = nil; compactProjection = nil; accessEpoch &+= 1
+            }
             sourceVersion = version
             authorizedCache = version != nil && fileSnapshots.retainsDocuments ? allowed : nil
             let ids = Set(allowed.map(\.id))
@@ -361,7 +490,7 @@ public actor ReadOnlyMCPRuntime {
     }
 
     private func recheck(_ profile: MCPAccessProfile, epoch: UInt64) throws {
-        guard epoch == accessEpoch, try profiles.load() == profile,
+        guard epoch == accessEpoch, try loadProfile() == profile,
               sourceVersion == nil || (try? MCPFileVersion(URL(fileURLWithPath: profile.vaultPath))) == sourceVersion else {
             clearAccessCaches()
             throw MCPAccessError.stale
@@ -377,13 +506,16 @@ public actor ReadOnlyMCPRuntime {
     }
 
     private func lease(for document: VaultDocument, profile: MCPAccessProfile) throws -> String {
-        let hash = try fingerprint(document)
-        if let handle = handlesByID[document.id], let existing = leases[handle],
-           existing.fingerprint == hash, existing.profile == profile { return handle }
-        if let old = handlesByID.removeValue(forKey: document.id) { leases.removeValue(forKey: old) }
+        try lease(id: document.id, fingerprint: fingerprint(document), profile: profile)
+    }
+
+    private func lease(id: UUID, fingerprint: Data, profile: MCPAccessProfile) -> String {
+        if let handle = handlesByID[id], let existing = leases[handle],
+           existing.fingerprint == fingerprint, existing.profile == profile { return handle }
+        if let old = handlesByID.removeValue(forKey: id) { leases.removeValue(forKey: old) }
         let handle = UUID().uuidString.lowercased()
-        leases[handle] = Lease(id: document.id, fingerprint: hash, profile: profile)
-        handlesByID[document.id] = handle
+        leases[handle] = Lease(id: id, fingerprint: fingerprint, profile: profile)
+        handlesByID[id] = handle
         return handle
     }
 
@@ -393,8 +525,8 @@ public actor ReadOnlyMCPRuntime {
         protectedDocuments.removeValue(forKey: document.id); protectedOrder.removeAll { $0 == document.id }
         let session = try privacySession(document)
         privacyBuildCount += 1
-        let sections = try VaultPageMarkedText.sections(in: document.ocrText).map {
-            VaultPageMarkedText.Section(page: $0.page, text: try protect($0.text, using: session))
+        let sections = try VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText).map {
+            VauldyDocumentCore.VaultPageMarkedText.Section(page: $0.page, text: try protect($0.text, using: session))
         }
         let result = PreparedDocument(fingerprint: hash, profile: profile, sections: sections,
                                       summary: try protect(document.summary, using: session), session: session)
@@ -411,7 +543,7 @@ public actor ReadOnlyMCPRuntime {
         leases.removeAll(); handlesByID.removeAll(); protectedDocuments.removeAll(); protectedOrder.removeAll()
         listSessions.removeAll(); listOrder.removeAll(); passageSessions.removeAll(); passageOrder.removeAll(); currentProfile = nil
         fileSnapshots.clear(); sourceVersion = nil; authorizedCache = nil
-        tokenIndex = nil; tokenIndexGeneration = nil
+        tokenIndex = nil; tokenIndexGeneration = nil; compactProjection = nil
         fingerprintCache.removeAll(); generationCache = nil
     }
 
@@ -446,7 +578,7 @@ public actor ReadOnlyMCPRuntime {
         let metadata = document.currentBaseAnalysis?.documents.flatMap { card in
             [card.title] + card.fields.flatMap { [$0.value, $0.quote] }
         } ?? []
-        let sourceSections = VaultPageMarkedText.sections(in: document.ocrText).map(\.text)
+        let sourceSections = VauldyDocumentCore.VaultPageMarkedText.sections(in: document.ocrText).map(\.text)
         let contents = [document.title, document.sourceName, document.summary] + sourceSections + metadata + metadataNames
             + document.entities.map { "\($0.type): \($0.value)\n\($0.sourceSnippet)" } + entityNames
             + document.contentFacts.map { "\($0.label): \($0.value)\n\($0.sourceSnippet)" }

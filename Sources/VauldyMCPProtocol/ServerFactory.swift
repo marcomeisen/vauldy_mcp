@@ -5,8 +5,8 @@ import VauldyCore
 
 public enum VauldyMCPServerFactory {
     public static func make(profile: any MCPProfileSource, audit: MCPAuditLog,
-                            experimentalSQLiteIndex: Bool = false, observedRequest: @escaping @Sendable () -> Void = {}) async -> Server {
-        let runtime = ReadOnlyMCPRuntime(profiles: profile, experimentalSQLiteIndex: experimentalSQLiteIndex)
+                            indexFeatures: MCPIndexFeatures = [], observedRequest: @escaping @Sendable () -> Void = {}) async -> Server {
+        let runtime = ReadOnlyMCPRuntime(profiles: profile, indexFeatures: indexFeatures)
         let server = Server(name: "vauldy", version: MCPBuild.version, instructions: instructions, capabilities: .init(tools: .init(listChanged: false)))
         await server.withMethodHandler(ListTools.self) { _ in
             do { try audit.append(.toolsListed, count: tools.count) }

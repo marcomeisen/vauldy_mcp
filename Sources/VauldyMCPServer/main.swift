@@ -10,13 +10,20 @@ enum VauldyMCPMain {
         if arguments.count == 2 && arguments[1] == "--version" {
             print("vauldy-mcp \(MCPBuild.version)"); return
         }
-        let experimentalSQLiteIndex = arguments.count == 4 && arguments[3] == "--experimental-sqlite-index"
-        guard (arguments.count == 3 || experimentalSQLiteIndex),
-              arguments[1] == "--profile", arguments[2].hasPrefix("/") else {
+        let options: [String: MCPIndexFeatures] = [
+            "--experimental-sqlite-index": [.largerSnapshotCache, .memoryTokenIndex],
+            "--large-snapshot-cache": .largerSnapshotCache,
+            "--compact-list-projection": .compactProjection,
+            "--memory-sqlite-index": .memoryTokenIndex,
+            "--persistent-sqlite-index": .persistentTokenIndex,
+        ]
+        guard arguments.count >= 3, arguments[1] == "--profile", arguments[2].hasPrefix("/"),
+              arguments.dropFirst(3).allSatisfy({ options[$0] != nil }) else {
             diagnostic(.configuration)
-            FileHandle.standardError.write(Data("Aufruf: vauldy-mcp --profile /absoluter/pfad/profile.json [--experimental-sqlite-index]\n".utf8))
+            FileHandle.standardError.write(Data("Aufruf: vauldy-mcp --profile /absoluter/pfad/profile.json [--persistent-sqlite-index]\n".utf8))
             Foundation.exit(64)
         }
+        let indexFeatures = arguments.dropFirst(3).compactMap { options[$0] }.reduce(into: MCPIndexFeatures()) { $0.formUnion($1) }
         let profileURL = URL(fileURLWithPath: arguments[2])
         let profile = FileMCPProfileSource(url: profileURL)
         let audit = MCPAuditLog(profileURL: profileURL)
@@ -32,7 +39,7 @@ enum VauldyMCPMain {
         }
         defer { presence?.stop() }
         let server = await VauldyMCPServerFactory.make(profile: profile, audit: audit,
-                                                       experimentalSQLiteIndex: experimentalSQLiteIndex) {
+                                                       indexFeatures: indexFeatures) {
             presence?.recordRequest()
         }
         do {
