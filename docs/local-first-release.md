@@ -232,6 +232,25 @@ python3 scripts/mcp/research_chat_smoke_test.py .build/release/vauldy-research-m
 
 Der installierte lokale Codex-Host erkannte das Werkzeug in einem flüchtigen Testthread und lieferte drei belegte Verträge. Nach Widerruf lieferte derselbe Host einen Fehler ohne Dokumentzeilen. Der Lauf sperrte Netzwerkzugriffe und nutzte das lokale Apple-Modell für die Suchplanung. Ein separater stdio-Test belegt, dass nach Abbruch keine Antwort folgt und der wartende Modellprozess endet. Die automatische Werkzeugwahl aus einem Freitextturn und die Darstellung durch das Chatmodell sind ein eigener Abnahmeschritt.
 
+### Freitexttest mit lokalem Chatmodell
+
+Der Freitexttest verbindet Apples lokales Chatmodell mit dem isolierten Codex-Testthread. Das Modell klassifiziert die natürlich formulierte Anfrage zunächst ohne Dokumentwerkzeuge. Bei einer allgemeinen Übersicht über eigene Versicherungsverträge erhält es das Recherche-Werkzeug zur Auswahl. Der Testclient akzeptiert genau eine Auswahl und ruft das Werkzeug dann im echten lokalen Codex-Host auf.
+
+Beim direkten Angebot des einzelnen Werkzeugs wählte das Modell es im ersten Versuch auch für sachfremde und zu eng gefasste Fragen. Deshalb liegt die Prüfung des Auftragsumfangs vor der Werkzeugwahl. Das Modell erhält für diese Entscheidung nur die Chatfrage. Die sichtbare Antwort übernimmt die geprüfte Markdown-Tabelle samt Werten und Belegen oder den Fehlerhinweis aus der Werkzeugantwort.
+
+```sh
+CLANG_MODULE_CACHE_PATH=/tmp/vauldy-mcp-clang-cache xcrun swiftc -parse-as-library \
+  -target arm64-apple-macos26.0 scripts/mcp/research_chat_router.swift -o /tmp/vauldy-research-chat-router
+/usr/bin/sandbox-exec -p '(version 1) (allow default) (deny network*)' \
+  python3 scripts/mcp/research_chat_smoke_test.py .build/release/vauldy-research-mcp .build/release/vauldy-mcp \
+  --planner /tmp/vauldy-iteration6-planner --router /tmp/vauldy-research-chat-router \
+  --codex "$(command -v codex)" --require-network-denied
+```
+
+Im Lauf mit gesperrtem Prozessnetz führten zwei verschieden formulierte Versicherungsfragen jeweils zu einer Tabelle mit drei belegten Verträgen. Eine auf Hausrat im Jahr 2024 eingeschränkte Frage und eine Rechenfrage führten zu keinem Werkzeugaufruf. Nach Widerruf führte eine weitere Versicherungsfrage zum Freigabefehler ohne Dokumentzeilen. Insgesamt gab es drei tatsächliche Werkzeugaufrufe im isolierten Codex-Host.
+
+Dieser Nachweis betrifft die lokale Modellwahl, den Codex-Werkzeugaufruf und die vom Testclient gezeigte Antwort. Die Darstellung im normalen ChatGPT- oder Codex-Gespräch mit dem dort ausgewählten Modell hat einen eigenen Abnahmepunkt.
+
 ### Grundlage aus Iteration 5
 
 Der [Werkzeugvertrag v1](mcp-mvp.md#vauldy-werkzeugvertrag-v1) beschreibt Handles, Seitenbelege, Vollständigkeit und Widerruf. Die vier Werkzeugnamen und ihre Schemas sind im stdio-Test festgehalten. Der SQLite-Pilot verwirft die frühere Cache-Schemaversion, damit alte Listenmetadaten neu berechnet werden. Der lokale JSON-Bestand bleibt lesbar.

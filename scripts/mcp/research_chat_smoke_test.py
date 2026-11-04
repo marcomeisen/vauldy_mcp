@@ -29,14 +29,23 @@ def bridge_flags(server, planner=None, timeout=None):
 
 def successful(result):
     assert result.get("isError") is False
-    assert check_result(result["structuredContent"]) == 3
+    report = result["structuredContent"]
+    assert check_result(report) == 3
     text = result["content"][0]["text"]
     for fragment in ("| Versicherer | Vertragsnummer | Kündigungsfrist |",
                      "Pseudonymisiert", "Nicht belegt", "Widersprüchlich", "unvollständig",
                      "Textkandidaten ohne Vertragsbeleg (1)", "Kandidaten mit fehlender oder fehlgeschlagener Verarbeitung (1)"):
         assert fragment in text
     assert text.count("| Nordstern") == 1 and "PRIVAT-POL-11" not in text
-    return result["structuredContent"]["planner"]
+    visible = text.replace("\\", "")
+    for row in report["rows"]:
+        assert row["contractEvidence"]["source"] in visible
+        for field in row["fields"].values():
+            if "source" in field:
+                assert field["source"] in visible
+            for evidence in field.get("evidence", []):
+                assert evidence["source"] in visible
+    return report["planner"]
 
 
 def failed(result, reason):
@@ -196,7 +205,19 @@ tool_timeout_sec = 65
             raise
 
 
-def codex_check(root, codex, bridge, server, profile, grant, planner):
+def freetext_turn(router, prompt, invoke):
+    selected = subprocess.run([str(router)], input=prompt, text=True, capture_output=True,
+                              check=True, timeout=30)
+    calls = json.loads(selected.stdout)
+    if calls == []:
+        return None, "Diese Frage wurde keinem Vauldy-Recherchewerkzeug zugeordnet."
+    if calls != [TOOL]:
+        raise AssertionError("Unexpected local model tool selection")
+    result = invoke()
+    return result, result["content"][0]["text"]
+
+
+def codex_check(root, codex, bridge, server, profile, grant, planner, router):
     host = LocalCodex(codex, root, bridge, server, profile, planner)
     try:
         result = host.request("thread/start", {"cwd": str(root), "ephemeral": True,
@@ -206,11 +227,45 @@ def codex_check(root, codex, bridge, server, profile, grant, planner):
         servers = listed["data"]
         assert len(servers) == 1 and TOOL in servers[0]["tools"]
         params = {"threadId": thread_id, "server": HOST_NAME, "tool": TOOL, "arguments": {}}
-        mode = successful(host.request("mcpServer/tool/call", params, timeout=40))
-        assert mode == ("apple-on-device" if planner else "fixed-request")
+        calls = 0
+
+        def invoke():
+            nonlocal calls
+            calls += 1
+            return host.request("mcpServer/tool/call", params, timeout=40)
+
+        expected_mode = "apple-on-device" if planner else "fixed-request"
+        if router is None:
+            assert successful(invoke()) == expected_mode
+            atomic_json(profile, grant | {"enabled": False})
+            failed(invoke(), "mcp-denied-or-stale")
+            atomic_json(profile, grant)
+            return None
+
+        for question in (
+            "Welche Versicherungsverträge habe ich? Bitte als Tabelle mit Versicherer, Vertragsnummer und Kündigungsfrist.",
+            "Bei wem bin ich versichert und wann kann ich meine Verträge kündigen? Gib mir bitte die Übersicht aller Policen.",
+        ):
+            result, message = freetext_turn(router, question, invoke)
+            assert successful(result) == expected_mode
+            assert message == result["content"][0]["text"] and "3 belegte Verträge" in message
+
+        for question in (
+            "Zeige mir nur meine Hausratversicherungen aus dem Jahr 2024.",
+            "Wie viel ist sieben plus fünf?",
+        ):
+            result, message = freetext_turn(router, question, invoke)
+            assert result is None and "keinem Vauldy-Recherchewerkzeug" in message
+        assert calls == 2, "Unrelated or narrower request accessed the inventory"
+
         atomic_json(profile, grant | {"enabled": False})
-        failed(host.request("mcpServer/tool/call", params, timeout=20), "mcp-denied-or-stale")
+        result, message = freetext_turn(
+            router, "Erstelle mir eine Übersicht über alle meine Versicherungspolicen und ihre Kündigungsfristen.", invoke
+        )
+        failed(result, "mcp-denied-or-stale")
+        assert "keine Dokumentzeilen" in message and calls == 3
         atomic_json(profile, grant)
+        return {"successfulTurns": 2, "noToolTurns": 2, "revokedTurns": 1, "actualToolCalls": calls}
     finally:
         host.close()
 
@@ -222,8 +277,11 @@ def main():
     parser.add_argument("server", type=path)
     parser.add_argument("--planner", type=path)
     parser.add_argument("--codex", type=path)
+    parser.add_argument("--router", type=path, help="Native local chat model for free-text tool selection")
     parser.add_argument("--require-network-denied", action="store_true")
     args = parser.parse_args()
+    if args.router and not args.codex:
+        parser.error("--router requires --codex")
     if args.require_network_denied:
         check_network_denied()
 
@@ -233,11 +291,12 @@ def main():
         original_vault, original_grant = vault.read_bytes(), profile.read_bytes()
         model = wire_check(root, args.bridge, args.server, profile, grant, args.planner)
         profile.write_bytes(original_grant)
+        freetext = None
         if args.codex:
-            codex_check(root, args.codex, args.bridge, args.server, profile, grant, args.planner)
+            freetext = codex_check(root, args.codex, args.bridge, args.server, profile, grant, args.planner, args.router)
             profile.write_bytes(original_grant)
         assert vault.read_bytes() == original_vault and profile.read_bytes() == original_grant
-    print(json.dumps({"stdio": True, "codexToolCall": bool(args.codex), "planner": model,
+    print(json.dumps({"stdio": True, "codexToolCall": bool(args.codex), "planner": model, "freetext": freetext,
                       "networkDenied": args.require_network_denied, "passed": [
                           "table-and-source-references", "fixed-tool-parameters", "busy",
                           "cancellation-no-response", "revocation", "timeout", "synthetic-source-unchanged",
