@@ -251,6 +251,22 @@ Im Lauf mit gesperrtem Prozessnetz führten zwei verschieden formulierte Versich
 
 Dieser Nachweis betrifft die lokale Modellwahl, den Codex-Werkzeugaufruf und die vom Testclient gezeigte Antwort. Die Darstellung im normalen ChatGPT- oder Codex-Gespräch mit dem dort ausgewählten Modell hat einen eigenen Abnahmepunkt.
 
+### Abnahme im regulären ChatGPT-Gespräch
+
+**Vorprüfung vom 04.11.2026.** Die erreichbare ChatGPT-Weboberfläche zeigte die Anmeldung. Der reguläre ChatGPT-Werkzeugaufruf konnte deshalb in diesem Lauf nicht ausgeführt werden. Ein frisches synthetisches Profil mit eigenem stdio-Startbefehl wurde lokal geprüft. Dieser Einstieg bietet ausschließlich `research_insurance_contracts` an und liefert die erwartete Tabelle mit drei belegten Verträgen.
+
+Der erneute lokale HTTP/OAuth-Test bestätigte vier angebotene Werkzeuge. Der Relay-Abgleich bestätigte dieselbe Standardliste für den Relay-Code. Für diesen Test ist der separate Recherche-Adapter der Zielprozess. Das ChatGPT-Webgespräch benötigt einen separat hinzugefügten MCP-Anschluss. OpenAI unterstützt für einen privaten Testanschluss einen Secure MCP Tunnel, der einen lokalen stdio-Prozess aufruft. [Benutzerdefinierte MCP-Server in ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server) · [Secure MCP Tunnel](https://developers.openai.com/api/docs/guides/secure-mcp-tunnels)
+
+1. Einen angemeldeten Test-Workspace mit Zugriff auf einen separaten privaten Tunnel verwenden. Den vorhandenen Tunnel-Client mit dem geprüften stdio-Startbefehl und dem synthetischen Profil starten. Den Runtime-Schlüssel ausschließlich lokal eingeben. In ChatGPT den Testanschluss hinzufügen und die Anzeige von `research_insurance_contracts` prüfen.
+2. Im neuen Chat den Testanschluss auswählen und fragen „Welche Versicherungsverträge habe ich? Bitte als Tabelle mit Versicherer, Vertragsnummer und Kündigungsfrist.“ Den tatsächlichen Werkzeugaufruf und die angezeigten drei Tabellenzeilen prüfen. Erwartet sind Seitenbelege, pseudonymisierte Vertragsnummern, eine fehlende Frist und eine widersprüchliche Frist.
+3. Das synthetische Profil widerrufen und in einem weiteren neuen Chat erneut fragen. Der Werkzeugaufruf muss den Freigabefehler liefern. Die Antwort darf keine früheren Dokumentzeilen wiedergeben.
+
+```sh
+python3 scripts/mcp/research_chat_smoke_test.py .build/release/vauldy-research-mcp .build/release/vauldy-mcp
+python3 scripts/mcp/oauth_smoke_test.py .build/release/vauldy-local .build/release/vauldy-mcp-http
+python3 scripts/mcp/export_relay_tools.py .build/release/vauldy-mcp --check
+```
+
 ### Grundlage aus Iteration 5
 
 Der [Werkzeugvertrag v1](mcp-mvp.md#vauldy-werkzeugvertrag-v1) beschreibt Handles, Seitenbelege, Vollständigkeit und Widerruf. Die vier Werkzeugnamen und ihre Schemas sind im stdio-Test festgehalten. Der SQLite-Pilot verwirft die frühere Cache-Schemaversion, damit alte Listenmetadaten neu berechnet werden. Der lokale JSON-Bestand bleibt lesbar.
