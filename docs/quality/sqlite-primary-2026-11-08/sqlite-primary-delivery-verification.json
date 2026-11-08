@@ -1,0 +1,39 @@
+{
+  "zip": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/sqlite-primary-20261108/Vauldy.zip",
+  "bytes": 19426729,
+  "sha256": "fd3f0330a630806bcfc531aac4e6032056991ecc4b3f6b1395589f2a6d7fc0a7",
+  "versions": {
+    "setup": "vauldy-mcp-setup 0.13.1",
+    "server": "vauldy-mcp 0.13.1",
+    "cli": "vauldy-local 0.13.1",
+    "http": "vauldy-mcp-http 0.13.1",
+    "relay": "vauldy-relay 0.13.1",
+    "status": "vauldy-mcp-status 0.13.1"
+  },
+  "buildInfo": {
+    "softwareCompatibilityEpoch": 2,
+    "documentStorage": "json-or-sqlite",
+    "buildID": "macho.198d43aa07dd3ffe8f81b527201ac6b8",
+    "supportedDocumentStorage": [
+      "json-snapshot",
+      "sqlite-v2"
+    ],
+    "tools": [
+      "compare_contract_versions",
+      "extract_document_fields",
+      "get_deadline_overview",
+      "get_document_inventory",
+      "get_topic_overview",
+      "get_vault_status",
+      "list_documents",
+      "read_document",
+      "search_documents"
+    ],
+    "productVersion": "0.13.1"
+  },
+  "deepStrictSignature": true,
+  "crc": true,
+  "signing": "ad-hoc; not notarized",
+  "sourceBase": "f0669ab1fb4ad4e6ce35d4ff9b4b835cbfed526a",
+  "buildMode": "reused after all six programs rebuilt and source bytes compared"
+}

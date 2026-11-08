@@ -367,6 +367,7 @@ final class SetupModel: ObservableObject {
     }
 
     func load(_ url: URL, profile: MCPAccessProfile? = nil) {
+        let url = LocalDocumentStore.resolvedSnapshotURL(url)
         shownImportDocumentIDs = nil
         localSnapshotURL = localStore.snapshotURL
         let generation = UUID(); loadGeneration = generation

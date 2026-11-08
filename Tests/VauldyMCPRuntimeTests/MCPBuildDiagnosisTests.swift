@@ -108,7 +108,7 @@ private func probe(_ root: URL, tools: [String], mode: String = "normal") throws
             time.sleep(10)
         method=request['method']
         if method=='initialize':
-            result={'protocolVersion':'wrong' if mode=='protocol' else '2025-11-25','serverInfo':{'name':'vauldy','version':'0.13.0'}}
+            result={'protocolVersion':'wrong' if mode=='protocol' else '2025-11-25','serverInfo':{'name':'vauldy','version':'\(MCPBuild.version)'}}
         elif method=='tools/list':
             offset=int(request.get('params',{}).get('cursor','0'))
             result={'tools':[{'name':name} for name in tools[offset:offset+3]]}

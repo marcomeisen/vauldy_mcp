@@ -95,7 +95,7 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     func makeReport() async throws {
         let priorSelection = report == nil ? nil : selected
         let currentProfile = try FileMCPProfileSource(url: installation.profileURL(profile.connectionID)).load()
-        guard URL(fileURLWithPath: currentProfile.vaultPath).standardizedFileURL == store.snapshotURL else { throw LocalInventoryError.wrongStore }
+        guard LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: currentProfile.vaultPath)) == store.snapshotURL else { throw LocalInventoryError.wrongStore }
         profile = currentProfile
         report = nil; acknowledged = false; acknowledgedReview = false; approval = nil
         let observed = try await MCPInventoryQualityService(store: store).report { [weak self] done, total in
@@ -212,8 +212,8 @@ extension SetupModel {
                     profile = activeConnection
                 }
                 guard let executable = localExecutable else { throw LocalImportError.storageUnavailable }
-                let expected = installation.root.appendingPathComponent("vault/documents.json").standardizedFileURL
-                guard URL(fileURLWithPath: profile.vaultPath).standardizedFileURL == expected else { throw LocalInventoryError.wrongStore }
+                let expected = LocalDocumentStore(root: installation.root.appendingPathComponent("vault")).snapshotURL
+                guard LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) == expected else { throw LocalInventoryError.wrongStore }
                 inventoryWorkflow = .init(installation: installation, executable: executable, profile: profile,
                     updatesChatGPT: response.state.paired && response.state.profileID == profile.connectionID) { [weak self] state in
                         if let state { self?.relayState = state; self?.relayRunning = state.running }

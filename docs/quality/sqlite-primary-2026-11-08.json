@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-08",
+  "version": "0.13.1",
+  "sourceBase": "f0669ab1fb4ad4e6ce35d4ff9b4b835cbfed526a",
+  "storageFormat": 4,
+  "sqliteSchema": 2,
+  "softwareCompatibilityEpoch": 2,
+  "tests": {
+    "functions": 88,
+    "suites": 11,
+    "seconds": 17.708,
+    "passed": true,
+    "buildDiagnosisFunctions": 5,
+    "buildDiagnosisSeconds": 5.052
+  },
+  "gates": {
+    "realPackagedPrimaryActivation": true,
+    "visionBeforeAndAfter": true,
+    "epoch1Upgrade": true,
+    "incompatibleRollbackRefused": true,
+    "actualOldWriterRefused": true,
+    "stdioBothChannelsAndRevocation": true,
+    "softwareUpdateAndRollbackFaults": true,
+    "noStartupWorkerResumption": true,
+    "deepStrictSignatureAndCRC": true
+  },
+  "productionOperation": {
+    "explicitlyRequested": true,
+    "activated": true,
+    "documents": 96,
+    "allFieldsAndRowDigestsVerified": true,
+    "integrityCheck": "ok",
+    "managedOriginalCopiesByteUnchanged": 88,
+    "originalReferencesPreserved": 8,
+    "profileConfigWatchFilesByteUnchanged": true,
+    "localMCPProbe": true,
+    "externalChatGPTVerification": "pending native keychain approval; no ACL changes"
+  },
+  "package": {
+    "relativePath": "dist/mcp/sqlite-primary-20261108/Vauldy.zip",
+    "bytes": 19426729,
+    "sha256": "fd3f0330a630806bcfc531aac4e6032056991ecc4b3f6b1395589f2a6d7fc0a7",
+    "buildID": "macho.198d43aa07dd3ffe8f81b527201ac6b8",
+    "signing": "ad-hoc; not notarized",
+    "buildMode": "reused after all six products rebuilt",
+    "sourceCommit": null
+  },
+  "limits": [
+    "Crash recovery tests reconstruct interrupted state; no power-loss claim",
+    "No fresh offline Mac or external target-chat acceptance",
+    "Other existing JSON stores are not automatically migrated",
+    "Actual records, profiles, credentials and backups are excluded from repository"
+  ]
+}

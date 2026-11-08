@@ -40,8 +40,8 @@ def main():
                      enabled=True, acknowledgedCloudDisclosure=True, vaultPath=str(vault), allowedDocumentIDs=[document])
         profile.write_text(json.dumps(grant)); original = vault.read_bytes(), profile.read_bytes()
         info = output([args.mcp, '--build-info'])
-        assert len(info['tools']) == 9 and info['documentStorage'] == 'json-snapshot'
-        assert subprocess.check_output([args.mcp, '--version'], text=True).strip() == 'vauldy-mcp 0.13.0'
+        assert len(info['tools']) == 9 and info['documentStorage'] == 'json-or-sqlite'
+        assert subprocess.check_output([args.mcp, '--version'], text=True).strip() == 'vauldy-mcp ' + info['productVersion']
         old_client, current_client = None, None
         try:
             old_client = Client(old_binary, profile)
@@ -50,9 +50,9 @@ def main():
             assert len(old_tools) == 6, f'Expected actual six-tool package, found {len(old_tools)}'
             old_probe = output([old_dir/'vauldy-local', 'check-connection', '--profile', profile])
             assert old_probe['serverVersion'] == '0.13.0' and not old_probe['compatible'] and not old_probe['buildVerified']
-            assert old_probe['missingTools'] == ['compare_contract_versions', 'get_deadline_overview']
+            assert old_probe['missingTools'] == ['compare_contract_versions', 'get_deadline_overview', 'get_document_inventory']
             current_client = Client(args.mcp, profile)
-            assert current_client.initialization['serverInfo']['version'] == '0.13.0+' + info['buildID']
+            assert current_client.initialization['serverInfo']['version'] == info['productVersion'] + '+' + info['buildID']
             actual_tools = sorted(item['name'] for item in current_client.request('tools/list', {})['tools'])
             assert actual_tools == info['tools']
             current_probe = output([args.local, 'check-connection', '--profile', profile])
@@ -72,7 +72,7 @@ def main():
             assert current_client.call('list_documents', includeExcerpts=False)['isError']
             assert old_client.call('list_documents', includeExcerpts=False)['isError']
             assert vault.read_bytes() == original[0]
-            report = dict(passed=True, productVersion='0.13.0', currentBuild=info, actualLegacyTools=old_tools,
+            report = dict(passed=True, productVersion=info['productVersion'], currentBuild=info, actualLegacyTools=old_tools,
                           legacyProbe=old_probe, currentProbe=current_probe, pausedProbe=paused,
                           simultaneousOldAndNewProcesses=True, noDiagnosticHostConfusion=True,
                           originalAndGrantUnchangedByProbe=True, revocationBothBuilds=True,

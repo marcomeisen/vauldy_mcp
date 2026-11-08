@@ -78,7 +78,7 @@ public struct MCPBuildInformation: Codable, Sendable {
     public init(tools: [String] = []) {
         productVersion = MCPBuild.version; buildID = MCPBuildIdentity.running
         softwareCompatibilityEpoch = MCPBuild.softwareCompatibilityEpoch
-        documentStorage = "json-snapshot"; supportedDocumentStorage = ["json-snapshot", "sqlite-v2"]; self.tools = tools.sorted()
+        documentStorage = "json-or-sqlite"; supportedDocumentStorage = ["json-snapshot", "sqlite-v2"]; self.tools = tools.sorted()
     }
 }
 

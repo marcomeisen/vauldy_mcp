@@ -48,7 +48,7 @@ extension MCPInstallation {
             guard !release.versionParts.lexicographicallyPrecedes(version) else { throw MCPUpdateError.downgrade }
         }
         if let prior {
-            let current = try checkedGeneration(in: softwareDirectory, state: prior, trust: trust)
+            let current = try checkedGeneration(in: softwareDirectory, state: prior, trust: trust, allowPreviousEpoch: true)
             if current.signature == release.signature {
                 try probeSoftware(binaryURL, release)
                 removeObsoleteSlots(keeping: prior.previous)
@@ -116,7 +116,11 @@ extension MCPInstallation {
 
     var hasSoftwareRollback: Bool {
         guard let state = try? softwareGeneration(), let slot = state.previous else { return false }
-        return (try? softwareGeneration(in: softwareSlot(slot))) != nil
+        let directory = softwareSlot(slot)
+        guard (try? softwareGeneration(in: directory)) != nil,
+              let data = try? readManaged(directory.appendingPathComponent(Self.setupBundleName + "/Contents/Resources/release.json"), limit: 16_384),
+              let manifest = try? JSONDecoder().decode(MCPRelease.Manifest.self, from: data) else { return false }
+        return manifest.softwareCompatibilityEpoch == MCPBuild.softwareCompatibilityEpoch
     }
 
     private func softwareSlot(_ id: UUID) -> URL {
@@ -158,9 +162,9 @@ extension MCPInstallation {
     }
 
     private func checkedGeneration(in directory: URL, state: MCPSoftwareGeneration,
-                                   trust: MCPUpdateTrust) throws -> MCPRelease {
+                                   trust: MCPUpdateTrust, allowPreviousEpoch: Bool = false) throws -> MCPRelease {
         _ = try softwareCompanionFiles(in: directory)
-        let release = try MCPRelease(app: directory.appendingPathComponent(Self.setupBundleName), trust: trust)
+        let release = try MCPRelease(app: directory.appendingPathComponent(Self.setupBundleName), trust: trust, allowPreviousEpoch: allowPreviousEpoch)
         guard release.version == state.version, release.signature == state.signature else { throw MCPUpdateError.signature }
         for product in MCPRelease.installedProducts {
             let installed = directory.appendingPathComponent(product)
@@ -262,7 +266,7 @@ private struct MCPRelease {
     let serverBuildID: String?
     let declaredTools: [String]?
 
-    private struct Manifest: Decodable {
+    fileprivate struct Manifest: Decodable {
         let manifestVersion: Int
         let productVersion: String
         let softwareCompatibilityEpoch: Int
@@ -270,7 +274,7 @@ private struct MCPRelease {
         let tools: [String]?
     }
 
-    init(app: URL, trust: MCPUpdateTrust) throws {
+    init(app: URL, trust: MCPUpdateTrust, allowPreviousEpoch: Bool = false) throws {
         try Self.checkTree(app)
         signature = try trust.validate(app, identifier: Self.setupIdentifier)
         resources = app.appendingPathComponent("Contents/Resources")
@@ -279,7 +283,9 @@ private struct MCPRelease {
         defer { try? manifestData.close() }
         guard let data = try manifestData.read(upToCount: 16_385), data.count <= 16_384,
               let manifest = try? JSONDecoder().decode(Manifest.self, from: data),
-              manifest.manifestVersion == 1, manifest.softwareCompatibilityEpoch == MCPBuild.softwareCompatibilityEpoch,
+              manifest.manifestVersion == 1,
+              (manifest.softwareCompatibilityEpoch == MCPBuild.softwareCompatibilityEpoch
+                || (allowPreviousEpoch && MCPBuild.softwareCompatibilityEpoch == 2 && manifest.softwareCompatibilityEpoch == 1)),
               let parts = Self.versionParts(manifest.productVersion),
               let bundle = Bundle(url: app), bundle.bundleIdentifier == Self.setupIdentifier,
               bundle.object(forInfoDictionaryKey: "CFBundleExecutable") as? String == "vauldy-mcp-setup",

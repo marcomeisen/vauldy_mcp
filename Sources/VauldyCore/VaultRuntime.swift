@@ -11,7 +11,7 @@ public actor LocalVault {
         var bytes: Int { fields.reduce(0) { $0 + $1.normalized.utf8.count } }
     }
 
-    public init(source: any VaultSnapshotSource = FileVaultSnapshotSource()) {
+    public init(source: any VaultSnapshotSource = LocalVaultSnapshotSource(fileURL: FileVaultSnapshotSource.defaultVaultURL())) {
         self.source = source
     }
 

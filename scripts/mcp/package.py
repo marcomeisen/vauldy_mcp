@@ -52,7 +52,7 @@ def verify_build_information(binary_dir, version, compatibility_epoch, env):
                 'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'}
     if (info.get('productVersion') != version or not re.fullmatch(r'macho\.[0-9a-f]{32}', info.get('buildID', ''))
             or set(info.get('tools', [])) != required or len(info['tools']) != len(required)
-            or info.get('documentStorage') != 'json-snapshot'
+            or info.get('documentStorage') != 'json-or-sqlite'
             or info.get('softwareCompatibilityEpoch') != compatibility_epoch):
         raise SystemExit('MCP build identity or capabilities do not match the current package contract.')
     return info

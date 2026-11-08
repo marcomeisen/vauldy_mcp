@@ -92,7 +92,7 @@ public enum RelayUIManager {
                       request.acknowledgedDisclosure == true, let verification = request.nativeVerification else { throw RelayFailure.changedGrant }
                 let localStore = LocalDocumentStore(root: installation.root.appendingPathComponent("vault"))
                 let profile = try FileMCPProfileSource(url: installation.profileURL(id)).load()
-                guard profile.revision == revision, try profile.disclosureFingerprint() == fingerprint, URL(fileURLWithPath: profile.vaultPath).standardizedFileURL == localStore.snapshotURL else { throw RelayFailure.changedGrant }
+                guard profile.revision == revision, try profile.disclosureFingerprint() == fingerprint, LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) == localStore.snapshotURL else { throw RelayFailure.changedGrant }
                 let report = try await MCPInventoryQualityService(store: localStore).report(using: verification)
                 guard report.snapshotDigest == digest else { throw LocalInventoryError.changed }
                 try report.validateSelection(Set(requested), acknowledgedReview: request.acknowledgedReview == true)

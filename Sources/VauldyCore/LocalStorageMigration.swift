@@ -152,8 +152,9 @@ public struct LocalStorageMigration: Sendable {
                        estimatedRequiredBytes: estimate, fingerprint: token)
     }
 
-    private func withFrozenSource<T>(_ operation: () throws -> T) throws -> T {
+    private func withFrozenSource<T>(recoveringActivation: Bool = false, _ operation: () throws -> T) throws -> T {
         try directory(source)
+        guard recoveringActivation || !exists(source.appendingPathComponent("SQLITE_ACTIVATION_PENDING")) else { throw Failure.busy }
         // Read the marker before opening locks: never initialize an arbitrary directory.
         _ = try marker(source)
         var leases: [LocalWorkerLease] = []
@@ -301,9 +302,9 @@ public struct LocalStorageMigration: Sendable {
     private func marker(_ root: URL) throws -> Format {
         let value = try JSONSerialization.jsonObject(with: read(root.appendingPathComponent("store.json"), limit: 4096)) as? [String: Any]
         guard let value, Set(value.keys) == ["kind", "version"], value["kind"] as? String == "vauldy-local-core",
-              let version = value["version"] as? Int, (1...3).contains(version),
+              let version = value["version"] as? Int, (1...4).contains(version),
               (allowPending || !exists(root.deletingLastPathComponent().appendingPathComponent("INCOMPLETE"))) else { throw Failure.incompatible }
-        return version == 3 ? .sqlite : .json
+        return version >= 3 ? .sqlite : .json
     }
     private func originalFiles(_ files: [String: String]) -> [String: String] { files.filter { $0.key.hasPrefix("originals/") } }
     private func encode(_ documents: [VaultDocument]) throws -> Data {
@@ -363,5 +364,145 @@ public struct LocalStorageMigration: Sendable {
         let fd = Darwin.open(root.path, O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW)
         guard fd >= 0 else { throw Failure.unsafePath }; defer { close(fd) }
         guard fsync(fd) == 0 else { throw Failure.verification }
+    }
+}
+
+extension LocalStorageMigration {
+    public struct Activation: Codable, Sendable {
+        public let storage: String
+        public let vaultPath: String
+        public let backupPath: String
+        public let documents: Int
+        public let verified: Bool
+        public let profilesChanged: Bool
+    }
+    private struct PendingActivation: Codable {
+        var version = 1
+        let prepared: String
+        let sourceHash: String
+        let marker: Data
+        let staging: String
+        let archive: String
+    }
+    private var activationPending: URL { source.appendingPathComponent("SQLITE_ACTIVATION_PENDING") }
+
+    /// Promote a verified additive transfer at the existing root. Format 4 excludes old
+    /// writers and explicitly routes existing logical JSON grants to this SQLite store.
+    public func activateSQLite(from prepared: URL, expected: String) throws -> Activation {
+        try activateSQLite(from: prepared, expected: expected, checkpoint: { _ in })
+    }
+
+    package func activateSQLite(from prepared: URL, expected: String,
+                                checkpoint: (String) throws -> Void) throws -> Activation {
+        try withFrozenSource {
+            let original = try inspect(), plan = try preview(original, format: .sqlite)
+            guard original.format == .json, plan.fingerprint == expected else { throw Failure.changed }
+            try directory(prepared)
+            guard !exists(prepared.appendingPathComponent("INCOMPLETE")),
+                  !exists(source.appendingPathComponent("sqlite")),
+                  !prepared.resolvingSymlinksInPath().path.hasPrefix(source.resolvingSymlinksInPath().path + "/") else { throw Failure.unsafePath }
+            let backup = prepared.appendingPathComponent("backup"), ready = prepared.appendingPathComponent("vault")
+            try verifyBackup(backup)
+            let backed = try LocalStorageMigration(source: backup).inspect()
+            let converted = try LocalStorageMigration(source: ready).inspect()
+            guard backed.format == .json, converted.format == .sqlite else { throw Failure.incompatible }
+            try compare(original.documents, backed.documents)
+            try compare(original.documents, converted.documents)
+            guard originalFiles(original.files) == originalFiles(backed.files),
+                  originalFiles(original.files) == originalFiles(converted.files),
+                  original.files["documents.json"] == backed.files["documents.json"],
+                  original.files["store.json"] == backed.files["store.json"] else { throw Failure.verification }
+            let token = UUID().uuidString
+            let pending = PendingActivation(prepared: prepared.resolvingSymlinksInPath().path,
+                sourceHash: original.files["documents.json"]!, marker: try read(source.appendingPathComponent("store.json")),
+                staging: ".sqlite-activation-" + token, archive: "activation-source-" + token)
+            let archive = prepared.appendingPathComponent(pending.archive)
+            guard mkdir(archive.path, S_IRWXU) == 0 else { throw Failure.unsafePath }
+            try write(pending.marker, archive.appendingPathComponent("store.json"))
+            try write(JSONEncoder().encode(pending), activationPending)
+            try syncDirectory(source)
+            do {
+                let database = try SQLiteDocumentStore(directory: ready.appendingPathComponent("sqlite"), readOnly: true)
+                let copied = try database.backup(toNewDirectory: source.appendingPathComponent(pending.staging))
+                try compare(original.documents, copied.documents())
+                try synchronizeTree(source.appendingPathComponent(pending.staging))
+                try checkpoint("prepared")
+                guard try inspect().token == original.token else { throw Failure.changed }
+                guard renamex_np(source.appendingPathComponent(pending.staging).path,
+                                 source.appendingPathComponent("sqlite").path, UInt32(RENAME_EXCL)) == 0 else { throw Failure.unsafePath }
+                for name in ["documents.json", "documents.backup.json"] where original.files[name] != nil {
+                    guard try fileHash(source.appendingPathComponent(name)) == original.files[name],
+                          renamex_np(source.appendingPathComponent(name).path, archive.appendingPathComponent(name).path,
+                                     UInt32(RENAME_EXCL)) == 0 else { throw Failure.changed }
+                }
+                try syncDirectory(archive)
+                // Atomic marker replacement is the commit point. Pending blocks new readers
+                // throughout; older v1-v3 writers reject format 4 rather than recreate JSON.
+                try LocalDocumentStore(root: source).privateWrite(Data("{\"kind\":\"vauldy-local-core\",\"version\":4}".utf8),
+                                                                to: source.appendingPathComponent("store.json"))
+                try syncDirectory(source)
+                try checkpoint("marker-published")
+                let active = try SQLiteDocumentStore(directory: source.appendingPathComponent("sqlite"), readOnly: true)
+                try active.validateForMigration()
+                try compare(original.documents, active.documents())
+                try verifyBackup(backup)
+                let result = Activation(storage: "sqlite", vaultPath: source.appendingPathComponent("sqlite/records.sqlite").path,
+                    backupPath: backup.path, documents: original.documents.count, verified: true, profilesChanged: false)
+                try write(JSONEncoder().encode(result), archive.appendingPathComponent("activation-receipt.json"))
+                try synchronizeTree(archive)
+                try FileManager.default.removeItem(at: activationPending)
+                try syncDirectory(source)
+                return result
+            } catch {
+                let failure = error
+                // If rollback itself fails, pending remains and all current access fails closed.
+                _ = try rollbackActivation(pending)
+                throw failure
+            }
+        }
+    }
+
+    /// Explicit recovery only. Never restores over later changes to either backend.
+    public func recoverSQLiteActivation() throws -> Activation {
+        try withFrozenSource(recoveringActivation: true) {
+            let pending = try JSONDecoder().decode(PendingActivation.self, from: read(activationPending, limit: 16_384))
+            return try rollbackActivation(pending)
+        }
+    }
+
+    private func rollbackActivation(_ pending: PendingActivation) throws -> Activation {
+        guard pending.version == 1, pending.staging.hasPrefix(".sqlite-activation-"),
+              UUID(uuidString: String(pending.staging.dropFirst(".sqlite-activation-".count))) != nil,
+              pending.archive.hasPrefix("activation-source-"),
+              UUID(uuidString: String(pending.archive.dropFirst("activation-source-".count))) != nil else { throw Failure.verification }
+        let prepared = URL(fileURLWithPath: pending.prepared), backup = prepared.appendingPathComponent("backup")
+        try directory(prepared); try verifyBackup(backup)
+        guard hash(try read(backup.appendingPathComponent("store.json"))) == hash(pending.marker),
+              hash(try read(backup.appendingPathComponent("documents.json"))) == pending.sourceHash else { throw Failure.verification }
+        let original = try LocalStorageMigration(source: backup).inspect()
+        if try marker(source) == .sqlite {
+            let active = try SQLiteDocumentStore(directory: source.appendingPathComponent("sqlite"), readOnly: true)
+            try compare(original.documents, active.documents()) // Preserve unexpected later SQL edits.
+        }
+        for name in ["documents.json", "documents.backup.json"] where original.files[name] != nil {
+            let url = source.appendingPathComponent(name)
+            if exists(url) { guard try fileHash(url) == original.files[name] else { throw Failure.changed } }
+            else { try write(read(backup.appendingPathComponent(name)), url) }
+        }
+        let archive = prepared.appendingPathComponent(pending.archive)
+        try directory(archive)
+        for name in ["sqlite", pending.staging] where exists(source.appendingPathComponent(name)) {
+            try directory(source.appendingPathComponent(name))
+            guard renamex_np(source.appendingPathComponent(name).path,
+                             archive.appendingPathComponent("retained-sqlite-" + UUID().uuidString).path,
+                             UInt32(RENAME_EXCL)) == 0 else { throw Failure.unsafePath }
+        }
+        try LocalDocumentStore(root: source).privateWrite(pending.marker, to: source.appendingPathComponent("store.json"))
+        try compare(original.documents, inspect().documents)
+        try syncDirectory(source); try syncDirectory(archive)
+        try FileManager.default.removeItem(at: activationPending)
+        try syncDirectory(source)
+        return Activation(storage: "json-snapshot", vaultPath: source.appendingPathComponent("documents.json").path,
+                          backupPath: backup.path, documents: original.documents.count, verified: true, profilesChanged: false)
     }
 }

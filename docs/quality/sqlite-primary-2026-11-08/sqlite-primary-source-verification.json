@@ -1,0 +1,26 @@
+{
+  "productionSwiftFiles": 112,
+  "allSourceAndManifestBytesMatch": true,
+  "sourceBase": "f0669ab1fb4ad4e6ce35d4ff9b4b835cbfed526a",
+  "currentChanges": [
+    "Sources/VauldyCore/LocalDocumentStore.swift",
+    "Sources/VauldyCore/LocalInventoryReconciliation.swift",
+    "Sources/VauldyCore/LocalStorageMigration.swift",
+    "Sources/VauldyCore/LocalVaultSnapshotSource.swift",
+    "Sources/VauldyCore/VaultRuntime.swift",
+    "Sources/VauldyLocalCLI/main.swift",
+    "Sources/VauldyMCPRuntime/MCPBuild.swift",
+    "Sources/VauldyMCPRuntime/MCPBuildIdentity.swift",
+    "Sources/VauldyMCPRuntime/MCPFileVersion.swift",
+    "Sources/VauldyMCPRuntime/MCPSoftwareUpdate.swift",
+    "Sources/VauldyMCPSetup/InventoryWorkflowModel.swift",
+    "Sources/VauldyMCPSetup/SetupModel.swift",
+    "Sources/VauldyRelay/RelayCredentials.swift",
+    "Sources/VauldyRelay/RelayUIControl.swift",
+    "Tests/VauldyMCPRuntimeTests/Fixtures/faint-line-corpus.json",
+    "docs/local-first-todo.md",
+    "docs/mcp-mvp.md",
+    "scripts/mcp/package.py"
+  ],
+  "packageScriptMatches": true
+}

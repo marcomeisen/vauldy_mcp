@@ -13,6 +13,7 @@ public enum LocalInventoryError: LocalizedError {
 }
 public enum LocalInventoryFingerprint {
     public static func snapshot(_ url: URL) throws -> String {
+        let url = LocalDocumentStore.resolvedSnapshotURL(url)
         if let generation = try LocalVaultSnapshotSource(fileURL: url).generation {
             // A replaced database with a restored generation must also invalidate reports.
             let attributes = try FileManager.default.attributesOfItem(atPath: url.path)

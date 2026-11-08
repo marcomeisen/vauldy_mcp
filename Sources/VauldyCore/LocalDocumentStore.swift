@@ -9,7 +9,16 @@ public struct LocalDocumentStore: Sendable {
     public var snapshotURL: URL { root.appendingPathComponent(isSQLite ? "sqlite/records.sqlite" : "documents.json") }
     public var storageKind: String { isSQLite ? "sqlite" : "json-snapshot" }
     var isSQLite: Bool {
-        (try? JSONDecoder().decode(Marker.self, from: Data(contentsOf: root.appendingPathComponent("store.json"))).version) == 3
+        (try? JSONDecoder().decode(Marker.self, from: Data(contentsOf: root.appendingPathComponent("store.json"))).version).map { (3...4).contains($0) } == true
+    }
+    /// A format-4 promotion explicitly retains the logical JSON path in existing grants.
+    /// No missing-file heuristic or profile/credential rewrite is involved.
+    public static func resolvedSnapshotURL(_ input: URL) -> URL {
+        let url = input.standardizedFileURL
+        guard url.lastPathComponent == "documents.json",
+              let marker = try? JSONDecoder().decode(Marker.self, from: Data(contentsOf: url.deletingLastPathComponent().appendingPathComponent("store.json"))),
+              marker.kind == "vauldy-local-core", marker.version == 4 else { return url }
+        return url.deletingLastPathComponent().appendingPathComponent("sqlite/records.sqlite")
     }
     private func database() throws -> SQLiteDocumentStore { try SQLiteDocumentStore(directory: root.appendingPathComponent("sqlite")) }
 
@@ -347,6 +356,7 @@ public struct LocalDocumentStore: Sendable {
     func locked<T>(_ operation: () throws -> T) throws -> T {
         do {
             guard !FileManager.default.fileExists(atPath: root.deletingLastPathComponent().appendingPathComponent("INCOMPLETE").path) else { throw LocalImportError.foreignStore }
+            guard !FileManager.default.fileExists(atPath: root.appendingPathComponent("SQLITE_ACTIVATION_PENDING").path) else { throw LocalImportError.storageUnavailable }
             try privateDirectory(root)
             let markerURL = root.appendingPathComponent("store.json")
             if !FileManager.default.fileExists(atPath: markerURL.path) {
@@ -357,10 +367,11 @@ public struct LocalDocumentStore: Sendable {
             }
             let lock = try LocalWorkerLease(url: root.appendingPathComponent("writer.lock"), wait: true)
             defer { lock.release() }
+            guard !FileManager.default.fileExists(atPath: root.appendingPathComponent("SQLITE_ACTIVATION_PENDING").path) else { throw LocalImportError.storageUnavailable }
             try refuseSymlink(markerURL)
             if FileManager.default.fileExists(atPath: markerURL.path) {
                 guard let marker = try? JSONDecoder().decode(Marker.self, from: Data(contentsOf: markerURL)),
-                      marker.kind == "vauldy-local-core", (1...3).contains(marker.version) else { throw LocalImportError.foreignStore }
+                      marker.kind == "vauldy-local-core", (1...4).contains(marker.version) else { throw LocalImportError.foreignStore }
                 guard FileManager.default.fileExists(atPath: snapshotURL.path) else { throw LocalImportError.damagedStore }
             } else {
                 let entries = try FileManager.default.contentsOfDirectory(atPath: root.path)

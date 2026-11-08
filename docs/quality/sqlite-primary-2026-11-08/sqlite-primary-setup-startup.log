@@ -1,0 +1,1 @@
+PASS: native setup with enabled watched folder starts no import worker; snapshots, config and original unchanged.

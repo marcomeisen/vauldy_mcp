@@ -1,0 +1,1 @@
+PASS: real signature rejects Finder/resource-fork metadata; exact cleanup restores validity, preserves quarantine/custom attributes and all signed bytes, is idempotent and rejects symlinks.

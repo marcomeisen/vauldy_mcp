@@ -1,0 +1,47 @@
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 1]
+[1 / 61] VauldyMCPSetup
+[2 / 37] VauldyCore
+/private/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-quality-ui-8hgfegu8/Sources/VauldyCore/VaultRuntime.swift:188:42: warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+186 |         var document: VaultDocument
+187 |         var score: Int
+188 |         var excerpt: VaultPageMarkedText.Section
+    |                                          `- warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+189 |     }
+190 | 
+
+VauldyDocumentCore.VaultPageMarkedText.Section:2:54: note: struct declared here
+1 | enum VaultPageMarkedText {
+2 | public struct VauldyDocumentCore.VaultPageMarkedText.Section : Equatable, Sendable {
+  |                                                      `- note: struct declared here
+3 |     public var page: Int?
+4 |     public var text: String
+[3 / 38] VauldyCore
+[6 / 11] VauldyMCPRuntimeTests-product
+[8 / 13] VauldyMCPRuntimeTests-product
+[13 / 17] VauldyMCPRuntimeTests-product
+[14 / 17] VauldyMCPRuntimeTests-product
+[15 / 17] VauldyMCPRuntimeTests-product
+Build complete! (6,19 Sek.)
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Explicit primary SQLite activation" started.
+◇ Test logicalGrantAndCacheFollowSQLiteWithoutJSONFallbackOrScopeExpansion() started.
+✔ Test logicalGrantAndCacheFollowSQLiteWithoutJSONFallbackOrScopeExpansion() passed after 0.535 seconds.
+◇ Test failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+◇ Test case passing 1 argument phase → "prepared" to failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+◇ Test case passing 1 argument phase → "marker-published" to failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+✔ Test failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) with 2 test cases passed after 0.757 seconds.
+◇ Test reconstructedCrashStateBlocksReadersAndRecoversLosslessly() started.
+✔ Test reconstructedCrashStateBlocksReadersAndRecoversLosslessly() passed after 0.335 seconds.
+◇ Test recoveryNeverDiscardsUnexpectedLaterSQLWrites() started.
+✔ Test recoveryNeverDiscardsUnexpectedLaterSQLWrites() passed after 0.513 seconds.
+◇ Test stalePreviewAndModifiedPreparedCopyCannotBeActivated() started.
+✔ Test stalePreviewAndModifiedPreparedCopyCannotBeActivated() passed after 0.238 seconds.
+◇ Test markerAloneNeverFallsBackToAnOldJSONSnapshot() started.
+✔ Test markerAloneNeverFallsBackToAnOldJSONSnapshot() passed after 0.206 seconds.
+✔ Suite "Explicit primary SQLite activation" passed after 2.588 seconds.
+✔ Test run with 6 tests in 1 suite passed after 2.588 seconds.

@@ -1,13 +1,15 @@
 import Foundation
 
 /// Read-only adapter shared by local administration and MCP. Existing JSON keeps its decoder,
-/// bounds and semantics. SQLite paths are explicit, never inferred from a missing JSON file.
+/// bounds and semantics. A format-4 marker explicitly promotes a legacy logical path;
+/// a missing JSON file alone never selects another backend.
 public struct LocalVaultSnapshotSource: VaultSnapshotSource {
     public let fileURL: URL
-    public init(fileURL: URL) { self.fileURL = fileURL }
+    public init(fileURL: URL) { self.fileURL = LocalDocumentStore.resolvedSnapshotURL(fileURL) }
     package var isSQLite: Bool { fileURL.lastPathComponent == "records.sqlite" }
     private func requirePublished() throws {
         let root = isSQLite ? fileURL.deletingLastPathComponent().deletingLastPathComponent() : fileURL.deletingLastPathComponent()
+        if FileManager.default.fileExists(atPath: root.appendingPathComponent("SQLITE_ACTIVATION_PENDING").path) { throw VaultSnapshotError.unreadable }
         if FileManager.default.fileExists(atPath: root.deletingLastPathComponent().appendingPathComponent("INCOMPLETE").path) { throw VaultSnapshotError.unreadable }
     }
     package func database() throws -> SQLiteDocumentStore {

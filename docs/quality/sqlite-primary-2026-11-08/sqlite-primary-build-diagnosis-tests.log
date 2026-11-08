@@ -1,0 +1,97 @@
+Building for debugging...
+[Computing dependencies]
+[Constructing description]
+[Pre-planning 1 / 1537]
+[Planning deferred tasks]
+[Starting]
+[32 / 183] CNIOOpenBSD
+[32 / 194]
+[36 / 199] CNIOFreeBSD
+[42 / 199] VauldyDemoDocuments
+[43 / 199] VauldyCore
+[50 / 184] NIOConcurrencyHelpers
+[55 / 182] SystemPackage
+[76 / 177] SystemPackage
+[80 / 176] CNIODarwin
+[87 / 172] NIOConcurrencyHelpers
+[95 / 186] CNIOLLHTTP
+[104 / 188] CNIOLinux
+[107 / 184] MCP
+[116 / 181] CNIOLLHTTP
+[119 / 182] VauldyPrivacy
+[122 / 178] MCP
+[123 / 187] VauldyCore/private/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-quality-ui-8hgfegu8/Sources/VauldyCore/VaultRuntime.swift:188:42: warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+186 |         var document: VaultDocument
+187 |         var score: Int
+188 |         var excerpt: VaultPageMarkedText.Section
+    |                                          `- warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+189 |     }
+190 | 
+
+VauldyDocumentCore.VaultPageMarkedText.Section:2:54: note: struct declared here
+1 | enum VaultPageMarkedText {
+2 | public struct VauldyDocumentCore.VaultPageMarkedText.Section : Equatable, Sendable {
+  |                                                      `- note: struct declared here
+3 |     public var page: Int?
+4 |     public var text: String
+
+[125 / 187] VauldyCore
+[128 / 183] VauldyCore
+[131 / 189] NIOCore
+[132 / 189] NIOCore
+[133 / 189] NIOCore
+[134 / 189] NIOCore
+[137 / 185] VauldyCore
+[138 / 197] VauldyCore
+[141 / 201] NIOEmbedded
+[142 / 202] VauldyMCPRuntime
+[147 / 211]
+[150 / 211] NIOEmbedded
+[154 / 211] NIOPosix
+[155 / 211] NIOPosix
+[156 / 211] NIOPosix
+[161 / 221] NIOPosix
+[163 / 227] NIOPosix
+[164 / 227] NIOPosix
+[165 / 227] NIOPosix
+[166 / 227] NIOEmbedded
+[168 / 229] VauldyOAuth
+[169 / 229] VauldyMCPProtocol
+[171 / 230] NIO
+[172 / 230] VauldyOAuth
+[181 / 199] _NIODataStructures
+[186 / 201] NIOHTTP1
+[188 / 203] VauldyMCPRuntimeTests-product
+[190 / 205] NIOHTTP1
+[193 / 203] NIOPosix
+[196 / 210] NIOHTTP1
+[197 / 220]
+[199 / 220]
+[201 / 220]
+[206 / 220] vauldy-mcp-http-product
+[208 / 220] vauldy-mcp-http-product
+[210 / 220] vauldy-mcp-http-product
+[216 / 222] VauldyMCPRuntimeTests-product
+[219 / 226] VauldyMCPRuntimeTests-product
+[219 / 226] NIOHTTP1
+[221 / 225] VauldyMCPRuntimeTests-product
+[222 / 225] vauldy-mcp-http-product
+[223 / 225] VauldyMCPRuntimeTests-product
+[224 / 224] vauldy-mcp-http-product
+Build complete! (15,33 Sek.)
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "R4 build identity and honest local diagnosis" started.
+◇ Test executableIdentityIsRealAndVersionKeepsProductSeparate() started.
+✔ Test executableIdentityIsRealAndVersionKeepsProductSeparate() passed after 0.001 seconds.
+◇ Test universalAndMalformedMachOHeadersAreBounded() started.
+✔ Test universalAndMalformedMachOHeadersAreBounded() passed after 0.001 seconds.
+◇ Test sameVersionOldBuildAndUnknownLegacyProcessNeedRestart() started.
+✔ Test sameVersionOldBuildAndUnknownLegacyProcessNeedRestart() passed after 0.001 seconds.
+◇ Test paginatedNineToolsAndLegacySixAreDistinguishedWithoutDocuments() started.
+✔ Test paginatedNineToolsAndLegacySixAreDistinguishedWithoutDocuments() passed after 0.887 seconds.
+◇ Test malformedDiscoveryAndProtocolHaveSpecificDiagnosis() started.
+✔ Test malformedDiscoveryAndProtocolHaveSpecificDiagnosis() passed after 4.162 seconds.
+✔ Suite "R4 build identity and honest local diagnosis" passed after 5.052 seconds.
+✔ Test run with 5 tests in 1 suite passed after 5.052 seconds.

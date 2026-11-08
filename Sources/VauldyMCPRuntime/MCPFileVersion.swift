@@ -15,6 +15,7 @@ struct MCPFileVersion: Equatable, Sendable {
     let owner: UInt32
     let databaseGeneration: String?
     init(_ url: URL) throws {
+        let url = LocalDocumentStore.resolvedSnapshotURL(url)
         let descriptor = Darwin.open(url.path, O_RDONLY | O_CLOEXEC)
         guard descriptor >= 0 else { throw MCPAccessError.unavailable }
         defer { Darwin.close(descriptor) }

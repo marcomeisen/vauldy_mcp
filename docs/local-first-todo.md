@@ -1,10 +1,70 @@
 # Vauldy Local-First · Entwicklungsstand
 
-Integrationsstand `main` (zuvor Arbeitsbranch `codex/local-first-product-readiness`). Jede Verbindung nutzt den MCP auf dem Mac des jeweiligen Kunden. JSON und das vorhandene Backup bleiben führend. Die Kundenabnahme folgt auf die intern geprüfte lokale Architektur.
+Integrationsstand `main` (zuvor Arbeitsbranch `codex/local-first-product-readiness`). Jede Verbindung nutzt den MCP auf dem Mac des jeweiligen Kunden. Auf ausdrücklichen Nutzerauftrag ist der bestehende lokale Bestand auf SQLite als führenden Speicher umgestellt; JSON bleibt als verifiziertes Backup erhalten. Bestehende andere JSON-Bestände werden nicht automatisch migriert. Die Kundenabnahme folgt auf die intern geprüfte lokale Architektur.
 
 Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der Chatbot ist die einzige Oberfläche für die Dokumentarbeit. Die Vauldy-Hauptapp ist aus dem Entwicklungsumfang ausgeschieden. Der vorhandene MCP-Einrichtungsassistent ist ein technischer Installations- und Verbindungsweg. Die künftige Einrichtung und Freigabeverwaltung werden separat vom Chatbetrieb festgelegt.
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
+
+## SQLite als führender Bestand · 08.11.2026
+
+Ausdrücklicher Nutzerauftrag: vorhandenen Datenbestand migrieren und SQLite ab sofort führen.
+Die Aktivierung erfolgt erst nach unabhängiger Sicherung und verlustlosem Vergleich.
+
+- Format 4 kennzeichnet die ausdrücklich aktivierte primäre SQLite. Bestehende logische
+  `documents.json`-Freigabepfade werden ausschließlich bei diesem Marker auf
+  `sqlite/records.sqlite` aufgelöst. Profilbytes, Revision, Dokumentauswahl und
+  Gerätebindung bleiben erhalten. Fehlende SQLite führt niemals zum JSON-Fallback.
+- Aktivierung hält Worker-/OCR-/Writer-Sperren, prüft den aktuellen Vorschautoken,
+  das Backupmanifest, alle Dokumentfelder und Originalkopien. SQLite wird mittels
+  Online-Backup kopiert; JSON-Haupt- und Backupdatei bleiben im privaten Migrationsarchiv.
+- Persistiertes `SQLITE_ACTIVATION_PENDING` sperrt neue Leser und Writer bis zum
+  Abschluss. Fehler werden unter Sperren zurückgerollt. Nach Prozessverlust ist
+  Wiederherstellung ausdrücklich möglich; unerwartete spätere SQL-Änderungen werden
+  dabei nicht überschrieben.
+- Version 0.13.1, Softwarekompatibilitätsepoche 2: geprüfte Epoche-1-Installation darf
+  aktualisiert werden, aber nicht als inkompatibler Rollback gestartet werden.
+  Ältere Writer verweigern Format 4. Neue Importe/OCR schreiben im aktivierten
+  Bestand direkt in SQLite. Keine neue Freigabe und keine Modellintegration.
+
+Abgeschlossen: Der ausdrücklich beauftragte Bestand ist auf Format 4 aktiviert;
+SQLite ist dort führend. **96 eindeutige Dokumente** stimmen in allen gespeicherten
+Feldern mit der unabhängigen Sicherung überein. Zeilendigest und `integrity_check`
+bestanden. **88 Originalkopien und acht Originalverweise** erhalten; bestehende
+Profil-, Clientkonfigurations- und Watchdateien bytegleich. OCR-Zustände unverändert:
+83 teilweise gelesen, 13 abgeschlossen. Keine neue OCR durch die Migration.
+
+Prüfung: **88 Tests in elf Suites bestanden** (17,708 s), darunter native OCR,
+Speichermigration, SQLite-Integration, Bestandsabgleich, Privacy und Relay.
+Zusätzlich **fünf Builddiagnosetests** (5,052 s). Tatsächliche Paketprogramme prüften
+Vision-Import vor/nach Aktivierung, alle Recordfelder, unveränderten logischen
+Freigabepfad, abgewiesenen Altwriter, Epoche-1-Upgrade und gesperrten inkompatiblen
+Rollback. stdio mit beiden Ausgabeformaten, Datenschutz/Widerruf, Paketmetadaten,
+Update-/Crash-/Rollbackprüfung und nativer Start ohne Importfortsetzung bestanden.
+
+Version **0.13.1** ist lokal installiert, auch `/Applications/Vauldy.app` aktualisiert;
+die alte App wurde bytegleich separat gesichert. Neues Paket:
+`dist/mcp/sqlite-primary-20261108/Vauldy.zip`, 19.426.729 Bytes, SHA-256
+`fd3f0330a630806bcfc531aac4e6032056991ecc4b3f6b1395589f2a6d7fc0a7`.
+Ad hoc signiert, arm64, macOS ab 14.0, nicht notarisiert. Alle sechs Programme neu
+gebaut; 112 Produktions-Swiftdateien plus Manifeste gegen den Checkout bytegeprüft.
+Paketierung mit `--skip-build` deshalb ausdrücklich `buildMode=reused`;
+`sourceCommit=null`, Basis `f0669ab` mit den hier dokumentierten Änderungen.
+Tatsächlich ausgeliefertes ZIP erneut entpackt und tief/strikt geprüft.
+
+Lokale, inhaltsfreie MCP-Diagnose gegen die unveränderte produktive Freigabe:
+Version 0.13.1, Build verifiziert, Zugriff auf 96 freigegebene Dokumente bestätigt.
+Die neue Agentensignatur benötigt eine erneute native Schlüsselbundbestätigung.
+Der alte Dienst wurde kontrolliert beendet; Kopplung/Credentials nicht widerrufen.
+Die neue App ist zur Bestätigung geöffnet. Keine Schlüsselbund-ACL erweitert;
+die externe ChatGPT-Verfügbarkeit bleibt bis Bestätigung/Neustart offen.
+
+Synthetische Nachweise: `docs/quality/sqlite-primary-2026-11-08.json` und zugehöriges
+Protokollverzeichnis. Reale Sicherungen, Dokumente, Profile und operative Belege
+bleiben ausschließlich privat unter der lokalen Installation. Kein vollständiger
+Release-Regressionslauf, keine frische Offline-Mac-/Zielchat-Abnahme.
+Nächster Schritt: native Schlüsselbundbestätigung und Neustart des bestehenden
+ChatGPT-Dienstes, anschließend eine reguläre Anfrage im Zielchat.
 
 ## Konkrete Qualitätsgründe und lokale Fundstellen · 08.11.2026
 

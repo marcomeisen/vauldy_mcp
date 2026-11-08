@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "nativeVisionImportBeforeAndAfter": true,
+  "losslessRecords": true,
+  "epoch1Upgrade": true,
+  "incompatibleRollbackRefused": true,
+  "oldWriterRefused": true,
+  "logicalProfileByteUnchanged": true,
+  "noGrantExpansion": true,
+  "privacyAndRevocation": true,
+  "oldHandleInvalidated": true,
+  "noJSONFallback": true,
+  "localSHA256": "210c052dd20042a097b64e3972d59dcf8840e8780c13559e2ff58f51f747941c",
+  "serverSHA256": "7b022105918620391519fae51bdd0bac9daf210b973b09b87548f234ecad907f"
+}
