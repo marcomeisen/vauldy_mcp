@@ -1,0 +1,242 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceState": "existing working tree; no commit or push",
+  "productVersion": "0.13.0",
+  "archive": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-ui-package-onjunyd_/Vauldy.zip",
+  "archiveSHA256": "bf80bc7b7f6cb444356907a113e896f029ad5acdec72ecb92cc32bfbe95b60b6",
+  "archiveBytes": 16360034,
+  "serverBuildID": "macho.b4ff62e510dc350eb65b35e94db890a5",
+  "setupBuildID": "macho.98b22d1046ed37319c70455df2800b26",
+  "signing": "local ad-hoc",
+  "notarized": false,
+  "developerID": {
+    "available": false,
+    "xcodeInspected": true,
+    "creationAttempted": true,
+    "accountRole": "Admin",
+    "result": "Communication with Apple failed. This operation can only be performed by the Account Holder.",
+    "existingCertificatesRevoked": false,
+    "certificateOrPrivateKeyExported": false,
+    "notarizationAttempted": false,
+    "appleReference": "https://developer.apple.com/help/account/certificates/create-developer-id-certificates/"
+  },
+  "sourceVerification": {
+    "files": 221,
+    "aggregateSHA256": "40c4643b9f38e29739c4c6106fd01313ca6f6fcf5f8f551421ddc11d4a5ed3d8",
+    "buildCopy": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+    "manifestBuildMode": "reused",
+    "manifestSourceCommit": null
+  },
+  "releaseBuild": {
+    "exitCode": 0,
+    "swiftReportedSeconds": 46.99,
+    "command": "swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4"
+  },
+  "swiftTests": {
+    "exitCode": 0,
+    "tests": 30,
+    "suites": 5,
+    "swiftReportedSeconds": 5.942,
+    "command": "swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 --no-parallel --filter 'SetupDocumentGuidanceTests|LocalImportTests|OCRTargetedRetryTests|OCRSmallRegionTests|EvidencePreservingOCRTests|MCPSoftwareUpdateTests'",
+    "note": "Five actual matched suites: UI guidance, import, targeted retry, small regions, evidence preservation. Packaged updater coverage is the separate Python update/rollback stage."
+  },
+  "packageChecks": [
+    {
+      "name": "source-verification",
+      "command": [
+        "python3",
+        "/private/tmp/vauldy-small-source-verify.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.375
+    },
+    {
+      "name": "package",
+      "command": [
+        "python3",
+        "scripts/mcp/package.py",
+        "--skip-build",
+        "--name",
+        "Vauldy",
+        "--archive-only",
+        "--output",
+        "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-ui-package-onjunyd_"
+      ],
+      "exitCode": 0,
+      "seconds": 7.011
+    },
+    {
+      "name": "extract",
+      "command": [
+        "ditto",
+        "-x",
+        "-k",
+        "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-ui-package-onjunyd_/Vauldy.zip",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted"
+      ],
+      "exitCode": 0,
+      "seconds": 0.417
+    },
+    {
+      "name": "zip-signature",
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 0.067
+    },
+    {
+      "name": "package-metadata",
+      "command": [
+        "python3",
+        "scripts/mcp/package_metadata_smoke_test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.861
+    },
+    {
+      "name": "update-rollback",
+      "command": [
+        "python3",
+        "scripts/mcp/software_update_smoke_test.py",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 16.088
+    },
+    {
+      "name": "stdio-smoke",
+      "command": [
+        "python3",
+        "scripts/mcp/smoke_test.py",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app/Contents/Resources/vauldy-mcp"
+      ],
+      "exitCode": 0,
+      "seconds": 1.291
+    },
+    {
+      "name": "raster-worker-mcp",
+      "command": [
+        "python3",
+        "scripts/mcp/raster_ocr_quality_smoke_test.py",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app/Contents/Resources/vauldy-local",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app/Contents/Resources/vauldy-mcp",
+        "/private/tmp/vauldy-product-acceptance-v7v9vf93/raster"
+      ],
+      "exitCode": 0,
+      "seconds": 61.694
+    },
+    {
+      "name": "setup-startup",
+      "command": [
+        "python3",
+        "scripts/mcp/setup_startup_smoke_test.py",
+        "/private/tmp/vauldy-ui-package-onjunyd_/extracted/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 12.137
+    }
+  ],
+  "rasterWorkerMCP": {
+    "passed": true,
+    "syntheticPDFs": 3,
+    "exactStoredFields": 12,
+    "cases": [
+      {
+        "name": "raster-pdf",
+        "state": "completed",
+        "review": false
+      },
+      {
+        "name": "raster-other-values",
+        "state": "completed",
+        "review": false
+      },
+      {
+        "name": "raster-light",
+        "state": "partial",
+        "review": true
+      }
+    ],
+    "grants": true,
+    "privacy": true,
+    "physicalPage": 1,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "backup": "/Users/marcomeisen/Library/Application Support/Vauldy Backups/ui-package-20261108-152716",
+  "softwareUpdate": {
+    "clientRestartRequired": true,
+    "updated": true,
+    "version": "0.13.0"
+  },
+  "preservation": {
+    "documentsEntireRecordsUnchanged": 9,
+    "originalsUnchanged": 9,
+    "protectedFilesByteIdentical": 26,
+    "clientConfigurationsByteIdentical": 1,
+    "auditHistoryPrefixPreserved": true,
+    "signatureVerifiedBundles": [
+      "Vauldy.app",
+      "Vauldy MCP Einrichtung.app",
+      "Vauldy MCP Status.app"
+    ],
+    "installedProgramsAndUIMatchPackage": true,
+    "pairingMetadataPreserved": true,
+    "newRelayRunning": true,
+    "keychainBackgroundAccessConfirmed": true,
+    "OCRWorkerNotStarted": true
+  },
+  "connectionBefore": {
+    "available": true,
+    "granted": 9,
+    "searchable": 9,
+    "completeSourceDocuments": 4,
+    "reviewSourceDocuments": 5,
+    "baseAnalysisNeedsReview": 9
+  },
+  "connectionAfter": {
+    "available": true,
+    "granted": 9,
+    "searchable": 9,
+    "completeSourceDocuments": 4,
+    "reviewSourceDocuments": 5,
+    "baseAnalysisNeedsReview": 9
+  },
+  "connectionCheck": "actual existing private Vauldy connector get_vault_status before update and after new relay restart; metadata only; no document reading",
+  "macOSKeychain": {
+    "explicitOwnerApproval": true,
+    "freshNoninteractiveAccessConfirmed": true,
+    "sameProfilePairAndExpiry": true,
+    "newPairingCreated": false,
+    "credentialExported": false,
+    "ACLUnchangedClaimed": false
+  },
+  "installedUI": {
+    "opened": true,
+    "section": "settings",
+    "observedMessage": "Die installierten Programme entsprechen dieser App.",
+    "softwareUpdateButtonDisabled": true,
+    "rollbackButtonEnabled": true
+  },
+  "postinstallStatusCheckNote": "Initial status assertion expected no error; existing credential instead correctly requires macOS approval. Software update and preservation checks succeeded.",
+  "notExecuted": [
+    "Developer ID signing: blocked by team role",
+    "notarization",
+    "full regression runner",
+    "physical offline customer Mac",
+    "79-field quality-improvement rerun",
+    "new regular ChatGPT question/answer acceptance"
+  ],
+  "changesThisIteration": [
+    "docs/ui-package-update.md",
+    "docs/quality/ui-package-update-2026-11-08.json",
+    "docs/local-first-todo.md"
+  ]
+}

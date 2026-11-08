@@ -27,7 +27,7 @@ struct SetupDocumentAnalysisView: View {
                     Text("Lokal aus dem erfassten Text abgeleitet. Bitte Angaben am Original prüfen.")
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
-                    Text(document.baseAnalysisStatus == "stale" ? "Die Basisanalyse ist veraltet. Lies das Original erneut, um Text und Angaben zu aktualisieren." : "Keine aktuelle belegte Basisanalyse vorhanden. Du kannst das Original erneut lesen.")
+                    Text(SetupDocumentGuidance(document).analysisExplanation)
                         .foregroundStyle(.secondary)
                 }
             }.font(.callout).padding(.top, 8)

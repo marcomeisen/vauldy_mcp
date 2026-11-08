@@ -4,16 +4,18 @@ import CoreGraphics
 /// Tracks graphics transforms and descends into forms. Unknown/inline constructs fall back to full-page OCR.
 struct PDFContentInspection {
     var imageRects: [CGRect] = []
+    var imageScales: [CGFloat?] = []
     var uncertain = false
     static func inspect(_ page: CGPDFPage) -> Self {
         let state = ScanState()
         state.scan(CGPDFContentStreamCreateWithPage(page))
-        return Self(imageRects: state.images, uncertain: state.uncertain)
+        return Self(imageRects: state.images, imageScales: state.imageScales, uncertain: state.uncertain)
     }
     private final class ScanState {
         var transform = CGAffineTransform.identity
         var stack: [CGAffineTransform] = []
         var images: [CGRect] = []
+        var imageScales: [CGFloat?] = []
         var uncertain = false
         var depth = 0
         func scan(_ stream: CGPDFContentStreamRef) {
@@ -39,6 +41,24 @@ struct PDFContentInspection {
             CGPDFOperatorTableSetCallback(table, "BI") { _, info in
                 if let info { Unmanaged<ScanState>.fromOpaque(info).takeUnretainedValue().uncertain = true }
             }
+            CGPDFOperatorTableSetCallback(table, "Tf") { scanner, info in
+                guard let info else { return }; let s = Unmanaged<ScanState>.fromOpaque(info).takeUnretainedValue()
+                var size: CGPDFReal = 0
+                var name: UnsafePointer<CChar>?
+                guard CGPDFScannerPopNumber(scanner, &size), CGPDFScannerPopName(scanner, &name), let name,
+                      let object = CGPDFContentStreamGetResource(CGPDFScannerGetContentStream(scanner), "Font", name) else {
+                    s.uncertain = true; return
+                }
+                var font: CGPDFDictionaryRef?
+                var subtype: UnsafePointer<CChar>?
+                guard CGPDFObjectGetValue(object, .dictionary, &font), let font,
+                      CGPDFDictionaryGetName(font, "Subtype", &subtype), let subtype else {
+                    s.uncertain = true; return
+                }
+                // Type 3 glyphs are content streams. Their visible shapes can contain
+                // whole lines that PDFKit cannot map to the extracted character.
+                if String(cString: subtype) == "Type3" { s.uncertain = true }
+            }
             CGPDFOperatorTableSetCallback(table, "Do") { scanner, info in
                 guard let info else { return }; let s = Unmanaged<ScanState>.fromOpaque(info).takeUnretainedValue()
                 var name: UnsafePointer<CChar>?
@@ -54,6 +74,13 @@ struct PDFContentInspection {
                     let rect = CGRect(x: 0, y: 0, width: 1, height: 1).applying(s.transform).standardized
                     guard [rect.minX, rect.minY, rect.width, rect.height].allSatisfy(\.isFinite) else { s.uncertain = true; return }
                     s.images.append(rect)
+                    var width: CGPDFInteger = 0, height: CGPDFInteger = 0
+                    if CGPDFDictionaryGetInteger(dictionary, "Width", &width),
+                       CGPDFDictionaryGetInteger(dictionary, "Height", &height), width > 0, height > 0,
+                       rect.width > 0, rect.height > 0, s.transform.b == 0, s.transform.c == 0 {
+                        let x = CGFloat(width) / rect.width, y = CGFloat(height) / rect.height
+                        s.imageScales.append(abs(x - y) <= 0.001 * max(x, y) ? min(x, y) : nil)
+                    } else { s.imageScales.append(nil) }
                 case "Form":
                     let old = s.transform, oldStack = s.stack
                     defer { s.transform = old; s.stack = oldStack }

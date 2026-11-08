@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "inputFilesByteCompared": 149,
+  "swiftTests": {
+    "passed": true,
+    "count": 73,
+    "suites": 11,
+    "seconds": 18.378
+  },
+  "nativeComparison": [
+    {
+      "sample": 0,
+      "beforeExact": 0,
+      "afterExact": 3,
+      "expected": 3,
+      "preserved": true,
+      "attempts": 3,
+      "recoveredLines": 3,
+      "recoveryMS": 487
+    },
+    {
+      "sample": 1,
+      "beforeExact": 0,
+      "afterExact": 3,
+      "expected": 3,
+      "preserved": true,
+      "attempts": 3,
+      "recoveredLines": 3,
+      "recoveryMS": 527
+    }
+  ],
+  "recoveryWire": {
+    "passed": true,
+    "syntheticPDFs": 3,
+    "recoveredFields": 6,
+    "preservedValues": 3,
+    "numericConflictPreserved": true,
+    "physicalPage": 1,
+    "metadataRemainsLocal": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "controlWire": {
+    "passed": true,
+    "syntheticPDFs": 2,
+    "exactStoredFields": 6,
+    "ungrantedExcluded": true,
+    "physicalPage": 1,
+    "protectedOutput": true,
+    "sourceBoundLayout": true,
+    "layoutRemainsLocal": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "limits": {
+    "regionsPerPage": 4,
+    "OCRRequestsPerRegion": 2,
+    "pixelsPerCrop": 1000000,
+    "additionalOCRPixelsPerPage": 8000000,
+    "candidateLinesPerRegion": 8
+  },
+  "thresholds": {
+    "minimumConfidencePerObservation": 0.85,
+    "minimumAgreementArea": 0.7,
+    "minimumTargetArea": 0.7
+  },
+  "testedPolicies": [
+    "append-only existing text and line geometry",
+    "numeric disagreement under the same explicit colon label",
+    "spatial overlap rejection",
+    "two-pass disagreement rejection",
+    "ambiguous identifier rejection",
+    "budget leaves unresolved regions for review",
+    "unchanged complete-text controls without regional OCR",
+    "cache, fresh retry, physical source page and revocation"
+  ],
+  "initialTestRun": "Budget test expected four accepted lines from four attempts. Native agreement accepted three. The assertion now checks attempt limit, agreement between actual accepted fields and counters, and remaining review; acceptance thresholds were unchanged.",
+  "cacheConfiguration": "ocr-v10-marked-region-recovery",
+  "r6": "deferred at user request",
+  "remaining": [
+    "very faint pages classified blank",
+    "conflicts across differently named semantic fields",
+    "plausibly wrong text inside geometrically covered lines",
+    "broader document quality evaluation"
+  ],
+  "sourceSHA256": {
+    "Sources/VauldyCore/OCRRegionRecovery.swift": "3e8d468fb914dff2776cdf4d4dd614e697d1053e2832dcd142115bcd1b86f2d6",
+    "Sources/VauldyCore/OCRLineRecovery.swift": "bc7b6c68cf63b4901c54deb3fe2e76866f9ed5e7285727b3864c57c13f466f02",
+    "Sources/VauldyCore/NativeLocalDocumentOCR.swift": "a4a04050ea01855bcbfa20aca8d0007a20043a9e253d024735fd65af97c1ae3f",
+    "Sources/VauldyCore/LocalOCRMetrics.swift": "d78cfc9cd11506965e3483e11a9c650ee5c59efa9344fcd1be218d3ac80a5448",
+    "Sources/VauldyCore/LocalOCRPageCache.swift": "dec76d218c8185005b1172dc7970cbbd6e898234dd7efe0716b03f11a60a37bd",
+    "Tests/VauldyMCPRuntimeTests/OCRMarkedRegionRecoveryTests.swift": "770d602a946ac50745dff4d2be2893f3a257206c2be436a6b546c03dd9ea18b2",
+    "Tests/VauldyMCPRuntimeTests/OCRBlockCoverageTests.swift": "a70292f34167f7f8972709e5184523f53260001d7c2de0b7acee075b6c885acf",
+    "Tests/VauldyMCPRuntimeTests/PDFVectorTextOCRTests.swift": "bc1a23795ec95a370eca004cfaa24e519987c7cb32bb54111b8efd6a8ba8a716",
+    "scripts/mcp/visual_coverage_smoke_test.py": "a7203e8e39f551ece2c29b6ab400aa9e9f46b64ea2e9445ff39af338cb34ff38",
+    "scripts/mcp/vector_ocr_quality_smoke_test.py": "4e57b919379be90ba8d644c8de263b54843d7c622730f14f33ce80ee3b2446b5",
+    "scripts/mcp/regression_test.py": "8d80c6e31c710924b84c5c013c96e3921dc2ea175d39ab281544802962bf38c4"
+  }
+}

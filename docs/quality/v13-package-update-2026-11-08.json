@@ -1,0 +1,302 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceState": "existing dirty working tree; no commit or push",
+  "productVersion": "0.13.0",
+  "ocrConfiguration": "v13",
+  "archive": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v13-2026-11-08-nyvj7krs/Vauldy.zip",
+  "archiveSHA256": "b491f426cd9384fddfbd43b5fbd9253afca90f85293c74dafa2e712627c410b8",
+  "archiveBytes": 14366719,
+  "serverBuildID": "macho.e19c2c835af53f2d927c68b4eb371739",
+  "setupBuildID": "macho.6f82dee23a773761a0e52e72752d54d6",
+  "architectures": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "signing": "ad-hoc",
+  "notarized": false,
+  "developerIDApplicationAvailable": false,
+  "manifestBuildMode": "reused",
+  "manifestSourceCommit": null,
+  "sourceVerification": {
+    "files": 197,
+    "sha256": "6830fa2e110e245aeb3717b8a6e86786debc663181889c82efb8ffec8c9c669d"
+  },
+  "steps": [
+    {
+      "name": "source-verification",
+      "command": [
+        "python3",
+        "/private/tmp/vauldy-small-source-verify.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.179
+    },
+    {
+      "name": "release-build",
+      "command": [
+        "swift",
+        "build",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none"
+      ],
+      "exitCode": 0,
+      "seconds": 45.022
+    },
+    {
+      "name": "swift-tests",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "OCRDensePageTests|OCRLineContextTests|LocalWorkerTests|OCRSmallRegionTests|OCRSmallTextMCPFixturesTests|EvidencePreservingOCRTests|OCRMarkedRegionRecoveryTests|OCRBlockCoverageTests|OCRLayoutTests|PDFVectorTextOCRTests|OCRTargetedRetryTests|OCRWhiteMarginsTests|LocalImportTests|LocalOriginalReferenceTests|BaseAnalysisMCPTests|LocalDocumentReviewTests|SQLiteIntegrationTests|MCPFieldExtractionTests"
+      ],
+      "exitCode": 0,
+      "seconds": 114.845
+    },
+    {
+      "name": "package",
+      "command": [
+        "python3",
+        "scripts/mcp/package.py",
+        "--skip-build",
+        "--name",
+        "Vauldy",
+        "--archive-only",
+        "--output",
+        "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v13-2026-11-08-nyvj7krs"
+      ],
+      "exitCode": 0,
+      "seconds": 7.042
+    },
+    {
+      "name": "extract",
+      "command": [
+        "ditto",
+        "-x",
+        "-k",
+        "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v13-2026-11-08-nyvj7krs/Vauldy.zip",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy"
+      ],
+      "exitCode": 0,
+      "seconds": 0.431
+    },
+    {
+      "name": "zip-signature",
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 0.034
+    },
+    {
+      "name": "package-metadata",
+      "command": [
+        "python3",
+        "scripts/mcp/package_metadata_smoke_test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.761
+    },
+    {
+      "name": "update-rollback",
+      "command": [
+        "python3",
+        "scripts/mcp/software_update_smoke_test.py",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 18.249
+    },
+    {
+      "name": "dense-wire",
+      "command": [
+        "python3",
+        "scripts/mcp/dense_ocr_smoke_test.py",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app/Contents/Resources/vauldy-local",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app/Contents/Resources/vauldy-mcp",
+        "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 3.105
+    },
+    {
+      "name": "coverage-wire",
+      "command": [
+        "python3",
+        "scripts/mcp/visual_coverage_smoke_test.py",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app/Contents/Resources/vauldy-local",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app/Contents/Resources/vauldy-mcp",
+        "/private/tmp/vauldy-ocr-vector-wtr5pb1z/region-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 3.904
+    },
+    {
+      "name": "setup-startup",
+      "command": [
+        "python3",
+        "scripts/mcp/setup_startup_smoke_test.py",
+        "/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-v13-package-stage-ia2gofzy/Vauldy.app"
+      ],
+      "exitCode": 0,
+      "seconds": 11.911
+    }
+  ],
+  "swiftTests": {
+    "passed": 97,
+    "suites": 18,
+    "seconds": 26.6,
+    "log": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v13-2026-11-08-nyvj7krs/swift-tests.log",
+    "fixtureEnvironment": {
+      "VAULDY_OCR_DENSE_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-fixtures",
+      "VAULDY_OCR_SMALL_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-fixtures",
+      "VAULDY_OCR_REGION_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/region-fixtures",
+      "VAULDY_OCR_COVERAGE_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/coverage-fixtures",
+      "VAULDY_OCR_VECTOR_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/vector-fixtures",
+      "VAULDY_OCR_AB_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/raster-fixtures"
+    }
+  },
+  "packageChecksPassed": true,
+  "denseWire": {
+    "passed": true,
+    "syntheticPDFs": 1,
+    "embeddedRows": 140,
+    "exactRecoveredFields": 5,
+    "comparedRegions": 147,
+    "storedRegions": 128,
+    "preservedDeductible": true,
+    "sourcePage": 1,
+    "metadataRemainsLocal": true,
+    "sameWorkerFreshRetry": true,
+    "originalUnchanged": true,
+    "grantUnchanged": true,
+    "revocation": true
+  },
+  "coverageWire": {
+    "passed": true,
+    "syntheticPDFs": 3,
+    "recoveredFields": 6,
+    "preservedValues": 3,
+    "numericConflictPreserved": true,
+    "physicalPage": 1,
+    "metadataRemainsLocal": true,
+    "evidencePreservingRefinement": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "setupStartup": {
+    "passed": true,
+    "syntheticOnly": true,
+    "workerNotStarted": true,
+    "originalsAndSnapshotsUnchanged": true,
+    "fullVisibleGUIWizardRetestedThisIteration": false
+  },
+  "installedApp": "/Applications/Vauldy.app",
+  "backup": "/Users/marcomeisen/Library/Application Support/Vauldy Backups/v13-package-update-20261108-085924",
+  "softwareUpdate": {
+    "clientRestartRequired": true,
+    "updated": true,
+    "version": "0.13.0"
+  },
+  "rollbackAvailable": true,
+  "postinstallPreservation": {
+    "documentsEntireRecordsUnchanged": 9,
+    "originalsUnchanged": 9,
+    "immutableFilesUnchanged": 26,
+    "auditHistoryPreserved": true,
+    "auditChainVerified": true,
+    "clientConfigurationsUnchanged": 1,
+    "signatureVerifiedBundles": 3,
+    "retainedPreviousAppSignatureValid": true,
+    "retainedPreviousRelayMatchesBackup": true,
+    "installedRuntimeAndUIMatchPackage": true,
+    "OCRWorkerNotStarted": true
+  },
+  "connectionBefore": {
+    "available": true,
+    "granted": 9,
+    "searchable": 9,
+    "completeSourceDocuments": 4,
+    "sourceReviewDocuments": 5,
+    "baseAnalysisNeedsReview": 9
+  },
+  "connectionAfter": {
+    "available": true,
+    "granted": 9,
+    "searchable": 9,
+    "completeSourceDocuments": 4,
+    "sourceReviewDocuments": 5,
+    "baseAnalysisNeedsReview": 9,
+    "transport": "new installed relay and local MCP after orderly restart",
+    "documentContentRead": false
+  },
+  "newRelayRunning": true,
+  "keychainApprovalPending": false,
+  "finalVerification": {
+    "documentsUnchanged": 9,
+    "originalsUnchanged": 9,
+    "protectedFilesByteIdentical": 26,
+    "auditHistoryPreserved": true,
+    "clientConfigurationsByteIdentical": 1,
+    "wholeDocumentRecordsUnchanged": true,
+    "pairingMetadataPreserved": true,
+    "pairedRelayRunning": true,
+    "keychainNeedsApproval": false,
+    "newRelayRunning": true,
+    "signatureVerifiedBundles": [
+      "Vauldy.app",
+      "Vauldy MCP Einrichtung.app",
+      "Vauldy MCP Status.app"
+    ],
+    "installedProductsMatchPackage": true,
+    "serverBuild": "macho.e19c2c835af53f2d927c68b4eb371739",
+    "tools": 8,
+    "localProbePassed": true,
+    "workerNotStarted": true,
+    "rollbackAvailable": true
+  },
+  "keychainAuthorization": {
+    "firstAttemptTimeoutSeconds": 315,
+    "firstFreshBackgroundCheckPassed": false,
+    "secondExplicitUserConfirmation": true,
+    "freshBackgroundAccessConfirmed": true,
+    "ACLByteEqualityClaimed": false
+  },
+  "noRePairing": true,
+  "noExplicitTokenRotation": true,
+  "keychainCredentialExported": false,
+  "productionOCRReprocessed": false,
+  "databaseMigration": false,
+  "notPerformed": [
+    "full release regression suite",
+    "Developer-ID/notarization",
+    "physical offline customer Mac",
+    "new full visible wizard acceptance",
+    "real five-document OCR repeat"
+  ],
+  "scriptCheckCorrections": [
+    "Locked keychain hides pairing metadata; initial assertion stopped after successful program update, not because pairing changed.",
+    "Actual local probe appends to audit.jsonl; audit prefix and chain verified instead of byte equality."
+  ]
+}

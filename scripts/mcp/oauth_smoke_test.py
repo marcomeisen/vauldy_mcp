@@ -126,12 +126,20 @@ def main():
             for provider in ['chatgpt','claude']:
                 flows[provider]=connect(provider)
                 status,initialized=rpc(flows[provider],'initialize',dict(protocolVersion='2025-06-18',clientInfo=dict(name='Synthetic OAuth client',version='1'),capabilities=dict(experimental={'nested':{'ok':True}})))
-                assert status==200 and initialized['result']['serverInfo']['version']=='0.13.0',(status,initialized)
+                assert status==200 and initialized['result']['serverInfo']['version'].split('+', 1)[0]=='0.13.0',(status,initialized)
                 assert rpc(flows[provider],'notifications/initialized',notify=True)[0]==202
                 status,tools=rpc(flows[provider],'tools/list')
-                assert status==200 and len(tools['result']['tools'])==4
+                assert status==200 and len(tools['result']['tools'])==8
+                assert any(t['name']=='get_topic_overview' for t in tools['result']['tools'])
+                assert any(t['name']=='compare_contract_versions' for t in tools['result']['tools'])
+                assert any(t['name']=='get_deadline_overview' for t in tools['result']['tools'])
                 assert all(t['securitySchemes']==[dict(type='oauth2',scopes=['documents:read'])] and t['_meta']['securitySchemes']==t['securitySchemes'] for t in tools['result']['tools'])
             chat=flows['chatgpt'];claude=flows['claude']
+            status,overview=rpc(chat,'tools/call',dict(name='get_topic_overview',arguments=dict(query='wartung')))
+            assert status==200
+            overview=overview['result']['structuredContent']
+            assert overview['candidateCount'] == 53 and len(overview['rows']) == 25 and not overview['retrievalComplete']
+            assert all(row['status']=='topic-mention' and row['evidence']['page']==1 for row in overview['rows'])
             items=[];cursor=None;pages=0
             while True:
                 status,result=rpc(chat,'tools/call',dict(name='list_documents',arguments=dict(cursor=cursor) if cursor else dict(pageSize=25)))
@@ -141,6 +149,20 @@ def main():
                 if not cursor:
                     assert value['retrievalComplete'];break
             assert pages==3 and len(items)==53 and len({i['document'] for i in items})==53
+            status,extraction=rpc(chat,'tools/call',dict(name='extract_document_fields',arguments=dict(documents=[items[0]['document']])))
+            assert status==200 and not extraction['result'].get('isError'),extraction
+            extraction=extraction['result']['structuredContent']
+            assert extraction['retrievalComplete'] and len(extraction['results'])==4
+            assert all(row['status']=='not-evidenced' for row in extraction['results'])
+            status,comparison=rpc(chat,'tools/call',dict(name='compare_contract_versions',
+                arguments=dict(before=items[0]['document'],after=items[1]['document'])))
+            assert status==200 and not comparison['result'].get('isError'),comparison
+            assert comparison['result']['structuredContent']['status']=='unresolved-pair'
+            assert comparison['result']['structuredContent']['rows']==[]
+            status,deadlines=rpc(chat,'tools/call',dict(name='get_deadline_overview',arguments=dict(documents=[items[0]['document']])))
+            assert status==200 and not deadlines['result'].get('isError'),deadlines
+            deadline,=deadlines['result']['structuredContent']['rows']
+            assert deadline['document']==items[0]['document'] and deadline['calculationStatus']=='unresolved'
             status,result=rpc(chat,'tools/call',dict(name='read_document',arguments=dict(document=items[0]['document'])))
             assert status==200 and '49,99 EUR' in json.dumps(result) and '@example.com' not in json.dumps(result)
             assert str(root) not in json.dumps(result) and all(d['id'] not in json.dumps(result) for d in documents)

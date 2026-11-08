@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-05",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "productVersion": "0.13.0",
+  "tools": [
+    "get_vault_status",
+    "search_documents",
+    "list_documents",
+    "read_document",
+    "get_topic_overview",
+    "extract_document_fields",
+    "compare_contract_versions"
+  ],
+  "previousSixToolDeclarationsUnchanged": true,
+  "worktreeSourceAndTestsMatchBuildCopy": true,
+  "swiftTests": 44,
+  "swiftSuites": 6,
+  "swiftTestSeconds": 6.085,
+  "relayWorkerTests": 10,
+  "comparison": {
+    "passed": true,
+    "fixtures": 14,
+    "pagesPerVersion": 18,
+    "comparisonCalls": 1,
+    "comparisonMS": 231.3
+  },
+  "measurementScope": "One local stdio content request after choosing both synthetic handles. No model or relay timing.",
+  "checks": [
+    {
+      "name": "release-final",
+      "command": [
+        "swift",
+        "build",
+        "--package-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/source",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--cache-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/cache",
+        "--disable-automatic-resolution",
+        "--scratch-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--product",
+        "vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "comparison-final",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/contract_comparison_smoke_test.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "v1-final",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/smoke_test.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "fields-final",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/field_extraction_smoke_test.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "topic-final",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/topic_overview_smoke_test.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "relay-parity",
+      "command": [
+        "python3",
+        "scripts/mcp/export_relay_tools.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/release/vauldy-mcp",
+        "--check"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "swift-final",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/source",
+        "--scratch-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build",
+        "--cache-path",
+        "/private/tmp/vauldy-comparison-0lyob_01/cache",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "MCPFieldExtractionTests|MCPRetrievalCompletenessTests|MCPPrivacyBoundaryTests|MCPPassageTests|RelayConnectionTests|LocalImportTests/scannedPDFAndPNGUseRealVisionWithoutApp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "oauth-final",
+      "command": [
+        "python3",
+        "scripts/mcp/oauth_smoke_test.py",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/debug/vauldy-local",
+        "/private/tmp/vauldy-comparison-0lyob_01/source/.build/debug/vauldy-mcp-http"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "relay-worker",
+      "command": [
+        "node",
+        "--test",
+        "cloud/chatgpt-relay/tests/relay.mjs"
+      ],
+      "returnCode": 0
+    }
+  ],
+  "regularChatGPTVerified": false,
+  "installPackageBuilt": false,
+  "relayDeployed": false
+}

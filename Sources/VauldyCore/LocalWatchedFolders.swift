@@ -226,6 +226,11 @@ actor LocalWatchedFolderMonitor {
 
     private enum ScanFailure: Error { case unavailable }
     static func files(_ folder: LocalWatchedFolder, excluding root: URL, directory: URL) throws -> [URL] {
+        try scanFiles(folder, excluding: root, directory: directory, includeUnsupported: false).supported
+    }
+
+    static func scanFiles(_ folder: LocalWatchedFolder, excluding root: URL, directory: URL,
+                          includeUnsupported: Bool) throws -> (supported: [URL], unsupported: [URL]) {
         let resolved = try canonicalWatchPath(directory)
         let vault = try canonicalWatchPath(root)
         guard (folder.bookmark != nil || resolved == folder.path), resolved != vault, !resolved.hasPrefix(vault + "/"),
@@ -237,16 +242,22 @@ actor LocalWatchedFolderMonitor {
         if !folder.recursive { options.insert(.skipsSubdirectoryDescendants) }
         guard let iterator = FileManager.default.enumerator(at: directory, includingPropertiesForKeys: keys, options: options,
                                                            errorHandler: { _, _ in failed = true; return false }) else { throw ScanFailure.unavailable }
-        var files: [URL] = []; var count = 0
+        var files: [URL] = [], unsupported: [URL] = []
+        var count = 0
         for case let file as URL in iterator {
             try Task.checkCancellation()
             count += 1
             guard count <= 20_000 else { throw LocalWatchError.scanLimit }
             let values = try file.resourceValues(forKeys: Set(keys))
             if values.isSymbolicLink == true { iterator.skipDescendants(); continue }
-            if values.isRegularFile == true, LocalDocumentStore.supportedExtensions.contains(file.pathExtension.lowercased()) { files.append(file) }
+            guard values.isRegularFile == true else { continue }
+            if LocalDocumentStore.supportedExtensions.contains(file.pathExtension.lowercased()) {
+                files.append(file)
+            } else if includeUnsupported {
+                unsupported.append(file)
+            }
         }
         guard !failed else { throw ScanFailure.unavailable }
-        return files.sorted { $0.path < $1.path }
+        return (files.sorted { $0.path < $1.path }, unsupported.sorted { $0.path < $1.path })
     }
 }

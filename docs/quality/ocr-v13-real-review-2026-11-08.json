@@ -1,0 +1,820 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "workingTree": "existing local changes retained; no code change, commit or push in this maintenance",
+  "installedProductVersion": "0.13.0",
+  "serverBuildID": "macho.e19c2c835af53f2d927c68b4eb371739",
+  "configurationPrefix": "ocr-v13-dense-and-line-recovery-",
+  "privateBackup": "/Users/marcomeisen/Library/Application Support/Vauldy Backups/v13-ocr-review-20261108-092714",
+  "candidateFirst": true,
+  "stageValidationExitCode": 0,
+  "applyValidationExitCode": 0,
+  "stageSteps": [
+    {
+      "document": "D1",
+      "exitCode": 2,
+      "seconds": 46.246,
+      "state": "partial"
+    },
+    {
+      "document": "D2",
+      "exitCode": 2,
+      "seconds": 1.234,
+      "state": "partial"
+    },
+    {
+      "document": "D3",
+      "exitCode": 2,
+      "seconds": 4.619,
+      "state": "partial"
+    },
+    {
+      "document": "D8",
+      "exitCode": 2,
+      "seconds": 3.283,
+      "state": "partial"
+    },
+    {
+      "document": "D9",
+      "exitCode": 2,
+      "seconds": 9.505,
+      "state": "partial"
+    }
+  ],
+  "applySteps": [
+    {
+      "document": "D1",
+      "exitCode": 2,
+      "seconds": 10.418,
+      "state": "partial"
+    },
+    {
+      "document": "D2",
+      "exitCode": 2,
+      "seconds": 1.389,
+      "state": "partial"
+    },
+    {
+      "document": "D3",
+      "exitCode": 2,
+      "seconds": 4.011,
+      "state": "partial"
+    },
+    {
+      "document": "D8",
+      "exitCode": 2,
+      "seconds": 2.31,
+      "state": "partial"
+    },
+    {
+      "document": "D9",
+      "exitCode": 2,
+      "seconds": 8.16,
+      "state": "partial"
+    }
+  ],
+  "stageSummary": [
+    {
+      "document": "D1",
+      "targeted": true,
+      "pages": 9,
+      "charactersBefore": 29332,
+      "charactersAfter": 29332,
+      "addedLines": 0,
+      "reviewPagesBefore": 4,
+      "reviewPagesAfter": 5,
+      "fallbackPages": 0,
+      "newConfigurationPages": 9,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_STRUCTURE_AMBIGUOUS",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D2",
+      "targeted": true,
+      "pages": 1,
+      "charactersBefore": 1147,
+      "charactersAfter": 1147,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "newConfigurationPages": 1,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D3",
+      "targeted": true,
+      "pages": 4,
+      "charactersBefore": 9410,
+      "charactersAfter": 9410,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "newConfigurationPages": 4,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D4",
+      "targeted": false,
+      "pages": 2,
+      "charactersBefore": 1481,
+      "charactersAfter": 1481,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D5",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 1684,
+      "charactersAfter": 1684,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D6",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 568,
+      "charactersAfter": 568,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D7",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 109,
+      "charactersAfter": 109,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D8",
+      "targeted": true,
+      "pages": 2,
+      "charactersBefore": 3294,
+      "charactersAfter": 3294,
+      "addedLines": 0,
+      "reviewPagesBefore": 2,
+      "reviewPagesAfter": 2,
+      "fallbackPages": 0,
+      "newConfigurationPages": 2,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D9",
+      "targeted": true,
+      "pages": 6,
+      "charactersBefore": 7595,
+      "charactersAfter": 7663,
+      "addedLines": 9,
+      "reviewPagesBefore": 5,
+      "reviewPagesAfter": 5,
+      "fallbackPages": 0,
+      "newConfigurationPages": 6,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    }
+  ],
+  "appliedSummary": [
+    {
+      "document": "D1",
+      "targeted": true,
+      "pages": 9,
+      "charactersBefore": 29332,
+      "charactersAfter": 29332,
+      "addedLines": 0,
+      "reviewPagesBefore": 4,
+      "reviewPagesAfter": 5,
+      "fallbackPages": 0,
+      "newConfigurationPages": 9,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_STRUCTURE_AMBIGUOUS",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D2",
+      "targeted": true,
+      "pages": 1,
+      "charactersBefore": 1147,
+      "charactersAfter": 1147,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "newConfigurationPages": 1,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D3",
+      "targeted": true,
+      "pages": 4,
+      "charactersBefore": 9410,
+      "charactersAfter": 9410,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "newConfigurationPages": 4,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D4",
+      "targeted": false,
+      "pages": 2,
+      "charactersBefore": 1481,
+      "charactersAfter": 1481,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D5",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 1684,
+      "charactersAfter": 1684,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D6",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 568,
+      "charactersAfter": 568,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D7",
+      "targeted": false,
+      "pages": 1,
+      "charactersBefore": 109,
+      "charactersAfter": 109,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "newConfigurationPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D8",
+      "targeted": true,
+      "pages": 2,
+      "charactersBefore": 3294,
+      "charactersAfter": 3294,
+      "addedLines": 0,
+      "reviewPagesBefore": 2,
+      "reviewPagesAfter": 2,
+      "fallbackPages": 0,
+      "newConfigurationPages": 2,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 0,
+      "currentQuotesChecked": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D9",
+      "targeted": true,
+      "pages": 6,
+      "charactersBefore": 7595,
+      "charactersAfter": 7663,
+      "addedLines": 9,
+      "reviewPagesBefore": 5,
+      "reviewPagesAfter": 5,
+      "fallbackPages": 0,
+      "newConfigurationPages": 6,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "oldQuoteCountPreserved": 1,
+      "currentQuotesChecked": 1,
+      "priorLinesPreserved": true
+    }
+  ],
+  "targetedDocuments": 5,
+  "physicalPagesPerPass": 22,
+  "nativePagePassesTotal": 44,
+  "additionalCharacters": 68,
+  "additionalLines": 9,
+  "reviewPagesBefore": 13,
+  "reviewPagesAfter": 14,
+  "sourceCompleteDocuments": 4,
+  "sourceReviewDocuments": 5,
+  "analysisNeedsReviewDocuments": 9,
+  "diagnosticSummary": {
+    "reviewPages": 14,
+    "withUncoveredRegions": 7,
+    "withLowConfidenceLines": 11,
+    "withLimitedCoverage": 0,
+    "categoriesOverlap": true,
+    "evidenceFallbackPages": 0,
+    "currentConfigurationPages": 22,
+    "cachedPages": 0
+  },
+  "selectedPageComparisons": [
+    {
+      "document": "D1",
+      "before": {
+        "page": 4,
+        "needsReview": false,
+        "configurationCurrent": false,
+        "coverageStatus": "checked",
+        "storedRegions": 91,
+        "comparedRegions": 91,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 20,
+        "lineRetries": 4,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      },
+      "after": {
+        "page": 4,
+        "needsReview": true,
+        "configurationCurrent": true,
+        "coverageStatus": "checked",
+        "storedRegions": 91,
+        "comparedRegions": 91,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 20,
+        "lineRetries": 4,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      }
+    },
+    {
+      "document": "D1",
+      "before": {
+        "page": 6,
+        "needsReview": true,
+        "configurationCurrent": false,
+        "coverageStatus": "checked",
+        "storedRegions": 36,
+        "comparedRegions": 36,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 4,
+        "lineRetries": 4,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      },
+      "after": {
+        "page": 6,
+        "needsReview": false,
+        "configurationCurrent": true,
+        "coverageStatus": "checked",
+        "storedRegions": 36,
+        "comparedRegions": 36,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 4,
+        "lineRetries": 4,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      }
+    },
+    {
+      "document": "D1",
+      "before": {
+        "page": 8,
+        "needsReview": false,
+        "configurationCurrent": false,
+        "coverageStatus": "checked",
+        "storedRegions": 62,
+        "comparedRegions": 62,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 1,
+        "lineRetries": 1,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      },
+      "after": {
+        "page": 8,
+        "needsReview": true,
+        "configurationCurrent": true,
+        "coverageStatus": "checked",
+        "storedRegions": 62,
+        "comparedRegions": 62,
+        "uncoveredRegions": 0,
+        "missingDetectedCharacters": 0,
+        "lowConfidenceLines": 1,
+        "lineRetries": 1,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      }
+    },
+    {
+      "document": "D9",
+      "before": {
+        "page": 5,
+        "needsReview": true,
+        "configurationCurrent": false,
+        "coverageStatus": "limited",
+        "storedRegions": 128,
+        "comparedRegions": 128,
+        "uncoveredRegions": 25,
+        "missingDetectedCharacters": 191,
+        "lowConfidenceLines": 3,
+        "lineRetries": 3,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      },
+      "after": {
+        "page": 5,
+        "needsReview": true,
+        "configurationCurrent": true,
+        "coverageStatus": "checked",
+        "storedRegions": 128,
+        "comparedRegions": 165,
+        "uncoveredRegions": 19,
+        "missingDetectedCharacters": 146,
+        "lowConfidenceLines": 3,
+        "lineRetries": 3,
+        "lineRepairs": 0,
+        "regionRetries": 4,
+        "recoveredRegionLines": 6,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      }
+    },
+    {
+      "document": "D9",
+      "before": {
+        "page": 6,
+        "needsReview": true,
+        "configurationCurrent": false,
+        "coverageStatus": "limited",
+        "storedRegions": 126,
+        "comparedRegions": 126,
+        "uncoveredRegions": 34,
+        "missingDetectedCharacters": 241,
+        "lowConfidenceLines": 3,
+        "lineRetries": 3,
+        "lineRepairs": 0,
+        "regionRetries": 0,
+        "recoveredRegionLines": 0,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      },
+      "after": {
+        "page": 6,
+        "needsReview": true,
+        "configurationCurrent": true,
+        "coverageStatus": "checked",
+        "storedRegions": 128,
+        "comparedRegions": 135,
+        "uncoveredRegions": 32,
+        "missingDetectedCharacters": 230,
+        "lowConfidenceLines": 3,
+        "lineRetries": 3,
+        "lineRepairs": 0,
+        "regionRetries": 4,
+        "recoveredRegionLines": 3,
+        "regionConflicts": 0,
+        "evidenceFallback": false,
+        "cacheHit": false
+      }
+    }
+  ],
+  "finalPreservation": {
+    "documents": 9,
+    "targetedDocuments": 5,
+    "physicalPagesReprocessed": 22,
+    "allOriginalsUnchanged": 9,
+    "allIDsPreserved": true,
+    "originalReferencesPreserved": true,
+    "untargetedDocumentsEntirelyUnchanged": 4,
+    "immutableConnectionFilesUnchanged": 2,
+    "clientConfigurationsUnchanged": 1,
+    "candidateAndActiveOCRTextsEqual": true,
+    "priorEvidenceLinesPreserved": true,
+    "analysisEvidenceBefore": 5,
+    "analysisEvidenceRecordsUnchanged": 5,
+    "analysisEvidenceAfter": 5,
+    "savedDeadlineCountBefore": 0,
+    "savedDeadlineCountAfter": 0,
+    "baseAnalysisNeedsReview": 9,
+    "pairedRelayRunning": true,
+    "keychainNeedsApproval": false,
+    "pairingMetadataPreserved": true,
+    "localProbePassed": true,
+    "serverBuild": "macho.e19c2c835af53f2d927c68b4eb371739",
+    "tools": 8,
+    "auditPrefixPreserved": true,
+    "auditChainVerified": true,
+    "workerNotStarted": true,
+    "additionalTextShape": {
+      "addedLines": 9,
+      "lineLengths": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        3,
+        3,
+        5
+      ],
+      "containsLetter": 0,
+      "containsDigit": 9,
+      "amountPatternLines": 0,
+      "datePatternLines": 6,
+      "colonLabelLines": 1
+    }
+  },
+  "actualChatGPTStatus": {
+    "available": true,
+    "grantedDocumentCount": 9,
+    "searchableDocumentCount": 9,
+    "completeSourceDocumentCount": 4,
+    "reviewDocumentCount": 5,
+    "missingGrantedDocumentCount": 0,
+    "pendingDocumentCount": 0,
+    "baseAnalysisNeedsReview": 9,
+    "documentTextRetrieved": false
+  },
+  "chatImpact": {
+    "additionalTextOnlyIn": "D9",
+    "newAnalysisEvidenceRecords": 0,
+    "savedDeadlinesBefore": 0,
+    "savedDeadlinesAfter": 0,
+    "datePatternLines": 6,
+    "numericOnlyAdditionalLines": 9,
+    "independentVisualAccuracyMeasured": false,
+    "interpretation": "Additional date/number-shaped lines are searchable text, not proven contract dates, deadlines or amounts. No measured regular-chat answer-quality improvement."
+  },
+  "exitCodes": "Each native refine returned 2 (partial); stage/apply validators returned 0 after preservation checks. No OCR-complete claim.",
+  "priorSyntheticEvidence": {
+    "reference": "v13-package-update-2026-11-08.json",
+    "swiftTests": 97,
+    "suites": 18,
+    "reexecutedThisMaintenance": false
+  },
+  "commands": [
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-prepare.py",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-review.py stage",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-review.py apply",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-diagnostics.py stage",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-diagnostics.py apply",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v13-ocr-finalize.py",
+      "exitCode": 0
+    }
+  ],
+  "correctedHelperFailures": [
+    "First diagnostic write lacked sandbox permission to private Library backup; repeated with required file access, no OCR rerun.",
+    "First final audit check used profile/audit.jsonl instead of profile/logs/audit.jsonl; corrected from source and validation repeated, no OCR rerun."
+  ],
+  "boundaries": {
+    "originalsTransferred": false,
+    "realTextInRepository": false,
+    "profileChanged": false,
+    "newGrant": false,
+    "OAuthDeviceChanged": false,
+    "keychainChanged": false,
+    "relayReconfigured": false,
+    "primaryDatabaseMigration": false,
+    "cloudDeployment": false,
+    "productionFilesRestoredFromBackup": false
+  },
+  "next": [
+    "Independent dense raster and noisy single-line corpus with exact truth and false-positive gates.",
+    "Explain/reproduce line-context review flag transitions separately from text and actual accuracy.",
+    "Confirm date/number roles from full local source context before using new lines as structured facts."
+  ]
+}

@@ -18,29 +18,36 @@ struct SetupView: View {
                 Label("Auf diesem Mac", systemImage: "lock.shield").font(.caption).foregroundStyle(.secondary).padding(16)
             }.navigationSplitViewColumnWidth(min: 170, ideal: 190, max: 240)
         } detail: {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    header
-                    if model.busy { ProgressView("Wird lokal verarbeitet …").controlSize(.small) }
-                    if !model.managementError.isEmpty { SetupNotice(text: model.managementError, warning: true) }
-                    if model.importing { SetupImportProgress(model: model) }
-                    switch model.section {
-                    case .overview: overview
-                    case .connections: connections
-                    case .documents: SetupDocumentsView(model: model)
-                    case .folders: SetupFoldersView(model: model)
-                    case .oauth: SetupOAuthView(model: model)
-                    case .settings: SetupSettingsView(model: model)
-                    }
-                    if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
-                }.padding(28).frame(maxWidth: 940, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
-            }.background(Color(nsColor: .windowBackgroundColor))
+            ScrollViewReader { scroll in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        header
+                        if model.busy { ProgressView("Wird lokal verarbeitet …").controlSize(.small) }
+                        if !model.managementError.isEmpty { SetupNotice(text: model.managementError, warning: true) }
+                        SetupImportStatusView(model: model)
+                        switch model.section {
+                        case .overview: overview
+                        case .connections: connections
+                        case .documents: SetupDocumentsView(model: model)
+                        case .folders: SetupFoldersView(model: model)
+                        case .oauth: SetupOAuthView(model: model)
+                        case .settings: SetupSettingsView(model: model)
+                        }
+                        if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
+                    }.padding(28).frame(maxWidth: 940, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
+                }.background(Color(nsColor: .windowBackgroundColor))
+                .onChange(of: model.shownImportDocumentIDs) { _, ids in
+                    if ids != nil { scroll.scrollTo(SetupDocumentList.scrollAnchor, anchor: .top) }
+                }
+            }
         }
         .navigationTitle("Vauldy · MCP")
         .toolbar { ToolbarItem(placement: .primaryAction) { Button("Verbindung hinzufügen", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
         .frame(minWidth: 860, minHeight: 640)
         .sheet(item: $model.inventoryWorkflow) { workflow in InventoryWorkflowView(model: workflow) }
-        .sheet(isPresented: $model.showingInstallation) { SoftwareInstallationWizard(model: model) }
+        .sheet(isPresented: $model.showingInstallation, onDismiss: model.installationWizardDismissed) {
+            SoftwareInstallationWizard(model: model)
+        }
         .sheet(isPresented: $model.showingSetup) { SetupWizardView(model: model) }
         .sheet(item: $model.diagnosisProfile) { profile in SetupDiagnosisView(model: model, profileID: profile.connectionID) }
         .alert("Dokumentzugriff fortsetzen?", isPresented: Binding(get: { model.resumeCandidate != nil }, set: { if !$0 { model.resumeCandidate = nil } })) {
@@ -85,8 +92,8 @@ struct SetupView: View {
         switch model.section {
         case .overview: "Alles Wichtige zu deinem lokalen MCP-Zugang."
         case .connections: "Dokumentzugriff für jeden Chatbot einzeln verwalten."
-        case .documents: "Prüfe, welche Inhalte dein Chatbot erhalten darf."
-        case .folders: "Automatisch lokal importieren. Dokumente separat freigeben."
+        case .documents: "Vorhandene Dokumente prüfen und neue Dateien hinzufügen."
+        case .folders: "Ordner einmalig importieren oder automatisch überwachen."
         case .oauth: "Sicher verbinden und Dokumentzugriff bestätigen. Ohne API-Schlüssel."
         case .settings: "Software, Datenschutz und lokale Diagnose."
         }
@@ -228,30 +235,6 @@ struct SetupNotice: View {
         Label(text, systemImage: warning ? "exclamationmark.triangle" : "info.circle")
             .font(.callout).foregroundStyle(warning ? Color.orange : .secondary)
             .textSelection(.enabled).accessibilityAddTraits(.updatesFrequently)
-    }
-}
-
-struct SetupImportProgress: View {
-    @ObservedObject var model: SetupModel
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if let total = model.importTotal {
-                let label = "\(model.importProcessed) von \(total) Dokumenten verarbeitet"
-                if total > 0 {
-                    ProgressView(value: Double(model.importProcessed), total: Double(total)) { Text(label) }
-                        .accessibilityIdentifier("batch-import-progress")
-                } else {
-                    Text(label).font(.callout)
-                }
-            } else {
-                ProgressView("Ordner werden nach Dokumenten durchsucht …")
-            }
-            if let progress = model.importProgress {
-                let pages = progress.totalPages > 0 ? " · \(progress.completedPages)/\(progress.totalPages) Seiten" : ""
-                Text("Aktuelles Dokument: \(progress.stage)\(pages)").font(.caption).foregroundStyle(.secondary)
-            }
-            HStack { Text("Dokumentzugriffe bleiben während des Imports verwaltbar.").font(.caption).foregroundStyle(.secondary); Spacer(); Button("Import abbrechen", action: model.cancelImport) }
-        }.padding(16).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
     }
 }
 

@@ -1,0 +1,1022 @@
+{
+  "iteration": "R3d.2",
+  "recordedAt": "2026-11-06T19:53:36.070749+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceAndTestFilesByteCompared": 135,
+  "runnerSHA256": "5eccec40d1f5d3467a92ee5f351309349a9290b0f1e4621ad8ab6396a0a18652",
+  "measuredRunnerSHA256": "2df529bb8c767b43153718b53d4e70ff7488ea91957cf809d50efb424f119fb3",
+  "benchmarkSourceNote": {
+    "benchmarkRuntimeSHA256": "c0ed29856e6093af31a5f3a9447ebece196a193391fea7e5c3c4dbd2307198d1",
+    "finalRuntimeSHA256": "60f41fb54cdacd1c4a0090669dde8f4ca077fb20b3767048859501b0bce4bec0",
+    "delta": "Final regression build restricts the new topic cursor fast path to SQLite. The benchmark uses SQLite and measures only the first topic page."
+  },
+  "queryGates": "all 10 cases pass",
+  "originalRecoveryCheck": "inconclusive assertion in journal detection or cleanup check",
+  "separateRecoveryGates": "pass at 2000 documents",
+  "benchmarkCommand": "python3 scripts/mcp/sqlite_load_acceptance.py /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-local /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-mcp --search-gates --output /private/tmp/vauldy-r3d2.rFwXXTwt/matrix.json",
+  "recoveryCommand": "python3 scripts/mcp/sqlite_load_acceptance.py /private/tmp/vauldy-r3d2.rFwXXTwt/bench-bins/vauldy-local /private/tmp/vauldy-r3d2.rFwXXTwt/bench-bins/vauldy-mcp --search-gates --counts 2000 --samples 5 --recovery-at 2000 --output /private/tmp/vauldy-r3d2.rFwXXTwt/recovery.json",
+  "swiftCommand": "swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none --no-parallel --filter 'SQLiteIntegrationTests|SQLiteDocumentStorePilotTests|StorageMigrationTests|SearchTextNormalizationTests|MCPScalabilityTests|MCPPrivacyBoundaryTests|MCPRetrievalCompletenessTests'",
+  "wireCommands": [
+    "python3 scripts/mcp/smoke_test.py /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-mcp",
+    "python3 scripts/mcp/topic_overview_smoke_test.py /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-mcp",
+    "python3 scripts/mcp/deadline_overview_smoke_test.py /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-mcp",
+    "python3 scripts/mcp/export_relay_tools.py /private/tmp/vauldy-r3d2.rFwXXTwt/.build/release/vauldy-mcp --check"
+  ],
+  "swiftTests": {
+    "passed": 59,
+    "skipped": [
+      "largeSyntheticStorageComparison()"
+    ],
+    "suites": 7,
+    "seconds": 6.277
+  },
+  "wire": "pass",
+  "matrix": {
+    "scope": "R3d.2: SQLite projections and incremental search index, local stdio and synthetic data.",
+    "gates": {
+      "coldStatusMS": 5000,
+      "warmCompactP95MS": 1000,
+      "warmStatusP95MS": 1000,
+      "peakRSSBytes": 536870912,
+      "filteredListMS": 5000
+    },
+    "emergencyRSSLimitBytes": 1610612736,
+    "samplesRequested": 25,
+    "textBytesPerGeneratedDocument": 32768,
+    "localSHA256": "ac2a0e5742e89a902c2ff823aeafe658ccfc22496505def85f4cf11b7318f647",
+    "mcpSHA256": "4710de5678a64cbfecbd7e3edb0f34c24cec1d45075b788dfe4ae02a1db1ff9f",
+    "cases": [
+      {
+        "documents": 1000,
+        "seedWriteMS": 355.654,
+        "payloadBytes": 35213432,
+        "projectionBackfillMS": 10841.524,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 761.618,
+          "concurrentList": {
+            "samples": 16,
+            "medianMS": 33.214,
+            "p95MS": 46.86
+          },
+          "concurrentSourceChangeErrors": 3,
+          "finalDocuments": 1000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 28.836,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 41021440,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 26.88145899446681,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 28.206,
+              "p95MS": 43.978,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 65.01,
+              "p95MS": 83.301,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 69.322,
+              "complete": true
+            },
+            "narrowGrantMS": 24.243,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 71.326
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 44.537,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 49.795,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 35.21,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 34.792,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 399.627,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 32571392,
+            "peakRSSBytes": 33144832,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 1000,
+            "options": [],
+            "coldStatusMS": 40.56616697926074,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 29.729,
+              "p95MS": 52.507,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 72.388,
+              "p95MS": 97.387,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 1000,
+              "calls": 10,
+              "totalMS": 746.644,
+              "complete": true
+            },
+            "narrowGrantMS": 36.525,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 147.039
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 250,
+                "actual": 250,
+                "milliseconds": 101.351,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 249,
+                "actual": 249,
+                "milliseconds": 82.74,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 37.013,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 250,
+                "actual": 250,
+                "milliseconds": 82.39,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 397.232,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 33308672,
+            "peakRSSBytes": 34111488,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 2000,
+        "seedWriteMS": 772.976,
+        "payloadBytes": 70497432,
+        "projectionBackfillMS": 21513.627,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 842.696,
+          "concurrentList": {
+            "samples": 14,
+            "medianMS": 40.126,
+            "p95MS": 84.082
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 2000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 27.022,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 82071552,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 31.52845799922943,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 27.504,
+              "p95MS": 108.649,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 68.808,
+              "p95MS": 123.025,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 79.968,
+              "complete": true
+            },
+            "narrowGrantMS": 33.183,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 214.51
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 73.944,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 126.255,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 31.528,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 52.02,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 416.258,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 32686080,
+            "peakRSSBytes": 33898496,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 2000,
+            "options": [],
+            "coldStatusMS": 68.8837090274319,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 33.961,
+              "p95MS": 50.951,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 74.641,
+              "p95MS": 110.094,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 2000,
+              "calls": 20,
+              "totalMS": 1583.759,
+              "complete": true
+            },
+            "narrowGrantMS": 40.529,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 150.086
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 500,
+                "actual": 500,
+                "milliseconds": 120.45,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 499,
+                "actual": 499,
+                "milliseconds": 90.195,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 34.848,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 500,
+                "actual": 500,
+                "milliseconds": 79.611,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 398.875,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 35274752,
+            "peakRSSBytes": 36569088,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 5000,
+        "seedWriteMS": 1987.283,
+        "payloadBytes": 176349432,
+        "projectionBackfillMS": 53936.774,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 732.529,
+          "concurrentList": {
+            "samples": 16,
+            "medianMS": 31.862,
+            "p95MS": 51.243
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 5000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 34.015,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 205131776,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 25.349041970912367,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 25.697,
+              "p95MS": 37.449,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 63.669,
+              "p95MS": 88.776,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 62.185,
+              "complete": true
+            },
+            "narrowGrantMS": 42.271,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 106.652
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 48.723,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 31.896,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 23.054,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 46.199,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 400.271,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 32342016,
+            "peakRSSBytes": 35356672,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 5000,
+            "options": [],
+            "coldStatusMS": 92.19804202439263,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 43.136,
+              "p95MS": 64.85,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 85.364,
+              "p95MS": 115.104,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 5000,
+              "calls": 50,
+              "totalMS": 4882.248,
+              "complete": true
+            },
+            "narrowGrantMS": 31.992,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 182.64
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 1250,
+                "actual": 1250,
+                "milliseconds": 170.145,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 1249,
+                "actual": 1249,
+                "milliseconds": 100.366,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 52.512,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 1250,
+                "actual": 1250,
+                "milliseconds": 109.409,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 418.284,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 40878080,
+            "peakRSSBytes": 43679744,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 10000,
+        "seedWriteMS": 4139.61,
+        "payloadBytes": 352769432,
+        "projectionBackfillMS": 108462.491,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 945.265,
+          "concurrentList": {
+            "samples": 17,
+            "medianMS": 39.832,
+            "p95MS": 87.638
+          },
+          "concurrentSourceChangeErrors": 3,
+          "finalDocuments": 10000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 38.552,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 410185728,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 32.15666703181341,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 28.082,
+              "p95MS": 128.602,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 67.953,
+              "p95MS": 137.357,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 61.951,
+              "complete": true
+            },
+            "narrowGrantMS": 27.129,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 114.66
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 49.64,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 49.982,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 25.459,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 72.793,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 497.826,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 32620544,
+            "peakRSSBytes": 38076416,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 10000,
+            "options": [],
+            "coldStatusMS": 179.23387500923127,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 52.683,
+              "p95MS": 66.601,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 102.397,
+              "p95MS": 120.278,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 10000,
+              "calls": 100,
+              "totalMS": 11259.063,
+              "complete": true
+            },
+            "narrowGrantMS": 42.613,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 141.926
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 2500,
+                "actual": 2500,
+                "milliseconds": 247.72,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 2499,
+                "actual": 2499,
+                "milliseconds": 144.335,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 86.238,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 2500,
+                "actual": 2500,
+                "milliseconds": 128.313,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 488.14,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 50806784,
+            "peakRSSBytes": 52412416,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 20000,
+        "seedWriteMS": 8725.814,
+        "payloadBytes": 705609432,
+        "projectionBackfillMS": 214490.39,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 788.829,
+          "concurrentList": {
+            "samples": 17,
+            "medianMS": 31.767,
+            "p95MS": 49.693
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 20000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 27.405,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 820428800,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 41.86041699722409,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 23.892,
+              "p95MS": 46.134,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 66.9,
+              "p95MS": 85.744,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 66.128,
+              "complete": true
+            },
+            "narrowGrantMS": 16.265,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 57.442
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 54.888,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 43.879,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 35.542,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 97.21,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 447.407,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 34783232,
+            "peakRSSBytes": 41435136,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 20000,
+            "options": [],
+            "coldStatusMS": 326.60629198653623,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 86.067,
+              "p95MS": 104.738,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 129.171,
+              "p95MS": 151.474,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 20000,
+              "calls": 200,
+              "totalMS": 29113.139,
+              "complete": true
+            },
+            "narrowGrantMS": 44.388,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 203.966
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 5000,
+                "actual": 5000,
+                "milliseconds": 417.231,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 4999,
+                "actual": 4999,
+                "milliseconds": 176.856,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 123.689,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 5000,
+                "actual": 5000,
+                "milliseconds": 180.699,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 558.303,
+            "insuranceOverviewFirstPageMS": 7944.805,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 83460096,
+            "peakRSSBytes": 83820544,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "failureType": "AssertionError",
+        "go": false
+      }
+    ],
+    "go": false
+  },
+  "recoveryMatrix": {
+    "scope": "R3d.2: SQLite projections and incremental search index, local stdio and synthetic data.",
+    "gates": {
+      "coldStatusMS": 5000,
+      "warmCompactP95MS": 1000,
+      "warmStatusP95MS": 1000,
+      "peakRSSBytes": 536870912,
+      "filteredListMS": 5000
+    },
+    "emergencyRSSLimitBytes": 1610612736,
+    "samplesRequested": 5,
+    "textBytesPerGeneratedDocument": 32768,
+    "localSHA256": "ac2a0e5742e89a902c2ff823aeafe658ccfc22496505def85f4cf11b7318f647",
+    "mcpSHA256": "4710de5678a64cbfecbd7e3edb0f34c24cec1d45075b788dfe4ae02a1db1ff9f",
+    "cases": [
+      {
+        "documents": 2000,
+        "seedWriteMS": 757.693,
+        "payloadBytes": 70497432,
+        "projectionBackfillMS": 28036.828,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 759.995,
+          "concurrentList": {
+            "samples": 17,
+            "medianMS": 29.308,
+            "p95MS": 36.811
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 2000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 29.112,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 82112512,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 27.20358403166756,
+            "warmStatus": {
+              "samples": 5,
+              "medianMS": 20.505,
+              "p95MS": 22.847,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 5,
+              "medianMS": 65.442,
+              "p95MS": 66.791,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 67.921,
+              "complete": true
+            },
+            "narrowGrantMS": 17.87,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 71.84
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 46.517,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 37.845,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 21.236,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 42.658,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 429.503,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 32489472,
+            "peakRSSBytes": 33783808,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 2000,
+            "options": [],
+            "coldStatusMS": 67.90449999971315,
+            "warmStatus": {
+              "samples": 5,
+              "medianMS": 27.27,
+              "p95MS": 32.752,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 5,
+              "medianMS": 63.392,
+              "p95MS": 82.062,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 2000,
+              "calls": 20,
+              "totalMS": 1458.361,
+              "complete": true
+            },
+            "narrowGrantMS": 35.919,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 90.691
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 500,
+                "actual": 500,
+                "milliseconds": 103.734,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 499,
+                "actual": 499,
+                "milliseconds": 76.927,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 45.614,
+                "passed": true
+              },
+              {
+                "query": "versicher",
+                "expected": 500,
+                "actual": 500,
+                "milliseconds": 89.651,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 388.687,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 35028992,
+            "peakRSSBytes": 36257792,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "searchIndexRecovery": {
+          "builderKilledAfterJournalObserved": true,
+          "priorIndexAndGenerationRecovered": true,
+          "journalRemoved": true,
+          "rebuildAndQueryPassed": true,
+          "rebuildMS": 28399.186
+        },
+        "go": true
+      }
+    ],
+    "go": true
+  }
+}

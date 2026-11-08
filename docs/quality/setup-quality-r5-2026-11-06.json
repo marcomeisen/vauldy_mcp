@@ -1,0 +1,36 @@
+{
+  "iteration": "R5",
+  "recordedAt": "2026-11-06T22:51:29.337755+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceAndTestsFilesByteCompared": 138,
+  "setupBinarySHA256": "5e5413676e49da100da5059037c4591c6a5450974e075d72639a6ad87e0c18be",
+  "swiftTests": {
+    "passed": 34,
+    "suites": 5,
+    "seconds": 4.575
+  },
+  "nativeUI": {
+    "isolatedSetupRoot": true,
+    "freshSyntheticImport": true,
+    "pages": 2,
+    "directPage": 2,
+    "page2Reason": "unreadable",
+    "originalPreviewPages": [
+      1,
+      2
+    ],
+    "keyboardPageSwitch": true,
+    "keyboardDismiss": true,
+    "comparisonSeenOnBothPages": true,
+    "unchangedTextCorrectlyReported": true,
+    "dialogWidthPoints": 540,
+    "filenameCharacters": 154,
+    "accessibilityLabelsObserved": true,
+    "voiceOverSessionExecuted": false,
+    "finishedNativeJobs": 2,
+    "testProfileByteEqual": true,
+    "originalByteEqual": true,
+    "newDocumentNotGranted": true
+  }
+}

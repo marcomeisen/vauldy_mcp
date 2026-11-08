@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vauldy Import & OCR"
+  short_description: "Lokaler Import, OCR und Originalzugriff"
+  default_prompt: "Nutze $vauldy-import-ocr-sync für Importfortschritt, native OCR oder Originalzugriff im eigenständigen Vauldy MCP."

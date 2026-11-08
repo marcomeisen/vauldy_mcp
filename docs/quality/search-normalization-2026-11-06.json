@@ -1,0 +1,192 @@
+{
+  "date": "2026-11-06",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "worktreeSourceAndTestsMatchBuildCopy": true,
+  "binarySHA256": "1da575fb364f11e133c8f034dfdee565cf70080e1b484139cb145182b2c9b5f7",
+  "swiftTests": 52,
+  "swiftSuites": 6,
+  "swiftSeconds": 5.181,
+  "wire": {
+    "passed": true,
+    "variants": 7,
+    "controls": 5,
+    "privateDocuments": 1,
+    "modes": [
+      {
+        "mode": [
+          "default"
+        ],
+        "matchingDocuments": 7,
+        "enumerationMS": 72.1,
+        "literalPageEvidence": true,
+        "changedSourceAndRevocation": true
+      },
+      {
+        "mode": [
+          "--memory-sqlite-index"
+        ],
+        "matchingDocuments": 7,
+        "enumerationMS": 72.2,
+        "literalPageEvidence": true,
+        "changedSourceAndRevocation": true
+      },
+      {
+        "mode": [
+          "--persistent-sqlite-index"
+        ],
+        "matchingDocuments": 7,
+        "enumerationMS": 96.1,
+        "literalPageEvidence": true,
+        "changedSourceAndRevocation": true
+      }
+    ]
+  },
+  "topic": {
+    "passed": [
+      "single-call",
+      "physical-evidence",
+      "typed-fields",
+      "privacy",
+      "grants",
+      "ocr-coverage",
+      "generic-query",
+      "input-validation",
+      "pagination",
+      "cursor-scope",
+      "changed-source",
+      "revocation",
+      "read-only-fixtures"
+    ],
+    "documents": 150,
+    "granted": 149,
+    "candidates": 19,
+    "policyHeadings": 12,
+    "toolCalls": 1
+  },
+  "fields": {
+    "passed": [
+      "single-call-four-fields",
+      "physical-last-page",
+      "conflicts",
+      "cost-roles",
+      "missing-fields",
+      "whole-document-privacy",
+      "grants",
+      "failed-source",
+      "unlocated-source",
+      "bounded-evidence",
+      "input-validation",
+      "pagination",
+      "cursor-scope",
+      "changed-source",
+      "revocation",
+      "read-only-fixtures",
+      "v1-contract"
+    ],
+    "documents": 7,
+    "selectedPages": 18,
+    "extractionCalls": 1
+  },
+  "v1ContractPassed": true,
+  "relayDiscoveryUnchanged": true,
+  "checks": [
+    {
+      "command": [
+        "swift",
+        "build",
+        "-c",
+        "release",
+        "--package-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source",
+        "--disable-sandbox",
+        "--cache-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/cache",
+        "--disable-automatic-resolution",
+        "--scratch-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--product",
+        "vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source",
+        "--disable-sandbox",
+        "--cache-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/cache",
+        "--disable-automatic-resolution",
+        "--scratch-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "SearchTextNormalizationTests|MCPPassageTests|MCPScalabilityTests|MCPPrivacyBoundaryTests|MCPRetrievalCompletenessTests|VaultRuntimeTests"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/search_normalization_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/topic_overview_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/field_extraction_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/export_relay_tools.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp",
+        "--check"
+      ],
+      "returnCode": 0
+    }
+  ],
+  "measurementScope": "Synthetic local stdio only. Enumeration timing includes pagination at pageSize=2; it is neither a single-call measurement nor ChatGPT latency. No P95 claim.",
+  "limitations": [
+    "Conservative German/English word aliases; uppercase codes and labeled identifiers excluded.",
+    "No persisted OCR correction, no OCR accuracy improvement claimed.",
+    "No production installation, installer package or regular ChatGPT acceptance."
+  ],
+  "developmentFailures": [
+    "Initial new test fixtures omitted sourceName; corrected before passing builds.",
+    "SQLite test fixture path used a macOS /var alias rejected by NOFOLLOW; fixed to /private/tmp.",
+    "Wire source-change fixture initially changed a document other than the selected handle; corrected to change the selected sources."
+  ]
+}

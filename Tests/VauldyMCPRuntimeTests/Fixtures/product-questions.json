@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "scope": "local MCP workflows with deterministic extractive reference answers; no live ChatGPT evaluation",
+  "questions": [
+    {
+      "id": "insurance_inventory",
+      "question": "Zeige alle meine Versicherungsunterlagen.",
+      "kind": "topic",
+      "expected": {
+        "status": "candidates",
+        "policyHeadings": 2,
+        "mentions": 2
+      }
+    },
+    {
+      "id": "monthly_lease",
+      "question": "Was zahle ich monatlich für das Fahrradleasing?",
+      "kind": "cost",
+      "query": "fahrradleasing",
+      "label": "Monatliche Rate",
+      "expected": {
+        "status": "evidenced",
+        "values": [
+          "129.90"
+        ],
+        "period": "monthly",
+        "page": 1,
+        "sourceContains": "fahrradleasing"
+      }
+    },
+    {
+      "id": "annual_household",
+      "question": "Wie hoch ist mein Jahresbeitrag für die Hausratversicherung?",
+      "kind": "cost",
+      "query": "hausratversicherung",
+      "label": "Jahresbeitrag",
+      "expected": {
+        "status": "evidenced",
+        "values": [
+          "144.00"
+        ],
+        "period": "annual",
+        "page": 1,
+        "sourceContains": "hausratversicherung"
+      }
+    },
+    {
+      "id": "cancel_lease",
+      "question": "Welcher Kündigungsstichtag ergibt sich für das Fahrradleasing?",
+      "kind": "deadline",
+      "query": "fahrradleasing",
+      "role": "cancellation",
+      "expected": {
+        "status": "calculated",
+        "values": [
+          "2027-03-15"
+        ],
+        "page": 1,
+        "sourceContains": "fahrradleasing"
+      }
+    },
+    {
+      "id": "cancel_household",
+      "question": "Welcher Kündigungsstichtag steht in der Hausratversicherung?",
+      "kind": "deadline",
+      "query": "hausratversicherung",
+      "role": "cancellation",
+      "expected": {
+        "status": "stated-date",
+        "values": [
+          "2027-09-30"
+        ],
+        "page": 1,
+        "sourceContains": "hausratversicherung",
+        "evidenceLabel": "Kündigung bis"
+      }
+    },
+    {
+      "id": "invoice_total",
+      "question": "Wie hoch ist die Gesamtsumme der Fahrradwartung?",
+      "kind": "cost",
+      "query": "fahrradwartung",
+      "label": "Gesamtbetrag",
+      "expected": {
+        "status": "evidenced",
+        "values": [
+          "247.80"
+        ],
+        "period": "total",
+        "page": 2,
+        "sourceContains": "fahrradwartung"
+      }
+    },
+    {
+      "id": "invoice_due",
+      "question": "Bis wann ist die Fahrradwartung zu bezahlen?",
+      "kind": "deadline",
+      "query": "fahrradwartung",
+      "role": "paymentDue",
+      "expected": {
+        "status": "explicit-date",
+        "values": [
+          "2027-03-15"
+        ],
+        "page": 2,
+        "sourceContains": "fahrradwartung",
+        "evidenceLabel": "Zahlbar bis"
+      }
+    },
+    {
+      "id": "conditions_summary",
+      "question": "Fasse Glasbruch und Fahrraddiebstahl in den Hausratbedingungen zusammen.",
+      "kind": "passages",
+      "query": "hausratbedingungen",
+      "terms": "glasbruch",
+      "expected": {
+        "status": "quoted",
+        "contains": [
+          "Glasbruch ist nicht mitversichert.",
+          "Fahrraddiebstahl gilt nur bei abgeschlossenem Fahrrad."
+        ],
+        "page": 1,
+        "sourceContains": "hausratbedingungen"
+      }
+    },
+    {
+      "id": "missing_notice",
+      "question": "Welche Kündigungsfrist steht in der Privathaftpflichtversicherung?",
+      "kind": "deadline",
+      "query": "privathaftpflichtversicherung",
+      "role": "noticePeriod",
+      "expected": {
+        "status": "not-evidenced",
+        "values": [],
+        "sourceContains": "privathaftpflichtversicherung"
+      }
+    },
+    {
+      "id": "conflicting_rent",
+      "question": "Welche Monatsrate gilt für die Wohnungsmiete?",
+      "kind": "cost",
+      "query": "wohnungsmiete",
+      "label": "Monatsrate",
+      "expected": {
+        "status": "conflicting",
+        "values": [
+          "640.00",
+          "690.00"
+        ],
+        "period": "monthly",
+        "pages": [
+          1,
+          2
+        ],
+        "warnings": [
+          "SOURCE_NOT_READY"
+        ],
+        "sourceContains": "wohnungsmiete"
+      }
+    },
+    {
+      "id": "incomplete_source",
+      "question": "Kannst du den Kündigungstermin aus dem Teilscan sicher bestimmen?",
+      "kind": "deadline",
+      "query": "teilscan",
+      "role": "cancellation",
+      "expected": {
+        "status": "unresolved",
+        "values": [],
+        "sourceContains": "teilscan"
+      }
+    }
+  ]
+}

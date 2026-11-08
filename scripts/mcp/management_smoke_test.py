@@ -32,7 +32,9 @@ def main():
             profile.write_text(json.dumps(grant)); before = profile.read_bytes()
             result = json.loads(subprocess.check_output([str(local), 'check-connection', '--profile', str(profile)], timeout=20))
             assert result['serverVersion'] == '0.13.0'
-            assert set(result['discoveredTools']) == {'get_vault_status', 'list_documents', 'search_documents', 'read_document'}
+            assert set(result['discoveredTools']) == {
+                'get_vault_status', 'list_documents', 'search_documents', 'read_document', 'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'
+            }
             assert result['accessEnabled'] == enabled
             assert result['grantedDocuments'] == int(enabled)
             assert vault.read_bytes() == original and profile.read_bytes() == before
@@ -55,7 +57,11 @@ def main():
         (wrong_app/'Contents/Info.plist').write_bytes(plistlib.dumps(dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-setup', CFBundleShortVersionString='0.1.0')))
         bad = subprocess.run([str(local), 'update-software', '--root', str(root), '--from-app', str(wrong_app), '--allow-ad-hoc'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         assert bad.returncode != 0 and profile.read_bytes() == saved_profile and vault.read_bytes() == original
-        host = Client(server, profile)
+        # Exercise real host metadata without launching the unrelated status-menu UI.
+        # That observer has separate lifecycle tests and could outlive this temporary root.
+        headless_server = root/'headless-mcp'
+        shutil.copy2(server, headless_server)
+        host = Client(headless_server, profile)
         try:
             assert payload(host.call('get_vault_status'))['grantedDocumentCount'] == 1
             entries = [json.loads(p.read_text()) for p in (root/'runtime-status').glob('*.json')]
@@ -63,7 +69,8 @@ def main():
             entry = entries[0]
             assert entry['connectionID'].lower() == connection.lower() and entry['diagnostic'] is False
             assert entry['version'] == '0.13.0' and entry.get('lastRequestAt') is not None
-            assert set(entry) <= {'connectionID', 'version', 'diagnostic', 'lastRequestAt'}
+            assert set(entry) <= {'connectionID', 'version', 'buildID', 'diagnostic', 'lastRequestAt'}
+            assert entry.get('buildID', '').startswith('macho.')
             assert document not in json.dumps(entry) and str(root) not in json.dumps(entry)
         finally:
             host.close()

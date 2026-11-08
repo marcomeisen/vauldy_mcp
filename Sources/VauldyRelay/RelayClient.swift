@@ -92,7 +92,7 @@ public struct RelayClient: Sendable {
         guard data.count <= 16000, let obj = try JSONSerialization.jsonObject(with: data) as? [String: Any],
               Set(obj.keys) == ["method", "params"], obj["method"] as? String == "tools/call",
               let p = obj["params"] as? [String: Any], let name = p["name"] as? String,
-              ["get_vault_status", "list_documents", "search_documents", "read_document"].contains(name) else { throw RelayFailure.unavailable }
+              ["get_vault_status", "list_documents", "search_documents", "read_document", "get_topic_overview", "extract_document_fields", "compare_contract_versions", "get_deadline_overview", "get_document_inventory"].contains(name) else { throw RelayFailure.unavailable }
         return data
     }
 }

@@ -1,0 +1,292 @@
+{
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "dirtyWorkingTree": true,
+  "configuration": "ocr-v12-small-text-detection",
+  "buildDirectory": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+  "sourceTestAndScriptVerification": {
+    "files": 194,
+    "sha256": "092425d9a7d8ce6afe10522d0eb9d179288542a4a8b096c30e4a8e9565120e09"
+  },
+  "native": {
+    "passed": true,
+    "tests": 88,
+    "suites": 15,
+    "seconds": 26.835,
+    "buildSeconds": 39.1,
+    "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-regression-final.log",
+    "additionalGates": [
+      "nonzero PDF crop coordinates",
+      "4pt conflicting amount retains prior literal value and review",
+      "v11 completed checkpoint ignored",
+      "cancellable proposal scan",
+      "solid rule negative control"
+    ]
+  },
+  "exactFieldComparison": [
+    {
+      "points": 4,
+      "fixture": "synthetic vector paths with independently embedded header and deductible",
+      "beforeExactFields": 0,
+      "afterExactFields": 3,
+      "expectedFields": 3,
+      "beforeElapsedMilliseconds": 17,
+      "afterElapsedMilliseconds": 393,
+      "afterMetrics": {
+        "cacheMilliseconds": 0,
+        "coverageMilliseconds": 39,
+        "recognitionRegions": 0,
+        "regionRetryMilliseconds": 353,
+        "cacheHit": false,
+        "renderedPixels": 0,
+        "recoveredRegionLines": 3,
+        "inspectionMilliseconds": 0,
+        "regionRecoveryConflicts": 0,
+        "smallTextDetectionRegions": 6,
+        "regionRetries": 3,
+        "coverageRenderedPixels": 4320000,
+        "recognitionMilliseconds": 0,
+        "regionRetryPixels": 166770,
+        "renderMilliseconds": 0,
+        "smallTextDetectionPixels": 212736
+      }
+    },
+    {
+      "points": 5,
+      "fixture": "synthetic vector paths with independently embedded header and deductible",
+      "beforeExactFields": 2,
+      "afterExactFields": 3,
+      "expectedFields": 3,
+      "beforeElapsedMilliseconds": 225,
+      "afterElapsedMilliseconds": 387,
+      "afterMetrics": {
+        "recognitionRegions": 0,
+        "coverageMilliseconds": 34,
+        "cacheMilliseconds": 0,
+        "regionRetryMilliseconds": 352,
+        "cacheHit": false,
+        "renderedPixels": 0,
+        "recoveredRegionLines": 3,
+        "inspectionMilliseconds": 0,
+        "regionRecoveryConflicts": 0,
+        "smallTextDetectionRegions": 2,
+        "regionRetries": 3,
+        "coverageRenderedPixels": 4320000,
+        "recognitionMilliseconds": 0,
+        "regionRetryPixels": 162768,
+        "renderMilliseconds": 0,
+        "smallTextDetectionPixels": 86400
+      }
+    },
+    {
+      "points": 6,
+      "fixture": "synthetic vector paths with independently embedded header and deductible",
+      "beforeExactFields": 3,
+      "afterExactFields": 3,
+      "expectedFields": 3,
+      "beforeElapsedMilliseconds": 375,
+      "afterElapsedMilliseconds": 374,
+      "afterMetrics": {
+        "renderMilliseconds": 0,
+        "regionRetries": 3,
+        "regionRetryPixels": 151060,
+        "cacheHit": false,
+        "recognitionRegions": 0,
+        "coverageMilliseconds": 29,
+        "renderedPixels": 0,
+        "regionRecoveryConflicts": 0,
+        "regionRetryMilliseconds": 345,
+        "coverageRenderedPixels": 4320000,
+        "cacheMilliseconds": 0,
+        "recoveredRegionLines": 3,
+        "inspectionMilliseconds": 0,
+        "recognitionMilliseconds": 0
+      }
+    }
+  ],
+  "wire": {
+    "passed": true,
+    "cases": [
+      {
+        "size": 4,
+        "mode": "v11",
+        "exactFields": 0,
+        "searchableByHausrat": false,
+        "costStatus": "not-evidenced",
+        "startDateStatus": "not-evidenced",
+        "contractTypeStatus": "not-evidenced",
+        "selectionAndReadCalls": 2,
+        "selectionAndReadMilliseconds": 99.236,
+        "contentToolCalls": 4,
+        "originalEvidencePreserved": true,
+        "page": 1
+      },
+      {
+        "size": 4,
+        "mode": "current",
+        "exactFields": 3,
+        "searchableByHausrat": true,
+        "costStatus": "evidenced",
+        "startDateStatus": "not-evidenced",
+        "contractTypeStatus": "not-evidenced",
+        "selectionAndReadCalls": 2,
+        "selectionAndReadMilliseconds": 82.434,
+        "contentToolCalls": 4,
+        "originalEvidencePreserved": true,
+        "page": 1
+      },
+      {
+        "size": 5,
+        "mode": "v11",
+        "exactFields": 2,
+        "searchableByHausrat": false,
+        "costStatus": "evidenced",
+        "startDateStatus": "not-evidenced",
+        "contractTypeStatus": "not-evidenced",
+        "selectionAndReadCalls": 2,
+        "selectionAndReadMilliseconds": 105.268,
+        "contentToolCalls": 4,
+        "originalEvidencePreserved": true,
+        "page": 1
+      },
+      {
+        "size": 5,
+        "mode": "current",
+        "exactFields": 3,
+        "searchableByHausrat": true,
+        "costStatus": "evidenced",
+        "startDateStatus": "not-evidenced",
+        "contractTypeStatus": "not-evidenced",
+        "selectionAndReadCalls": 2,
+        "selectionAndReadMilliseconds": 86.741,
+        "contentToolCalls": 4,
+        "originalEvidencePreserved": true,
+        "page": 1
+      }
+    ],
+    "revocationChecks": 8,
+    "actualChatModelTest": false,
+    "productionInstallationChanged": false,
+    "binarySHA256": "2bc0e5f76803546e5f9699dddfdd151682af9ee9d93853eac57ec1c850b1c5a3"
+  },
+  "regionWire": {
+    "passed": true,
+    "syntheticPDFs": 3,
+    "recoveredFields": 6,
+    "preservedValues": 3,
+    "numericConflictPreserved": true,
+    "physicalPage": 1,
+    "metadataRemainsLocal": true,
+    "evidencePreservingRefinement": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "chat": {
+    "url": "https://chatgpt.com/c/6aef4ec7-48a0-83ed-8da3-7c5378a562e7",
+    "mode": "regular Safari ChatGPT, manual replay of actual protected synthetic read_document results",
+    "liveMCPCallsInChat": 0,
+    "syntheticDataOnly": true,
+    "modelIdentifier": null,
+    "observedCompleteResponseByMilliseconds": 27228,
+    "firstVisibleTableTimeMeasured": false,
+    "replayFile": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-chat-replay.txt",
+    "replaySHA256": "d1fe1497641c258d76e02755e3cc18aaedb421b7e21eba30c12c945782dcdf3e",
+    "sourceWireReport": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-wire.json",
+    "table": [
+      {
+        "case": "4pt-v11",
+        "insuranceType": null,
+        "contribution": null,
+        "start": null,
+        "page": 1
+      },
+      {
+        "case": "4pt-current",
+        "insuranceType": "Hausrat",
+        "contribution": "49,99 EUR",
+        "start": "27.01.2026",
+        "page": 1
+      },
+      {
+        "case": "5pt-v11",
+        "insuranceType": null,
+        "contribution": "49,99 EUR",
+        "start": "27.01.2026",
+        "page": 1
+      },
+      {
+        "case": "5pt-current",
+        "insuranceType": "Hausrat",
+        "contribution": "49,99 EUR",
+        "start": "27.01.2026",
+        "page": 1
+      }
+    ],
+    "activeContractNotClaimed": true,
+    "deductibleNotMisclassified": true,
+    "missingValuesNotCrossFilled": true,
+    "limitation": "Chat calls page-processing coverage complete; this is not measured OCR text completeness or accuracy. Manual replay does not accept live routing/relay."
+  },
+  "preserved": {
+    "productionInstallationUntouched": true,
+    "productionNineDocumentsUntouched": true,
+    "productionProfilesKeychainAndConnectionUntouched": true,
+    "syntheticOriginalBytesUnchanged": true,
+    "existingDeductibleUnchanged": true,
+    "numericConflictsNotPromoted": true
+  },
+  "failedAttempts": [
+    {
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-first.log",
+      "stage": "build startup",
+      "reason": "sandbox module cache denied; no tests ran"
+    },
+    {
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-second.log",
+      "stage": "native quality",
+      "reason": "detail detection plus image enlargement still missed 4pt insurance type; strict 3/3 goal failed"
+    },
+    {
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-v12-wire.log",
+      "stage": "wire harness",
+      "reason": "KeyError for retrievalComplete; harness corrected to full-text contract containsEntireAvailableText and no nextCursor"
+    }
+  ],
+  "commands": [
+    {
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "command": "VAULDY_OCR_SMALL_FIXTURES=/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-fixtures VAULDY_OCR_REGION_FIXTURES=/private/tmp/vauldy-ocr-vector-wtr5pb1z/region-fixtures VAULDY_OCR_COVERAGE_FIXTURES=/private/tmp/vauldy-ocr-vector-wtr5pb1z/coverage-fixtures VAULDY_OCR_VECTOR_FIXTURES=/private/tmp/vauldy-ocr-vector-wtr5pb1z/vector-fixtures VAULDY_OCR_AB_FIXTURES=/private/tmp/vauldy-ocr-vector-wtr5pb1z/raster-fixtures swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none --no-parallel --filter 'OCRSmallRegionTests|OCRSmallTextMCPFixturesTests|EvidencePreservingOCRTests|OCRMarkedRegionRecoveryTests|OCRBlockCoverageTests|OCRLayoutTests|PDFVectorTextOCRTests|OCRTargetedRetryTests|OCRWhiteMarginsTests|LocalImportTests|LocalOriginalReferenceTests|BaseAnalysisMCPTests|LocalDocumentReviewTests|SQLiteIntegrationTests|MCPFieldExtractionTests'",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "command": "python3 scripts/mcp/small_text_chat_smoke_test.py .build/out/Products/Release/vauldy-mcp small-fixtures --report small-v12-wire-current.json",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "command": "python3 scripts/mcp/visual_coverage_smoke_test.py .build/out/Products/Release/vauldy-local .build/out/Products/Release/vauldy-mcp region-fixtures",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp",
+      "command": "python3 -m py_compile scripts/mcp/small_text_chat_smoke_test.py scripts/mcp/regression_test.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp",
+      "command": "git --no-optional-locks -c core.fsmonitor=false diff --check",
+      "exitCode": 0
+    }
+  ],
+  "regressionOrchestratorIntegrated": true,
+  "fullReleaseRegressionExecuted": false,
+  "remaining": [
+    "independent raster and dense-table corpus",
+    "explicit maintenance of real outstanding documents after release/source check",
+    "context-qualified structured field roles",
+    "separate synthetic live MCP ChatGPT routing acceptance",
+    "package and installation update not requested in this iteration"
+  ]
+}

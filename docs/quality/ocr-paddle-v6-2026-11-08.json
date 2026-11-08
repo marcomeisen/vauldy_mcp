@@ -1,0 +1,1639 @@
+{
+  "schemaVersion": 1,
+  "engine": "paddleocr-pp-ocrv6-medium",
+  "language": "de",
+  "resolvedGermanModels": [
+    "PP-OCRv6_medium_det",
+    "PP-OCRv6_medium_rec"
+  ],
+  "versions": {
+    "paddleocr": "3.7.0",
+    "paddlepaddle": "3.3.1",
+    "paddlex": "3.7.2",
+    "numpy": "2.3.5",
+    "Pillow": "13.0.0"
+  },
+  "modelProvenance": [
+    {
+      "repository": "PaddlePaddle/PP-OCRv6_medium_det",
+      "revision": "8e0f56fb2ef86b461d99cfc7ac5c137738985f61",
+      "files": [
+        {
+          "file": "README.md",
+          "bytes": 23247,
+          "sha256": "59f37b08a9a49aa6c1275e7b0363991353582f4dc7676539a5d2b05aab57e744",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_det/resolve/8e0f56fb2ef86b461d99cfc7ac5c137738985f61/README.md"
+        },
+        {
+          "file": "inference.json",
+          "bytes": 312150,
+          "sha256": "0f1a7ec35da36173529c7a60238b7f7919e3831929c3f700ad90ad4896adecd5",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_det/resolve/8e0f56fb2ef86b461d99cfc7ac5c137738985f61/inference.json"
+        },
+        {
+          "file": "inference.pdiparams",
+          "bytes": 61960476,
+          "sha256": "85218d2e3d98f5a21c58b4220627be923a97aee5db3cc71f39536ab31ac53960",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_det/resolve/8e0f56fb2ef86b461d99cfc7ac5c137738985f61/inference.pdiparams"
+        },
+        {
+          "file": "inference.yml",
+          "bytes": 886,
+          "sha256": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_det/resolve/8e0f56fb2ef86b461d99cfc7ac5c137738985f61/inference.yml"
+        }
+      ]
+    },
+    {
+      "repository": "PaddlePaddle/PP-OCRv6_medium_rec",
+      "revision": "e5a92bcbc5cc1b494628e458d267778f0704fd7c",
+      "files": [
+        {
+          "file": "README.md",
+          "bytes": 23474,
+          "sha256": "75ff9c4853ed171f36224127805062f9bcd1cfbbcacae3d577344866df74f6d3",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_rec/resolve/e5a92bcbc5cc1b494628e458d267778f0704fd7c/README.md"
+        },
+        {
+          "file": "inference.json",
+          "bytes": 221814,
+          "sha256": "0b2e25e990bd072f1bf77d59d67d508bce6c4bd44af6624e0fb27d6da2cd00e8",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_rec/resolve/e5a92bcbc5cc1b494628e458d267778f0704fd7c/inference.json"
+        },
+        {
+          "file": "inference.pdiparams",
+          "bytes": 76465087,
+          "sha256": "1b01c79a914587933f615569e75de54f2e638ebb5d3f3b3c1b38c24ede8c7319",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_rec/resolve/e5a92bcbc5cc1b494628e458d267778f0704fd7c/inference.pdiparams"
+        },
+        {
+          "file": "inference.yml",
+          "bytes": 150580,
+          "sha256": "991b700facf5b50a7de193468207d5f4255b538dde0d312ae3b7c7a9b6873129",
+          "sourceURL": "https://huggingface.co/PaddlePaddle/PP-OCRv6_medium_rec/resolve/e5a92bcbc5cc1b494628e458d267778f0704fd7c/inference.yml"
+        }
+      ]
+    }
+  ],
+  "candidateEnabled": false,
+  "fixtures": "/private/tmp/vauldy-ppocr6-qq4oj5su/apple-fixtures",
+  "sourceHashes": {
+    "clean.png": "e42b2bf54984151d663fed1086824967ca10de30a24903a887193ce8037ac43d",
+    "clean.png.before.json": "44f4fcd2ed42980289a0206985665b39fdc89f955864e2d88e228b3408f15b2d",
+    "tilted-9-right.png": "3676f6caf7f63531adccde7e19ed82627cb5ddb935eb64561181d19c6b2f19c8",
+    "tilted-9-right.png.before.json": "855e2e88b6f1fb018259b0cb5685d01d1fbba74342744ca343f41f56bcb42aa4",
+    "payroll.png": "742c78cb5bce64ae69450d8b39957ebedefd811d6bf836f500b7832dad81fa36",
+    "payroll.png.before.json": "7eb58eb4541e5503d1099ff26aa454922b140ed757181d94b31158de25a106d0",
+    "grid-9-88-25.png": "a0423eca5e0e5d944c4ee80fbffd4dc67472379d63b7c306314fb6c564a7e71b",
+    "grid-9-88-25.png.before.json": "590a88e248bd7dd6745fdddaf3e120a7ca1e94adda3845342136d3b87c151cb4",
+    "date.png": "46fde2bdefcc83e622db3d858476185998f97f490817a485ad9c584add921c28",
+    "date.png.before.json": "b25eb7f5f4a00402c59f21d39ba169d3ee7a48fe2264deee97af152d0878b9aa",
+    "italic-Courier-Oblique-14.png": "784413940810520ff5930976936caf794d284fb27519a7232184f7a66eb5cc37",
+    "italic-Courier-Oblique-14.png.before.json": "a1281e16bd75e1ef4a6f880799796a2331aa324e10d07e2060c1a54a99e8b376",
+    "grid-11-93-25.png": "abede21560d9126a19272b2cf4746f5de95b29866169147dc9389fd678db8f09",
+    "grid-11-93-25.png.before.json": "1517bf41b81b491b945e02bde926d543e4fe9d5858baf97e7c8eb135fd471296",
+    "ambiguous.png": "74089948ddb448c3a9bc87c463ab12548ee97056492dc641ad2eb5b38c9075c8",
+    "ambiguous.png.before.json": "e445b883df9b346add8590ea173b8a986a9e7ac3213a0535b71c588b13ddfbe1",
+    "mixed-85-Fahrrad.png": "4224ebff606fdfba98c0288339786d9a3f23b1052a14274fa87c4ff08c906d51",
+    "mixed-85-Fahrrad.png.before.json": "72b419e0f36c502ba94415f7b2db1ae0b9751f152506de2e7f1ab088ffcac1c9",
+    "tilted-12-left.png": "c1e0c9f32ef86b22a40aaec3c57d37531686be0b5f11e1a2fb58bdb92a93f485",
+    "tilted-12-left.png.before.json": "bcbebec68423b4ffc253403ddb3329efe1a3067a03beecd98cdb17e805df2777",
+    "tilted-12-right.png": "3a8943578607854564ed4e0b9f2e176e3c7a359fdafdf819e4be04b06532d68e",
+    "tilted-12-right.png.before.json": "a18cef97d44a9b0cec6f33de72b6907b81ec5e84bb21844a5283e385c97fa38b",
+    "mixed-92-fuer.png": "07d6726195a291ce009a6e4a6691daf095d05a9692d1e3c34f81a1066e525f99",
+    "mixed-92-fuer.png.before.json": "1484d363bccece630db4c12ed1e5dcb9c70eaff1db8b555c3b9d0cdae18b1492",
+    "grid-9-88-15.png": "4a595d28a76377e3ada2ff4f5e92d9a61c29b1a448531ef32452e4e0a5b9254b",
+    "grid-9-88-15.png.before.json": "650532e7b45cc4e275670d2dcfa16c4a02d0a632e75fa52b02cea39555cd7645",
+    "grid-11-93-15.png": "543e3d30c27a2427a9224e0cc6c3e590d0ae670a8bd8cfa23ac394ffe6909430",
+    "grid-11-93-15.png.before.json": "741be720648680e38d4207b556cb3dd3f3cd88bbcc449e0b703086b9a8f1348b",
+    "grid-9-93-25.png": "e42aa05bffd2c0f8bd8715acf795b2b87b1cffcd73bd743abda25ce7a20980dc",
+    "grid-9-93-25.png.before.json": "02d23a5a4e3d838260639be60a07666041140acdf2c15672d8c5cffd08bde0ad",
+    "italic-Times-Italic-11.png": "a56c0fc8ee65cbe19941589f97f2d6ea277ad0c67deec58e9a3574abed788eb9",
+    "italic-Times-Italic-11.png.before.json": "3286f4307c2cbbc826abc2829091bcedf4849cb529c96f550fdc84e748a72b86",
+    "mixed-85-fuer.png": "088e4ba22b2eae07e051f45e1912d823c31e5156f151f20aa8bc6bc43cb59f2c",
+    "mixed-85-fuer.png.before.json": "d5b22f44b52818c7e50c739a93daac295fafc5e8e8824ebfbf50a914096aeb6e",
+    "grid-11-88-25.png": "29132823a904e228bfe0efefa802fd06fd5f18a763b9195e02ff855c3b6cedb0",
+    "grid-11-88-25.png.before.json": "6613e302dcf4fe9becb897a06a25cbf6297bd4920f5cb335f7cf8a631cb698ae",
+    "tilted-9-left.png": "0a9b80e07266e28f553ce9d9bb695d2643a470a65a461d5d4cfe227bb7afded1",
+    "tilted-9-left.png.before.json": "900c8e6808f4ff6cd0e5da839af8cfbac7a035a224a78bc50fba8b7dbb511790",
+    "grid-11-88-15.png": "1c2b4463c7dc48b35d31c4f7ca7f3827c2153595d54b8eb890f2ca730f2e1b2f",
+    "grid-11-88-15.png.before.json": "8c624a4ae557d0b75e8710b5122e97ff3ebdcb833d15d87de9567f8a49f33cc0",
+    "mixed-92-Fahrrad.png": "2b96f12d6628e76cfb24c5621ea24e10d3ffaceb2a290e5bab4312444c1b7bc3",
+    "mixed-92-Fahrrad.png.before.json": "8308ef6a294dd1608f62a1306794815942e74463e2d0248e067b308c44c72851",
+    "grid-13-88-15.png": "c91e6dbe872948c31ebcbb462b559c353b5fb0b6c24e5cb50c9d4ddbba205fbd",
+    "grid-13-88-15.png.before.json": "3e8b6407faecf136ff713eb9f168b8ba32c914764619b3bd550b412cc0e4278e",
+    "italic-Helvetica-Oblique-14.png": "1ddfecddd54e7c6d70d9cb1ec6e12a03b0fedbe724a2fb365e34b70f5749f606",
+    "italic-Helvetica-Oblique-14.png.before.json": "2823cdfa7dd479fc80b188ca6ddbaa93ced82cd6cf9284d0b8a4faed4456ad13",
+    "grid-13-93-15.png": "f778b1fc535ed2655d3247a5b71d545037d1b1d860f7a4ea602a0d4802f79784",
+    "grid-13-93-15.png.before.json": "337c747f1f58aa688efe3339d498c3730d889de67c0f014402dd2e8ae9a2e922",
+    "italic-Times-Italic-14.png": "4109702f2142a8d818c487709ed539d600dcb037ae9cb505d35ae34494dea5eb",
+    "italic-Times-Italic-14.png.before.json": "375f5753eeb5850c01a43f85aa11cfa0df7265451d028188e3705660adb58e2b",
+    "dense.png": "e37ad6d2e1e97c8f5199cc40233effe5ec51114cadd506b6e22c1962d5ca4560",
+    "dense.png.before.json": "2081d06fd2b6910b0ccc5fe82170d268d57aeff44cb8d5a7f424bc5542c6995d",
+    "italic-Helvetica-Oblique-11.png": "361da7afa29d0deb5e0662d8e7f96a87dd7f67c6a36d0af4fa5d52c52c335ed4",
+    "italic-Helvetica-Oblique-11.png.before.json": "9be31cfbb94c1a432d21d63c4f1a7dc65a8f998732d2bb593cd7d0366823dcd5",
+    "invoice.png": "def715c03b29d3d7e41a573163d228eb2c3e415dd83167d351802414cdb3a5bb",
+    "invoice.png.before.json": "ddbe678b9864b9c11569b5e7f361f77848634e4d24a82a97846664ea28b46739",
+    "grid-9-93-15.png": "dd629a100b4c98602a629c82950fd7f8015f4d0aca58b90373346b47ca47e46d",
+    "grid-9-93-15.png.before.json": "8e94ebdb31ccf2f3da159f522383c8b093b9bcfd634ace1f6288d6f12b83621d",
+    "grid-13-93-25.png": "48ef4d8a3b6c72efd5207bbe8f92dbafe2e6816d10236f7f3715e082e38fb799",
+    "grid-13-93-25.png.before.json": "f1396ca0e9cab6ff75b29bdc8eb3823ffee5932b5ed4900321657c51baf333b5",
+    "mixed-78-fuer.png": "76fd73c9e2df00cbf84c5d0ed11f158b677ed90fa65aae8d3ee57e0ee94bc988",
+    "mixed-78-fuer.png.before.json": "dfafc1be6fb63e871bdc94b4a549e1b810ad1868479f150da2d243dc68392598",
+    "mixed-78-Fahrrad.png": "e0cfdd2082f4abfb73a60de62dbabe28f8b302394ecf094bc2975329ab341d79",
+    "mixed-78-Fahrrad.png.before.json": "02dedd3c9330cfd58844a9db7592a90e47d8975388a797361a832c9586228e4d",
+    "grid-13-88-25.png": "b3e71440998149c9f4d24a4675cdb5db1a7927640baee5dcfbca9490fff976c6",
+    "grid-13-88-25.png.before.json": "e30bd143ad4360004acf8a320664a25ef734022731279c4ec19b89219ec72791",
+    "italic-Courier-Oblique-11.png": "d948f3393cb853daf13c25da3a46cfe2feb6c01ec1ae1cac7ee6e1ce5d725302",
+    "italic-Courier-Oblique-11.png.before.json": "0f185b739d0c27b596c4e8f03f900cc2b28e13c3bae2eea3b4b1945f14495ef3",
+    "faint-words.png": "165f59b436cdab58adea06f614c1ce69b3169239296fa2a43ddc86f566091fa8",
+    "faint-words.png.before.json": "9cf92670366d0055cf51f16089ca0bc2dcfc9cfef6883868a73375ff300d3fe7"
+  },
+  "manifestSHA256": "f6b0aec345da8a052931ef0977a719ab2c4c75e6e2ab62113ad394358c773c76",
+  "networkDeniedForOCR": true,
+  "userHomeReadWriteDenied": true,
+  "sandboxProfile": "(version 1)(allow default)(deny network*)(deny file-read* (subpath \"/Users/marcomeisen\"))(deny file-write* (subpath \"/Users/marcomeisen\"))",
+  "cpuThreads": 2,
+  "modelInitializationMilliseconds": 2719.747,
+  "apple": {
+    "exactFields": 52,
+    "timing": {
+      "sumMilliseconds": 7407,
+      "medianMilliseconds": 200,
+      "p95Milliseconds": 414
+    }
+  },
+  "variants": [
+    {
+      "name": "original",
+      "exactFields": 49,
+      "lostAppleFields": 4,
+      "additionalExactFields": 1,
+      "timing": {
+        "sumMilliseconds": 64453.603,
+        "medianMilliseconds": 1983.513,
+        "p95Milliseconds": 2519.291
+      },
+      "totalVariantMilliseconds": 64548.509,
+      "cases": [
+        {
+          "file": "ambiguous.png",
+          "expected": 2,
+          "apple": 1,
+          "paddle": 1,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "9308b985a2adcdbc0e6cb206937c73df96ba109007a13aa9d08ecd74155256f1",
+          "milliseconds": 1983.513,
+          "recognizedLines": 3
+        },
+        {
+          "file": "clean.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "9f04891b97ed1e0536049ea510108ab203a7a2309dc3f572c389f5673ac6eb43",
+          "milliseconds": 2085.024,
+          "recognizedLines": 4
+        },
+        {
+          "file": "date.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 1,
+          "lost": 1,
+          "added": 0,
+          "textSHA256": "1a5e30d236898e345fea63b91d47c237b4661d56945d1c1cd9e60ce48980af3f",
+          "milliseconds": 1852.629,
+          "recognizedLines": 3
+        },
+        {
+          "file": "dense.png",
+          "expected": 6,
+          "apple": 6,
+          "paddle": 6,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "15255163d300d62fad1151aef600ce45ebf04c85f39de6b04112cea86ed30b3e",
+          "milliseconds": 2773.434,
+          "recognizedLines": 7
+        },
+        {
+          "file": "faint-words.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "3210318c53bc26807671baecd0ae59566f9d832a9b60f61fafa6df5f4c6ad531",
+          "milliseconds": 1963.22,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-11-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1217.373,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1210.364,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1213.508,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1227.135,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1222.588,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1216.923,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1211.194,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1220.563,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1196.525,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1208.631,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1268.596,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 1208.472,
+          "recognizedLines": 1
+        },
+        {
+          "file": "invoice.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "867c0722ea486e057d23aedaeea1b75c5b7c456884927bd381d4f78e36ff42c5",
+          "milliseconds": 1939.22,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 2345.879,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 2321.834,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 2077.132,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 2104.91,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 1976.585,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 2182.654,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 2062.926,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 2069.494,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 1,
+          "lost": 1,
+          "added": 0,
+          "textSHA256": "9b22421fc10a41b22503b4b028a52018c2fabc08991fda2d9b641c1890da250b",
+          "milliseconds": 2076.631,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 2067.942,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 2069.999,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 2081.127,
+          "recognizedLines": 3
+        },
+        {
+          "file": "payroll.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "65a9671d8563db2a5ad08a0d436450953d8bf2fd595300d6646cc8a5122faed0",
+          "milliseconds": 1957.939,
+          "recognizedLines": 3
+        },
+        {
+          "file": "tilted-12-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 2519.291,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-12-right.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 2468.451,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 1,
+          "lost": 2,
+          "added": 0,
+          "textSHA256": "c32fb49b7b31f6c532ae5cf8937b4d4e946e5aa639d2d2b9ffb9830fa84cb8df",
+          "milliseconds": 2432.687,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-right.png",
+          "expected": 3,
+          "apple": 1,
+          "paddle": 2,
+          "lost": 0,
+          "added": 1,
+          "textSHA256": "a555dc3d3ebe821817d957dd9180b74e6402097a5352af145decba33305269f6",
+          "milliseconds": 2419.21,
+          "recognizedLines": 4
+        }
+      ]
+    },
+    {
+      "name": "scale3",
+      "exactFields": 54,
+      "lostAppleFields": 1,
+      "additionalExactFields": 3,
+      "timing": {
+        "sumMilliseconds": 431135.142,
+        "medianMilliseconds": 12323.894,
+        "p95Milliseconds": 13230.109
+      },
+      "totalVariantMilliseconds": 432252.957,
+      "cases": [
+        {
+          "file": "ambiguous.png",
+          "expected": 2,
+          "apple": 1,
+          "paddle": 2,
+          "lost": 0,
+          "added": 1,
+          "textSHA256": "4ad974d04cd780542b8fda507c6812f1a800539826ff078ffcad11ec83ffbf42",
+          "milliseconds": 13156.162,
+          "recognizedLines": 3
+        },
+        {
+          "file": "clean.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "9f04891b97ed1e0536049ea510108ab203a7a2309dc3f572c389f5673ac6eb43",
+          "milliseconds": 12581.711,
+          "recognizedLines": 4
+        },
+        {
+          "file": "date.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "dedd1cc606f3c31dddffb5cb44c4f99dd941f94ebbc5331d96012c040aa28f2a",
+          "milliseconds": 12417.074,
+          "recognizedLines": 3
+        },
+        {
+          "file": "dense.png",
+          "expected": 6,
+          "apple": 6,
+          "paddle": 5,
+          "lost": 1,
+          "added": 0,
+          "textSHA256": "6e750785ec498cfd91209e881154827ee04e7867753cde79d952f7189441b912",
+          "milliseconds": 13144.728,
+          "recognizedLines": 7
+        },
+        {
+          "file": "faint-words.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "3210318c53bc26807671baecd0ae59566f9d832a9b60f61fafa6df5f4c6ad531",
+          "milliseconds": 12136.868,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-11-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11397.087,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11751.838,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11907.375,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-11-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11508.99,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11657.692,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11838.893,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11707.893,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11969.488,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11944.792,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11621.161,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11699.716,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11592.259,
+          "recognizedLines": 1
+        },
+        {
+          "file": "invoice.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "867c0722ea486e057d23aedaeea1b75c5b7c456884927bd381d4f78e36ff42c5",
+          "milliseconds": 12523.774,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12914.972,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12685.526,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12511.245,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12522.77,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12552.392,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12445.282,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12396.7,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12317.284,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12318.037,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12666.753,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12323.894,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12310.51,
+          "recognizedLines": 3
+        },
+        {
+          "file": "payroll.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "65a9671d8563db2a5ad08a0d436450953d8bf2fd595300d6646cc8a5122faed0",
+          "milliseconds": 12158.427,
+          "recognizedLines": 3
+        },
+        {
+          "file": "tilted-12-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 13230.109,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-12-right.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 13269.212,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 12953.39,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-right.png",
+          "expected": 3,
+          "apple": 1,
+          "paddle": 3,
+          "lost": 0,
+          "added": 2,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 13001.138,
+          "recognizedLines": 4
+        }
+      ]
+    },
+    {
+      "name": "contrast3",
+      "exactFields": 53,
+      "lostAppleFields": 1,
+      "additionalExactFields": 2,
+      "timing": {
+        "sumMilliseconds": 433791.586,
+        "medianMilliseconds": 12467.5,
+        "p95Milliseconds": 13038.357
+      },
+      "totalVariantMilliseconds": 434514.72,
+      "cases": [
+        {
+          "file": "ambiguous.png",
+          "expected": 2,
+          "apple": 1,
+          "paddle": 2,
+          "lost": 0,
+          "added": 1,
+          "textSHA256": "4ad974d04cd780542b8fda507c6812f1a800539826ff078ffcad11ec83ffbf42",
+          "milliseconds": 12158.896,
+          "recognizedLines": 3
+        },
+        {
+          "file": "clean.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "9f04891b97ed1e0536049ea510108ab203a7a2309dc3f572c389f5673ac6eb43",
+          "milliseconds": 12641.293,
+          "recognizedLines": 4
+        },
+        {
+          "file": "date.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "dedd1cc606f3c31dddffb5cb44c4f99dd941f94ebbc5331d96012c040aa28f2a",
+          "milliseconds": 12467.5,
+          "recognizedLines": 3
+        },
+        {
+          "file": "dense.png",
+          "expected": 6,
+          "apple": 6,
+          "paddle": 6,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "15255163d300d62fad1151aef600ce45ebf04c85f39de6b04112cea86ed30b3e",
+          "milliseconds": 13038.357,
+          "recognizedLines": 7
+        },
+        {
+          "file": "faint-words.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "3210318c53bc26807671baecd0ae59566f9d832a9b60f61fafa6df5f4c6ad531",
+          "milliseconds": 12395.071,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-11-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "419f60f0e3a968762da09ba0166e21fe4af242578f3c8425ab94df114dfefce7",
+          "milliseconds": 12715.506,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-11-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "071f89c4d7aa55a6a814e1e9755f119efd374c88550191e98202ec79831b8cfc",
+          "milliseconds": 12562.725,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-11-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "15b2bc34b264ae938a4e11d3a156b2d40605265cd9de771bfa259e9f4f2e1aa4",
+          "milliseconds": 12234.367,
+          "recognizedLines": 2
+        },
+        {
+          "file": "grid-11-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11665.19,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-13-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "b93caed1d28262e8060f08bbaf179880bf7864625b35138d0052c5f12777677c",
+          "milliseconds": 12603.387,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-13-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "33638529f3c711fb4c2cb990b309ab1d6be98647671440247babf25f0c9081d9",
+          "milliseconds": 12193.479,
+          "recognizedLines": 2
+        },
+        {
+          "file": "grid-13-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7df646e1f6c343cb21866fbd539944a5471650318d5ccbbc451f82732e3a14d8",
+          "milliseconds": 12532.922,
+          "recognizedLines": 2
+        },
+        {
+          "file": "grid-13-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11707.224,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-88-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "c1ac897e1a968e293de079cd6daed3d323c4f8c676ea3e73888f880e05da631e",
+          "milliseconds": 12666.311,
+          "recognizedLines": 3
+        },
+        {
+          "file": "grid-9-88-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11573.431,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-15.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11584.2,
+          "recognizedLines": 1
+        },
+        {
+          "file": "grid-9-93-25.png",
+          "expected": 2,
+          "apple": 0,
+          "paddle": 0,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "7346c2cbd6a6f032d6e61467c717538ee64a6346ebea16a38699141abe0fdf87",
+          "milliseconds": 11663.165,
+          "recognizedLines": 1
+        },
+        {
+          "file": "invoice.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "867c0722ea486e057d23aedaeea1b75c5b7c456884927bd381d4f78e36ff42c5",
+          "milliseconds": 12554.366,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12480.902,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Courier-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12844.143,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 1,
+          "lost": 1,
+          "added": 0,
+          "textSHA256": "4905f2e5ab6c599d8f9ca8e6e5b17ec2fd6f6ce26b23913762661bf9c37b2126",
+          "milliseconds": 12417.29,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Helvetica-Oblique-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12597.658,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-11.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12483.967,
+          "recognizedLines": 3
+        },
+        {
+          "file": "italic-Times-Italic-14.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "bd34b2f5f8edb1c01c6fa1899d18d3f7147bea4abd070fcb6a30d0cb4ba78d55",
+          "milliseconds": 12244.133,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12230.397,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-78-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12233.42,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12500.916,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-85-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12306.07,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-Fahrrad.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12200.144,
+          "recognizedLines": 3
+        },
+        {
+          "file": "mixed-92-fuer.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "a04c438a6f7d04e96ccff4f67d8a7ca23e456f10bb62f3d0c2dc2a5877b8709b",
+          "milliseconds": 12269.952,
+          "recognizedLines": 3
+        },
+        {
+          "file": "payroll.png",
+          "expected": 2,
+          "apple": 2,
+          "paddle": 2,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "65a9671d8563db2a5ad08a0d436450953d8bf2fd595300d6646cc8a5122faed0",
+          "milliseconds": 12072.348,
+          "recognizedLines": 3
+        },
+        {
+          "file": "tilted-12-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 13054.658,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-12-right.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 12965.963,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-left.png",
+          "expected": 3,
+          "apple": 3,
+          "paddle": 3,
+          "lost": 0,
+          "added": 0,
+          "textSHA256": "e4adc55d7065b2f0db474585db62ea3e9f2081e781e7a2bb4572192eaa7cd7ce",
+          "milliseconds": 12913.899,
+          "recognizedLines": 4
+        },
+        {
+          "file": "tilted-9-right.png",
+          "expected": 3,
+          "apple": 1,
+          "paddle": 2,
+          "lost": 0,
+          "added": 1,
+          "textSHA256": "a555dc3d3ebe821817d957dd9180b74e6402097a5352af145decba33305269f6",
+          "milliseconds": 13018.336,
+          "recognizedLines": 4
+        }
+      ]
+    }
+  ],
+  "peakResidentBytes": 4587520000,
+  "sourceAndEvidenceFilesUnchanged": true,
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "hardware": {
+    "cpu": "Apple M1 Pro",
+    "memoryBytes": 17179869184,
+    "macOS": "27.2"
+  },
+  "rawGainOver52": 2,
+  "protectedGainOver52": 0,
+  "protection": [
+    {
+      "preservedEvidence": true,
+      "lost": 0,
+      "fallbackPages": 5,
+      "unexpectedAdditions": 0,
+      "name": "original",
+      "after": 52,
+      "before": 52
+    },
+    {
+      "preservedEvidence": true,
+      "lost": 0,
+      "fallbackPages": 3,
+      "unexpectedAdditions": 0,
+      "name": "scale3",
+      "after": 52,
+      "before": 52
+    },
+    {
+      "preservedEvidence": true,
+      "lost": 0,
+      "fallbackPages": 3,
+      "unexpectedAdditions": 10,
+      "name": "contrast3",
+      "after": 52,
+      "before": 52
+    }
+  ],
+  "qualityGate": {
+    "engine": "paddleocr-pp-ocrv6-medium",
+    "language": "de",
+    "apple": 52,
+    "bestRawPaddleOCR": 54,
+    "bestProtected": 52,
+    "qualityGate": "NO-GO",
+    "passingVariants": [],
+    "candidateEnabled": false
+  },
+  "freshAppleValidation": {
+    "command": [
+      "swift",
+      "test",
+      "-c",
+      "release",
+      "--disable-sandbox",
+      "--disable-automatic-resolution",
+      "--jobs",
+      "4",
+      "-debug-info-format",
+      "none",
+      "--no-parallel",
+      "--filter",
+      "OCRFaintRasterTests"
+    ],
+    "workingDirectory": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+    "environment": {
+      "VAULDY_OCR_FAINT_FIXTURES": "/private/tmp/vauldy-ppocr6-qq4oj5su/apple-fixtures"
+    },
+    "exitCode": 0,
+    "seconds": 23.768
+  },
+  "freshAppleTests": {
+    "tests": 3,
+    "suites": 1,
+    "seconds": 12.657,
+    "passed": true
+  },
+  "nativeTests": {
+    "tests": 13,
+    "suites": 4,
+    "seconds": 15.658,
+    "passed": true
+  },
+  "legacyTesseractTests": {
+    "tests": 1,
+    "suites": 1,
+    "seconds": 1.495,
+    "passed": true
+  },
+  "pythonUnitTests": {
+    "tests": 4,
+    "passed": true
+  },
+  "validation": [
+    {
+      "name": "source-verification",
+      "command": [
+        "python3",
+        "/private/tmp/vauldy-small-source-verify.py"
+      ],
+      "environment": {},
+      "exitCode": 0,
+      "seconds": 0.254,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/source-verification-final.log",
+      "logSHA256": "c00c1bbe8e74f02c64de1ce4f482e455133bc42c2aa1255b086ab7c0baaab641"
+    },
+    {
+      "name": "native-protection",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "LocalOCRAlternativeComparisonTests|EvidencePreservingOCRTests|OCRFaintRasterTests|OCRTargetedRetryTests"
+      ],
+      "environment": {
+        "VAULDY_OCR_ALTERNATIVE_RUN": "/private/tmp/vauldy-ppocr6-qq4oj5su/final"
+      },
+      "exitCode": 0,
+      "seconds": 66.782,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/native-protection-final.log",
+      "logSHA256": "2cd28ab9690961e2ec785aa3fa190b13d10eddf7fafd5f509bfb32851616581a"
+    },
+    {
+      "name": "legacy-tesseract-protection",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "LocalOCRAlternativeComparisonTests"
+      ],
+      "environment": {
+        "VAULDY_OCR_ALTERNATIVE_RUN": "/private/tmp/vauldy-alt-ocr-zklrh9uc/final"
+      },
+      "exitCode": 0,
+      "seconds": 6.486,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/legacy-tesseract-protection-final.log",
+      "logSHA256": "649c7e4135542f58fc8984b83d12bef91a86299604f351d6f6047ad6b86ba38f"
+    },
+    {
+      "name": "line-wire",
+      "command": [
+        "python3",
+        "scripts/mcp/line_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "line-fixtures"
+      ],
+      "environment": {},
+      "exitCode": 0,
+      "seconds": 3.884,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/line-wire-final.log",
+      "logSHA256": "6552a093b36a9a85b098866351456179d7a3e424d3c23c70c92cc2e9f540bf62"
+    },
+    {
+      "name": "unit-tests",
+      "command": [
+        "/private/tmp/vauldy-ppocr6-qq4oj5su/venv/bin/python",
+        "scripts/mcp/paddle_ocr_comparison_test.py"
+      ],
+      "environment": {},
+      "exitCode": 0,
+      "seconds": 0.2,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/unit-tests-final.log",
+      "logSHA256": "98255317dbdec068621cfd1c730ebd962e38b6f8c534b73c2b3cbfc806ea738c"
+    },
+    {
+      "name": "syntax",
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "scripts/mcp/paddle_ocr_comparison.py",
+        "scripts/mcp/paddle_ocr_comparison_test.py"
+      ],
+      "environment": {},
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/syntax-final.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "quality-gate",
+      "command": [
+        "python3",
+        "scripts/mcp/paddle_ocr_comparison.py",
+        "check",
+        "/private/tmp/vauldy-ppocr6-qq4oj5su/final"
+      ],
+      "environment": {},
+      "exitCode": 1,
+      "seconds": 0.073,
+      "log": "/private/tmp/vauldy-ppocr6-qq4oj5su/quality-gate-final.log",
+      "logSHA256": "04e7a8a3572b6cf22e98065b485c2d35c6b95cf26372fdc3ee8bd9ab2ecd1635"
+    }
+  ],
+  "paddleExecution": {
+    "command": [
+      "/usr/bin/sandbox-exec",
+      "-p",
+      "(version 1)(allow default)(deny network*)(deny file-read* (subpath \"/Users/marcomeisen\"))(deny file-write* (subpath \"/Users/marcomeisen\"))",
+      "/private/tmp/vauldy-ppocr6-qq4oj5su/venv/bin/python",
+      "/private/tmp/vauldy-ocr-vector-wtr5pb1z/scripts/mcp/paddle_ocr_comparison.py",
+      "_worker",
+      "/private/tmp/vauldy-ppocr6-qq4oj5su/paddle-execution-request.json"
+    ],
+    "exitCode": 0,
+    "seconds": 936.891
+  },
+  "workerMCPWire": {
+    "passed": true,
+    "syntheticImages": 3,
+    "nativeExactFields": 6,
+    "protectedVerifiedExcerpts": 5,
+    "contractIdentifierRedacted": true,
+    "ambiguousIdentifierRemainsReview": true,
+    "persistedReasons": true,
+    "sameWorker": true,
+    "freshRetryPreservesEvidence": true,
+    "repeatReasonsStable": true,
+    "originalAndGrantUnchanged": true,
+    "sourcePage": 1,
+    "diagnosticsRemainLocal": true,
+    "revocations": 3
+  },
+  "sourceVerification": {
+    "files": 212,
+    "sha256": "7d42a3222cc46c2e65d67dc93e5317c5d7e586d318320aca9a906830ac460fb9"
+  },
+  "productionSourceFilesUnchanged": {
+    "files": 108,
+    "verified": true,
+    "sha256": "65d89fca2c84d37fef471e63de9459635bd9a1c1e035b66b828908ac7eb58627"
+  },
+  "modelInstalledGlobally": false,
+  "productionDocumentsOrGrantsModified": false,
+  "installedVauldyUpdated": false,
+  "ocrPageCalls": 105,
+  "modelsInRepository": false,
+  "cloudInferenceUsed": false,
+  "fullReleaseRegressionExecuted": false,
+  "limitations": [
+    "Literal 79-field metric includes punctuation/whitespace; three new exact fields are not three newly discovered facts",
+    "Twelve very faint/noisy images remain at zero of 24 complete fields in all variants",
+    "Existing whole-page evidence fallback rejects corrected prior OCR lines; no protection thresholds were weakened",
+    "The corpus is synthetic and largely ASCII-transliterated German; no independent umlaut/real-document holdout",
+    "Evaluation has access to ground truth; recognition/variant selection does not",
+    "Timing is local CPU inference on an M1 Pro, not ChatGPT response latency or customer-Mac release acceptance"
+  ],
+  "preflightCorrections": [
+    "First isolated API probe failed because the pinned helper is an instance method; corrected self argument before inference",
+    "First controller unit test expected a noncanonical /var path; corrected test expectation to /private/var and reran four tests successfully"
+  ],
+  "removedOwnPipCacheBytes": 239462248
+}

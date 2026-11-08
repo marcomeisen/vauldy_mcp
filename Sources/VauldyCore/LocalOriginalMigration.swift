@@ -102,6 +102,7 @@ public struct LocalOriginalMigrationService: Sendable {
 extension LocalDocumentStore {
     func convertOriginal(expected: VaultDocument, reference: LocalOriginalReference) async throws -> LocalOriginalMigrationItem {
         try await run { try locked {
+            guard !isSQLite else { throw LocalImportError.foreignStore }
             var documents = try read()
             var item = LocalOriginalMigrationItem(documentID: expected.id, status: .recordChanged)
             guard let index = documents.firstIndex(where: { $0.id == expected.id }), documents[index] == expected,

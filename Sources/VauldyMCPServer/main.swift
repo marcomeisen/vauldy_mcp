@@ -10,6 +10,12 @@ enum VauldyMCPMain {
         if arguments.count == 2 && arguments[1] == "--version" {
             print("vauldy-mcp \(MCPBuild.version)"); return
         }
+        if arguments == [arguments[0], "--build-info"] {
+            if let data = try? JSONEncoder().encode(MCPBuildInformation(tools: VauldyMCPServerFactory.toolNames)) {
+                print(String(decoding: data, as: UTF8.self))
+            }
+            return
+        }
         let options: [String: MCPIndexFeatures] = [
             "--experimental-sqlite-index": [.largerSnapshotCache, .memoryTokenIndex],
             "--large-snapshot-cache": .largerSnapshotCache,

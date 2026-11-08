@@ -14,16 +14,18 @@ MCP-Software aktualisieren. [Ablauf und Grenzen](inventory-workflow.md).
 
 ## Einrichtung ohne bestehende App
 
-1. `Vauldy-MCP-macOS.zip` entpacken, `Vauldy MCP Einrichtung.app` nach Programme verschieben und öffnen.
-2. In **Übersicht** oder **Einstellungen** „Installation starten“ wählen. Der Installationsassistent zeigt Version und Speicherort. Mit **„Installieren“** werden die lokalen Programme geprüft, eingerichtet und mit einem synthetischen Profil gestartet. Der Abschluss zeigt die installierte Version und das Ergebnis des lokalen Starttests. Für diesen Schritt brauchst du kein Konto.
-3. Optional in **Übersicht** „Chatbot verbinden“ wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**.
-4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder importieren, „Ordner importieren …“ wählen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zählt nach der Suche alle gefundenen Dokumente über die Ordner hinweg. Einzelimporte werden lokal kopiert, Ordnerimporte referenzieren die Originaldateien. Import allein erteilt keine Freigabe.
+1. `Vauldy.zip` entpacken, `Vauldy.app` nach Programme verschieben und öffnen. Pakete mit den bisherigen Namen `Vauldy-MCP-macOS.zip` / `Vauldy MCP Einrichtung.app` werden genauso verwendet. Voraussetzung: macOS 14 oder neuer und eine zum Paket passende Prozessorarchitektur.
+2. Beim ersten gewöhnlichen Start ohne installierte Software und ohne Verbindungen öffnet sich der Installationsassistent automatisch. Er zeigt Version und Speicherort. Mit **„Installieren“** werden die lokalen Programme geprüft, eingerichtet und mit einem synthetischen Profil gestartet. Der Abschluss zeigt die installierte Version und das Ergebnis des lokalen Starttests. Für diesen Schritt brauchst du kein Konto. Nach „Abbrechen“ kannst du ihn über **Übersicht → Installation starten** wieder öffnen.
+3. Am erfolgreichen Abschluss **„Chatbot verbinden“** wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**. Mit **„Später einrichten“** beendest du die Installation ohne Chatbot-Verbindung. Der Verbindungsassistent bleibt über die Übersicht erreichbar.
+4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder mit „Dateien importieren …“ lokal kopieren, mit „Ordner einmal importieren …“ Originale am vorhandenen Ort verknüpfen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zeigt die Gesamtzahl gefundener unterstützter Dokumente, die aktuelle Datei und den Verarbeitungsschritt. „Import abbrechen“ zeigt den laufenden Abbruch. Beim Schließen des Assistenten läuft der Import weiter. Die Freigabe erfolgt separat.
 5. Lesbare Dokumente auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
 6. „Freigeben und einrichten“ speichert die Dokumentauswahl. Für normale Chats anschließend unter „ChatGPT & Claude“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird ein passender Client-Eintrag angelegt. Konflikte mit bestehenden Einträgen bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
 7. Der lokale Protokolltest prüft Handshake und Freigabestatus. Aktiviere Vauldy anschließend im Chatbot und starte dessen Verbindung bei Bedarf neu. Unter **Verbindungen** kannst du einzelne Zugriffe pausieren oder nach Bestätigung fortsetzen.
 
 **Dokumente** bietet Suche, Auswahl-/Qualitätsfilter und eine lokale Vorschau importierter Originale.
-**„Alle auswählen“** markiert den gesamten geladenen lesbaren Bestand, auch außerhalb der aktuellen Suche oder des Filters; beide werden dabei zurückgesetzt. Dokumente ohne durchsuchbaren Text bleiben unausgewählt. „Auswahl aufheben“ leert den Entwurf. Die Freigabebestätigung und „Auswahl speichern“ stehen oberhalb der Liste. Erst das Speichern ändert die Freigabe; neue Importe werden weiterhin nicht automatisch ausgewählt.
+Der Importbericht bleibt oberhalb der Liste sichtbar und unterscheidet neue, bereits vorhandene, fehlgeschlagene und übersprungene Dateien. „Fehler anzeigen“ führt zu den betroffenen Dateinamen und Gründen. Hinweise zu Texterkennung und Basisanalyse erscheinen separat. „Neu importierte Dokumente anzeigen“ filtert die Liste auf diesen Import.
+
+**„Sichtbare Dokumente auswählen“** markiert die lesbaren Treffer der aktuellen Suche und Filter. **„Gesamten Bestand auswählen“** markiert auch die lesbaren Dokumente außerhalb der Ansicht. „Auswahl aufheben“ leert den Entwurf. Die Freigabebestätigung und „Auswahl speichern“ stehen oberhalb der Liste. Erst das Speichern ändert die Freigabe.
 „Auswahl speichern“ ändert nur die Dokumentauswahl. Ein pausierter Zugriff bleibt pausiert; zusätzliche Dokumente benötigen eine neue Bestätigung. Eine leere Auswahl sperrt den Zugriff. Änderungen aus dem Statusmenü können nicht durch einen veralteten Entwurf überschrieben werden; dann die gespeicherte Auswahl neu laden.
 
 Unter **Einstellungen** erfolgt das Softwareupdate unabhängig von Freigaben und Client-Einträgen.
@@ -377,7 +379,7 @@ zu starten. Diese lokalen Verwaltungsbefehle verändern keine MCP-Dokumentfreiga
 
 ## Einen oder mehrere Ordner beobachten
 
-Im Assistenten unter **Ordner → „Ordner hinzufügen …“** einen oder mehrere Ordner
+Im Assistenten unter **Ordner → „Ordner zur Überwachung hinzufügen …“** einen oder mehrere Ordner
 wählen. „Unterordner … einbeziehen“ gilt für neu hinzugefügte Ordner; standardmäßig wird nur die
 oberste Ebene gelesen. Vorhandene und später hinzugefügte PDFs und Bilder werden über dauerhafte,
 schreibgeschützte Dateiverweise durch denselben OCR-Worker verarbeitet. Neue Dokumente erscheinen in der Dokumentauswahl und müssen
@@ -452,7 +454,7 @@ Vor dem Löschen von `~/Library/Application Support/VauldyMCP/` den Unterordner 
 liegt außerhalb dieses Verzeichnisses und bleibt unverändert.
 
 `python3 scripts/mcp/package.py` erstellt ein selbstenthaltendes ZIP für die Architektur des
-Build-Rechners. Swift, Python oder Node sind zur Nutzung der vier Programme nicht erforderlich.
+Build-Rechners. Swift, Python oder Node sind zur Nutzung der sechs mitgelieferten Programme nicht erforderlich.
 Standardmäßig ist das Paket ad-hoc für lokale Tests signiert, nicht für öffentliche Verteilung
 notarisiert. Gatekeeper nicht pauschal deaktivieren. Für öffentliche Verteilung sind Developer ID,
 Notarisierung und Neuinstallation auf unterstützten Systemen zusätzlich zu prüfen:
@@ -460,6 +462,21 @@ Notarisierung und Neuinstallation auf unterstützten Systemen zusätzlich zu pr�
 ```sh
 python3 scripts/mcp/package.py --identity 'Developer ID Application: …' --notary-profile '…'
 ```
+
+Für synchronisierte oder File-Provider-Ausgabeordner kann ausschließlich das ZIP ausgegeben werden:
+
+```sh
+python3 scripts/mcp/package.py --name Vauldy --archive-only --output /absoluter/ausgabeordner
+```
+
+Mit `--name Vauldy` enthält `Vauldy.zip` die `Vauldy.app`. Ohne `--name` gelten
+die bisherigen Paketnamen. Der Name im Finder ist unabhängig von der macOS-Bundle-ID.
+
+Das vermeidet ein loses App-Bundle, dem der Dateianbieter nach dem Kopieren erneut Finder-Metadaten
+hinzufügen kann. Das tatsächlich ausgegebene ZIP wird in einem lokalen Stagingordner erneut entpackt
+und auf seine Signatur geprüft. Bei der Paketierung werden aus eigenen generierten Bundles nur
+`com.apple.FinderInfo` und `com.apple.ResourceFork` entfernt. Quarantäne und andere Sicherheitsattribute
+bleiben erhalten. Die Prüfung ist mit `scripts/mcp/package_metadata_smoke_test.py` reproduzierbar.
 
 ## Vorhandene MCP-UI aus diesem Repository starten
 

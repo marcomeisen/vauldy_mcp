@@ -4,21 +4,53 @@ import VauldyCore
 import VauldyMCPRuntime
 
 enum SetupDocumentFilter: String, CaseIterable {
-    case all, selected, unselected, review, pending
+    case all, selected, unselected, review, ocrReview, analysisReview, pending
     var title: String {
         switch self {
         case .all: "Alle Dokumente"
-        case .selected: "Ausgewählt"
-        case .unselected: "Nicht ausgewählt"
-        case .review: "Texterkennung prüfen"
+        case .selected: "Für Chatbot ausgewählt"
+        case .unselected: "Nicht für Chatbot ausgewählt"
+        case .review: "Prüfbedarf (OCR / Analyse)"
+        case .ocrReview: "Nur OCR prüfen"
+        case .analysisReview: "Nur Basisanalyse prüfen"
         case .pending: "In Verarbeitung"
         }
     }
 }
 
 extension SetupModel {
+    /// Re-evaluate only when a source URL changes. Rendering each checkbox
+    /// must neither reread the storage marker nor resolve filesystem aliases.
+    func updateLocalVaultIdentity() {
+        let matches: Bool
+        if let vaultURL, let localSnapshotURL {
+            matches = vaultURL.standardizedFileURL.resolvingSymlinksInPath().path
+                == localSnapshotURL.standardizedFileURL.resolvingSymlinksInPath().path
+        } else { matches = false }
+        if isLocalVault != matches { isLocalVault = matches }
+    }
+    func documentDisplayName(_ document: VaultDocument) -> String {
+        let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        if title.isEmpty || ["Dokument", "Freigegebenes Dokument"].contains(title) {
+            return document.sourceName.isEmpty ? "Dokument" : document.sourceName
+        }
+        return title
+    }
+    func canRetryOCR(_ document: VaultDocument) -> Bool {
+        isLocalVault && document.localImport?.originalState == .available
+            && document.localImport?.state != .queued && document.localImport?.state != .recognizing
+    }
+    var visibleOCRDocumentIDs: Set<UUID> { Set(filteredDocuments.filter { canRetryOCR($0) }.map(\.id)) }
+    var selectedOCRDocuments: [VaultDocument] { documents.filter { ocrSelected.contains($0.id) } }
+    func retrySelectedOCR() {
+        let ids = selectedOCRDocuments.map(\.id)
+        guard !busy, !importing, !ids.isEmpty else { return }
+        importFiles([], retries: ids)
+    }
+
     var filteredDocuments: [VaultDocument] {
         documents.filter { document in
+            guard shownImportDocumentIDs?.contains(document.id) ?? true else { return false }
             let matches = documentSearch.isEmpty || document.title.localizedCaseInsensitiveContains(documentSearch) || document.sourceName.localizedCaseInsensitiveContains(documentSearch)
             guard matches else { return false }
             switch documentFilter {
@@ -26,21 +58,27 @@ extension SetupModel {
             case .selected: return selected.contains(document.id)
             case .unselected: return !selected.contains(document.id)
             case .review: return ["needsReview", "failed", "stale"].contains(document.baseAnalysisStatus) || (document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) } ?? false)
+            case .ocrReview: return document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) || $0.pages.contains(where: \.needsReview) } ?? false
+            case .analysisReview: return ["needsReview", "failed", "stale", "unavailable"].contains(document.baseAnalysisStatus)
             case .pending: return document.localImport?.state == .queued || document.localImport?.state == .recognizing
             }
         }
     }
     var selectedReadableCount: Int { documents.filter { selected.contains($0.id) && $0.isSearchable }.count }
     var selectableDocumentIDs: Set<UUID> { Set(documents.filter(\.isSearchable).map(\.id)) }
-    var allReadableDocumentsSelected: Bool {
-        let ids = selectableDocumentIDs
-        return !ids.isEmpty && ids.isSubset(of: selected)
+    var visibleSelectableDocumentIDs: Set<UUID> { Set(filteredDocuments.filter(\.isSearchable).map(\.id)) }
+
+    func selectDocuments(_ ids: Set<UUID>) {
+        guard !busy, editing != nil || showingSetup else { return }
+        selected.formUnion(ids.intersection(selectableDocumentIDs))
+        acknowledged = false
     }
 
-    func selectAllDocuments() {
-        guard !busy, editing != nil || showingSetup else { return }
-        selected.formUnion(selectableDocumentIDs)
-        acknowledged = false
+    func showImportedDocuments(_ ids: Set<UUID>) {
+        guard !busy else { return }
+        if !showingSetup { section = .documents }
+        if !isLocalVault { openLocalStore() }
+        shownImportDocumentIDs = ids
         documentSearch = ""
         documentFilter = .all
     }
@@ -63,7 +101,7 @@ extension SetupModel {
     var unsharedCount: Int { documents.filter { !(activeConnection?.allowedDocumentIDs.contains($0.id) ?? false) }.count }
 
     func state(for profile: MCPAccessProfile) -> MCPConnectionState {
-        MCPConnectionState(profile: profile, instances: instances, binding: profile.connectionKind == .oauth ? nil : bindings[profile.connectionID])
+        MCPConnectionState(profile: profile, instances: instances, binding: profile.connectionKind == .oauth ? nil : bindings[profile.connectionID], expectedBuildID: software?.installedBuildID)
     }
     func client(for profile: MCPAccessProfile) -> MCPDesktopClient? { profile.connectionKind == .oauth ? nil : resolvedClients[profile.connectionID] ?? profile.desktopClient }
     func existingConnection(for client: MCPDesktopClient) -> MCPAccessProfile? {
@@ -88,6 +126,13 @@ extension SetupModel {
         monitoring = Task { [weak self] in
             guard let self else { return }
             await refreshManagement(checkBindings: true)
+            // Offer the wizard once at ordinary first launch. Status polling must not
+            // reopen a dismissed sheet or interrupt an explicit management route.
+            if !args.contains("--section"), section == .overview,
+               managementError.isEmpty, connections.isEmpty,
+               software?.state == .notInstalled, !showingSetup, !busy {
+                showingInstallation = true
+            }
             // Opening connection management is observational. Starting folder imports
             // remains an explicit action in the folder view or import commands.
             await refreshWatchedFolders()
@@ -110,6 +155,9 @@ extension SetupModel {
         let installer = installation
         do {
             let loaded = try await Task.detached { try installer.profiles() }.value
+            for old in connections where !loaded.contains(old) {
+                probeResults.removeValue(forKey: old.connectionID); probeErrors.removeValue(forKey: old.connectionID)
+            }
             connections = loaded.sorted { $0.connectionName.localizedStandardCompare($1.connectionName) == .orderedAscending }
             if !connections.contains(where: { $0.connectionID == activeConnectionID }) { activeConnectionID = connections.first?.connectionID }
             instances = await Task.detached { try? MCPProcessPresence.serverInstances(root: installer.root) }.value
@@ -117,7 +165,9 @@ extension SetupModel {
             await refreshOAuth()
             if let binary = bundledBinary {
                 let stamp = try? installer.binaryURL.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
-                if software == nil || stamp != lastInstalledStamp {
+                let installedBuildID = await Task.detached { MCPBuildIdentity.read(installer.binaryURL) }.value
+                if software == nil || stamp != lastInstalledStamp || software?.installedBuildID != installedBuildID {
+                    probeResults.removeAll(); probeErrors.removeAll()
                     let local = localExecutable, status = bundledStatusApp, setup = Bundle.main.bundleURL
                     software = try await Task.detached { try installer.softwareStatus(availableBinary: binary, localCLI: local, statusApp: status, setupApp: setup) }.value
                     lastInstalledStamp = stamp
@@ -165,6 +215,7 @@ extension SetupModel {
         if section == .documents { showDocuments() }
     }
     func showDocuments(unselected: Bool = false) {
+        shownImportDocumentIDs = nil
         documentFilter = unselected ? .unselected : .all
         documentSearch = ""
         if let profile = activeConnection { edit(profile) }
@@ -179,7 +230,7 @@ extension SetupModel {
         guard !busy else { return }
         editing = nil; selected = []; acknowledged = false; configuration = nil
         registrationMessage = ""; connectionName = ""; setupStep = 0
-        documentFilter = .all; documentSearch = ""
+        shownImportDocumentIDs = nil; documentFilter = .all; documentSearch = ""
         clientSelection = "oauth-chatgpt"
         showingSetup = true; failure = false; message = ""
         if documents.isEmpty { openLocalStore() }
@@ -251,6 +302,17 @@ extension SetupModel {
         software = nil
         await refreshManagement()
         return version
+    }
+
+    func finishInstallation(connectChatbot: Bool) {
+        connectAfterInstallation = connectChatbot
+        showingInstallation = false
+    }
+
+    func installationWizardDismissed() {
+        guard connectAfterInstallation else { return }
+        connectAfterInstallation = false
+        newConnection()
     }
 
     private func activateBundledSoftware(rollback: Bool = false) async throws -> String {
@@ -325,11 +387,12 @@ extension SetupModel {
         if profile.connectionKind == .oauth { activeConnectionID = profile.connectionID; section = .oauth; Task { await refreshOAuth() }; return }
         if present { diagnosisProfile = profile }
         guard !probing.contains(profile.connectionID) else { return }
-        probing.insert(profile.connectionID); probeErrors[profile.connectionID] = nil
+        probing.insert(profile.connectionID); probeErrors[profile.connectionID] = nil; probeResults[profile.connectionID] = nil
         let installer = installation
         Task {
             do {
                 let result = try await Task.detached { try MCPLocalProbe.run(binary: installer.binaryURL, profile: installer.profileURL(profile.connectionID)) }.value
+                guard connections.first(where: { $0.connectionID == profile.connectionID }) == profile else { throw MCPAccessError.stale }
                 probeResults[profile.connectionID] = result
             } catch { probeErrors[profile.connectionID] = (error as? LocalizedError)?.errorDescription ?? "Der lokale MCP-Test ist fehlgeschlagen. Bitte Software und Freigabe prüfen." }
             probing.remove(profile.connectionID)
@@ -351,7 +414,7 @@ extension SetupModel {
     }
 
     func preview(_ document: VaultDocument) {
-        guard vaultURL == localStore.snapshotURL else { return }
+        guard isLocalVault else { return }
         Task {
             do {
                 let access = try await localStore.openOriginal(for: document.id)

@@ -9,7 +9,25 @@ public struct LocalOCRMetrics: Codable, Equatable, Sendable {
     public var cacheHit = false
     public var renderedPixels = 0
     public var recognitionRegions = 0
+    public var pdfScaleRetries: Int?
+    public var coverageMilliseconds: Int?
+    public var coverageRenderedPixels: Int?
+    public var smallTextDetectionRegions: Int?
+    public var smallTextDetectionPixels: Int?
+    public var regionRetries: Int?
+    public var recoveredRegionLines: Int?
+    public var regionRetryMilliseconds: Int?
+    public var regionRetryPixels: Int?
+    public var regionRecoveryConflicts: Int?
+    public var evidencePreservedFallback: Bool?
+    public var targetedRetries: Int?
+    public var recoveredLines: Int?
+    public var lineReview: LocalOCRLineReview?
     public init() {}
+    mutating func mergeCoverage(_ other: Self?) {
+        if let value = other?.coverageMilliseconds { coverageMilliseconds = (coverageMilliseconds ?? 0) + value }
+        if let value = other?.coverageRenderedPixels { coverageRenderedPixels = (coverageRenderedPixels ?? 0) + value }
+    }
 }
 
 struct LocalStopwatch {

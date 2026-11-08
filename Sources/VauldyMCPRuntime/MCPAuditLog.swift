@@ -15,8 +15,8 @@ public struct MCPAuditLog: Sendable {
             switch tool {
             case "get_vault_status": self = .status
             case "search_documents": self = .search
-            case "list_documents": self = .list
-            case "read_document": self = .read
+            case "list_documents", "get_topic_overview", "get_document_inventory": self = .list
+            case "read_document", "extract_document_fields", "compare_contract_versions", "get_deadline_overview": self = .read
             default: self = .unknown
             }
         }

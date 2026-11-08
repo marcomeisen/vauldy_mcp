@@ -61,6 +61,31 @@ public struct MCPDocumentListResult: Encodable, Sendable {
     public let disclosure = MCPDisclosure()
 }
 
+public struct MCPTopicOverview: Encodable, Sendable {
+    public struct Evidence: Encodable, Sendable {
+        public let page: Int
+        public let quote: String
+        public let source: String
+    }
+    public struct Row: Encodable, Sendable {
+        public let document: String
+        public let status: String
+        public let evidence: Evidence?
+        public let issuer: MCPAnalysisField?
+        public let subject: MCPAnalysisField?
+        public let processingStatus: String
+    }
+    public let contractVersion = 1
+    public let rows: [Row]
+    public let candidateCount: Int
+    public let nextCursor: String?
+    public let retrievalComplete: Bool
+    public let processingComplete: Bool
+    public let coverage: MCPProcessingCoverage
+    public let warnings: [String]
+    public let disclosure = MCPDisclosure()
+}
+
 public struct MCPDocumentSegment: Encodable, Sendable {
     public let page: Int?
     public let part: Int

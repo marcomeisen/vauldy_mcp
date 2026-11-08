@@ -33,6 +33,6 @@ def main():
             raise SystemExit('Relay tool schemas differ from local MCP.')
     else:
         path.write_text(updated)
-    print('PASS: exact four-tool relay discovery matches local MCP')
+    print('PASS: exact relay tool discovery matches local MCP')
 
 if __name__=='__main__':main()

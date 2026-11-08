@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "head": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "scope": "local MCP branch implementation; isolated synthetic metadata and originals only; no live ChatGPT acceptance",
+  "sourceVerification": {
+    "files": 225,
+    "sha256": "8617b0cfe64184238876129394ddeb832b357b4ed391d442a496ee97b5d697c9"
+  },
+  "sourceVerificationScope": "byte-equal Swift Sources/Tests, package manifests, MCP Python scripts and native JSON fixtures; excludes documentation, skill and cloud JS",
+  "serverSHA256": "66c12051d086588df784c8ed3a33d6619b5d0a715e417b18c82820622aba31c3",
+  "relayDiscoverySourceSHA256": "bc4bfab691ea228e657f4fd3e3d38fe29932f1d1e39a5bdaabaade2e444d4167",
+  "native": {
+    "passed": true,
+    "tests": 56,
+    "suites": 10,
+    "seconds": 18.778,
+    "workingDirectory": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+    "command": "swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 --no-parallel --filter 'MCPDocumentInventoryTests|SetupDocumentTimestampTests|SetupDocumentGuidanceTests|SQLiteIntegrationTests|StorageMigrationTests|MCPBuildDiagnosisTests|LocalImportTests|OCRTargetedRetryTests|OCRSmallRegionTests|EvidencePreservingOCRTests'",
+    "logSHA256": "922fde6fb551b4c3e025218188c4a312178a7705ad0a05bae48d22dd8ced00e9"
+  },
+  "wire": {
+    "scope": "actual local stdio; synthetic metadata, no live ChatGPT",
+    "cases": [
+      {
+        "case": "json",
+        "passed": true,
+        "documents": 5,
+        "fullPaginationCalls": 3,
+        "firstPageMS": 13.803,
+        "firstPageCalls": 1,
+        "readOnly": true
+      },
+      {
+        "case": "sqlite",
+        "passed": true,
+        "documents": 5,
+        "fullPaginationCalls": 3,
+        "firstPageMS": 14.563,
+        "firstPageCalls": 1,
+        "readOnly": true
+      },
+      {
+        "case": "legacy-sqlite",
+        "passed": true,
+        "documents": 5,
+        "fullPaginationCalls": 3,
+        "firstPageMS": 36.317,
+        "firstPageCalls": 1,
+        "readOnly": true
+      },
+      {
+        "case": "large",
+        "passed": true,
+        "documents": 20000,
+        "fullPaginationCalls": 200,
+        "firstPageMS": 737.35,
+        "firstPageCalls": 1,
+        "readOnly": true
+      }
+    ],
+    "largeWarm": {
+      "runs": 5,
+      "medianMS": 286.988,
+      "p95MS": 327.614,
+      "note": "five observed requests; not a general latency SLA"
+    },
+    "passed": true,
+    "v1SchemasUnchanged": true,
+    "stableIdentityAcrossRestartsAndGrantChanges": true,
+    "unknownDatesLast": true,
+    "revocationPassed": true,
+    "legacySQLiteReadWithoutMigration": true
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/mcp/document_inventory_smoke_test.py /private/tmp/vauldy-ocr-vector-wtr5pb1z/.build/out/Products/Release/vauldy-mcp /private/tmp/vauldy-document-inventory-rhznnt5_/fixtures --report /private/tmp/vauldy-document-inventory-rhznnt5_/wire-final.json",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 scripts/mcp/smoke_test.py /private/tmp/vauldy-ocr-vector-wtr5pb1z/.build/out/Products/Release/vauldy-mcp",
+      "exitCode": 0,
+      "result": "PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive."
+    },
+    {
+      "command": "python3 scripts/mcp/export_relay_tools.py /private/tmp/vauldy-ocr-vector-wtr5pb1z/.build/out/Products/Release/vauldy-mcp --check",
+      "exitCode": 0,
+      "result": "PASS: exact relay tool discovery matches local MCP"
+    },
+    {
+      "command": "node --test cloud/chatgpt-relay/tests/relay.mjs",
+      "exitCode": 0,
+      "tests": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "command": "python3 -m py_compile scripts/mcp/document_inventory_smoke_test.py scripts/mcp/regression_test.py scripts/mcp/package.py scripts/mcp/build_diagnosis_smoke_test.py scripts/mcp/customer_release_smoke_test.py scripts/mcp/smoke_test.py scripts/mcp/management_smoke_test.py",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "contract": {
+    "tool": "get_document_inventory",
+    "version": 1,
+    "toolCount": 9,
+    "identity": "doc_ + sha256(UTF8(vauldy.document-reference.v1) + NUL + lowercase stored UUID)",
+    "identityScope": "immutable stored record; stable across access handle, connection and grant revision changes; not authorization",
+    "importedAt": "original import time; UTC in MCP; local German timestamp in setup; unknown omitted",
+    "contentHash": "SHA-256 of last imported original bytes; historical if original changed or unavailable; never OCR hash",
+    "changedBytes": "new record/new ID; prior record and evidence retained",
+    "missingRow": "not proof of file deletion; may reflect revocation"
+  },
+  "production": {
+    "installedPackageUpdated": false,
+    "cloudDeployed": false,
+    "regularChatGPTTest": false,
+    "existingDocumentsModified": false,
+    "grantsModified": false,
+    "keychainModified": false
+  },
+  "notRun": [
+    "full regression runner",
+    "fixed 79-field OCR improvement gate",
+    "regular ChatGPT conversation",
+    "new installer/customer-Mac acceptance"
+  ],
+  "open": [
+    "package and private discovery rollout to nine tools",
+    "regular synthetic ChatGPT recent-import acceptance with visible answer timing",
+    "explicit logical version lineage and permission-safe change/deletion journal"
+  ]
+}

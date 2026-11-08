@@ -42,9 +42,12 @@ public struct MCPSoftwareStatus: Sendable {
     public var state: MCPSoftwareState
     public var installedVersion: String?
     public var availableVersion: String
+    public var installedBuildID: String?
+    public var availableBuildID: String?
     public var canRollback: Bool
-    public init(state: MCPSoftwareState, installedVersion: String?, availableVersion: String = MCPBuild.version, canRollback: Bool = false) {
+    public init(state: MCPSoftwareState, installedVersion: String?, availableVersion: String = MCPBuild.version, canRollback: Bool = false, installedBuildID: String? = nil, availableBuildID: String? = nil) {
         self.state = state; self.installedVersion = installedVersion; self.availableVersion = availableVersion; self.canRollback = canRollback
+        self.installedBuildID = installedBuildID; self.availableBuildID = availableBuildID
     }
 }
 
@@ -160,7 +163,7 @@ extension MCPInstallation {
     }
 
     public func softwareStatus(availableBinary: URL, localCLI: URL? = nil, statusApp: URL? = nil, setupApp: URL? = nil) throws -> MCPSoftwareStatus {
-        guard FileManager.default.fileExists(atPath: binaryURL.path) else { return .init(state: .notInstalled, installedVersion: nil) }
+        guard FileManager.default.fileExists(atPath: binaryURL.path) else { return .init(state: .notInstalled, installedVersion: nil, availableBuildID: MCPBuildIdentity.read(availableBinary)) }
         let hash = try Self.hash(binaryURL)
         let generation = try softwareGeneration()
         var current = hash == (try Self.hash(availableBinary))
@@ -187,7 +190,8 @@ extension MCPInstallation {
         }
         let version = generation?.version ?? (try? recordedSoftwareVersion())
         return .init(state: current ? .current : .updateAvailable,
-                     installedVersion: version ?? (current ? MCPBuild.version : nil), canRollback: hasSoftwareRollback)
+                     installedVersion: version ?? (current ? MCPBuild.version : nil), canRollback: hasSoftwareRollback, installedBuildID: MCPBuildIdentity.read(binaryURL),
+                     availableBuildID: MCPBuildIdentity.read(availableBinary))
     }
 
     func recordedSoftwareVersion() throws -> String? {

@@ -11,12 +11,14 @@ from stdio_client import Client
 
 # Vauldy's published v1 tool contract. Independent of the relay's discovery mirror.
 V1_DISCOVERY_SHA256 = '1c2d67d0bc94c20fb9efe2755d8bd67cf11a77eaeba769f775925371045fd9fa'
+V1_TOOLS = {'get_vault_status', 'search_documents', 'list_documents', 'read_document'}
 
 
 def assert_v1_discovery(tools):
     keys = ('name', 'inputSchema', 'outputSchema', 'annotations')
     contract = [{key: tool[key] for key in keys} for tool in sorted(tools, key=lambda tool: tool['name'])]
-    canonical = json.dumps(contract, sort_keys=True, separators=(',', ':')).encode()
+    canonical = json.dumps([tool for tool in contract if tool['name'] in V1_TOOLS],
+                           sort_keys=True, separators=(',', ':')).encode()
     assert hashlib.sha256(canonical).hexdigest() == V1_DISCOVERY_SHA256, 'Vauldy v1 tool contract changed'
 
 
@@ -92,7 +94,7 @@ def main():
         try:
             tools = client.request('tools/list', {})['tools']
             assert_v1_discovery(tools)
-            assert {t['name'] for t in tools} == {'get_vault_status', 'search_documents', 'list_documents', 'read_document'}
+            assert {t['name'] for t in tools} == V1_TOOLS | {'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'}
             assert all(t['annotations']['readOnlyHint'] for t in tools)
             assert all('outputSchema' in t for t in tools)
             schemas = {t['name']: t['outputSchema'] for t in tools}

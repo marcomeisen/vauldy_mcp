@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "inputFilesByteCompared": 143,
+  "swiftTests": {
+    "passed": true,
+    "count": 60,
+    "suites": 9,
+    "seconds": 12.171
+  },
+  "wire": {
+    "passed": true,
+    "syntheticPDFs": 2,
+    "exactStoredFields": 6,
+    "ungrantedExcluded": true,
+    "physicalPage": 1,
+    "protectedOutput": true,
+    "sourceBoundLayout": true,
+    "layoutRemainsLocal": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "verifiedCases": [
+    "legacy decoding without geometry",
+    "source/page/text/configuration binding",
+    "UTF-16 surrogate and invalid rectangle rejection",
+    "embedded and raster PDF crop with rotations 0/90/180/270",
+    "white margins in PNG",
+    "long image tiles",
+    "hybrid embedded and raster text offsets",
+    "multiple regions on a long PDF",
+    "persisted reload and cache geometry",
+    "source change suppression",
+    "source page marker rewriting drops geometry",
+    "eight strict raster document domains",
+    "SQLite integration regressions"
+  ],
+  "firstBuildAttempt": "test compilation failed on nested #require macro; split into separate assertions and rerun successfully",
+  "remaining": [
+    "block grouping",
+    "visual text coverage comparison",
+    "missing raster areas",
+    "plausibly wrong embedded mappings in other font types"
+  ],
+  "r6": "deferred at user request",
+  "sourceSHA256": {
+    "Sources/VauldyCore/LocalOCRLayout.swift": "f37029264bd7b4549c4cb559894d2a647affb983126a147640a0ef773cff5ca1",
+    "Sources/VauldyCore/LocalImportModels.swift": "95883d17311c22d7a6f5d0470c7d6f5867c6a53c4982f8a3b57f27a273536947",
+    "Sources/VauldyCore/NativeLocalDocumentOCR.swift": "a0534eb2ae4bd411814e040276091c707b0613805f61cd8f85b22d8d995b4dc6",
+    "Sources/VauldyCore/LocalOCRPageCache.swift": "4992fe2c978ea3b563a0416022bb665d3891aa6d6a82fa4042c3c3f554cb6034",
+    "Sources/VauldyCore/LocalDocumentStore.swift": "11a7c909d491d5ff70b5cc5e5fe9770d9e1ac156491fdbf8de8a09de75df9e96",
+    "Sources/VauldyCore/LocalDocumentReview.swift": "503875faff589c19c62bb7f0e474bfc0b7b70d652776427dad65b49afeb0b076",
+    "Tests/VauldyMCPRuntimeTests/OCRLayoutTests.swift": "99c9ca3cfa48a6d24ed5d75ea2c4135b7970738bbb49cbba25ee4f8af769e9b4",
+    "scripts/mcp/vector_ocr_quality_smoke_test.py": "56c9cb931c44b8dc15c38f28e173f1763ab826a5a5ebf2ccfd1acaa1b0205e8f"
+  }
+}

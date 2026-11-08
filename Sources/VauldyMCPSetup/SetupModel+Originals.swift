@@ -4,7 +4,8 @@ import VauldyCore
 extension SetupModel {
     func chooseFolderImport() {
         let panel = sourceFoldersPanel(title: "Ordner einmal importieren")
-        panel.message = "Die Dateien bleiben an ihrem Ort. Vauldy speichert Dateiverweise, OCR und Basisanalyse; keine zusätzliche Originalkopie."
+        panel.prompt = "Importieren"
+        panel.message = "Die Originaldateien bleiben an ihrem Ort. Vauldy speichert Verweise und liest die Dateien lokal. Die Ordner werden einmal durchsucht."
         let includeSubfolders = NSButton(checkboxWithTitle: "Unterordner einbeziehen", target: nil, action: nil)
         includeSubfolders.state = .on
         includeSubfolders.sizeToFit()

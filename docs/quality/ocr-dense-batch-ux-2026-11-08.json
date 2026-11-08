@@ -1,0 +1,209 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "workingTree": "includes earlier local changes; no commit or push",
+  "productVersion": "0.13.0",
+  "ocrConfigurationPrefix": "ocr-v13-dense-and-line-recovery-",
+  "sourceVerification": {
+    "files": 197,
+    "sha256": "6830fa2e110e245aeb3717b8a6e86786debc663181889c82efb8ffec8c9c669d",
+    "scope": "Sources/**/*.swift, Tests/**/*.swift, Package.swift, Package.resolved, scripts/mcp/*.py",
+    "buildCheckout": "/private/tmp/vauldy-ocr-vector-wtr5pb1z"
+  },
+  "swiftTests": {
+    "passed": 97,
+    "suites": 18,
+    "seconds": 27.11,
+    "exitCode": 0,
+    "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-regression-accepted.log",
+    "command": [
+      "swift",
+      "test",
+      "-c",
+      "release",
+      "--disable-sandbox",
+      "--disable-automatic-resolution",
+      "--jobs",
+      "4",
+      "-debug-info-format",
+      "none",
+      "--no-parallel",
+      "--filter",
+      "OCRDensePageTests|OCRLineContextTests|LocalWorkerTests|OCRSmallRegionTests|OCRSmallTextMCPFixturesTests|EvidencePreservingOCRTests|OCRMarkedRegionRecoveryTests|OCRBlockCoverageTests|OCRLayoutTests|PDFVectorTextOCRTests|OCRTargetedRetryTests|OCRWhiteMarginsTests|LocalImportTests|LocalOriginalReferenceTests|BaseAnalysisMCPTests|LocalDocumentReviewTests|SQLiteIntegrationTests|MCPFieldExtractionTests"
+    ],
+    "fixtureEnvironment": {
+      "VAULDY_OCR_DENSE_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-fixtures",
+      "VAULDY_OCR_SMALL_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/small-fixtures",
+      "VAULDY_OCR_REGION_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/region-fixtures",
+      "VAULDY_OCR_COVERAGE_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/coverage-fixtures",
+      "VAULDY_OCR_VECTOR_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/vector-fixtures",
+      "VAULDY_OCR_AB_FIXTURES": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/raster-fixtures"
+    },
+    "scopeNote": "Final URL identity and O(N) selection-count UI fixes followed this test run; final native UI separately built and exercised."
+  },
+  "nativeDenseAB": {
+    "syntheticEmbeddedRows": 140,
+    "expectedVectorFields": 5,
+    "beforeExactFields": 0,
+    "afterExactFields": 5,
+    "comparedRegions": 147,
+    "storedRegions": 128,
+    "regionRetries": 3,
+    "maximumRegionRetries": 4,
+    "maximumRegionRetryPixels": 8000000,
+    "priorTextPrefixPreserved": true,
+    "originalBytesPreserved": true,
+    "coverageStatus": "checked",
+    "notUniversalRasterAccuracy": true
+  },
+  "nativeSmallPrintRegression": {
+    "4Point": {
+      "before": 0,
+      "after": 3,
+      "expected": 3
+    },
+    "5Point": {
+      "before": 2,
+      "after": 3,
+      "expected": 3
+    },
+    "6Point": {
+      "before": 3,
+      "after": 3,
+      "expected": 3
+    }
+  },
+  "wire": [
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/dense_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "dense-fixtures"
+      ],
+      "exitCode": 0,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-wire.log",
+      "result": {
+        "passed": true,
+        "syntheticPDFs": 1,
+        "embeddedRows": 140,
+        "exactRecoveredFields": 5,
+        "comparedRegions": 147,
+        "storedRegions": 128,
+        "preservedDeductible": true,
+        "sourcePage": 1,
+        "metadataRemainsLocal": true,
+        "sameWorkerFreshRetry": true,
+        "originalUnchanged": true,
+        "grantUnchanged": true,
+        "revocation": true
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/mcp/visual_coverage_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "region-fixtures"
+      ],
+      "exitCode": 0,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-region-wire.log",
+      "result": {
+        "passed": true,
+        "syntheticPDFs": 3,
+        "recoveredFields": 6,
+        "preservedValues": 3,
+        "numericConflictPreserved": true,
+        "physicalPage": 1,
+        "metadataRemainsLocal": true,
+        "evidencePreservingRefinement": true,
+        "cacheAndFreshRetry": true,
+        "revocation": true
+      }
+    }
+  ],
+  "nativeUI": {
+    "isolatedSyntheticDocuments": 6,
+    "granted": 2,
+    "fullBatchCompleted": 6,
+    "cancelAfterCompleted": 3,
+    "remainingSelectionAfterCancel": 3,
+    "resumedCompleted": 3,
+    "finalBuildBatchCompleted": 6,
+    "hiddenSelectedWarning": 5,
+    "OCRReviewFilterCount": 0,
+    "analysisReviewFilterCount": 6,
+    "grantSelectionRetained": 2,
+    "saveDisabledWithoutChange": true,
+    "OCRActionsAfterGrantCollapse": true,
+    "sourceOriginalHashesUnchanged": 6,
+    "OCRTextsPreserved": 6,
+    "profileByteIdentical": true,
+    "screenshotVisuallyReviewed": true,
+    "testUIBuildUUID": "35D033CA-4E2E-3733-BBBB-936FF755A92C",
+    "finalUIBuildSeconds": 11.51,
+    "finalUIBuildLog": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/dense-ui-identity-build.log",
+    "finalUIBuildPassed": true,
+    "entireBatchSurvivesUIQuitOrCrash": false,
+    "onlyOwnedTestProcessesStopped": true
+  },
+  "productionPreservation": {
+    "productionOriginalsPreserved": 9,
+    "productionOCRTextsPreserved": 9,
+    "protectedConnectionFiles": 2,
+    "clientConfigurationsUnchanged": 1,
+    "noProductionV13OCR": true
+  },
+  "encounteredFailures": [
+    {
+      "stage": "initial compile",
+      "outcome": "missing try; corrected"
+    },
+    {
+      "stage": "first dense fixture",
+      "outcome": "0/5; column-aware planning added"
+    },
+    {
+      "stage": "next dense fixture",
+      "outcome": "4/5; bounded individual residual retry added"
+    },
+    {
+      "stage": "native UI row Menu",
+      "outcome": "SwiftUI layout loop and high resource use; replaced by simple Button, native UI retested"
+    },
+    {
+      "stage": "grant disclosure",
+      "outcome": "active profile not loaded; initialized on opening"
+    },
+    {
+      "stage": "return from grant selection",
+      "outcome": "raw URL comparison hid OCR actions; normalized cached identity on source changes and retested"
+    },
+    {
+      "stage": "CUA observation after quit",
+      "outcome": "test app relaunched without setup-root; no data action performed; stopped only lab and verified production preservation"
+    },
+    {
+      "stage": "test-only C launcher experiment",
+      "outcome": "no native window; discarded; final result uses regular full bundle with explicit setup-root"
+    }
+  ],
+  "notPerformed": [
+    "product installation or package release",
+    "real five-document OCR repeat with v13",
+    "regular live ChatGPT acceptance",
+    "full release/installer regression",
+    "VoiceOver per user request",
+    "native 20000-document list acceptance",
+    "Developer-ID/notarization or physical offline customer acceptance"
+  ],
+  "open": [
+    "native >256-character regions and independent dense raster/noisy-line corpus",
+    "durable whole OCR batch across UI quit/crash",
+    "separate package and real five-document/13-page review",
+    "customer release and large native list acceptance"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "passed": [
+    "single-call-four-fields",
+    "physical-last-page",
+    "conflicts",
+    "cost-roles",
+    "missing-fields",
+    "whole-document-privacy",
+    "grants",
+    "failed-source",
+    "unlocated-source",
+    "bounded-evidence",
+    "input-validation",
+    "pagination",
+    "cursor-scope",
+    "changed-source",
+    "revocation",
+    "read-only-fixtures",
+    "v1-contract"
+  ],
+  "documents": 7,
+  "selectedPages": 18,
+  "extractionCalls": 1,
+  "benchmark": {
+    "read": {
+      "cold": {
+        "runs": 10,
+        "medianMS": 392.0,
+        "p95MS": 416.9
+      },
+      "warm": {
+        "runs": 20,
+        "medianMS": 153.0,
+        "p95MS": 240.3
+      },
+      "toolCalls": 6,
+      "structuredBytes": 30729
+    },
+    "fields": {
+      "cold": {
+        "runs": 10,
+        "medianMS": 321.2,
+        "p95MS": 348.4
+      },
+      "warm": {
+        "runs": 20,
+        "medianMS": 15.3,
+        "p95MS": 16.1
+      },
+      "toolCalls": 1,
+      "structuredBytes": 2294
+    }
+  },
+  "date": "2026-11-05",
+  "branch": "codex/local-first-product-readiness",
+  "measurementScope": "Local stdio content retrieval after document selection; no ChatGPT, relay, model or table rendering",
+  "fixtures": "Synthetic stored OCR only; this benchmark does not measure OCR recognition quality"
+}

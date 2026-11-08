@@ -34,6 +34,7 @@ public struct LocalOCRPageInfo: Codable, Equatable, Sendable {
     public var elapsedMilliseconds: Int
     public var needsReview: Bool
     public var metrics: LocalOCRMetrics?
+    public var layout: LocalOCRPageLayout?
     public init(page: Int, method: LocalOCRMethod, confidence: Double? = nil, elapsedMilliseconds: Int = 0, needsReview: Bool = false) {
         self.page = page; self.method = method; self.confidence = confidence
         self.elapsedMilliseconds = elapsedMilliseconds; self.needsReview = needsReview
@@ -60,6 +61,7 @@ public struct LocalImportMetadata: Codable, Equatable, Sendable {
 public struct LocalOCRPage: Codable, Sendable {
     public var info: LocalOCRPageInfo
     public var text: String
+    public var geometry: LocalOCRGeometry?
     public init(info: LocalOCRPageInfo, text: String) { self.info = info; self.text = text }
 }
 public struct LocalOCRResult: Sendable {

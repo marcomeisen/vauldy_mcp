@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-07",
+  "verifiedAt": "2026-11-07T16:52:18.987107+01:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c",
+  "workingTreeSnapshot": true,
+  "productVersion": "0.13.0",
+  "serverBuildID": "macho.c20e99b2d8f73daaadac2a08ff2846c9",
+  "ocrConfiguration": "ocr-v11-small-region-recovery + OS version",
+  "archive": "dist/mcp/vauldy-v11-2026-11-07-v0s9nktc/Vauldy.zip",
+  "archiveSHA256": "7ea72798d1ff99dfaae9aee283733392957f8552bb3554aa7078ea2609764118",
+  "architectures": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "signing": "ad-hoc",
+  "notarized": false,
+  "validDeveloperIDIdentitiesAtBuild": 0,
+  "sourceAndTestFilesVerified": 149,
+  "sourceAndTestSHA256": "51e747723d191034e5e9787ad29b61af5263ee079432dc3e5a51792a43ce4e38",
+  "build": {
+    "command": "swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none",
+    "result": "passed",
+    "seconds": 51.37,
+    "packagingAfterBuildWithSkipBuild": true,
+    "manifestBuildMode": "reused"
+  },
+  "newChecks": {
+    "packageVersionAndPlatformGates": true,
+    "archiveExtractionAndSignature": true,
+    "syntheticUpdateRollback": true,
+    "actualLocalProbeBuildVerified": true,
+    "actualLocalProbeTools": 8,
+    "actualLocalProbeGrantedDocuments": 9,
+    "installedProductsMatchPackage": true,
+    "nativeUIProgramsCurrent": true,
+    "nativeUIVerifiedRollbackAvailable": true
+  },
+  "priorSourceMatchedChecks": {
+    "source": "quality/ocr-nine-document-review-2026-11-07.json",
+    "swiftTests": 78,
+    "nativeOCRIncluded": true,
+    "rerunThisIteration": false
+  },
+  "preservation": {
+    "documentCount": 9,
+    "allowedDocumentCount": 9,
+    "protectedDataAndGrantFilesSHA256Unchanged": 44,
+    "clientFilesSHA256Unchanged": 1,
+    "existingPairingProfileAndPublicPairMetadataUnchanged": true,
+    "noRePairingOrProvisioningOrExplicitRotation": true,
+    "keychainCredentialNotExportedOrReset": true,
+    "ownerConfirmedUpdatedAgentKeychainAccess": true,
+    "softwareRollbackGenerationRetained": true,
+    "oldApplicationPrivatelyBackedUp": true
+  },
+  "relayRestart": {
+    "firstKeychainApprovalDidNotPassFreshBackgroundCheck": true,
+    "secondExplicitOwnerApprovalSucceeded": true,
+    "temporaryPreviousAuthorizedTransportUsed": true,
+    "temporaryPreviousTransportStopped": true,
+    "newPackagedAgentRunning": true,
+    "newBackgroundKeychainReadPassed": true
+  },
+  "chatGPTFinal": {
+    "available": true,
+    "grantedDocumentCount": 9,
+    "searchableDocumentCount": 9,
+    "completeSourceDocumentCount": 4,
+    "reviewDocumentCount": 5,
+    "analysisNeedsReview": 9
+  },
+  "limits": [
+    "Ad-hoc package, no Developer ID/notarization.",
+    "No fresh physical offline customer-Mac acceptance in this update.",
+    "Existing five source-review documents and nine analysis-review states remain unchanged."
+  ]
+}

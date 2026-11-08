@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-07",
+  "verifiedAt": "2026-11-07T12:38:30.894463+01:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "workingTreeSnapshot": true,
+  "sourceFilesByteVerified": 106,
+  "sourceSHA256": "a9a56172a866971c9f3317bebc722c50b50743ca30d7553bdd127c9361efb8a9",
+  "artifact": "dist/mcp/vauldy-guided-2026-11-07/Vauldy.zip",
+  "archiveSHA256": "02363d33e3bba0bb8f9a2783a90b4e398854f509b969f488b468df07d4fe62e1",
+  "productVersion": "0.13.0",
+  "serverBuildID": "macho.2a3541f019733a7c8e4c4517b61bb230",
+  "architectures": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "signing": "ad-hoc",
+  "notarized": false,
+  "validDeveloperIDIdentities": 0,
+  "manifestBuildMode": "reused",
+  "freshBuild": true,
+  "swift": {
+    "tests": 80,
+    "suites": 13,
+    "seconds": 22.795,
+    "result": "passed"
+  },
+  "checks": {
+    "stdio": {
+      "result": "passed",
+      "lastLine": "PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive."
+    },
+    "management": {
+      "result": "passed",
+      "lastLine": "PASS: real local diagnosis for paused/active grants, no content query, unchanged profile/vault, no host/menu false positive, per-connection request metadata and cleanup."
+    },
+    "updateRollback": {
+      "result": "passed",
+      "lastLine": "PASS: signed update, authentication and compatibility gates, failed-start recovery, SIGKILL, concurrent update, verified rollback and real stdio."
+    },
+    "observationalStartup": {
+      "result": "passed",
+      "lastLine": "PASS: native setup with enabled watched folder starts no import worker; snapshots, config and original unchanged."
+    }
+  },
+  "nativeUI": {
+    "freshIsolatedRoot": true,
+    "automaticWizard": true,
+    "cancelKeepsClosedDuringPolling": true,
+    "manualReopen": true,
+    "installationStartTest": "passed",
+    "directConnectionWizard": "passed",
+    "connectionWizardClosedWithoutGrant": true,
+    "productionInstallation": false
+  },
+  "failedAttempts": [
+    {
+      "check": "setup_startup_smoke_test.py",
+      "attempts": 2,
+      "reason": "Fixture preparation exceeded 25 seconds; retained synthetic snapshot showed completed native OCR after about 40 seconds. Preparation timeout changed to 90 seconds; subsequent startup test passed. This is not a performance pass."
+    }
+  ],
+  "localReset": {
+    "explicitUserRequest": true,
+    "additionalSafariAndKeychainApproval": true,
+    "activeVauldyProcesses": 0,
+    "mcpRootArchived": true,
+    "documentVaultPreserved": true,
+    "legacyDocumentsUnchanged": true,
+    "nativeMCPSetupAppArchived": true,
+    "legacyNativeAppBackedUpAndTrashed": true,
+    "safariWrapperArchived": true,
+    "ownedClientEntriesRemoved": 2,
+    "foreignClientSettingsPreserved": true,
+    "preferenceFilesArchived": 23,
+    "relayCredentialDeletedWithoutExport": true,
+    "remoteServicesChanged": false
+  },
+  "limitations": [
+    "No Developer ID or notarization",
+    "No fresh physical Mac or physically offline customer acceptance",
+    "No new hosted ChatGPT connection created",
+    "Native Vision cold-start fixture took about 40 seconds"
+  ]
+}

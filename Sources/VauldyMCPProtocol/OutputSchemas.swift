@@ -55,6 +55,41 @@ let contentOutputSchema = object([
 private let analysisFieldSchema = object([
     "role": textSchema, "value": textSchema, "page": countSchema, "quote": textSchema, "source": textSchema
 ])
+let topicOverviewOutputSchema = object([
+    "contractVersion": countSchema,
+    "rows": array(object([
+        "document": textSchema, "status": textSchema, "processingStatus": textSchema,
+        "evidence": object(["page": countSchema, "quote": textSchema, "source": textSchema]),
+        "issuer": analysisFieldSchema, "subject": analysisFieldSchema
+    ], optional: ["evidence", "issuer", "subject"])),
+    "candidateCount": countSchema, "nextCursor": textSchema, "retrievalComplete": boolSchema,
+    "processingComplete": boolSchema, "coverage": coverageSchema,
+    "warnings": array(textSchema), "disclosure": disclosureSchema
+], optional: ["nextCursor"])
+private let fieldEvidenceSchema = object(["label": textSchema, "value": textSchema, "page": countSchema,
+                                          "quote": textSchema, "source": textSchema])
+let fieldExtractionOutputSchema = object([
+    "contractVersion": countSchema, "scope": textSchema,
+    "results": array(object([
+        "document": textSchema, "field": textSchema, "status": textSchema,
+        "evidence": array(fieldEvidenceSchema),
+        "evidenceCount": countSchema, "evidenceOffset": countSchema, "evidenceComplete": boolSchema,
+        "sourceCoverage": textSchema, "warnings": array(textSchema)
+    ])),
+    "nextCursor": textSchema, "retrievalComplete": boolSchema, "warnings": array(textSchema), "disclosure": disclosureSchema
+], optional: ["nextCursor"])
+private let comparisonSideSchema = object([
+    "document": textSchema, "sourceCoverage": textSchema, "identitySource": textSchema
+], optional: ["identitySource"])
+let contractComparisonOutputSchema = object([
+    "contractVersion": countSchema, "scope": textSchema, "status": textSchema,
+    "before": comparisonSideSchema, "after": comparisonSideSchema,
+    "rows": array(object(["field": textSchema, "aspect": textSchema, "status": textSchema,
+                          "before": fieldEvidenceSchema, "after": fieldEvidenceSchema,
+                          "beforeEvidenceCount": countSchema, "afterEvidenceCount": countSchema,
+                          "warnings": array(textSchema)], optional: ["before", "after"])),
+    "warnings": array(textSchema), "disclosure": disclosureSchema
+])
 let metadataOutputSchema = object([
     "document": textSchema, "view": textSchema, "analysisStatus": textSchema, "engine": textSchema,
     "analyzedPages": array(countSchema), "logicalDocumentCount": countSchema,
@@ -70,3 +105,33 @@ private let passagesOutputSchema = object([
     "warnings": array(textSchema), "disclosure": disclosureSchema
 ], optional: ["nextCursor"])
 let readOutputSchema: Value = .object(["type": .string("object"), "anyOf": .array([contentOutputSchema, metadataOutputSchema, passagesOutputSchema])])
+
+let deadlineOverviewOutputSchema = object([
+    "contractVersion": countSchema, "scope": textSchema,
+    "rows": array(object([
+        "document": textSchema, "sourceCoverage": textSchema,
+        "entries": array(object([
+            "role": textSchema, "status": textSchema, "date": textSchema, "evidence": array(fieldEvidenceSchema),
+            "evidenceCount": countSchema, "warnings": array(textSchema)
+        ], optional: ["date"])),
+        "calculationStatus": textSchema,
+        "calculation": object(["date": textSchema, "method": textSchema, "ruleSource": textSchema, "endDateSource": textSchema]),
+        "warnings": array(textSchema)
+    ], optional: ["calculation"])),
+    "warnings": array(textSchema), "disclosure": disclosureSchema
+])
+
+let inventoryOutputSchema = object([
+    "contractVersion": countSchema, "scope": textSchema, "identityScope": textSchema,
+    "identityAlgorithm": textSchema, "contentHashScope": textSchema, "order": textSchema,
+    "snapshot": textSchema,
+    "items": array(object([
+        "document": textSchema,
+        "documentID": .object(["type": .string("string"), "pattern": .string("^doc_[0-9a-f]{64}$")]),
+        "importedAt": .object(["type": .string("string"), "format": .string("date-time")]),
+        "contentHash": .object(["type": .string("string"), "pattern": .string("^[0-9a-f]{64}$")]),
+        "originalState": textSchema, "processingStatus": textSchema, "sourceCoverage": textSchema
+    ], optional: ["importedAt", "contentHash"])),
+    "totalCount": countSchema, "nextCursor": textSchema, "retrievalComplete": boolSchema,
+    "coverage": coverageSchema, "warnings": array(textSchema), "disclosure": disclosureSchema
+], optional: ["nextCursor"])

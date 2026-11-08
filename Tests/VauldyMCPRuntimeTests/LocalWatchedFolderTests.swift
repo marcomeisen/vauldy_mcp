@@ -42,6 +42,7 @@ struct LocalWatchedFolderTests {
             let flat = try await worker.folderImportBatch([source, other], recursive: false)
             defer { flat.close() }
             #expect(flat.files.map(\.lastPathComponent) == ["direct.pdf", "second.pdf"])
+            #expect(flat.unsupportedFiles.isEmpty)
             #expect(flat.unavailableFolderCount == 0)
 
             let recursive = try await worker.folderImportBatch(
@@ -49,7 +50,9 @@ struct LocalWatchedFolderTests {
             )
             defer { recursive.close() }
             #expect(recursive.files.map(\.lastPathComponent) == ["direct.pdf", "nested.png", "second.pdf"])
+            #expect(recursive.unsupportedFiles.map(\.lastPathComponent) == ["ignored.txt"])
             #expect(recursive.unavailableFolderCount == 1)
+            #expect(recursive.unavailableFolders.map(\.lastPathComponent) == ["missing"])
             #expect(try await store.documents().isEmpty)
             #expect(try await LocalWatchedFolderStore(store: store).folders().isEmpty)
         }

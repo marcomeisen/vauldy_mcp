@@ -1,0 +1,288 @@
+{
+  "date": "2026-11-07",
+  "verifiedAt": "2026-11-07T13:27:23.093891+01:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c",
+  "workingTreeSnapshot": true,
+  "sourceAndTestFilesVerified": 149,
+  "sourceAndTestSHA256": "51e747723d191034e5e9787ad29b61af5263ee079432dc3e5a51792a43ce4e38",
+  "ocrConfiguration": "ocr-v11-small-region-recovery + OS version",
+  "maintenance": {
+    "explicitUserRequestedExistingNineDocuments": true,
+    "localPrivateBackup": true,
+    "selectedDocumentsRefined": 6,
+    "totalPages": 27,
+    "pagesInSelectedDocuments": 24,
+    "priorNonemptyLinesPreserved": true,
+    "addedLines": 7,
+    "addedCharacters": 38,
+    "reviewPagesBefore": 15,
+    "reviewPagesAfter": 13,
+    "sourceCompleteDocumentsBefore": 3,
+    "sourceCompleteDocumentsAfter": 4,
+    "sourceReviewDocumentsBefore": 6,
+    "sourceReviewDocumentsAfter": 5,
+    "managedOriginalFilesSHA256Unchanged": 9,
+    "originalReferencesUnchanged": true,
+    "profileFilesSHA256Unchanged": true,
+    "OAuthAndKeychainUnchanged": true,
+    "noRealDocumentTextsOrNamesWrittenToRepo": true,
+    "noOriginalsTransferred": true
+  },
+  "documents": [
+    {
+      "document": "D1",
+      "pages": 9,
+      "charactersBefore": 29323,
+      "charactersAfter": 29332,
+      "addedLines": 1,
+      "reviewPagesBefore": 5,
+      "reviewPagesAfter": 4,
+      "fallbackPages": 0,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_STRUCTURE_AMBIGUOUS",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D2",
+      "pages": 1,
+      "charactersBefore": 1147,
+      "charactersAfter": 1147,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D3",
+      "pages": 4,
+      "charactersBefore": 9410,
+      "charactersAfter": 9410,
+      "addedLines": 0,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 1,
+      "fallbackPages": 0,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D4",
+      "pages": 2,
+      "charactersBefore": 1472,
+      "charactersAfter": 1481,
+      "addedLines": 1,
+      "reviewPagesBefore": 1,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D5",
+      "pages": 1,
+      "charactersBefore": 1684,
+      "charactersAfter": 1684,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 1,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D6",
+      "pages": 1,
+      "charactersBefore": 568,
+      "charactersAfter": 568,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D7",
+      "pages": 1,
+      "charactersBefore": 109,
+      "charactersAfter": 109,
+      "addedLines": 0,
+      "reviewPagesBefore": 0,
+      "reviewPagesAfter": 0,
+      "fallbackPages": 0,
+      "state": "completed",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D8",
+      "pages": 2,
+      "charactersBefore": 3294,
+      "charactersAfter": 3294,
+      "addedLines": 0,
+      "reviewPagesBefore": 2,
+      "reviewPagesAfter": 2,
+      "fallbackPages": 0,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "DOCUMENT_TYPE_UNRESOLVED",
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 0,
+      "priorLinesPreserved": true
+    },
+    {
+      "document": "D9",
+      "pages": 6,
+      "charactersBefore": 7575,
+      "charactersAfter": 7595,
+      "addedLines": 5,
+      "reviewPagesBefore": 5,
+      "reviewPagesAfter": 5,
+      "fallbackPages": 0,
+      "state": "partial",
+      "analysisStatus": "needsReview",
+      "analysisIssues": [
+        "OVERVIEW_UNAVAILABLE",
+        "SOURCE_NEEDS_REVIEW",
+        "SUBJECT_UNRESOLVED"
+      ],
+      "checkedQuotes": 1,
+      "priorLinesPreserved": true
+    }
+  ],
+  "analysis": {
+    "reanalyzedDocuments": 9,
+    "needsReview": 9,
+    "failed": 0,
+    "quotedFieldsCheckedAgainstTheirStoredOCRPage": 5,
+    "unsupportedStoredQuotes": 0,
+    "issueCounts": {
+      "DOCUMENT_STRUCTURE_AMBIGUOUS": 1,
+      "OVERVIEW_UNAVAILABLE": 8,
+      "SOURCE_NEEDS_REVIEW": 5,
+      "SUBJECT_UNRESOLVED": 9,
+      "DOCUMENT_TYPE_UNRESOLVED": 6
+    },
+    "semanticOrVisualCorrectnessNotCertified": true,
+    "previousStructuredFieldsPreserved": 5
+  },
+  "searchVerification": {
+    "localInstalledMCPQueries": 7,
+    "successful": 7,
+    "includeExcerpts": false,
+    "queriesOrDocumentTextsNotPrinted": true,
+    "remoteStatusConfirmsNineSearchable": true,
+    "remoteStatusConfirmsFourSourceComplete": true
+  },
+  "tests": {
+    "swiftTests": 78,
+    "suites": 13,
+    "seconds": 16.913,
+    "passed": true,
+    "wire": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "recoveredFields": 6,
+      "preservedValues": 3,
+      "numericConflictPreserved": true,
+      "physicalPage": 1,
+      "metadataRemainsLocal": true,
+      "evidencePreservingRefinement": true,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    },
+    "originalEightRasterCasesStillStrict": true
+  },
+  "tinyTextQualityProbes": [
+    {
+      "points": 4,
+      "expectedFields": 3,
+      "before": 0,
+      "after": 0,
+      "fullGoalMet": false
+    },
+    {
+      "points": 5,
+      "expectedFields": 3,
+      "before": 0,
+      "after": 2,
+      "fullGoalMet": false
+    },
+    {
+      "points": 6,
+      "expectedFields": 3,
+      "before": 3,
+      "after": 3,
+      "fullGoalMet": true
+    }
+  ],
+  "testScopeCorrection": "Two initial runs required 3/3 fields at every 4/5/6 point size and each recorded four failed field expectations. Independent detection misses all 4-point fields and one 5-point field. These failures remain unmet quality goals. Final suite separates the strict 6-point acceptance case from 4/5-point exploratory probes asserting preservation, bounds and non-regression, without claiming full accuracy for them.",
+  "interruptedAttempt": "Candidate-only OCR preflight was mistakenly started while synthetic wire OCR still ran. Candidate process was stopped, active store untouched, and candidate preflight rerun sequentially before application. Its interrupted timing is not reported as a pass.",
+  "concurrencyGuard": "Final code additionally checks the exact expected document under the store lock before refinement changes state. The actual maintenance used a whole-baseline equality check before applying, and postchecks proved all old lines and references retained. Actual documents were not pointlessly reread after adding this extra generic stale-draft guard.",
+  "deployment": {
+    "installedApplicationsOrRelayNotReplaced": true,
+    "maintenanceUsedBranchBuiltLocalCLI": true,
+    "noNewInstallerCreated": true,
+    "installedReaderCompatibilityVerified": true
+  },
+  "remaining": [
+    "Five documents / thirteen pages still require source review.",
+    "All nine rule-based analyses need review: nine unresolved subjects, eight missing overviews, six unresolved document types, one ambiguous structure.",
+    "Very small regions not marked by independent detector remain outside the targeted retry path.",
+    "Source code v11 must be included in the next installation package; current installed UI may withhold v11 geometry overlays until updated."
+  ]
+}

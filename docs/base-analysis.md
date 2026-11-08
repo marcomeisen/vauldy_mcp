@@ -116,6 +116,45 @@ ersetzen. Im Wire-Bericht sind zwölf Titel mit Ersetzungen erfasst; daraus folg
 annotierte Falschpositivrate. Eine gesonderte Bewertung der ausgehenden Antwortqualität
 bleibt erforderlich. Die Datenschutzgrenze wird für bessere Lesbarkeit nicht umgangen.
 
+## Gezielte Rasterauflösung (R2, 06.11.2026)
+
+Bei kleinen Raster-PDFs kann `CGPDFPage.getDrawingTransform` eine Seite im größeren
+Zielbitmap bei 1× zentrieren. Mehr Bitmap-Pixel ergeben dann keine größeren Schriftzeichen.
+Der lokale OCR-Pfad bietet deshalb für eine eindeutig erkannte einzelne, vollseitige
+Rastergrafik einen zusätzlichen Renderdurchlauf an. Er wird nur ausgelöst, wenn mindestens
+zwei und mindestens die Hälfte der erkannten Zeilen unter der bestehenden Kleinschriftgrenze
+von 16 Pixeln liegen. Die Auswahl verwendet die gemessene Geometrie, keine Solltexte oder
+erwarteten Vertragswerte. Seiten ohne erkannte Zeilen werden durch diesen Schritt noch nicht
+automatisch erschlossen.
+
+Der zusätzliche Renderdurchlauf wendet die begrenzte PDF-Punkt-zu-Pixel-Skalierung explizit
+an und berücksichtigt die native Pixeldichte des eingebetteten Bildes. Beschnitt und Rotation
+bleiben in der PDF-Transformation. Die lange Bildkante bleibt auf 3072 Pixel begrenzt; pro Seite
+ist höchstens eine zusätzliche Vollseiten-Erkennung erlaubt. Mehrteilige Rasterseiten,
+unklare Bildtransformationen, eingebetteter Text und gekachelte Langseiten behalten hier ihren
+bisherigen Pfad. Der bestehende, ebenfalls begrenzte Zeilen-Zweitlauf bleibt erhalten.
+
+`LocalOCRMetrics.pdfScaleRetries` zählt die zusätzliche Rastererkennung getrennt von
+`targetedRetries` und `recoveredLines`. Ein neuer Renderdurchlauf ist keine reparierte Zeile.
+Bildpunkte und Zeiten enthalten die zusätzliche Arbeit. Cachekonfiguration v5 verhindert,
+dass bereits falsch erkannte v4-Seiten als neue Ergebnisse wiederverwendet werden. Bestehende
+abgeschlossene Importe werden nicht automatisch geändert; „Text erneut lesen“ startet weiterhin
+die explizite cachefreie Erkennung. Seiten mit Review werden nicht im Seitencache wiederverwendet.
+
+Eine unbedingte Skalierung aller Seiten und reine Kontraständerungen wurden verworfen:
+Sie verbesserten den gesamten Kontrollkorpus nicht zuverlässig. Die acht vorhandenen
+Raster-Originalfälle behalten ihre strikten Sollwerte. Der erweiterte A/B-Test umfasst neun
+künstliche Scans, darunter drei schwierige Raster-PDFs mit unterschiedlichen Werten bzw.
+Helligkeiten. Der Problemfall muss jetzt alle vier Sollfelder korrekt liefern. Zeichen- und
+Wortfehler werden zusätzlich auf einem normalisierten Volltranskript gemessen; reine
+Feldtreffer bedeuten keine fehlerfreie Gesamtseite. Der Worker-Wiretest prüft gespeicherten Text,
+Freigabe, geschützte MCP-Ausgabe, Cache, Frischerkennung und Widerruf.
+
+Noch offen sind die Erkennung vollständig übersehener Bereiche, die Verifikation fragwürdiger
+eingebetteter PDF-Textschichten sowie eine additive Speicherung von Zeilen-/Blockkoordinaten
+für Layout und Quellenvergleich. Dafür sind getrennte Qualitätsfälle erforderlich; R2 ist
+kein allgemeiner Nachweis für beliebige Scans oder Kundenarchive.
+
 Für den vollständigen Original-/CLI-/MCP-Test zuerst die synthetischen Originale erzeugen:
 
 ```sh

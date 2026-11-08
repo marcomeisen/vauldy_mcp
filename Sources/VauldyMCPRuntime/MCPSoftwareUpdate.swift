@@ -3,12 +3,14 @@ import Foundation
 import Security
 
 public enum MCPUpdateError: LocalizedError, Equatable {
-    case signature, compatibility, downgrade, noRollback, interrupted, startup
+    case signature, compatibility, unexpectedSoftwareEntry, changedCompanionFiles, downgrade, noRollback, interrupted, startup
 
     public var errorDescription: String? {
         switch self {
         case .signature: "Die Signatur oder Integrität des Softwarepakets konnte nicht bestätigt werden."
-        case .compatibility: "Das Softwarepaket passt nicht zur lokalen Installation."
+        case .compatibility: "Das Softwarepaket passt nicht zur lokalen Installation oder zum Datenformat. Öffne die aktuelle vollständige Vauldy-Einrichtung und aktualisiere daraus. Bei einem Rückweg nur die geprüfte Vorversion verwenden; Profile und Bestand nicht löschen."
+        case .unexpectedSoftwareEntry: "Der lokale Programmordner enthält fremde oder unsichere Einträge. Die Software wurde nicht gewechselt."
+        case .changedCompanionFiles: "Die Begleitdateien im lokalen Programmordner stimmen nicht überein. Die Software wurde nicht gewechselt."
         case .downgrade: "Für eine ältere Version verwende die gesicherte Vorversion."
         case .noRollback: "Es ist keine geprüfte Vorversion verfügbar."
         case .startup: "Der lokale Server hat die Startprüfung nicht bestanden."
@@ -48,14 +50,17 @@ extension MCPInstallation {
         if let prior {
             let current = try checkedGeneration(in: softwareDirectory, state: prior, trust: trust)
             if current.signature == release.signature {
-                try probeSoftware(binaryURL, release.version)
+                try probeSoftware(binaryURL, release)
                 removeObsoleteSlots(keeping: prior.previous)
                 return release.version
             }
         } else if FileManager.default.fileExists(atPath: binaryURL.path) {
             _ = try trust.validate(binaryURL)
         }
-        try preserveTunnelClient(in: staging)
+        for file in try softwareCompanionFiles(in: softwareDirectory).values {
+            _ = try Self.hash(file)
+            try FileManager.default.copyItem(at: file, to: staging.appendingPathComponent(file.lastPathComponent))
+        }
         for product in MCPRelease.installedProducts {
             try FileManager.default.copyItem(at: release.resources.appendingPathComponent(product),
                                              to: staging.appendingPathComponent(product))
@@ -63,13 +68,13 @@ extension MCPInstallation {
         let generation = MCPSoftwareGeneration(version: release.version, signature: release.signature,
                                                previous: prior == nil ? nil : slot)
         try writeSoftwareGeneration(generation, in: staging)
-        try probeSoftware(staging.appendingPathComponent("vauldy-mcp"), release.version)
+        try probeSoftware(staging.appendingPathComponent("vauldy-mcp"), release)
         try syncSoftwareTree(staging)
-        guard try tunnelClientMatches(staging) else { throw MCPUpdateError.compatibility }
+        guard try softwareCompanionFilesMatch(staging) else { throw MCPUpdateError.changedCompanionFiles }
         try exchangeSoftware(with: staging)
         retained = true
         do {
-            try probeSoftware(binaryURL, release.version)
+            try probeSoftware(binaryURL, release)
         } catch {
             try exchangeSoftware(with: staging)
             retained = false
@@ -92,15 +97,15 @@ extension MCPInstallation {
         let release = try checkedGeneration(in: previousDirectory, state: previous, trust: trust)
         guard let currentVersion = MCPRelease.versionParts(current.version),
               !currentVersion.lexicographicallyPrecedes(release.versionParts) else { throw MCPUpdateError.compatibility }
-        try probeSoftware(previousDirectory.appendingPathComponent("vauldy-mcp"), release.version)
-        guard try tunnelClientMatches(previousDirectory) else { throw MCPUpdateError.compatibility }
+        try probeSoftware(previousDirectory.appendingPathComponent("vauldy-mcp"), release)
+        guard try softwareCompanionFilesMatch(previousDirectory) else { throw MCPUpdateError.changedCompanionFiles }
         if previous.previous != nil {
             try writeSoftwareGeneration(.init(version: previous.version, signature: previous.signature, previous: nil),
                                         in: previousDirectory)
             try syncSoftwareFile(previousDirectory)
         }
         try exchangeSoftware(with: previousDirectory)
-        do { try probeSoftware(binaryURL, release.version) }
+        do { try probeSoftware(binaryURL, release) }
         catch {
             try exchangeSoftware(with: previousDirectory)
             throw error
@@ -154,7 +159,7 @@ extension MCPInstallation {
 
     private func checkedGeneration(in directory: URL, state: MCPSoftwareGeneration,
                                    trust: MCPUpdateTrust) throws -> MCPRelease {
-        try validateSoftwareEntries(in: directory)
+        _ = try softwareCompanionFiles(in: directory)
         let release = try MCPRelease(app: directory.appendingPathComponent(Self.setupBundleName), trust: trust)
         guard release.version == state.version, release.signature == state.signature else { throw MCPUpdateError.signature }
         for product in MCPRelease.installedProducts {
@@ -171,41 +176,44 @@ extension MCPInstallation {
         return release
     }
 
-    private func validateSoftwareEntries(in directory: URL) throws {
+    private func softwareCompanionFiles(in directory: URL) throws -> [String: URL] {
         let owned = Set(MCPRelease.installedProducts + [Self.setupBundleName,
-                                                         MCPSoftwareGeneration.fileName, "tunnel-client"])
-        let entries = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.isSymbolicLinkKey])
+                                                         MCPSoftwareGeneration.fileName])
+        let keys: Set<URLResourceKey> = [.isRegularFileKey, .isSymbolicLinkKey]
+        let entries = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: Array(keys))
+        let backupPrefix = "vauldy-mcp.before-init-compatibility-"
+        var companions: [String: URL] = [:]
         for entry in entries {
-            guard owned.contains(entry.lastPathComponent),
-                  try entry.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink == false
-            else { throw MCPUpdateError.compatibility }
+            let name = entry.lastPathComponent
+            let properties = try entry.resourceValues(forKeys: keys)
+            guard properties.isSymbolicLink == false else { throw MCPUpdateError.unexpectedSoftwareEntry }
+            if owned.contains(name) { continue }
+            guard properties.isRegularFile == true else { throw MCPUpdateError.unexpectedSoftwareEntry }
+            // Finder may recreate this file at any time. It is not part of the program set.
+            if name == ".DS_Store" { continue }
+            let date = name.utf8.dropFirst(backupPrefix.utf8.count)
+            let isLegacyBackup = name.hasPrefix(backupPrefix) && date.count == 8 && date.allSatisfy { (48...57).contains($0) }
+            guard name == "tunnel-client" || isLegacyBackup else { throw MCPUpdateError.unexpectedSoftwareEntry }
+            companions[name] = entry
         }
+        return companions
     }
 
-    private func preserveTunnelClient(in staging: URL) throws {
-        try validateSoftwareEntries(in: softwareDirectory)
-        let name = "tunnel-client"
-        let source = softwareDirectory.appendingPathComponent(name)
-        if FileManager.default.fileExists(atPath: source.path) {
-            _ = try Self.hash(source)
-            try FileManager.default.copyItem(at: source, to: staging.appendingPathComponent(name))
-        }
-    }
-
-    private func tunnelClientMatches(_ previous: URL) throws -> Bool {
-        try validateSoftwareEntries(in: softwareDirectory)
-        let first = softwareDirectory.appendingPathComponent("tunnel-client")
-        let second = previous.appendingPathComponent("tunnel-client")
+    private func softwareCompanionFilesMatch(_ other: URL) throws -> Bool {
+        let current = try softwareCompanionFiles(in: softwareDirectory)
+        let candidate = try softwareCompanionFiles(in: other)
+        guard current.count == candidate.count else { return false }
         let fm = FileManager.default
-        let exists = fm.fileExists(atPath: first.path)
-        guard exists == fm.fileExists(atPath: second.path) else { return false }
-        guard exists else { return true }
-        return try Self.hash(first) == Self.hash(second)
-            && fm.attributesOfItem(atPath: first.path)[.posixPermissions] as? NSNumber
-                == fm.attributesOfItem(atPath: second.path)[.posixPermissions] as? NSNumber
+        for (name, file) in current {
+            guard let copy = candidate[name], try Self.hash(file) == Self.hash(copy),
+                  try fm.attributesOfItem(atPath: file.path)[.posixPermissions] as? NSNumber
+                      == fm.attributesOfItem(atPath: copy.path)[.posixPermissions] as? NSNumber
+            else { return false }
+        }
+        return true
     }
 
-    private func probeSoftware(_ binary: URL, _ version: String) throws {
+    private func probeSoftware(_ binary: URL, _ release: MCPRelease) throws {
         let temp = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-update-probe-\(UUID())")
         try FileManager.default.createDirectory(at: temp, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
         defer { try? FileManager.default.removeItem(at: temp) }
@@ -213,7 +221,10 @@ extension MCPInstallation {
         try Data("[]".utf8).write(to: vault)
         let profile = temp.appendingPathComponent("profile.json")
         try FileMCPProfileSource(url: profile).save(.init(vaultPath: vault.path, enabled: false))
-        guard let result = try? MCPLocalProbe.run(binary: binary, profile: profile, expectedVersion: version),
+        guard let result = try? MCPLocalProbe.run(binary: binary, profile: profile, expectedVersion: release.version),
+              result.serverVersion == release.version,
+              release.serverBuildID == nil || result.serverBuildID == release.serverBuildID,
+              release.declaredTools == nil || result.discoveredTools == release.declaredTools?.sorted(),
               !result.accessEnabled, result.grantedDocuments == 0 else { throw MCPUpdateError.startup }
     }
 
@@ -248,11 +259,15 @@ private struct MCPRelease {
     let versionParts: [Int]
     let signature: Data
     let resources: URL
+    let serverBuildID: String?
+    let declaredTools: [String]?
 
     private struct Manifest: Decodable {
         let manifestVersion: Int
         let productVersion: String
         let softwareCompatibilityEpoch: Int
+        let serverBuildID: String?
+        let tools: [String]?
     }
 
     init(app: URL, trust: MCPUpdateTrust) throws {
@@ -270,6 +285,12 @@ private struct MCPRelease {
               bundle.object(forInfoDictionaryKey: "CFBundleExecutable") as? String == "vauldy-mcp-setup",
               bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String == manifest.productVersion
         else { throw MCPUpdateError.compatibility }
+        serverBuildID = manifest.serverBuildID; declaredTools = manifest.tools
+        if let serverBuildID {
+            guard serverBuildID == MCPBuildIdentity.read(resources.appendingPathComponent("vauldy-mcp")),
+                  let declaredTools, declaredTools.count <= 128, Set(declaredTools).count == declaredTools.count,
+                  MCPToolRequirements.baseline.isSubset(of: Set(declaredTools)) else { throw MCPUpdateError.compatibility }
+        } else if declaredTools != nil { throw MCPUpdateError.compatibility }
         version = manifest.productVersion
         versionParts = parts
         for name in Self.installedProducts {

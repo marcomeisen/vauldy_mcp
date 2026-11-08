@@ -1,0 +1,74 @@
+{
+  "iteration": "OCR Type 3 coverage",
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "buildAndTestInputFilesByteCompared": 141,
+  "cacheConfiguration": "ocr-v7-type3-visible-page",
+  "swiftTests": {
+    "passed": true,
+    "count": 42,
+    "suites": 6,
+    "seconds": 9.624
+  },
+  "nativeComparison": [
+    {
+      "sample": 0,
+      "beforeExact": 0,
+      "afterExact": 3,
+      "expected": 3,
+      "beforeMS": 0,
+      "afterMS": 118
+    },
+    {
+      "sample": 1,
+      "beforeExact": 0,
+      "afterExact": 3,
+      "expected": 3,
+      "beforeMS": 0,
+      "afterMS": 130
+    }
+  ],
+  "wire": {
+    "passed": true,
+    "syntheticPDFs": 2,
+    "exactStoredFields": 6,
+    "ungrantedExcluded": true,
+    "physicalPage": 1,
+    "protectedOutput": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "verification": [
+    "nested form font resources",
+    "unused Type 3 font retains embedded fast path",
+    "old v6 checkpoint excluded",
+    "original bytes unchanged",
+    "eight strict native raster domains passed"
+  ],
+  "failedAttempts": [
+    {
+      "stage": "initial Swift run",
+      "result": "signal 5 while generating the new vector fixture; rerun passed after adding quadratic path support"
+    },
+    {
+      "stage": "initial wire invocation",
+      "result": "relative fixture path rejected by CLI; normalized path and rerun passed"
+    }
+  ],
+  "r6": "deferred at user request",
+  "remaining": [
+    "generic missing raster regions",
+    "vector paths outside font glyphs",
+    "plausible wrong mappings in other font types",
+    "source-bound line and block coordinates",
+    "ambiguous identifiers"
+  ],
+  "sourceSHA256": {
+    "Sources/VauldyCore/PDFContentInspection.swift": "4315a2b75c289d05c76b2dfd89c56a14b70ea46456b0d05abad21997669b2ae5",
+    "Sources/VauldyCore/LocalOCRPageCache.swift": "aa8099a30ad98f83e01dc713589124e0e76a52e25fed37cdd6ecf7b578439077",
+    "Tests/VauldyMCPRuntimeTests/PDFVectorTextOCRTests.swift": "e11ab671be8c10357e4d4ca3fd38827876553a30e858dc99516f12a677d652bb",
+    "scripts/mcp/vector_ocr_quality_smoke_test.py": "ec157c17d47c9d3c0b60a9f9ea2f1a4387977be8aa3e88eec54b3fe86fbf192b",
+    "scripts/mcp/regression_test.py": "6d0250976296f5c9e672d9cb6967c6eaedfa558682ca901126950f796e6d129b"
+  }
+}

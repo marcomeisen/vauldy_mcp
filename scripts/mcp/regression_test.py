@@ -24,6 +24,16 @@ def main():
     output.mkdir(parents=True, exist_ok=False)
     originals = output / 'originals'
     env = dict(os.environ, VAULDY_BASE_ANALYSIS_DIAGNOSTICS=str(originals),
+               VAULDY_OCR_AB_FIXTURES=str(output / 'ocr-raster'),
+               VAULDY_OCR_VECTOR_FIXTURES=str(output / 'ocr-vector'),
+               VAULDY_OCR_COVERAGE_FIXTURES=str(output / 'ocr-coverage'),
+               VAULDY_OCR_REGION_FIXTURES=str(output / 'ocr-regions'),
+               VAULDY_OCR_SMALL_FIXTURES=str(output / 'ocr-small'),
+               VAULDY_OCR_DENSE_FIXTURES=str(output / 'ocr-dense'),
+               VAULDY_OCR_LINE_FIXTURES=str(output / 'ocr-lines'),
+               VAULDY_OCR_FAINT_FIXTURES=str(output / 'ocr-faint'),
+               VAULDY_PRODUCT_FIXTURES=str(output / 'product-native'),
+               VAULDY_DOCUMENT_INVENTORY_FIXTURES=str(output / 'document-inventory'),
                VAULDY_BASE_ANALYSIS_REPORT=str(output / 'transcript-baseline.json'),
                VAULDY_BASE_ANALYSIS_NATIVE_REPORT=str(output / 'native-raster-baseline.json'))
     stages = []
@@ -38,7 +48,10 @@ def main():
             raise SystemExit(f'{name} failed. See {output / (name + ".log")}')
 
     try:
-        run('swift-tests', ['swift', 'test', '--disable-sandbox', '--disable-automatic-resolution'])
+        run('faint-ocr-gate-policy', [sys.executable, ROOT / 'scripts/mcp/faint_ocr_quality_gate_test.py'])
+        run('local-ocr-comparison-conversion', [sys.executable, ROOT / 'scripts/mcp/local_ocr_comparison_test.py'])
+        run('swift-tests', ['swift', 'test', '--disable-sandbox', '--disable-automatic-resolution', '--no-parallel'])
+        run('package-metadata', [sys.executable, ROOT / 'scripts/mcp/package_metadata_smoke_test.py'])
         command = [sys.executable, ROOT / 'scripts/mcp/package.py']
         if args.skip_build:
             command.append('--skip-build')
@@ -53,8 +66,27 @@ def main():
             ('smoke_test', [server]),
             ('index_recovery_smoke_test', [server]),
             ('research_agent_smoke_test', [server]),
+            ('topic_overview_smoke_test', [server]),
+            ('search_normalization_smoke_test', [server]),
+            ('storage_boundary_benchmark', [server, '--output', output / 'storage-boundaries.json']),
+            ('storage_import_smoke_test', [local, server, '--output', output / 'storage-import.json']),
+            ('sqlite_integration_smoke_test', [local, server, '--output', output / 'sqlite-integration.json']),
+            ('storage_migration_smoke_test', [local, server, '--output', output / 'storage-migration.json']),
+            ('field_extraction_smoke_test', [server]),
+            ('contract_comparison_smoke_test', [server]),
+            ('deadline_overview_smoke_test', [server]),
+            ('document_inventory_smoke_test', [server, output / 'document-inventory', '--report', output / 'document-inventory.json']),
+            ('product_acceptance', [server, output / 'product-native', '--output', output / 'product-acceptance']),
+            ('product_answer_check', [output / 'product-acceptance/evidence-packets.json', output / 'product-acceptance/answers.json']),
+            ('product_acceptance_test', ['--packets', output / 'product-acceptance/evidence-packets.json', '--report', output / 'product-answer-gates.json']),
             ('base_analysis_wire_test', [local, server, originals, '--include-raster']),
             ('import_smoke_test', [local, server]),
+            ('raster_ocr_quality_smoke_test', [local, server, output / 'ocr-raster']),
+            ('vector_ocr_quality_smoke_test', [local, server, output / 'ocr-vector']),
+            ('visual_coverage_smoke_test', [local, server, output / 'ocr-regions']),
+            ('dense_ocr_smoke_test', [local, server, output / 'ocr-dense']),
+            ('line_ocr_smoke_test', [local, server, output / 'ocr-lines']),
+            ('small_text_chat_smoke_test', [server, output / 'ocr-small', '--report', output / 'ocr-small-wire.json']),
             ('audit_smoke_test', [local]),
             ('client_install_smoke_test', [local]),
             ('management_smoke_test', [resources]),

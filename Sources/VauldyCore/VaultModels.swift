@@ -71,10 +71,10 @@ public struct VaultDeadline: Codable, Equatable, Sendable {
 }
 
 public struct VaultDocument: Codable, Equatable, Sendable {
-    public var id: UUID
+    public let id: UUID
     public var title: String
     public var sourceName: String
-    public var importedAt: Date
+    public let importedAt: Date
     public var category: String
     public var status: String
     public var ocrText: String

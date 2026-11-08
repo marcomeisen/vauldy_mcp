@@ -29,7 +29,9 @@ def main():
         process=None
         try:
             run(local,'watch-add','--store',store,source)
-            deadline=time.monotonic()+25
+            # This prepares the fixture, not a performance assertion. A cold native
+            # Vision process can take longer than 25 s to initialise on the test Mac.
+            deadline=time.monotonic()+90
             while time.monotonic()<deadline:
                 status=json.loads(run(local,'worker-status','--store',store))
                 snapshot=store/'documents.json'

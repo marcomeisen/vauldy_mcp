@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vauldy – bisheriger Skillname"
+  short_description: "Verweis auf die aktuelle MCP-Entwicklung"
+  default_prompt: "Nutze $vauldy-ios-clean-code als Verweis auf die aktuellen Vauldy-MCP-Entwicklungsregeln."

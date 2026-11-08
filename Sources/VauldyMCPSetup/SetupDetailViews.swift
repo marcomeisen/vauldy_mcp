@@ -6,33 +6,48 @@ import VauldyMCPRuntime
 struct SetupDocumentsView: View {
     @ObservedObject var model: SetupModel
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            if !model.connections.isEmpty {
-                Picker("Auswahl für", selection: Binding(get: { model.activeConnectionID }, set: { id in
-                    if let profile = model.connections.first(where: { $0.connectionID == id }) { model.edit(profile) }
-                })) {
-                    ForEach(model.connections, id: \.connectionID) { Text($0.connectionName).tag(Optional($0.connectionID)) }
-                }.frame(maxWidth: 420).disabled(model.busy)
-            }
+        VStack(alignment: .leading, spacing: 16) {
             SetupDocumentSource(model: model)
-            SetupDocumentSelectionActions(model: model)
-            if let profile = model.editing {
+            DisclosureGroup(isExpanded: $model.editingDocumentGrants) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("\(SetupText.documents(model.selected.count)) für \(profile.connectionName) ausgewählt").font(.headline)
-                    if model.selectionExpandsAccess {
-                        Toggle("Ich erlaube, dass dieser Chatbot die zusätzlich ausgewählten Dokumentinhalte erhält. Je nach Chatbot können diese an dessen Cloud-Anbieter übertragen werden.", isOn: $model.acknowledged)
+                    if !model.connections.isEmpty {
+                        Picker("Verbindung", selection: Binding(get: { model.activeConnectionID }, set: { id in
+                            if let profile = model.connections.first(where: { $0.connectionID == id }) { model.edit(profile) }
+                        })) {
+                            ForEach(model.connections, id: \.connectionID) { Text($0.connectionName).tag(Optional($0.connectionID)) }
+                        }.frame(maxWidth: 420).disabled(model.busy || model.importing)
                     }
-                    HStack {
-                        Button("Auswahl speichern", action: model.saveSelection).buttonStyle(.borderedProminent)
-                            .disabled(!model.selectionChanged || (model.selectionExpandsAccess && !model.acknowledged) || model.busy)
-                        Text(profile.enabled ? "Zugriff bleibt freigegeben." : "Zugriff bleibt pausiert.").font(.callout).foregroundStyle(.secondary)
+                    Text("Die Häkchen in der Liste bearbeiten jetzt die Dokumentauswahl für diese Verbindung.")
+                        .font(.callout).foregroundStyle(.secondary)
+                    SetupDocumentSelectionActions(model: model)
+                    if let profile = model.editing {
+                        if model.selectionExpandsAccess {
+                            Toggle("Ich erlaube die Weitergabe der zusätzlich ausgewählten Dokumentinhalte an diesen Chatbot und gegebenenfalls seinen Cloud-Anbieter.", isOn: $model.acknowledged)
+                        }
+                        HStack {
+                            Button("Freigabeauswahl speichern", action: model.saveSelection).buttonStyle(.borderedProminent)
+                                .disabled(!model.selectionChanged || (model.selectionExpandsAccess && !model.acknowledged) || model.busy || model.importing)
+                            Button("Gespeicherte Auswahl laden") { if let current = model.activeConnection { model.edit(current) } }
+                            Text(profile.enabled ? "Zugriff aktiv" : "Zugriff pausiert").font(.caption).foregroundStyle(.secondary)
+                        }
+                    } else {
+                        Text("Richte eine Verbindung ein, um Dokumente für einen Chatbot freizugeben.").foregroundStyle(.secondary)
                     }
-                    Button("Gespeicherte Auswahl neu laden") { if let current = model.activeConnection { model.edit(current) } }.disabled(model.busy)
-                }.padding(16).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
-            } else {
-                Text("Importe erteilen keine Freigabe. Richte eine Verbindung ein, um Dokumente für einen Chatbot auszuwählen.").foregroundStyle(.secondary)
-            }
-            Button("Bestand abgleichen und neu freigeben …", action: model.startInventoryWorkflow).disabled(model.busy || model.importing)
+                    Button("Bestand abgleichen und Freigabe prüfen …", action: model.startInventoryWorkflow).disabled(model.busy || model.importing)
+                }.padding(.top, 10)
+            } label: {
+                HStack {
+                    Label("Chatbot-Freigaben", systemImage: "lock.shield")
+                    Spacer()
+                    if model.selectionChanged { Text("Ungespeicherte Auswahl").foregroundStyle(.orange) }
+                    else { Text("\(model.activeConnection?.allowedDocumentIDs.count ?? 0) freigegeben").foregroundStyle(.secondary) }
+                }
+            }.padding(14).background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))
+                .disabled(model.importing)
+                .onChange(of: model.editingDocumentGrants) { _, expanded in
+                    if expanded, !model.busy, !model.importing, let profile = model.activeConnection,
+                       model.editing?.connectionID != profile.connectionID { model.edit(profile) }
+                }
             SetupDocumentList(model: model, showsSelectionActions: false)
         }
     }
@@ -41,62 +56,102 @@ struct SetupDocumentsView: View {
 struct SetupDocumentSelectionActions: View {
     @ObservedObject var model: SetupModel
     var body: some View {
+        let visible = model.visibleSelectableDocumentIDs
+        let all = model.selectableDocumentIDs
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Button("Alle auswählen", systemImage: "checkmark.circle", action: model.selectAllDocuments)
-                    .disabled(model.selectableDocumentIDs.isEmpty || model.allReadableDocumentsSelected)
-                    .help("Markiert den gesamten lesbaren Bestand, auch außerhalb der aktuellen Suche oder des Filters. Suchbegriff und Filter werden zurückgesetzt.")
+                Button(visible.count == 1 ? "1 sichtbares Dokument auswählen" : "\(visible.count) sichtbare Dokumente auswählen") {
+                    model.selectDocuments(visible)
+                }.disabled(visible.isSubset(of: model.selected))
+                    .help("Wählt die lesbaren Treffer der aktuellen Suche und Filter aus.")
+                Button("Gesamten Bestand auswählen") { model.selectDocuments(all) }
+                    .disabled(all.isSubset(of: model.selected))
+                    .help("Wählt alle \(all.count) lesbaren Dokumente aus, einschließlich ausgeblendeter Treffer.")
                 Button("Auswahl aufheben", action: model.clearDocumentSelection).disabled(model.selected.isEmpty)
-                Spacer()
-                Text("\(SetupText.documents(model.selectableDocumentIDs.count)) lesbar").font(.callout).foregroundStyle(.secondary)
             }
+            Text("\(model.selectedReadableCount) ausgewählt · \(SetupText.documents(all.count)) lesbar")
+                .font(.callout).foregroundStyle(.secondary)
             if model.documents.contains(where: { !$0.isSearchable }) {
                 Text("Dokumente ohne durchsuchbaren Text werden nicht neu ausgewählt. Du kannst ihre Texterkennung erneut starten.")
                     .font(.caption).foregroundStyle(.secondary)
             }
-        }.disabled(model.busy || (model.editing == nil && !model.showingSetup))
+        }.disabled(model.busy || model.importing || (model.editing == nil && !model.showingSetup))
     }
 }
 
 struct SetupDocumentSource: View {
     @ObservedObject var model: SetupModel
     var body: some View {
-        HStack(spacing: 12) {
-            Button("Dokumente importieren", systemImage: "square.and.arrow.down", action: model.chooseImports)
-            Button("Ordner importieren …", systemImage: "folder", action: model.chooseFolderImport)
-            Menu("Weitere Quellen") {
-                Button("Lokalen MCP-Bestand laden", action: model.openLocalStore)
-                Button("Beispieldokument ausprobieren", action: model.useExample).disabled(model.importing)
-                Divider()
-                Button("Archivdatei auswählen …", action: model.chooseVault)
-            }.fixedSize()
-            Spacer()
-            Text("\(model.documents.count) lokal verfügbar").font(.callout).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                Button("Neue Dateien hinzufügen …", systemImage: "square.and.arrow.down", action: model.chooseImports)
+                Button("Ordner einmal importieren …", systemImage: "folder", action: model.chooseFolderImport)
+                Menu("Weitere Quellen") {
+                    Button("Lokalen MCP-Bestand laden", action: model.openLocalStore)
+                    Button("Beispieldokument ausprobieren", action: model.useExample)
+                    Divider()
+                    Button("Archivdatei auswählen …", action: model.chooseVault)
+                }.fixedSize()
+            }
+            Text("Einzeldateien werden lokal kopiert. Beim Ordnerimport bleiben die Originale an ihrem Ort.")
+                .font(.caption).foregroundStyle(.secondary)
         }.disabled(model.busy || model.importing)
     }
 }
 
 struct SetupDocumentList: View {
+    static let scrollAnchor = "document-review-list"
     @ObservedObject var model: SetupModel
     var showsSelectionActions = true
+    @State private var reviewSelection: ReviewSelection?
+    private struct ReviewSelection: Identifiable { let id: UUID }
     private func analysisLabel(_ status: String) -> String {
         switch status {
         case "completed": "Basisanalyse vorhanden (regelbasiert)"
         case "needsReview": "Basisanalyse: prüfen"
         case "failed": "Basisanalyse fehlgeschlagen"
-        case "unavailable": "Kein Text für Basisanalyse"
+        case "unavailable": "Basisanalyse nicht verfügbar"
         case "stale": "Basisanalyse veraltet"
         default: "Basisanalyse noch nicht erfolgt"
         }
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if !model.documents.isEmpty {
+                Text("Diese Dokumente sind bereits im Bestand. Prüfhinweise zu Text oder Basisangaben erfordern keinen erneuten Import.")
+                    .font(.callout).foregroundStyle(.secondary)
+                    .accessibilityIdentifier("existing-document-guidance")
+            }
             if showsSelectionActions { SetupDocumentSelectionActions(model: model) }
+            if let imported = model.shownImportDocumentIDs {
+                HStack {
+                    Text("Importauswahl · \(SetupText.documents(imported.count))").font(.callout.weight(.medium))
+                    Button("Alle Dokumente wieder anzeigen") { model.shownImportDocumentIDs = nil }
+                }
+            }
             HStack {
                 TextField("Dokumente suchen", text: $model.documentSearch).textFieldStyle(.roundedBorder)
                 Picker("Filter", selection: $model.documentFilter) {
                     ForEach(SetupDocumentFilter.allCases, id: \.self) { Text($0.title).tag($0) }
                 }.labelsHidden().frame(width: 220)
+            }
+            if !model.showingSetup && !model.editingDocumentGrants && model.isLocalVault {
+                HStack {
+                    Button("Treffer auswählen (\(model.visibleOCRDocumentIDs.count))") { model.ocrSelected.formUnion(model.visibleOCRDocumentIDs) }
+                        .disabled(model.visibleOCRDocumentIDs.isSubset(of: model.ocrSelected))
+                        .help("Wählt alle Treffer der aktuellen Suche und Filter für OCR aus, auch unterhalb des sichtbaren Fensterausschnitts.")
+                    Button("Auswahl aufheben") { model.ocrSelected.removeAll() }.disabled(model.ocrSelected.isEmpty)
+                    Spacer()
+                    Text("\(model.selectedOCRDocuments.count) für OCR ausgewählt").font(.callout).foregroundStyle(.secondary)
+                    Button("Ausgewählten Text erneut lesen", systemImage: "arrow.clockwise", action: model.retrySelectedOCR)
+                        .disabled(model.selectedOCRDocuments.isEmpty)
+                        .help("Optional bei fehlendem oder fehlerhaftem Text. Ein Hinweis zur Basisanalyse allein erfordert keinen neuen Textlauf.")
+                        .accessibilityIdentifier("batch-ocr-start")
+                }.disabled(model.busy || model.importing)
+                let visibleIDs = Set(model.filteredDocuments.map(\.id))
+                let hidden = model.ocrSelected.subtracting(visibleIDs).count
+                Text(hidden > 0 ? "\(hidden) ausgewählte Dokumente außerhalb des Filters werden ebenfalls gelesen." : "Erneut lesen ist optional und fügt keine Dokumente hinzu. Bestehende Belegzeilen und Chatbot-Freigaben bleiben erhalten.")
+                    .font(.caption).foregroundStyle(.secondary)
             }
             if model.filteredDocuments.isEmpty {
                 ContentUnavailableView(model.documents.isEmpty ? "Noch keine Dokumente" : "Keine passenden Dokumente", systemImage: "doc.text.magnifyingglass", description: Text(model.documents.isEmpty ? "Importiere PDFs oder Bilder oder probiere das Beispieldokument aus." : "Ändere Suche oder Filter."))
@@ -105,25 +160,40 @@ struct SetupDocumentList: View {
                 LazyVStack(spacing: 0) {
                     ForEach(model.filteredDocuments, id: \.id) { document in
                         HStack(alignment: .top, spacing: 12) {
-                            Toggle(isOn: Binding(get: { model.selected.contains(document.id) }, set: { value in
-                                model.setDocumentSelected(value, id: document.id)
-                            })) { Text("\(document.title) auswählen") }.labelsHidden()
-                                .disabled(model.busy || (!document.isSearchable && !model.selected.contains(document.id)) || (model.editing == nil && !model.showingSetup))
+                            let ocrMode = !model.showingSetup && !model.editingDocumentGrants
+                            Toggle(isOn: Binding(get: { ocrMode ? model.ocrSelected.contains(document.id) : model.selected.contains(document.id) }, set: { value in
+                                if ocrMode {
+                                    if value { model.ocrSelected.insert(document.id) } else { model.ocrSelected.remove(document.id) }
+                                } else { model.setDocumentSelected(value, id: document.id) }
+                            })) { Text("\(model.documentDisplayName(document)) \(ocrMode ? "für OCR" : "für Chatbot") auswählen") }.labelsHidden()
+                                .disabled(model.busy || model.importing || (ocrMode ? (!model.canRetryOCR(document) && !model.ocrSelected.contains(document.id)) : ((!document.isSearchable && !model.selected.contains(document.id)) || (model.editing == nil && !model.showingSetup))))
                             Image(systemName: "doc.text").foregroundStyle(.secondary)
                             VStack(alignment: .leading, spacing: 5) {
-                                Text(document.title).font(.body.weight(.medium))
-                                Text(analysisLabel(document.baseAnalysisStatus)).font(.caption).foregroundStyle(.secondary)
-                                Text(model.importLabel(document).isEmpty ? document.sourceName : model.importLabel(document)).font(.caption).foregroundStyle(.secondary)
-                                if let metadata = document.localImport {
-                                    Text(metadata.originalReference == nil ? "Lokale Kopie" : "Verweis auf Originaldatei").font(.caption).foregroundStyle(.secondary)
+                                Text(model.documentDisplayName(document)).font(.body.weight(.medium)).help(document.sourceName)
+                                HStack(spacing: 10) {
+                                    Text("Im Bestand")
+                                    Text(model.importLabel(document, compact: true))
+                                    Text(analysisLabel(document.baseAnalysisStatus))
+                                }.font(.caption).foregroundStyle(.secondary)
+                                if let step = SetupDocumentGuidance(document).nextStep {
+                                    Text(step).font(.caption).foregroundStyle(.secondary)
                                 }
+                                if let metadata = document.localImport {
+                                    Text((document.pageCount.map { SetupText.pages($0) } ?? "Seitenzahl offen") + " · " + (metadata.originalReference == nil ? "Lokale Kopie" : "Originalverweis"))
+                                        .font(.caption).foregroundStyle(.tertiary)
+                                }
+                                Text(SetupText.importTimestamp(document.importedAt))
+                                    .font(.caption).foregroundStyle(.secondary)
+                                    .help("Zeitpunkt des Imports in diesen Bestand, angezeigt in der lokalen Mac-Zeitzone. Kein Dokumentdatum und kein Zeitpunkt eines späteren OCR-Laufs.")
+                                    .accessibilityIdentifier("document-import-timestamp")
                                 SetupDocumentAnalysisView(document: document)
                             }.frame(maxWidth: .infinity, alignment: .leading)
-                            if model.vaultURL == model.localStore.snapshotURL {
-                                Button("Vorschau") { model.preview(document) }
+                            if model.isLocalVault {
+                                Button("Original öffnen") { model.preview(document) }
                                 if let state = document.localImport?.state, ![.queued, .recognizing].contains(state) {
-                                    Button("Text erneut lesen") { model.importFiles([], retry: document.id) }.disabled(model.importing)
-                                        .help("Liest das gesicherte Original mit frischer OCR und Basisanalyse. Vorhandene OCR-Cacheeinträge werden nicht verwendet; Freigaben bleiben unverändert.")
+                                    Button("Text prüfen") { reviewSelection = .init(id: document.id) }
+                                        .help("Vergleicht Original und gespeicherten Text. Startet keine Texterkennung.")
+                                        .accessibilityIdentifier("document-text-review")
                                 }
                             }
                         }.padding(14)
@@ -131,7 +201,10 @@ struct SetupDocumentList: View {
                     }
                 }.background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
             }
-        }
+        }.id(Self.scrollAnchor)
+            .sheet(item: $reviewSelection) { item in
+                SetupQualityReviewView(model: model, documentID: item.id, reportID: nil)
+            }
     }
 }
 
@@ -139,13 +212,21 @@ struct SetupFoldersView: View {
     @ObservedObject var model: SetupModel
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            HStack {
-                Button("Ordner hinzufügen …", systemImage: "folder.badge.plus", action: model.chooseWatchedFolders).buttonStyle(.borderedProminent)
-                Toggle("Unterordner einbeziehen", isOn: $model.watchRecursive).help("Gilt für neu hinzugefügte Ordner.")
-            }.disabled(model.busy)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Einmaliger Import").font(.headline)
+                Button("Ordner einmal importieren …", action: model.chooseFolderImport)
+                Text("Vauldy durchsucht die gewählten Ordner einmal und verknüpft die Originale.").font(.caption).foregroundStyle(.secondary)
+            }.disabled(model.busy || model.importing)
+            Divider()
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Automatische Ordnerüberwachung").font(.headline)
+                HStack {
+                    Button("Ordner zur Überwachung hinzufügen …", systemImage: "folder.badge.plus", action: model.chooseWatchedFolders)
+                    Toggle("Unterordner einbeziehen", isOn: $model.watchRecursive).help("Gilt für neu hinzugefügte Ordner.")
+                }
+            }.disabled(model.busy || model.importing)
             Text("Ordnerimporte verwenden deine Originaldateien über dauerhafte Dateiverweise. Verschobene, gelöschte oder geänderte Originale können einen erneuten Zugriff erfordern. Neue Dokumente bleiben bis zu deiner ausdrücklichen Freigabe für Chatbots gesperrt.").foregroundStyle(.secondary)
             HStack {
-                Button("Ordner einmal importieren …", action: model.chooseFolderImport)
                 Button("Bestehende Kopien prüfen …", action: model.inspectOriginalMigration)
                 Button("Originalzugriff prüfen", action: model.checkOriginals)
             }.disabled(model.busy || model.importing)
@@ -181,6 +262,10 @@ struct SetupSettingsView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("Software auf diesem Mac").font(.headline)
                     LabeledContent("Diese App", value: MCPBuild.version)
+                    LabeledContent("App-Build", value: MCPBuildIdentity.running ?? "Unbekannt")
+                    LabeledContent("Mitgelieferter Server-Build", value: model.software?.availableBuildID ?? "Noch nicht geprüft")
+                    LabeledContent("Installierter Server-Build", value: model.software?.installedBuildID ?? "Unbekannt / älteres Paket")
+                    LabeledContent("Eigener Dokumentspeicher", value: model.localStore.storageKind == "sqlite" ? "Lokale SQLite-Datenbank" : "Lokaler JSON-Bestand")
                     LabeledContent("Installierter Server", value: model.software?.installedVersion ?? "Noch nicht verifiziert")
                     Text(model.software?.state == .current ? "Die installierten Programme entsprechen dieser App." : "Installiere die Programme aus dieser App. Freigaben, pausierte Zugriffe und Client-Einträge bleiben erhalten.").foregroundStyle(.secondary)
                     HStack {
@@ -236,15 +321,27 @@ struct SetupDiagnosisView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Verbindung prüfen").font(.title2.weight(.semibold))
+            ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
             if let profile = model.connections.first(where: { $0.connectionID == profileID }) {
                 Text(profile.connectionName).font(.headline)
                 Label(model.state(for: profile).serverLabel, systemImage: "network")
                 Label(model.state(for: profile).accessLabel, systemImage: "lock.shield")
+                Text(model.state(for: profile).explanation).font(.callout)
+                ForEach(Array(model.state(for: profile).matchingServers.enumerated()), id: \.offset) { _, instance in
+                    Text("Laufender Server: " + (instance.version ?? "Unbekannt") + " · " + (instance.buildID ?? "Build unbekannt")).font(.caption)
+                }
+                Text("Externe Chatverbindung: Durch diesen Test nicht bestätigt. Bei erfolgreichem lokalen Test die Verbindung und Werkzeugfreigabe im Chatbot prüfen.").foregroundStyle(.secondary)
                 Label(model.bindingLabel(profile), systemImage: "link")
                 Divider()
                 if model.probing.contains(profileID) { ProgressView("Lokaler MCP-Protokolltest läuft …") }
                 if let result = model.probeResults[profileID] {
-                    Label("Lokaler Protokolltest erfolgreich", systemImage: "checkmark.circle").foregroundStyle(.green)
+                    Label(result.summary, systemImage: result.compatible ? "checkmark.circle" : "exclamationmark.triangle")
+                        .foregroundStyle(result.compatible ? .green : .orange)
+                    LabeledContent("Server", value: result.serverVersion)
+                    LabeledContent("Geprüfter Build", value: result.serverBuildID ?? "Unbekannt / älterer Server")
+                    Text("Werkzeuge (\(result.discoveredTools.count)): " + result.discoveredTools.joined(separator: ", ")).font(.caption).textSelection(.enabled)
+                    Text(result.nextStep).font(.callout)
                     Text("\(SetupText.documents(result.grantedDocuments)) im Test zugänglich · \(result.completedAt.formatted(date: .omitted, time: .standard))").font(.callout)
                 }
                 if let error = model.probeErrors[profileID] { SetupNotice(text: error, warning: true) }
@@ -258,7 +355,9 @@ struct SetupDiagnosisView: View {
                 }
                 Text("Wenn ein älterer Server läuft: Starte die Vauldy-Verbindung in der MCP-Verwaltung deines Chatbots neu.").font(.callout).foregroundStyle(.secondary)
             } else { Text("Diese Verbindung ist nicht mehr vorhanden.") }
+            }
+            }
             HStack { Spacer(); Button("Schließen") { dismiss() }.keyboardShortcut(.defaultAction) }
-        }.padding(28).frame(width: 580)
+        }.padding(28).frame(width: 680, height: 640)
     }
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Real packaged updater and rollback, with signed synthetic crash fixtures."""
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -79,6 +80,12 @@ int main(int argc, char **argv) {
     subprocess.run(['xcrun', 'clang', '-mmacosx-version-min=14.0',
                     '-DREAL_SERVER=' + json.dumps(str(real_server)), str(c_file), '-o', str(server)], check=True)
     sign(server)
+    # Fault-injection launcher execs a different image. It deliberately models a legacy
+    # manifest without a build declaration, not a new self-identifying package.
+    manifest = resources(app) / 'release.json'
+    metadata = json.loads(manifest.read_text())
+    metadata.pop('serverBuildID', None); metadata.pop('tools', None)
+    manifest.write_text(json.dumps(metadata))
     sign(app)
 
 
@@ -102,8 +109,14 @@ def main():
         tunnel = installed / 'tunnel-client'
         tunnel.write_bytes(b'synthetic adjacent helper')
         tunnel.chmod(0o700)
+        legacy_backup = installed / 'vauldy-mcp.before-init-compatibility-20261101'
+        legacy_backup.write_bytes(b'synthetic legacy server backup')
+        legacy_backup.chmod(0o700)
+        (installed / '.DS_Store').write_bytes(b'synthetic Finder metadata')
         original_bin_inode = installed.stat().st_ino
         version = json.loads((resources(original) / 'release.json').read_text())['productVersion']
+        (root / 'software.json').write_text(json.dumps(dict(
+            version=version, serverHash=hashlib.sha256(server.read_bytes()).hexdigest())))
 
         connection, document = str(uuid.uuid4()), str(uuid.uuid4())
         profile = root / 'connections' / connection / 'profile.json'
@@ -115,7 +128,7 @@ def main():
                                           connectionName='Synthetic update profile', enabled=True,
                                           allowedDocumentIDs=[document], acknowledgedCloudDisclosure=True,
                                           vaultPath=str(vault))))
-        untouched = [profile, vault]
+        untouched = [profile, vault, root / 'software.json', legacy_backup]
         for name in ['client.toml', 'original.pdf', 'snapshot.backup', 'synthetic-device.json',
                      'connections/' + connection + '/logs/audit.jsonl']:
             fixture = root / name
@@ -170,6 +183,20 @@ def main():
         run(original, ad_hoc=False, failure='Signatur')
         assert installed.stat().st_ino == original_bin_inode
         run(original)
+        assert legacy_backup.read_bytes() == expected[legacy_backup]
+        assert legacy_backup.stat().st_mode & 0o777 == 0o700
+        metadata = installed / '.DS_Store'
+        assert not metadata.exists()
+        unknown = installed / 'unexpected-program'
+        unknown.write_bytes(b'synthetic unknown entry')
+        run(original, failure='fremde oder unsichere Einträge')
+        assert unknown.read_bytes() == b'synthetic unknown entry'
+        unknown.unlink()
+        metadata.symlink_to(legacy_backup)
+        run(original, failure='fremde oder unsichere Einträge')
+        assert metadata.is_symlink()
+        metadata.unlink()
+        metadata.write_bytes(b'synthetic Finder metadata')
         state_file = installed / '.vauldy-generation.json'
         baseline_state = state_file.read_bytes()
         baseline_inode = installed.stat().st_ino
@@ -185,6 +212,14 @@ def main():
         incompatible = copy_release(original, temp, 'incompatible')
         adjust_release(incompatible, softwareCompatibilityEpoch=999)
         run(incompatible, failure='passt nicht')
+        wrong_build = copy_release(original, temp, 'wrong-build')
+        adjust_release(wrong_build, serverBuildID='macho.' + '0' * 32)
+        run(wrong_build, failure='passt nicht')
+        wrong_tools = copy_release(original, temp, 'wrong-tools')
+        adjust_release(wrong_tools, tools=['get_vault_status', 'list_documents', 'read_document', 'search_documents'])
+        run(wrong_tools, failure='Startprüfung')
+        assert state_file.read_bytes() == baseline_state
+        assert_preserved()
         older = copy_release(original, temp, 'older')
         adjust_release(older, productVersion='0.0.1')
         run(older, failure='ältere Version')
@@ -228,10 +263,15 @@ def main():
         assert_preserved()
 
         tunnel.write_bytes(b'a changed adjacent helper')
-        run(failure='passt nicht')
+        run(failure='Begleitdateien')
         assert tunnel.read_bytes() == b'a changed adjacent helper'
         assert server.read_bytes() == new_server.read_bytes()
         tunnel.write_bytes(b'synthetic adjacent helper')
+
+        legacy_backup.write_bytes(b'changed legacy server backup')
+        run(failure='Begleitdateien')
+        assert legacy_backup.read_bytes() == b'changed legacy server backup'
+        legacy_backup.write_bytes(expected[legacy_backup])
 
         retained_server = slots()[0] / 'vauldy-mcp'
         retained_server.write_bytes(b'broken retained executable')

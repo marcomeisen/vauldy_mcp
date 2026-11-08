@@ -1,0 +1,167 @@
+{
+  "date": "2026-11-06",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "tools": [
+    "get_vault_status",
+    "search_documents",
+    "list_documents",
+    "read_document",
+    "get_topic_overview",
+    "extract_document_fields",
+    "compare_contract_versions",
+    "get_deadline_overview"
+  ],
+  "previousSevenToolDeclarationsUnchanged": true,
+  "worktreeSourceAndTestsMatchBuildCopy": true,
+  "swiftTests": 45,
+  "swiftSuites": 6,
+  "swiftTestSeconds": 6.211,
+  "relayWorkerTests": 10,
+  "deadlineOverview": {
+    "passed": true,
+    "fixtures": 22,
+    "documentsPerMeasuredCall": 5,
+    "deadlineCalls": 1,
+    "deadlineMS": 104.7
+  },
+  "measurementScope": "One offline local stdio call after handle selection, five synthetic documents, single measurement.",
+  "checks": [
+    {
+      "name": "release",
+      "command": [
+        "swift",
+        "build",
+        "-c",
+        "release",
+        "--package-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source",
+        "--disable-sandbox",
+        "--cache-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/cache",
+        "--disable-automatic-resolution",
+        "--scratch-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--product",
+        "vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "deadline",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/deadline_overview_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "swift-tests",
+      "command": [
+        "swift",
+        "test",
+        "--package-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source",
+        "--disable-sandbox",
+        "--cache-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/cache",
+        "--disable-automatic-resolution",
+        "--scratch-path",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "MCPRetrievalCompletenessTests|MCPFieldExtractionTests|MCPPrivacyBoundaryTests|MCPPassageTests|RelayConnectionTests|LocalImportTests/scannedPDFAndPNGUseRealVisionWithoutApp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "v1",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "comparison",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/contract_comparison_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "fields",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/field_extraction_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "topic",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1) (allow default) (deny network*)",
+        "python3",
+        "scripts/mcp/topic_overview_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "oauth",
+      "command": [
+        "python3",
+        "scripts/mcp/oauth_smoke_test.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/debug/vauldy-local",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/debug/vauldy-mcp-http"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "relay-parity",
+      "command": [
+        "python3",
+        "scripts/mcp/export_relay_tools.py",
+        "/private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp",
+        "--check"
+      ],
+      "returnCode": 0
+    },
+    {
+      "name": "relay-worker",
+      "command": [
+        "node",
+        "--test",
+        "cloud/chatgpt-relay/tests/relay.mjs"
+      ],
+      "returnCode": 0
+    }
+  ]
+}

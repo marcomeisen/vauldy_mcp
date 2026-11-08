@@ -160,6 +160,74 @@ struct MCPRetrievalCompletenessTests {
             await #expect(throws: MCPAccessError.stale) { try await runtime.list(query: "LVM") }
         }
     }
+
+    @Test func topicOverviewRechecksGrantAfterPreparingEvidence() async throws {
+        try await withVault([record("Police", text: "Versicherungsschein")]) { fixture in
+            let source = OverviewRevocationSource(profile: fixture.profile)
+            let runtime = ReadOnlyMCPRuntime(profiles: source)
+            await #expect(throws: MCPAccessError.stale) {
+                try await runtime.topicOverview(query: nil, topic: "insurance", cursor: nil)
+            }
+        }
+    }
+
+    @Test func fieldExtractionRechecksGrantAfterPreparingEvidence() async throws {
+        try await withVault([record("Vertrag", text: "Leasingvertrag\nMonatsrate: 249,99 EUR")]) { fixture in
+            let source = OverviewRevocationSource(profile: fixture.profile, revokeAt: 4)
+            let runtime = ReadOnlyMCPRuntime(profiles: source)
+            let page = try await runtime.list(includeExcerpts: false)
+            let handle = try #require(page.items.first?.document)
+            await #expect(throws: MCPAccessError.stale) {
+                try await runtime.extractFields(documents: [handle], fields: nil, cursor: nil)
+            }
+        }
+    }
+
+    @Test func contractComparisonRechecksGrantBeforeReleasingEvidence() async throws {
+        let header = "Leasingvertrag\nAussteller: Testwerk GmbH\nVertragsnummer: TEST-721\n"
+        try await withVault([record("Vorher", text: header + "Monatsrate: 200 EUR"),
+                             record("Nachher", text: header + "Monatsrate: 250 EUR")]) { fixture in
+            let source = OverviewRevocationSource(profile: fixture.profile, revokeAt: 4)
+            let runtime = ReadOnlyMCPRuntime(profiles: source)
+            let handles = try await runtime.list(includeExcerpts: false).items.map(\.document)
+            #expect(handles.count == 2)
+            await #expect(throws: MCPAccessError.stale) {
+                try await runtime.compareContractVersions(before: handles[0], after: handles[1])
+            }
+        }
+    }
+
+    @Test func deadlineOverviewRechecksGrantBeforeReleasingEvidence() async throws {
+        let text = "Leasingvertrag\nVertragsende: 15.04.2027\nKündigungsfrist: 1 Monat vor Vertragsende"
+        try await withVault([record("Testvertrag", text: text)]) { fixture in
+            let source = OverviewRevocationSource(profile: fixture.profile, revokeAt: 4)
+            let runtime = ReadOnlyMCPRuntime(profiles: source)
+            let page = try await runtime.list(includeExcerpts: false)
+            let handle = try #require(page.items.first?.document)
+            await #expect(throws: MCPAccessError.stale) {
+                try await runtime.deadlineOverview(documents: [handle])
+            }
+        }
+    }
+}
+
+private final class OverviewRevocationSource: MCPProfileSource, @unchecked Sendable {
+    private let profile: MCPAccessProfile
+    private let lock = NSLock()
+    private var reads = 0
+    private let revokeAt: Int
+
+    init(profile: MCPAccessProfile, revokeAt: Int = 3) { self.profile = profile; self.revokeAt = revokeAt }
+
+    func load() throws -> MCPAccessProfile {
+        lock.lock()
+        defer { lock.unlock() }
+        reads += 1
+        guard reads >= revokeAt else { return profile }
+        var revoked = profile
+        revoked.enabled = false
+        return revoked
+    }
 }
 
 private func record(_ title: String, text: String? = nil) -> VaultDocument {

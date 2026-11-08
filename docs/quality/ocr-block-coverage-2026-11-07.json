@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "inputFilesByteCompared": 147,
+  "swiftTests": {
+    "passed": true,
+    "count": 68,
+    "suites": 10,
+    "seconds": 12.144
+  },
+  "nativeComparison": [
+    {
+      "sample": 0,
+      "priorReview": false,
+      "review": true,
+      "regions": 4,
+      "gaps": 3,
+      "coverageMS": 16
+    },
+    {
+      "sample": 1,
+      "priorReview": false,
+      "review": true,
+      "regions": 4,
+      "gaps": 3,
+      "coverageMS": 17
+    }
+  ],
+  "graphicsControlExtraReview": false,
+  "coverageWire": {
+    "passed": true,
+    "syntheticPDFs": 2,
+    "gapCounts": [
+      3,
+      3
+    ],
+    "partialImport": true,
+    "incompleteSourceCoverage": true,
+    "noInventedText": true,
+    "metadataRemainsLocal": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "completeTextWire": {
+    "passed": true,
+    "syntheticPDFs": 2,
+    "exactStoredFields": 6,
+    "ungrantedExcluded": true,
+    "physicalPage": 1,
+    "protectedOutput": true,
+    "sourceBoundLayout": true,
+    "layoutRemainsLocal": true,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "limits": {
+    "lines": 4096,
+    "activeBlockGroups": 64,
+    "visualRegions": 128,
+    "charactersPerRegion": 256,
+    "candidateLinesPerRegion": 128
+  },
+  "thresholds": {
+    "minimumUncoveredCharacters": 3,
+    "minimumCoveredRatio": 0.85,
+    "characterIntersectionRatio": 0.5
+  },
+  "cacheConfiguration": "ocr-v9-visual-text-coverage",
+  "intermediateBuildFailure": "Timing separation initially overlapped accesses to an optional metrics value. Read into a local constant and rebuilt. The final Swift and both wire runs passed.",
+  "r6": "deferred at user request",
+  "remaining": [
+    "targeted recognition of flagged regions",
+    "semantic differences within a geometrically covered line",
+    "very faint pages classified blank",
+    "larger real-document false-positive and missed-region evaluation"
+  ],
+  "sourceSHA256": {
+    "Sources/VauldyCore/LocalOCRBlocks.swift": "cb2fa44349df19b1b6fd09b2cdc4bfd46f0e1f621e49f09924f1f8f6017af69a",
+    "Sources/VauldyCore/LocalOCRVisualCoverage.swift": "5836742f862f1f7909736ed78d22578df60ef47ee63dfd8a5582065602c286e8",
+    "Sources/VauldyCore/LocalOCRLayout.swift": "cdc6eae182a1ade3ef842d58b71a03d3226c77681c6cda99841289897001af0e",
+    "Sources/VauldyCore/NativeLocalDocumentOCR.swift": "98032de575827794764fe7b359853e3f8e4ea13fd953640a7545d4fa469d47de",
+    "Sources/VauldyCore/LocalOCRMetrics.swift": "a400c35b93242c57e824dcc69fb8e38194d04b7c4e8b4c6c9ca504cafa5dfada",
+    "Sources/VauldyCore/LocalOCRPageCache.swift": "8950afdcf10bcfbbd42509b334cc0ed592e6c26d0579aa15e32fad60cf6e61c8",
+    "Sources/VauldyCore/LocalDocumentReview.swift": "87f95be4868163d724d69f6d5b82f233efa4b0bd7ff3ae49ecc68954737f53f5",
+    "Tests/VauldyMCPRuntimeTests/OCRBlockCoverageTests.swift": "7c914ab64a4d7ea6fb39ae44a9b3a26ef0478a2f432333e6f96940db8a7579d5",
+    "Tests/VauldyMCPRuntimeTests/PDFVectorTextOCRTests.swift": "375d5b55e84de91e516b46efaa419ab9dcd9acd7078cad2ff32e23e66027f052",
+    "scripts/mcp/visual_coverage_smoke_test.py": "b3f54d2be2fedad07e28252ffadd8dd97ce1e11fba6418b155b1fbbb566a5519",
+    "scripts/mcp/vector_ocr_quality_smoke_test.py": "abe767f827acde70a3cd85af37071eed7ab7d0ae078f21ab7f14c41001ba0e42",
+    "scripts/mcp/regression_test.py": "229ec044621d376e2252e078621a3d87de25d51666c001cfebcd123d3b260dcf"
+  }
+}

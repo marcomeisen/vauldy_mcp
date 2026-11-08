@@ -1,0 +1,213 @@
+{
+  "generatedAt": "2026-11-06T14:28:03.669372+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "existingDirtyTreePreserved": true,
+  "wire": {
+    "passed": true,
+    "productVersion": "0.13.0",
+    "currentBuild": {
+      "softwareCompatibilityEpoch": 1,
+      "documentStorage": "json-snapshot",
+      "productVersion": "0.13.0",
+      "buildID": "macho.dc522d0efb703844876ccd02193c0b19",
+      "tools": [
+        "compare_contract_versions",
+        "extract_document_fields",
+        "get_deadline_overview",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ]
+    },
+    "actualLegacyTools": [
+      "get_vault_status",
+      "search_documents",
+      "list_documents",
+      "read_document",
+      "get_topic_overview",
+      "extract_document_fields"
+    ],
+    "legacyProbe": {
+      "accessEnabled": true,
+      "buildVerified": false,
+      "compatible": false,
+      "completedAt": 815667736.71967,
+      "discoveredTools": [
+        "extract_document_fields",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ],
+      "grantedDocuments": 1,
+      "missingTools": [
+        "compare_contract_versions",
+        "get_deadline_overview"
+      ],
+      "protocolServerVersion": "0.13.0",
+      "serverVersion": "0.13.0"
+    },
+    "currentProbe": {
+      "accessEnabled": true,
+      "buildVerified": true,
+      "compatible": true,
+      "completedAt": 815667737.048969,
+      "discoveredTools": [
+        "compare_contract_versions",
+        "extract_document_fields",
+        "get_deadline_overview",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ],
+      "grantedDocuments": 1,
+      "missingTools": [],
+      "protocolServerVersion": "0.13.0+macho.dc522d0efb703844876ccd02193c0b19",
+      "serverBuildID": "macho.dc522d0efb703844876ccd02193c0b19",
+      "serverVersion": "0.13.0"
+    },
+    "pausedProbe": {
+      "accessEnabled": false,
+      "buildVerified": true,
+      "compatible": true,
+      "completedAt": 815667737.348871,
+      "discoveredTools": [
+        "compare_contract_versions",
+        "extract_document_fields",
+        "get_deadline_overview",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ],
+      "grantedDocuments": 0,
+      "missingTools": [],
+      "protocolServerVersion": "0.13.0+macho.dc522d0efb703844876ccd02193c0b19",
+      "serverBuildID": "macho.dc522d0efb703844876ccd02193c0b19",
+      "serverVersion": "0.13.0"
+    },
+    "simultaneousOldAndNewProcesses": true,
+    "noDiagnosticHostConfusion": true,
+    "originalAndGrantUnchangedByProbe": true,
+    "revocationBothBuilds": true,
+    "mcpSHA256": "e9738c8d99a9e1a3a1daf70ca1f19b92c42a9b7e5ed5121ec0c9507c418eebaf",
+    "legacyZIP_SHA256": "874a2573bd212a5bba16c07637cefa969263bacd3733482897d4a0773fc073eb",
+    "scope": "Local synthetic stdio. No real ChatGPT connection or installed user archive used."
+  },
+  "swiftTests": {
+    "passed": 23,
+    "suites": 4,
+    "seconds": 5.562,
+    "skipped": 0,
+    "configuration": "release"
+  },
+  "package": {
+    "path": "/private/tmp/vauldy-r4-package/Vauldy MCP Einrichtung.app",
+    "ZIP": "/private/tmp/vauldy-r4-package/Vauldy-MCP-macOS.zip",
+    "zipSHA256": "7bc2ef97fd7762b4dc511c19a991677def9bda17328214adad15ef17bc15a2b4",
+    "signing": "ad-hoc",
+    "notarized": false,
+    "manifest": {
+      "architectures": [
+        "arm64"
+      ],
+      "buildMode": "reused",
+      "documentStorage": "json-snapshot",
+      "manifestVersion": 1,
+      "minimumMacOS": "14.0",
+      "packageLockSHA256": "8bf982080fd53dce82960cf25590844d54fbdd129b78057d7e61bc83aaaf8e1a",
+      "productVersion": "0.13.0",
+      "products": {
+        "vauldy-local": "Resources/vauldy-local",
+        "vauldy-mcp": "Resources/vauldy-mcp",
+        "vauldy-mcp-http": "Resources/vauldy-mcp-http",
+        "vauldy-mcp-setup": "MacOS/vauldy-mcp-setup",
+        "vauldy-mcp-status": "Resources/Vauldy MCP Status.app/Contents/MacOS/vauldy-mcp-status",
+        "vauldy-relay": "Resources/vauldy-relay"
+      },
+      "serverBuildID": "macho.dc522d0efb703844876ccd02193c0b19",
+      "softwareCompatibilityEpoch": 1,
+      "sourceCommit": null,
+      "swift": "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)\nTarget: arm64-apple-macosx27.2.0",
+      "tools": [
+        "compare_contract_versions",
+        "extract_document_fields",
+        "get_deadline_overview",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ],
+      "xcode": "Xcode 27.2\nBuild version 27B52"
+    }
+  },
+  "checks": {
+    "updateRollback": {
+      "exitCode": 0,
+      "result": "PASS: signed update, authentication and compatibility gates, failed-start recovery, SIGKILL, concurrent update, verified rollback and real stdio."
+    },
+    "management": {
+      "exitCode": 0,
+      "result": "PASS: real local diagnosis for paused/active grants, no content query, unchanged profile/vault, no host/menu false positive, per-connection request metadata and cleanup."
+    },
+    "v1": {
+      "exitCode": 0,
+      "result": "PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive."
+    },
+    "oauth": {
+      "exitCode": 0,
+      "result": "PASS: keyless ChatGPT/Claude OAuth, local consent/denial, PKCE, issuer/resource/redirect binding, real HTTP MCP discovery, 53-document pagination, sanitized reads, cross-provider isolation, refresh rotation/reuse, immediate revocation, private hashed credentials, unchanged synthetic vault/profiles."
+    },
+    "relayParity": {
+      "exitCode": 0,
+      "result": "PASS: exact relay tool discovery matches local MCP"
+    }
+  },
+  "sourceSHA256": {
+    "Sources/VauldyMCPRuntime/MCPBuildIdentity.swift": "0ce3cba4db2b3f486f91dc4944b476a7fd353c55f82c4fe8088fb4fad8e01fd5",
+    "Sources/VauldyMCPRuntime/MCPBuild.swift": "bf9ea4fc00532541603b49c7c0589438107a7249d464f63b91b53fe258e1043e",
+    "Sources/VauldyMCPRuntime/MCPLocalProbe.swift": "439981f97d50e8ada186c1daa575335671a0761fbf6d5b2fa9978a59ac5b157b",
+    "Sources/VauldyMCPRuntime/MCPProcessPresence.swift": "1e651c30ac4413f411d040edd0c08b79e10c508294b37064c0cebef168e4967f",
+    "Sources/VauldyMCPRuntime/MCPConnectionState.swift": "1f84112ba5c07243b3bb19d00f5c280ea150e0f2dc18422e97919b9e5ffc0b34",
+    "Sources/VauldyMCPRuntime/MCPManagement.swift": "f9f872a2e5664bc86e5a150b16d87721ed7887ce9384745698a3cc9ad2d65f6b",
+    "Sources/VauldyMCPRuntime/MCPSoftwareUpdate.swift": "98d6ffd822c59189518510a952cbe36e654b5721c9f14bebbe34964f57d1cc32",
+    "Sources/VauldyMCPProtocol/ServerFactory.swift": "3f69f9d6ce2ecc11b026629e365a7fbe9859c3b3ad205e5da8e701885e16003f",
+    "Sources/VauldyMCPServer/main.swift": "bab2d70d01d4d2175f2de5c4f2669e31fc31fb3614d794a620d6ad93eab0d1ea",
+    "Sources/VauldyLocalCLI/main.swift": "6d41ea2bd4a34c329441c7e603a89966aa3bb3eec04040bf2c726c7a234c938f",
+    "Sources/VauldyMCPSetup/SetupModel+Management.swift": "abca6a2c7ee738ccc3de9e7882506113bf5f94a3291ab740c8d7e10b0d34634b",
+    "Sources/VauldyMCPSetup/SetupDetailViews.swift": "f43a2a7629dbd18c9317dff2469e9961646aab10e5fec56ff5a4b72484f9fe59",
+    "Sources/VauldyMCPSetup/SetupWizardView.swift": "1fac77ea38e9ea6e08796aa845f74c7a45434792a8243899e46abf5ed9928397",
+    "Tests/VauldyMCPRuntimeTests/MCPBuildDiagnosisTests.swift": "99448fa00f61bfb0eadae1b7679936828a84a969c6cb603dcb74df9cb8a442f8",
+    "scripts/mcp/build_diagnosis_smoke_test.py": "a6ff31c3c31c476ef5872bc2aa8a20f07e1b30bb0544f3f7e4bf2596f411f93c",
+    "scripts/mcp/package.py": "30b58023b7fad82d50ca342060b747c134c136385cc9fe088efb0b16c85b20cc",
+    "scripts/mcp/software_update_smoke_test.py": "a25806320bc05a07d9a945ab0a48fa2591e703d9fb42343132f0e944faac7f5f",
+    "scripts/mcp/management_smoke_test.py": "d8c580b338b2eaed5d734a066286ddb5f152e708a1513554c4dd62cfbd4524cd",
+    "scripts/mcp/customer_release_smoke_test.py": "c6012f33e21b5ca799a1beee3f435b98c9e455ca67e86ead309480432c68fa5d",
+    "scripts/mcp/oauth_smoke_test.py": "2c9063a496d0dc6f78a205997face6cea070ac2e450ad2a5923090be3c1bca3f"
+  },
+  "verificationScope": {
+    "sourcesAndTestsByteEqualToNativeBuildCopy": true,
+    "packageManifestMatchesExecutedServer": true,
+    "UICompiled": true,
+    "GUIObserved": false,
+    "realChatGPTOrSafari": false,
+    "customerOfflineMac": false,
+    "fullRegressionRunner": false,
+    "productionMutations": false,
+    "commitOrPRCreated": false
+  },
+  "resolvedTestIssues": [
+    "Existing management metadata allowlist extended for the intended buildID field; additional build assertion retained.",
+    "Management fixture moved its host binary outside installed bin to avoid launching an unrelated status-menu UI during headless metadata tests; cleanup race was not counted as a pass.",
+    "Fault-injection update launcher explicitly uses a legacy manifest without build declaration because it execs a different image; production new-manifest gates remain strict."
+  ],
+  "next": "R3b SQLite adapter/worker/MCP integration, R3c explicit migration and restore, R3d load acceptance; before R5."
+}

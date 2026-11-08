@@ -2,7 +2,9 @@
 
 Eigenständiger lokaler Dokumentendienst für macOS 14+. Import, Texterkennung und
 Basisanalyse laufen lokal. MCP-Clients erhalten ausschließlich ausdrücklich freigegebene,
-bereinigte Dokumentinhalte. stdio und OAuth-geschütztes HTTP bieten dieselben vier lesenden Werkzeuge.
+bereinigte Dokumentinhalte. stdio und OAuth-geschütztes HTTP bieten dieselben acht lesenden Werkzeuge,
+einschließlich Themenübersicht, gebündelter Vertragsfelder, Fassungsvergleich und
+Fristenübersicht mit Seitenbelegen.
 
 Die Entwicklung ist vom Vauldy-App-Repository getrennt. Es werden keine App-Archive,
 Profile oder Provider-Einstellungen automatisch übernommen.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vauldy Suche & Evidenz"
+  short_description: "Lesende MCP-Werkzeuge mit belegten Antworten"
+  default_prompt: "Nutze $vauldy-ai-search-assistant für Suche, Themenübersicht oder belegte Feldauslese im lokalen Vauldy MCP."

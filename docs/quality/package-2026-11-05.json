@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-05",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "workingTreeSnapshot": true,
+  "sourceTreeSHA256": "80a67cfe9a3baa4695184c0e32b71face28fc2927e66eaabe86df30b6d35d0e6",
+  "artifact": "dist/mcp/contracts-2026-11-05-373egj4t/Vauldy-MCP-macOS.zip",
+  "archiveSHA256": "874a2573bd212a5bba16c07637cefa969263bacd3733482897d4a0773fc073eb",
+  "productVersion": "0.13.0",
+  "architecture": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "testHost": {
+    "architecture": "arm64",
+    "macOS": "27.2",
+    "freshMac": false
+  },
+  "signing": "ad-hoc",
+  "notarized": false,
+  "freshBuiltPrograms": 6,
+  "sourceFilesVerified": 91,
+  "swift": {
+    "tests": 50,
+    "suites": 8,
+    "testSeconds": 6.499,
+    "buildAndTestSeconds": 58.43,
+    "returnCode": 0
+  },
+  "packagedChecks": [
+    {
+      "name": "archive-signature",
+      "returnCode": 0
+    },
+    {
+      "name": "stdio",
+      "returnCode": 0
+    },
+    {
+      "name": "topic",
+      "returnCode": 0
+    },
+    {
+      "name": "fields",
+      "returnCode": 0
+    },
+    {
+      "name": "management",
+      "returnCode": 0
+    },
+    {
+      "name": "client-install",
+      "returnCode": 0
+    },
+    {
+      "name": "update-rollback",
+      "returnCode": 0
+    },
+    {
+      "name": "oauth",
+      "returnCode": 0
+    },
+    {
+      "name": "relay-parity",
+      "returnCode": 0
+    },
+    {
+      "name": "relay-worker",
+      "returnCode": 0
+    },
+    {
+      "name": "import-worker",
+      "returnCode": 0
+    },
+    {
+      "name": "setup-startup",
+      "returnCode": 0
+    }
+  ],
+  "finalArchiveChecks": [
+    {
+      "name": "final-signature",
+      "returnCode": 0
+    },
+    {
+      "name": "final-management",
+      "returnCode": 0
+    },
+    {
+      "name": "final-update-rollback",
+      "returnCode": 0
+    },
+    {
+      "name": "final-setup-startup",
+      "returnCode": 0
+    }
+  ],
+  "packagingMetadataCheck": "passed: signature validity, unchanged signed bytes, quarantine preservation, idempotence, symlink denial",
+  "tools": [
+    "get_vault_status",
+    "search_documents",
+    "list_documents",
+    "read_document",
+    "get_topic_overview",
+    "extract_document_fields"
+  ],
+  "offlineProcessChecks": [
+    "stdio",
+    "topic",
+    "fields",
+    "management",
+    "client-install",
+    "update-rollback"
+  ],
+  "wholeMacOfflineVerified": false,
+  "customerInstructionsVersion": "1.1.1",
+  "sourceCodeInCustomerSkill": false,
+  "releaseDecision": {
+    "localDeveloperTesting": "GO",
+    "customerDistribution": "NO-GO: Developer ID/notarization and fresh offline Mac acceptance pending",
+    "agensi": "NO-GO: target-client acceptance pending",
+    "real20000Documents": "NO-GO: not validated on real archives by these tests"
+  },
+  "limitations": [
+    "No production installation, grant expansion, document migration, keychain mutation or relay deployment.",
+    "No regular ChatGPT conversation or time-to-visible-table measurement.",
+    "Packaged import test observed a cold synthetic mixed PDF import of 54.30 seconds; no broad performance claim.",
+    "Final documentation change also changes setup bundle signature; helper binaries and unsigned setup payload match initial tested package."
+  ]
+}

@@ -121,9 +121,12 @@ def verify_active(root, profile, app, version):
     require(sha256(installed_manifest) == sha256(bundled / 'release.json'), 'Active setup bundle differs from the release.')
     client = Client(binary, profile)
     try:
-        require(client.initialization['serverInfo']['version'] == version, 'Unexpected active MCP version.')
+        require(client.initialization['serverInfo']['version'].split('+', 1)[0] == version, 'Unexpected active MCP version.')
         tools = client.request('tools/list', {})['tools']
-        require(len(tools) == 4 and {tool['name'] for tool in tools} == TOOLS, 'Unexpected MCP tool contract.')
+        names = {tool['name'] for tool in tools}
+        additions = ['get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory']
+        require(len(tools) == len(names) and any(names == TOOLS | set(additions[:count])
+                for count in range(len(additions) + 1)), 'Unexpected MCP tool contract.')
         require(payload(client.call('get_vault_status'))['grantedDocumentCount'] == 2, 'Unexpected synthetic grant count.')
         first = payload(client.call('list_documents', pageSize=1, includeExcerpts=False))
         require(first.get('nextCursor') and len(first['items']) == 1, 'Expected a continuation cursor.')

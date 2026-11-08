@@ -46,6 +46,18 @@ def verify_product_versions(binary_dir, version, env):
             raise SystemExit(f'{product} version mismatch: expected {version}, got {reported!r}')
 
 
+def verify_build_information(binary_dir, version, compatibility_epoch, env):
+    info = json.loads(capture([str(binary_dir / 'vauldy-mcp'), '--build-info'], env=env, timeout=10))
+    required = {'get_vault_status', 'list_documents', 'search_documents', 'read_document',
+                'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'}
+    if (info.get('productVersion') != version or not re.fullmatch(r'macho\.[0-9a-f]{32}', info.get('buildID', ''))
+            or set(info.get('tools', [])) != required or len(info['tools']) != len(required)
+            or info.get('documentStorage') != 'json-snapshot'
+            or info.get('softwareCompatibilityEpoch') != compatibility_epoch):
+        raise SystemExit('MCP build identity or capabilities do not match the current package contract.')
+    return info
+
+
 def verify_platform(binary_dir):
     architectures = set()
     for product in PRODUCTS:
@@ -73,13 +85,35 @@ def source_commit():
 def run(args, **kwargs):
     return subprocess.run(args, check=True, **kwargs)
 
+
+def remove_signing_detritus(app):
+    """Remove only forbidden Finder/resource-fork attributes from our generated bundle.
+
+    A destination file provider can add these during copytree, after staging was signed.
+    Preserve quarantine, provenance and all other attributes. Do not use xattr -cr.
+    """
+    for path in [app, *app.rglob('*')]:
+        if path.is_symlink():
+            raise SystemExit('Unexpected symlink in generated package bundle.')
+        attributes = set(capture(['/usr/bin/xattr', str(path)]).splitlines())
+        for name in attributes & {'com.apple.FinderInfo', 'com.apple.ResourceFork'}:
+            run(['/usr/bin/xattr', '-d', name, str(path)])
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, default=ROOT / 'dist' / 'mcp')
+    parser.add_argument('--name', help='Bundle and ZIP name for this package')
     parser.add_argument('--identity', default='-', help='Developer ID Application identity; default ad-hoc for local testing')
     parser.add_argument('--notary-profile', help='Existing notarytool keychain profile, used only when explicitly supplied')
     parser.add_argument('--skip-build', action='store_true', help='Package an already-built release (developer use)')
+    parser.add_argument('--archive-only', action='store_true',
+                        help='Publish only the ZIP; avoids a loose app in file-provider output folders')
     args = parser.parse_args()
+    if args.name is not None and not re.fullmatch(r'[A-Za-z][A-Za-z0-9 -]{0,48}[A-Za-z0-9]|[A-Za-z]', args.name):
+        parser.error('--name must be a safe bundle name of at most 50 characters.')
+    bundle_name = args.name or 'Vauldy MCP Einrichtung'
+    archive_name = (args.name or 'Vauldy-MCP-macOS') + '.zip'
     version, compatibility_epoch = release_values()
     signed = args.identity != '-'
     if args.notary_profile and not signed:
@@ -104,10 +138,11 @@ def main():
                 run(command + ['--product', product], env=env)
         binary_dir = Path(capture(command + ['--show-bin-path'], env=env))
         verify_product_versions(binary_dir, version, env)
+        build_info = verify_build_information(binary_dir, version, compatibility_epoch, env)
         architectures = verify_platform(binary_dir)
         if signed and source_commit() != commit:
             raise SystemExit('Source checkout changed during the distribution build.')
-        app = temp / 'Vauldy MCP Einrichtung.app'
+        app = temp / (bundle_name + '.app')
         contents = app / 'Contents'
         resources = contents / 'Resources'
         for product, relative_path in PRODUCTS.items():
@@ -131,6 +166,7 @@ def main():
         for guide in ['base-analysis.md', 'mcp-mvp.md', 'provenance.md', 'mcp-oauth.md', 'mcp-chatgpt-sso.md']:
             shutil.copy2(ROOT / 'docs' / guide, resources / guide)
         release_info = dict(manifestVersion=1, productVersion=version, sourceCommit=commit,
+                            serverBuildID=build_info["buildID"], tools=build_info["tools"], documentStorage=build_info["documentStorage"],
                             softwareCompatibilityEpoch=compatibility_epoch,
                             packageLockSHA256=hashlib.sha256((ROOT / 'Package.resolved').read_bytes()).hexdigest(),
                             swift=capture(['swift', '--version']), xcode=capture(['xcodebuild', '-version']),
@@ -138,12 +174,13 @@ def main():
                             buildMode='reused' if args.skip_build else 'release', products=PRODUCTS)
         (resources / 'release.json').write_text(json.dumps(release_info, indent=2, sort_keys=True) + '\n')
         info = dict(CFBundleIdentifier='com.marcomeisen.vauldy.mcp-setup',
-                    CFBundleName='Vauldy MCP Einrichtung', CFBundleDisplayName='Vauldy MCP Einrichtung',
+                    CFBundleName=bundle_name, CFBundleDisplayName=bundle_name,
                     CFBundleExecutable='vauldy-mcp-setup', CFBundlePackageType='APPL',
                     CFBundleShortVersionString=version, CFBundleVersion='1', LSMinimumSystemVersion=MINIMUM_MACOS,
                     NSHighResolutionCapable=True,
                     CFBundleURLTypes=[dict(CFBundleURLName='Vauldy OAuth connection', CFBundleURLSchemes=['vauldy-mcp'])])
         with (app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(info, f)
+        remove_signing_detritus(app)
         sign = ['codesign', '--force', '--sign', args.identity]
         if args.identity != '-': sign += ['--options', 'runtime', '--timestamp']
         run(sign + [str(resources / 'vauldy-mcp')])
@@ -153,7 +190,7 @@ def main():
         run(sign + [str(status_app)])
         run(sign + [str(app)])
         run(['codesign', '--verify', '--deep', '--strict', str(app)])
-        archive = temp / 'Vauldy-MCP-macOS.zip'
+        archive = temp / archive_name
         run(['ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', str(app), str(archive)])
         if args.notary_profile:
             run(['xcrun', 'notarytool', 'submit', str(archive), '--keychain-profile', args.notary_profile, '--wait'])
@@ -162,21 +199,28 @@ def main():
             run(['spctl', '--assess', '--type', 'execute', str(app)])
             archive.unlink()
             run(['ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', str(app), str(archive)])
-        local_app = output / app.name
-        if local_app.is_symlink():
-            raise SystemExit('Refusing to replace a symlink at the app output.')
-        if local_app.exists():
-            with (local_app / 'Contents' / 'Info.plist').open('rb') as f:
-                if plistlib.load(f).get('CFBundleIdentifier') != info['CFBundleIdentifier']:
-                    raise SystemExit('Refusing to replace an unrelated app.')
-            shutil.rmtree(local_app)
         output.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(app, local_app)
-        run(['codesign', '--verify', '--deep', '--strict', str(local_app)])
+        if not args.archive_only:
+            local_app = output / app.name
+            if local_app.is_symlink():
+                raise SystemExit('Refusing to replace a symlink at the app output.')
+            if local_app.exists():
+                with (local_app / 'Contents' / 'Info.plist').open('rb') as f:
+                    if plistlib.load(f).get('CFBundleIdentifier') != info['CFBundleIdentifier']:
+                        raise SystemExit('Refusing to replace an unrelated app.')
+                shutil.rmtree(local_app)
+            shutil.copytree(app, local_app)
+            remove_signing_detritus(local_app)
+            run(['codesign', '--verify', '--deep', '--strict', str(local_app)])
         final_archive = output / archive.name
         shutil.copy2(archive, final_archive)
+        # Verify the actual published ZIP after extraction into a local staging directory.
+        extracted = temp / 'verify-archive'
+        run(['ditto', '-x', '-k', str(final_archive), str(extracted)])
+        run(['codesign', '--verify', '--deep', '--strict', str(extracted / app.name)])
         (output / 'SHA256SUMS').write_text(hashlib.sha256(final_archive.read_bytes()).hexdigest() + '  ' + final_archive.name + '\n')
-        print(local_app)
+        if not args.archive_only:
+            print(local_app)
         print(final_archive)
         print('Signing: ' + ('Developer ID, notarized' if args.notary_profile else
                             'Developer ID, not notarized' if signed else 'local ad-hoc, not notarized'))

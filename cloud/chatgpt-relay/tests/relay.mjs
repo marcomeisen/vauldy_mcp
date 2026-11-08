@@ -50,10 +50,10 @@ test('expired pairs and devices are denied',async()=>{
   const db=new DB();const p=await pair(db);db.db.prepare('UPDATE devices SET expires=0').run();
   const r=await worker.fetch(request('/api/device/poll',{deviceToken:p.deviceToken}),{DB:db});assert.equal(r.status,401);
 });
-test('discovery has exactly four read-only tools and offline is never an empty success',async()=>{
+test('discovery includes the read-only topic overview and offline is never an empty success',async()=>{
   const db=new DB();const headers={'oai-authenticated-user-id':'alice'};
   let r=await worker.fetch(request('/mcp',{jsonrpc:'2.0',id:1,method:'server/discover'},headers),{DB:db});assert.deepEqual((await r.json()).result.supportedVersions,['2026-07-28']);
-  r=await worker.fetch(request('/mcp',{jsonrpc:'2.0',id:2,method:'tools/list'},headers),{DB:db});const tools=(await r.json()).result.tools;assert.equal(tools.length,4);assert(tools.every(t=>t.annotations.readOnlyHint));
+  r=await worker.fetch(request('/mcp',{jsonrpc:'2.0',id:2,method:'tools/list'},headers),{DB:db});const tools=(await r.json()).result.tools;assert.equal(tools.length,9);assert(tools.every(t=>t.annotations.readOnlyHint));assert(tools.some(t=>t.name==='get_topic_overview'));assert(tools.some(t=>t.name==='extract_document_fields'));assert(tools.some(t=>t.name==='compare_contract_versions'));assert(tools.some(t=>t.name==='get_deadline_overview'));
   r=await worker.fetch(request('/mcp',{jsonrpc:'2.0',id:3,method:'tools/call',params:{name:'get_vault_status'}},headers),{DB:db});const result=(await r.json()).result;assert.equal(result.isError,true);assert.match(result.content[0].text,/nicht mit dem Mac verbunden/);
 });
 test('end-to-end encrypted queue, original tool result and source cursor retained; no plaintext at rest',async()=>{

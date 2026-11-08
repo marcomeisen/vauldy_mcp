@@ -23,7 +23,7 @@ package final class SQLiteVaultTokenIndex {
     private var nextRowID: Int64 = 1
 
     // Changes to stored projection semantics require regeneration even if the SQL columns are unchanged.
-    private static let schemaVersion: Int64 = 2
+    private static let schemaVersion: Int64 = 3
     private static let applicationID: Int64 = 0x564D4350
     private static let schema = """
         PRAGMA page_size = 4096;
@@ -299,6 +299,10 @@ package struct VaultIndexProjection: Codable, Equatable, Sendable {
     package let sourceCoverage: String
     package let analysisStatus: String
     package let searchable: Bool
+    package var inventoryVersion: Int? = nil
+    package var importedAt: Date? = nil
+    package var contentHash: String? = nil
+    package var originalState: String? = nil
 
     package init(processingStatus: String, sourceCoverage: String, analysisStatus: String, searchable: Bool) {
         self.processingStatus = processingStatus
@@ -312,5 +316,9 @@ package struct VaultIndexProjection: Codable, Equatable, Sendable {
         && ["original-changed-stored-ocr-is-historical", "original-unavailable-stored-ocr-retained",
             "all-declared-pages-have-ocr-text", "all-declared-pages-processed", "incomplete-or-unknown"].contains(sourceCoverage)
         && ["completed", "needsReview", "failed", "stale", "unavailable", "not-analyzed"].contains(analysisStatus)
+        && (inventoryVersion == nil || inventoryVersion == 1)
+        && (contentHash.map { $0.count == 64 && $0.allSatisfy { "0123456789abcdef".contains($0) } } ?? true)
+        && (importedAt.map { $0.timeIntervalSinceReferenceDate.isFinite && $0 != .distantPast && $0 != .distantFuture } ?? true)
+        && (originalState.map { ["available", "changed", "unavailable"].contains($0) } ?? true)
     }
 }

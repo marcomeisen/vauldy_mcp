@@ -5,7 +5,7 @@ import CryptoKit
 struct LocalOCRPageCache {
     let directory: URL
     let identity: String
-    static let configuration = "ocr-v3-accurate-de-en-correction-hybrid-white-margins-" + ProcessInfo.processInfo.operatingSystemVersionString
+    static let configuration = "ocr-v14-consistent-line-review-" + ProcessInfo.processInfo.operatingSystemVersionString
     init(root: URL, file: URL, configuration: String = Self.configuration) throws {
         let handle = try FileHandle(forReadingFrom: file); defer { try? handle.close() }
         let bytes = try handle.read(upToCount: LocalDocumentStore.maximumOriginalBytes + 1) ?? Data()

@@ -1,0 +1,869 @@
+{
+  "corpusImages": 35,
+  "expectedFields": 79,
+  "before": 52,
+  "after": 52,
+  "gainedFields": 0,
+  "lostFields": 0,
+  "unexpectedAdditions": 0,
+  "evidencePreserved": true,
+  "requiredAfterMinimum": 53,
+  "qualityGate": "NO-GO",
+  "candidateEnabled": false,
+  "cases": [
+    {
+      "file": "ambiguous.png",
+      "sha256": "74089948ddb448c3a9bc87c463ab12548ee97056492dc641ad2eb5b38c9075c8",
+      "expected": 2,
+      "before": 1,
+      "after": 1,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "attempts": 0,
+        "added": 0,
+        "proposals": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "clean.png",
+      "sha256": "e42b2bf54984151d663fed1086824967ca10de30a24903a887193ce8037ac43d",
+      "expected": 3,
+      "before": 3,
+      "after": 3,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "attempts": 0,
+        "unconfirmed": 0,
+        "pixels": 0,
+        "proposals": 0,
+        "added": 0
+      }
+    },
+    {
+      "file": "date.png",
+      "sha256": "46fde2bdefcc83e622db3d858476185998f97f490817a485ad9c584add921c28",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "added": 0,
+        "proposals": 0,
+        "attempts": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "dense.png",
+      "sha256": "e37ad6d2e1e97c8f5199cc40233effe5ec51114cadd506b6e22c1962d5ca4560",
+      "expected": 6,
+      "before": 6,
+      "after": 6,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "added": 0,
+        "proposals": 0,
+        "attempts": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "faint-words.png",
+      "sha256": "165f59b436cdab58adea06f614c1ce69b3169239296fa2a43ddc86f566091fa8",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "added": 0,
+        "proposals": 0,
+        "attempts": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "grid-11-88-15.png",
+      "sha256": "1c2b4463c7dc48b35d31c4f7ca7f3827c2153595d54b8eb890f2ca730f2e1b2f",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 2,
+        "attempts": 2,
+        "unconfirmed": 2,
+        "added": 0,
+        "pixels": 438912
+      }
+    },
+    {
+      "file": "grid-11-88-25.png",
+      "sha256": "29132823a904e228bfe0efefa802fd06fd5f18a763b9195e02ff855c3b6cedb0",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 2,
+        "unconfirmed": 2,
+        "added": 0,
+        "pixels": 438912,
+        "attempts": 2
+      }
+    },
+    {
+      "file": "grid-11-93-15.png",
+      "sha256": "543e3d30c27a2427a9224e0cc6c3e590d0ae670a8bd8cfa23ac394ffe6909430",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 2,
+        "attempts": 2,
+        "added": 0,
+        "proposals": 2,
+        "pixels": 318816
+      }
+    },
+    {
+      "file": "grid-11-93-25.png",
+      "sha256": "abede21560d9126a19272b2cf4746f5de95b29866169147dc9389fd678db8f09",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "attempts": 0,
+        "added": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "unconfirmed": 0
+      }
+    },
+    {
+      "file": "grid-13-88-15.png",
+      "sha256": "c91e6dbe872948c31ebcbb462b559c353b5fb0b6c24e5cb50c9d4ddbba205fbd",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 2,
+        "unconfirmed": 2,
+        "added": 0,
+        "pixels": 608760,
+        "attempts": 2
+      }
+    },
+    {
+      "file": "grid-13-88-25.png",
+      "sha256": "b3e71440998149c9f4d24a4675cdb5db1a7927640baee5dcfbca9490fff976c6",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 2,
+        "attempts": 2,
+        "pixels": 607392,
+        "proposals": 2
+      }
+    },
+    {
+      "file": "grid-13-93-15.png",
+      "sha256": "f778b1fc535ed2655d3247a5b71d545037d1b1d860f7a4ea602a0d4802f79784",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 2,
+        "attempts": 2,
+        "added": 0,
+        "proposals": 2,
+        "pixels": 604656
+      }
+    },
+    {
+      "file": "grid-13-93-25.png",
+      "sha256": "48ef4d8a3b6c72efd5207bbe8f92dbafe2e6816d10236f7f3715e082e38fb799",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 2,
+        "added": 0,
+        "pixels": 156384,
+        "proposals": 2,
+        "attempts": 2
+      }
+    },
+    {
+      "file": "grid-9-88-15.png",
+      "sha256": "4a595d28a76377e3ada2ff4f5e92d9a61c29b1a448531ef32452e4e0a5b9254b",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 2,
+        "attempts": 2,
+        "proposals": 2,
+        "added": 0,
+        "pixels": 297648
+      }
+    },
+    {
+      "file": "grid-9-88-25.png",
+      "sha256": "a0423eca5e0e5d944c4ee80fbffd4dc67472379d63b7c306314fb6c564a7e71b",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 1,
+        "added": 0,
+        "pixels": 159120,
+        "proposals": 1,
+        "attempts": 1
+      }
+    },
+    {
+      "file": "grid-9-93-15.png",
+      "sha256": "dd629a100b4c98602a629c82950fd7f8015f4d0aca58b90373346b47ca47e46d",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 1,
+        "attempts": 1,
+        "proposals": 1,
+        "added": 0,
+        "pixels": 76032
+      }
+    },
+    {
+      "file": "grid-9-93-25.png",
+      "sha256": "e42aa05bffd2c0f8bd8715acf795b2b87b1cffcd73bd743abda25ce7a20980dc",
+      "expected": 2,
+      "before": 0,
+      "after": 0,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 0,
+        "attempts": 0,
+        "pixels": 0,
+        "proposals": 0
+      }
+    },
+    {
+      "file": "invoice.png",
+      "sha256": "def715c03b29d3d7e41a573163d228eb2c3e415dd83167d351802414cdb3a5bb",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 0,
+        "attempts": 0,
+        "pixels": 0,
+        "unconfirmed": 0,
+        "added": 0
+      }
+    },
+    {
+      "file": "italic-Courier-Oblique-11.png",
+      "sha256": "d948f3393cb853daf13c25da3a46cfe2feb6c01ec1ae1cac7ee6e1ce5d725302",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "added": 0,
+        "pixels": 0,
+        "proposals": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "italic-Courier-Oblique-14.png",
+      "sha256": "784413940810520ff5930976936caf794d284fb27519a7232184f7a66eb5cc37",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "pixels": 0,
+        "attempts": 0,
+        "proposals": 0,
+        "unconfirmed": 0,
+        "added": 0
+      }
+    },
+    {
+      "file": "italic-Helvetica-Oblique-11.png",
+      "sha256": "361da7afa29d0deb5e0662d8e7f96a87dd7f67c6a36d0af4fa5d52c52c335ed4",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "pixels": 0,
+        "added": 0,
+        "proposals": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "italic-Helvetica-Oblique-14.png",
+      "sha256": "1ddfecddd54e7c6d70d9cb1ec6e12a03b0fedbe724a2fb365e34b70f5749f606",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "italic-Times-Italic-11.png",
+      "sha256": "a56c0fc8ee65cbe19941589f97f2d6ea277ad0c67deec58e9a3574abed788eb9",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "added": 0,
+        "pixels": 0,
+        "proposals": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "italic-Times-Italic-14.png",
+      "sha256": "4109702f2142a8d818c487709ed539d600dcb037ae9cb505d35ae34494dea5eb",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "pixels": 0,
+        "unconfirmed": 0,
+        "proposals": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "mixed-78-Fahrrad.png",
+      "sha256": "e0cfdd2082f4abfb73a60de62dbabe28f8b302394ecf094bc2975329ab341d79",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 0,
+        "unconfirmed": 0,
+        "added": 0,
+        "pixels": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "mixed-78-fuer.png",
+      "sha256": "76fd73c9e2df00cbf84c5d0ed11f158b677ed90fa65aae8d3ee57e0ee94bc988",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "mixed-85-Fahrrad.png",
+      "sha256": "4224ebff606fdfba98c0288339786d9a3f23b1052a14274fa87c4ff08c906d51",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "proposals": 0,
+        "unconfirmed": 0,
+        "attempts": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "mixed-85-fuer.png",
+      "sha256": "088e4ba22b2eae07e051f45e1912d823c31e5156f151f20aa8bc6bc43cb59f2c",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "attempts": 0,
+        "added": 0,
+        "pixels": 0,
+        "proposals": 0
+      }
+    },
+    {
+      "file": "mixed-92-Fahrrad.png",
+      "sha256": "2b96f12d6628e76cfb24c5621ea24e10d3ffaceb2a290e5bab4312444c1b7bc3",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "proposals": 0,
+        "unconfirmed": 0,
+        "attempts": 0,
+        "added": 0,
+        "pixels": 0
+      }
+    },
+    {
+      "file": "mixed-92-fuer.png",
+      "sha256": "07d6726195a291ce009a6e4a6691daf095d05a9692d1e3c34f81a1066e525f99",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 0,
+        "attempts": 0,
+        "pixels": 0,
+        "proposals": 0
+      }
+    },
+    {
+      "file": "payroll.png",
+      "sha256": "742c78cb5bce64ae69450d8b39957ebedefd811d6bf836f500b7832dad81fa36",
+      "expected": 2,
+      "before": 2,
+      "after": 2,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "unconfirmed": 0,
+        "attempts": 0,
+        "added": 0,
+        "pixels": 0,
+        "proposals": 0
+      }
+    },
+    {
+      "file": "tilted-12-left.png",
+      "sha256": "c1e0c9f32ef86b22a40aaec3c57d37531686be0b5f11e1a2fb58bdb92a93f485",
+      "expected": 3,
+      "before": 3,
+      "after": 3,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "unconfirmed": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "tilted-12-right.png",
+      "sha256": "3a8943578607854564ed4e0b9f2e176e3c7a359fdafdf819e4be04b06532d68e",
+      "expected": 3,
+      "before": 3,
+      "after": 3,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "attempts": 0,
+        "added": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "unconfirmed": 0
+      }
+    },
+    {
+      "file": "tilted-9-left.png",
+      "sha256": "0a9b80e07266e28f553ce9d9bb695d2643a470a65a461d5d4cfe227bb7afded1",
+      "expected": 3,
+      "before": 3,
+      "after": 3,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "pixels": 0,
+        "unconfirmed": 0,
+        "proposals": 0,
+        "attempts": 0
+      }
+    },
+    {
+      "file": "tilted-9-right.png",
+      "sha256": "3676f6caf7f63531adccde7e19ed82627cb5ddb935eb64561181d19c6b2f19c8",
+      "expected": 3,
+      "before": 1,
+      "after": 1,
+      "lost": 0,
+      "added": 0,
+      "evidencePreserved": true,
+      "unexpectedAdditions": 0,
+      "diagnostics": {
+        "added": 0,
+        "proposals": 0,
+        "pixels": 0,
+        "unconfirmed": 0,
+        "attempts": 0
+      }
+    }
+  ],
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "scope": "synthetic tests only; production native OCR and v14 cache restored unchanged",
+  "buildDirectory": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+  "sourceVerification": {
+    "files": 207,
+    "sha256": "422dc16b86fa016f91120214c50d340be80f6209cbf1f95f4ffbf151c63b6ffd"
+  },
+  "swiftRegression": {
+    "tests": 111,
+    "suites": 20,
+    "testSeconds": 49.713,
+    "passed": true
+  },
+  "gatePolicy": {
+    "tests": 5,
+    "passed": true,
+    "nativeAccuracyEvidence": false
+  },
+  "qualityGateExitCode": 1,
+  "fullPackageUIRelayRegressionExecuted": false,
+  "productionOriginalsOrProfilesModified": false,
+  "validation": [
+    {
+      "name": "faint-v15-policy-final",
+      "command": [
+        "python3",
+        "scripts/mcp/faint_ocr_quality_gate_test.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.418,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-policy-final.log",
+      "logSHA256": "ec3358c7f8f03510c60b9e2b7c74e3ba3aa27a981090f9d0a6e3cf6f6f7147d3"
+    },
+    {
+      "name": "faint-v15-source-final",
+      "command": [
+        "python3",
+        "/private/tmp/vauldy-small-source-verify.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.079,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-source-final.log",
+      "logSHA256": "f7184f49c5a43659981aa027efd78e3f8fe44e600b54208d2987489fec0efc04"
+    },
+    {
+      "name": "faint-v15-regression-final",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "OCRFaintRasterTests|OCRConsistentLineTests|OCRDensePageTests|OCRLineContextTests|LocalWorkerTests|OCRSmallRegionTests|OCRSmallTextMCPFixturesTests|EvidencePreservingOCRTests|OCRMarkedRegionRecoveryTests|OCRBlockCoverageTests|OCRLayoutTests|PDFVectorTextOCRTests|OCRTargetedRetryTests|OCRWhiteMarginsTests|LocalImportTests|LocalOriginalReferenceTests|BaseAnalysisMCPTests|LocalDocumentReviewTests|SQLiteIntegrationTests|MCPFieldExtractionTests"
+      ],
+      "exitCode": 0,
+      "seconds": 54.411,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-regression-final.log",
+      "logSHA256": "cb845d5401a3ecea6619158b42d76b9e2a7dde56893734a6a318acc3ef265561"
+    },
+    {
+      "name": "faint-v15-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/line_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "line-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 4.36,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-wire-final.log",
+      "logSHA256": "6552a093b36a9a85b098866351456179d7a3e424d3c23c70c92cc2e9f540bf62"
+    },
+    {
+      "name": "faint-v15-dense-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/dense_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "dense-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 2.023,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-dense-wire-final.log",
+      "logSHA256": "d873a56ca77553a0c66d2226ed5ee4ec38dea6ee913b9915110612c5e87d3f76"
+    },
+    {
+      "name": "faint-v15-coverage-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/visual_coverage_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "region-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 3.335,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-coverage-wire-final.log",
+      "logSHA256": "bfd91e62eb7d3c2af74df9631981989007439c7413515c24d84d1f59ebbf4a5b"
+    },
+    {
+      "name": "faint-v15-raster-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/raster_ocr_quality_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "raster-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 2.32,
+      "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-raster-wire-final.log",
+      "logSHA256": "2357cf63c7122e677fb5bbf6d8db6f82858812507ab85109a3e289fd03b35db7"
+    }
+  ],
+  "wireResults": {
+    "wire": {
+      "passed": true,
+      "syntheticImages": 3,
+      "nativeExactFields": 6,
+      "protectedVerifiedExcerpts": 5,
+      "contractIdentifierRedacted": true,
+      "ambiguousIdentifierRemainsReview": true,
+      "persistedReasons": true,
+      "sameWorker": true,
+      "freshRetryPreservesEvidence": true,
+      "repeatReasonsStable": true,
+      "originalAndGrantUnchanged": true,
+      "sourcePage": 1,
+      "diagnosticsRemainLocal": true,
+      "revocations": 3
+    },
+    "dense-wire": {
+      "passed": true,
+      "syntheticPDFs": 1,
+      "embeddedRows": 140,
+      "exactRecoveredFields": 5,
+      "comparedRegions": 147,
+      "storedRegions": 128,
+      "preservedDeductible": true,
+      "sourcePage": 1,
+      "metadataRemainsLocal": true,
+      "sameWorkerFreshRetry": true,
+      "originalUnchanged": true,
+      "grantUnchanged": true,
+      "revocation": true
+    },
+    "coverage-wire": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "recoveredFields": 6,
+      "preservedValues": 3,
+      "numericConflictPreserved": true,
+      "physicalPage": 1,
+      "metadataRemainsLocal": true,
+      "evidencePreservingRefinement": true,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    },
+    "raster-wire": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "exactStoredFields": 12,
+      "cases": [
+        {
+          "name": "raster-pdf",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-other-values",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-light",
+          "state": "partial",
+          "review": true
+        }
+      ],
+      "grants": true,
+      "privacy": true,
+      "physicalPage": 1,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    }
+  },
+  "productionSourcesPreserved": {
+    "NativeLocalDocumentOCR.swift": "0478d81c734e5ea9086bdd16583c6fb7197b13ac83e49cafa2119cd9ecd0ad0d",
+    "LocalOCRPageCache.swift": "d3b9b3df08b7841b2593cc5a176d8ba9f0c7a89e159fb07fc3feff815bab2237"
+  },
+  "historicalRejectedNativePrototype": {
+    "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/faint-v15-supported.log",
+    "before": 52,
+    "after": 52,
+    "requiredGainAssertionPassed": false,
+    "activated": false
+  },
+  "limits": [
+    "No real document OCR or installation was performed",
+    "35 synthetic images are not a universal OCR accuracy claim",
+    "Candidate detection is not a transcription gain",
+    "The separate quality gate failed and must pass before any production activation"
+  ],
+  "macOS": "27.2",
+  "qualityGateCommand": [
+    "python3",
+    "scripts/mcp/faint_ocr_quality_gate.py",
+    "faint-fixtures",
+    "--report",
+    "faint-quality.json"
+  ],
+  "qualityGateWorkingDirectory": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+  "diffCheckPassed": true
+}

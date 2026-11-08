@@ -14,10 +14,14 @@ struct RelayConnectionTests {
         let server = project.appendingPathComponent(".build/debug/vauldy-mcp")
         try FileManager.default.createDirectory(at: installation.binaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: server, to: installation.binaryURL)
-        let document = UUID(), vault = root.appendingPathComponent("documents.json")
-        let bytes = try JSONSerialization.data(withJSONObject: [["id": document.uuidString, "title": "Synthetic insurance", "sourceName": "secret-local-source.pdf", "status": "indexed", "pageCount": 1, "ocrText": "--- Seite 1 ---\nFahrradversicherung 49,99 EUR.\nE-Mail: erika@example.com"]])
+        let document = UUID(), other = UUID(), vault = root.appendingPathComponent("documents.json")
+        let records: [[String: Any]] = [document, other].map {
+            ["id": $0.uuidString, "title": "Synthetic insurance", "sourceName": "secret-local-source.pdf",
+             "status": "indexed", "pageCount": 1, "ocrText": "--- Seite 1 ---\nFahrradversicherung 49,99 EUR.\nE-Mail: erika@example.com"]
+        }
+        let bytes = try JSONSerialization.data(withJSONObject: records)
         try bytes.write(to: vault)
-        var p = MCPAccessProfile(vaultPath: vault.path, allowedDocumentIDs: [document], enabled: true, acknowledgedCloudDisclosure: true)
+        var p = MCPAccessProfile(vaultPath: vault.path, allowedDocumentIDs: [document, other], enabled: true, acknowledgedCloudDisclosure: true)
         let source = FileMCPProfileSource(url: installation.profileURL(p.connectionID)); try source.save(p)
         let child = try await RelayLocalMCP(installation: installation, profile: source.url); defer { child.close() }
         func call(_ name: String, _ arguments: [String: Any]) async throws -> [String: Any] {
@@ -26,15 +30,31 @@ struct RelayConnectionTests {
         }
         let listed = try await call("list_documents", ["includeExcerpts": false])
         let value = try #require(listed["structuredContent"] as? [String: Any])
-        let item = try #require((value["items"] as? [[String: Any]])?.first)
-        let handle = try #require(item["document"] as? String)
+        let items = try #require(value["items"] as? [[String: Any]])
+        let handle = try #require(items.first?["document"] as? String)
+        let second = try #require(items.dropFirst().first?["document"] as? String)
         let read = try await call("read_document", ["document": handle])
         let text = String(decoding: try JSONSerialization.data(withJSONObject: read), as: UTF8.self)
         #expect(!text.contains("erika@example.com") && !text.contains("secret-local-source.pdf"))
         #expect(text.contains("49,99"))
+        let extraction = try await call("extract_document_fields", ["documents": [handle]])
+        let extracted = try #require(extraction["structuredContent"] as? [String: Any])
+        #expect(extracted["retrievalComplete"] as? Bool == true)
+        #expect((extracted["results"] as? [[String: Any]])?.count == 4)
+        let comparison = try await call("compare_contract_versions", ["before": handle, "after": second])
+        let compared = try #require(comparison["structuredContent"] as? [String: Any])
+        #expect(compared["status"] as? String == "unresolved-pair")
+        let deadlines = try await call("get_deadline_overview", ["documents": [handle]])
+        let deadlineOverview = try #require(deadlines["structuredContent"] as? [String: Any])
+        let row = try #require((deadlineOverview["rows"] as? [[String: Any]])?.first)
+        #expect(row["document"] as? String == handle)
+        #expect(row["calculationStatus"] as? String == "unresolved")
         p.enabled = false; p.revision = UUID(); try source.save(p)
         let denied = try await call("read_document", ["document": handle])
         #expect(denied["isError"] as? Bool == true)
+        #expect(try await call("extract_document_fields", ["documents": [handle]])["isError"] as? Bool == true)
+        #expect(try await call("compare_contract_versions", ["before": handle, "after": second])["isError"] as? Bool == true)
+        #expect(try await call("get_deadline_overview", ["documents": [handle]])["isError"] as? Bool == true)
         #expect(try Data(contentsOf: vault) == bytes)
     }
     @Test func deviceAuthenticationNeverUsesURLOrLoggedCustomHeaders() throws {
@@ -121,6 +141,8 @@ struct RelayConnectionTests {
         }
         let valid = "{\"method\":\"tools/call\",\"params\":{\"name\":\"list_documents\",\"arguments\":{}}}"
         #expect(try client.decode(job: job(valid)) == Data(valid.utf8))
+        let deadline = valid.replacingOccurrences(of: "list_documents", with: "get_deadline_overview")
+        #expect(try client.decode(job: job(deadline)) == Data(deadline.utf8))
         for value in ["{\"method\":\"initialize\",\"params\":{}}", "{\"method\":\"tools/call\",\"params\":{\"name\":\"import_file\"}}", "{\"method\":\"tools/call\",\"params\":{\"name\":\"list_documents\"},\"profile\":\"foreign\"}"] {
             #expect(throws: (any Error).self) { try client.decode(job: job(value)) }
         }

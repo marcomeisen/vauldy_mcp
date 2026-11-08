@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-07",
+  "verifiedAt": "2026-11-07T12:53:38.432033+01:00",
+  "branch": "codex/local-first-product-readiness",
+  "application": "/Applications/Vauldy.app",
+  "productVersion": "0.13.0",
+  "serverBuildID": "macho.2a3541f019733a7c8e4c4517b61bb230",
+  "archiveSHA256": "02363d33e3bba0bb8f9a2783a90b4e398854f509b969f488b468df07d4fe62e1",
+  "signing": "ad-hoc",
+  "notarized": false,
+  "actualDefaultInstallationRoot": true,
+  "setupRootOverride": false,
+  "initialState": {
+    "alreadyHadRecreatedInstallation": true,
+    "profiles": 1,
+    "selectedDocuments": [
+      9
+    ],
+    "appSignatureFailure": "Finder metadata/resource fork detritus",
+    "guardedInitialInstallAbortedWithoutMutation": true
+  },
+  "actions": {
+    "priorProgramsPrivatelyBackedUp": true,
+    "appReplacedFromVerifiedZIP": true,
+    "quarantineRemoved": false,
+    "gatekeeperDisabled": false,
+    "installationViaNativeWizard": true
+  },
+  "results": {
+    "visibleWizardCompletion": true,
+    "visibleLocalServerStartTest": "passed",
+    "appAndInstalledBundlesSignatureVerified": true,
+    "installedProductsMatchPackagedBytes": true,
+    "protectedFilesVerified": 46,
+    "protectedFilesChanged": 0,
+    "newConnectionCreated": false,
+    "newGrantCreated": false,
+    "noCloudSetupPerformed": true
+  },
+  "limits": [
+    "Existing nine-document grant retained; this was a software reinstall, not an empty-data fresh install.",
+    "No Developer ID/notarization; no physically offline test.",
+    "Historical 80-test run belongs to package creation, not this install verification."
+  ]
+}

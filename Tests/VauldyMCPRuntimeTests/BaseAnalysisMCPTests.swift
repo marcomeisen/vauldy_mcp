@@ -39,6 +39,7 @@ struct BaseAnalysisMCPTests {
                 try diagnostics(document, fixture: fixture.id, mode: "raster", original: file)
                 #expect(outcome.state == .completed)
                 #expect(document.localImport?.pages.first?.method == .vision)
+                #expect(document.localImport?.pages.first?.metrics?.pdfScaleRetries == nil)
                 let analysis = try #require(document.currentBaseAnalysis)
                 measurements.append((fixture, analysis))
                 let card = try #require(analysis.documents.first)

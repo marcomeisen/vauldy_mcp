@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "head": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "swiftTests": {
+    "passed": true,
+    "tests": 18,
+    "suites": 2,
+    "seconds": 1.725,
+    "exitCode": 0,
+    "command": "swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none --no-parallel --filter 'SetupDocumentGuidanceTests|LocalImportTests'",
+    "log": "/private/tmp/vauldy-import-guidance-vm48gkbb/tests-final.log",
+    "firstAttempt": "Compilation failed: test needed @testable VauldyCore for the internal outcome initializer; corrected before passing run."
+  },
+  "finalBuild": {
+    "passed": true,
+    "exitCode": 0,
+    "seconds": 10.28,
+    "command": "swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 --product vauldy-mcp-setup",
+    "log": "/private/tmp/vauldy-import-guidance-vm48gkbb/build-final.log"
+  },
+  "bundle": {
+    "passed": true,
+    "exitCode": 0,
+    "command": "python3 scripts/mcp/run_ui.py --skip-build --no-open",
+    "signing": "local ad-hoc, not notarized",
+    "log": "/private/tmp/vauldy-import-guidance-vm48gkbb/bundle-final.log"
+  },
+  "nativeUI": {
+    "syntheticDocuments": 8,
+    "protectedFiles": 22,
+    "allOriginalStoreFilesUnchanged": true,
+    "workerStarted": false,
+    "uiCasesObserved": [
+      "Existing-document notice and per-row Im Bestand",
+      "Text vorhanden separate from Basisanalyse: prüfen",
+      "Optional batch action disabled with no selection",
+      "Text prüfen opens original preview and stored text",
+      "No import or OCR started by review"
+    ],
+    "testProcessStopped": true
+  },
+  "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+  "setupRoot": "/private/tmp/vauldy-import-guidance-vm48gkbb/ui-root",
+  "changesToPreexistingFiles": [
+    "Sources/VauldyMCPSetup/SetupView.swift",
+    "Sources/VauldyMCPSetup/SetupImportStatusView.swift",
+    "Sources/VauldyMCPSetup/SetupDetailViews.swift",
+    "Sources/VauldyMCPSetup/SetupImportReport.swift",
+    "Sources/VauldyMCPSetup/SetupDocumentAnalysisView.swift",
+    "Sources/VauldyMCPSetup/SetupQualityReviewView.swift",
+    "Sources/VauldyMCPSetup/SetupModel.swift",
+    "Package.swift",
+    "docs/local-first-todo.md"
+  ],
+  "coreOCRPrivacyMCPSourcesUnchanged": true,
+  "existingRegressionTestsUnchanged": true,
+  "productionDataUsed": false,
+  "productionInstallationUpdated": false,
+  "sourceVerification": {
+    "files": 221,
+    "aggregateSHA256": "40c4643b9f38e29739c4c6106fd01313ca6f6fcf5f8f551421ddc11d4a5ed3d8"
+  },
+  "notExecuted": [
+    "full regression runner",
+    "79-field OCR improvement rerun",
+    "Developer-ID/notarization/customer installation",
+    "regular ChatGPT answer acceptance"
+  ]
+}

@@ -23,15 +23,13 @@ enum MCPSourceExcerpt {
         var matchCount = 0
         for section in sections {
             let text = section.text
+            let projection = VaultSearchText(text)
             var matches: [Range<String.Index>] = []
             for term in terms where !term.isEmpty {
-                var offset = text.startIndex
-                while offset < text.endIndex,
-                      let match = text.range(of: term, options: [.caseInsensitive, .diacriticInsensitive], range: offset..<text.endIndex) {
-                    matchCount += 1
-                    guard matchCount <= 20_000 else { throw MCPAccessError.tooLarge }
-                    matches.append(match); offset = match.upperBound
-                }
+                let found = projection.ranges(of: term, limit: 20_001 - matchCount)
+                matchCount += found.count
+                guard matchCount <= 20_000 else { throw MCPAccessError.tooLarge }
+                matches += found
             }
             var windows: [Range<String.Index>] = []
             for match in matches.sorted(by: { $0.lowerBound < $1.lowerBound }) {
@@ -51,19 +49,23 @@ enum MCPSourceExcerpt {
     }
 
     static func select(sections: [VaultPageMarkedText.Section], summary: String,
-                       terms: [String], preferredPage: Int?) -> VaultPageMarkedText.Section {
+                       terms: [String], preferredPage: Int?, limit: Int = 700) -> VaultPageMarkedText.Section {
         let readable = sections.filter { !$0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
         let chosen = preferredPage.flatMap { page in readable.first { $0.page == page } }
-            ?? readable.first { section in terms.contains { section.text.range(of: $0, options: [.caseInsensitive, .diacriticInsensitive]) != nil } }
+            ?? readable.first { section in
+                let projection = VaultSearchText(section.text)
+                return terms.contains { !projection.ranges(of: $0, limit: 1).isEmpty }
+            }
             ?? readable.first
         let text = chosen?.text ?? summary
         guard !text.isEmpty else { return .init(page: nil, text: "Kein lesbarer Text verfügbar.") }
-        let match = terms.compactMap { text.range(of: $0, options: [.caseInsensitive, .diacriticInsensitive]) }
+        let projection = VaultSearchText(text)
+        let match = terms.compactMap { projection.ranges(of: $0, limit: 1).first }
             .min { $0.lowerBound < $1.lowerBound }
         var start = match.map { text.index($0.lowerBound, offsetBy: -180, limitedBy: text.startIndex) ?? text.startIndex } ?? text.startIndex
         if let open = text[..<start].lastIndex(of: "["), text[open...].hasPrefix("[V_"),
            !text[open..<start].contains("]") { start = open }
-        var end = text.index(start, offsetBy: 700, limitedBy: text.endIndex) ?? text.endIndex
+        var end = text.index(start, offsetBy: limit, limitedBy: text.endIndex) ?? text.endIndex
         if let open = text[start..<end].lastIndex(of: "["), text[open...].hasPrefix("[V_"),
            !text[open..<end].contains("]"), let close = text[end...].firstIndex(of: "]") { end = text.index(after: close) }
         return .init(page: chosen?.page, text: String(text[start..<end]))

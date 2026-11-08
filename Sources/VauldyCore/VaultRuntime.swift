@@ -70,7 +70,7 @@ public actor LocalVault {
             if indexBytes + size <= 16_000_000 {
                 indexBuildCount += 1
                 indexed[document.id] = IndexedDocument(document: document, fields: Self.searchFields(document).map {
-                    (tokens: Self.tokenize($0.0), normalized: Self.normalized($0.0), weight: $0.1)
+                    (tokens: VaultSearchText.sourceTokens($0.0), normalized: Self.normalized($0.0), weight: $0.1)
                 })
                 indexBytes += size
             }
@@ -223,7 +223,7 @@ private extension LocalVault {
 
     }
     static func score(document: VaultDocument, prepared: [(tokens: [String], normalized: String, weight: Int)]?, terms: [String], phrase: String) -> Int {
-        let fields = prepared ?? searchFields(document).map { (tokens: tokenize($0.0), normalized: normalized($0.0), weight: $0.1) }
+        let fields = prepared ?? searchFields(document).map { (tokens: VaultSearchText.sourceTokens($0.0), normalized: normalized($0.0), weight: $0.1) }
         var result = 0
         for (tokens, normalizedValue, weight) in fields {
             for term in terms {
@@ -252,15 +252,13 @@ private extension LocalVault {
     }
 
     static func normalized(_ value: String) -> String {
-        value
-            .folding(options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "de_DE"))
-            .lowercased()
+        VaultSearchText.normalized(value)
     }
 
     static func bestExcerpt(from document: VaultDocument, terms: [String]) -> VaultPageMarkedText.Section {
         let sections = VaultPageMarkedText.sections(in: document.ocrText)
         let ranked = sections.map { section in
-            let tokens = tokenize(section.text)
+            let tokens = VaultSearchText.sourceTokens(section.text)
             let score = terms.reduce(0) { partial, term in
                 partial + tokens.reduce(0) { $0 + ($1.contains(term) ? 1 : 0) }
             }
@@ -278,18 +276,12 @@ private extension LocalVault {
     }
 
     static func excerptWindow(in text: String, terms: [String]) -> String {
-        let lines = text.components(separatedBy: .newlines)
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-        guard !lines.isEmpty else { return "Keine Textstelle verfügbar." }
-
-        let matchIndex = lines.firstIndex { line in
-            let normalizedLine = normalized(line)
-            return terms.contains { normalizedLine.contains($0) }
-        } ?? 0
-        let lower = max(0, matchIndex - 2)
-        let upper = min(lines.count - 1, matchIndex + 2)
-        return compact(lines[lower...upper].joined(separator: "\n"), limit: 600)
+        let projection = VaultSearchText(text)
+        let match = terms.compactMap { projection.ranges(of: $0, limit: 1).first }
+            .min { $0.lowerBound < $1.lowerBound }
+        let start = match.map { text.index($0.lowerBound, offsetBy: -180, limitedBy: text.startIndex) ?? text.startIndex } ?? text.startIndex
+        let end = text.index(start, offsetBy: 600, limitedBy: text.endIndex) ?? text.endIndex
+        return String(text[start..<end])
     }
 
     static func intent(for question: String) -> QuestionIntent {
@@ -369,5 +361,164 @@ private extension LocalVault {
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+}
+
+extension LocalVault {
+    package nonisolated static func rankedCandidates(
+        query: String, limit: Int, visit: ((VaultDocument) throws -> Void) throws -> Void
+    ) throws -> (hits: [(document: VaultDocument, page: Int?)], count: Int) {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let terms = meaningfulTerms(in: query)
+        let phrase = normalized(query)
+        var best: [(document: VaultDocument, score: Int)] = []
+        var count = 0
+        try visit { document in
+            guard document.isSearchable else { return }
+            let value = score(document: document, prepared: nil, terms: terms, phrase: phrase)
+            guard value > 0 else { return }
+            count += 1
+            let position = best.firstIndex {
+                value > $0.score || (value == $0.score && document.importedAt > $0.document.importedAt)
+            } ?? best.count
+            if position < limit {
+                best.insert((document, value), at: position)
+                if best.count > limit { best.removeLast() }
+            }
+        }
+        return (best.map { ($0.document, bestExcerpt(from: $0.document, terms: terms).page) }, count)
+    }
+
+    static func rankedSearchFields(_ document: VaultDocument) -> [(String, Int)] {
+        searchFields(document)
+    }
+
+    package nonisolated static func compactRankTerm(_ query: String) -> String? {
+        let phrase = normalized(query.trimmingCharacters(in: .whitespacesAndNewlines))
+        return meaningfulTerms(in: query) == [phrase] ? phrase : nil
+    }
+
+    package nonisolated static func rankedIDs(
+        term: String, limit: Int, scores: [VaultRankScore],
+        visitUncovered: ((VaultDocument) throws -> Void) throws -> Void
+    ) throws -> (ids: [UUID], count: Int) {
+        var ranked = scores
+        try visitUncovered { document in
+            guard document.isSearchable else { return }
+            let value = score(document: document, prepared: nil, terms: [term], phrase: term)
+            if value > 0 { ranked.append(.init(id: document.id, score: value, date: document.importedAt)) }
+        }
+        ranked.sort {
+            if $0.score != $1.score { return $0.score > $1.score }
+            if $0.date != $1.date { return $0.date > $1.date }
+            return $0.id.uuidString < $1.id.uuidString
+        }
+        return (ranked.prefix(limit).map(\.id), ranked.count)
+    }
+
+    package nonisolated static func rankedEvidencePage(_ document: VaultDocument, query: String) -> Int? {
+        bestExcerpt(from: document, terms: meaningfulTerms(in: query)).page
+    }
+}
+
+struct VaultSearchVocabulary {
+    let counts: [String: Int]
+    var words: Dictionary<String, Int>.Keys { counts.keys }
+    let foldedChunks: Set<String>
+    let normalizedChunks: Set<String>
+
+    init(_ field: String) {
+        if let ascii = Self.asciiVocabulary(field) {
+            counts = ascii.counts
+            foldedChunks = ascii.chunks
+            normalizedChunks = ascii.chunks
+            return
+        }
+        let folded = VaultSearchText.folded(field)
+        let normalized = VaultSearchText.normalized(field)
+        let separators = CharacterSet.alphanumerics.inverted
+        let original = folded.components(separatedBy: separators).filter { !$0.isEmpty }
+        let known = Set(original)
+        let aliases = normalized.components(separatedBy: separators).filter { !$0.isEmpty && !known.contains($0) }
+        var frequencies: [String: Int] = [:]
+        for word in original + aliases { frequencies[word] = min(5, frequencies[word, default: 0] + 1) }
+        counts = frequencies
+        foldedChunks = Self.chunks(folded)
+        normalizedChunks = Self.chunks(normalized)
+    }
+
+    // Search terms do not span whitespace. Keep punctuation and combining characters
+    // inside chunks so the lookup still uses Swift's original substring semantics.
+    private static func chunks(_ field: String) -> Set<String> {
+        Set(field.split(whereSeparator: \.isWhitespace).map(String.init))
+    }
+
+    private static func asciiVocabulary(_ field: String) -> (counts: [String: Int], chunks: Set<String>)? {
+        let bytes = Array(field.utf8)
+        guard bytes.allSatisfy({ $0 < 128 }) else { return nil }
+        for offset in bytes.indices where bytes[offset] == 45 {
+            // These are the only possible ASCII spellings of an OCR line-break alias.
+            var after = offset + 1
+            while after < bytes.count, bytes[after] == 9 || bytes[after] == 32 { after += 1 }
+            if after < bytes.count, bytes[after] == 10 || bytes[after] == 13 { return nil }
+        }
+        let lower = Array(field.lowercased().utf8)
+        var counts: [String: Int] = [:]
+        var chunks: Set<String> = []
+        func countWord(_ slice: ArraySlice<UInt8>) {
+            let word = String(decoding: slice, as: UTF8.self)
+            counts[word] = min(5, counts[word, default: 0] + 1)
+        }
+        var wordStart = 0, chunkStart = 0
+        for (offset, byte) in lower.enumerated() {
+            if !(48...57).contains(byte), !(97...122).contains(byte) {
+                if wordStart < offset { countWord(lower[wordStart..<offset]) }
+                wordStart = offset + 1
+            }
+            if byte == 32 || (9...13).contains(byte) {
+                if chunkStart < offset { chunks.insert(String(decoding: lower[chunkStart..<offset], as: UTF8.self)) }
+                chunkStart = offset + 1
+            }
+        }
+        if wordStart < lower.count { countWord(lower[wordStart...]) }
+        if chunkStart < lower.count { chunks.insert(String(decoding: lower[chunkStart...], as: UTF8.self)) }
+        return (counts, chunks)
+    }
+}
+
+package struct VaultRankScore: Sendable {
+    let id: UUID
+    let score: Int
+    let date: Date
+}
+
+/// The original rank formula for a single normalized word. Whitespace cannot be
+/// part of that word, so checking it in any chunk preserves the phrase bonus.
+struct VaultRankProjection: Codable, Sendable {
+    struct Field: Codable, Sendable {
+        let weight: Int
+        let counts: [String: Int]
+        let normalizedChunks: Set<String>
+    }
+    let importedAt: Date
+    let searchable: Bool
+    let fields: [Field]
+
+    func score(term: String) -> Int {
+        fields.reduce(0) { score, field in
+            var matches = 0
+            for (token, count) in field.counts where token.contains(term) {
+                matches += count
+                if matches >= 5 { break }
+            }
+            let bonus = term.count > 3 && field.normalizedChunks.contains { $0.contains(term) } ? 3 : 0
+            return score + (min(matches, 5) + bonus) * field.weight
+        }
+    }
+
+    var isValid: Bool {
+        fields.count == 8 && fields.allSatisfy { field in
+            (1...5).contains(field.weight) && field.counts.values.allSatisfy { (1...5).contains($0) }
+        }
     }
 }

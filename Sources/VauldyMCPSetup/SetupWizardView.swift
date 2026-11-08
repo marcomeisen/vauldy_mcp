@@ -19,27 +19,33 @@ struct SetupWizardView: View {
             }
             Divider()
             if model.setupStep == 1 && model.importing { SetupImportProgress(model: model) }
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    if model.busy { ProgressView("Wird lokal vorbereitet …").controlSize(.small) }
-                    switch model.setupStep {
-                    case 0: client
-                    case 1:
-                        Text("Wähle die Dokumente für diesen Chatbot.").font(.headline)
-                        Text("Du kannst mit einem unverfänglichen Beispieldokument beginnen. Importierte Dokumente erhalten noch keine Freigabe.").foregroundStyle(.secondary)
-                        SetupDocumentSource(model: model)
-                        SetupDocumentList(model: model)
-                    case 2: consent
-                    default: completion
-                    }
-                    if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
-                }.padding(2)
+            ScrollViewReader { scroll in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        if model.busy { ProgressView("Wird lokal vorbereitet …").controlSize(.small) }
+                        switch model.setupStep {
+                        case 0: client
+                        case 1:
+                            Text("Wähle die Dokumente für diesen Chatbot.").font(.headline)
+                            Text("Du kannst mit einem unverfänglichen Beispieldokument beginnen. Importierte Dokumente erhalten noch keine Freigabe.").foregroundStyle(.secondary)
+                            if !model.importing { SetupImportStatusView(model: model) }
+                            SetupDocumentSource(model: model)
+                            SetupDocumentList(model: model)
+                        case 2: consent
+                        default: completion
+                        }
+                        if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
+                    }.padding(2)
+                }.onChange(of: model.shownImportDocumentIDs) { _, ids in
+                    if ids != nil { scroll.scrollTo(SetupDocumentList.scrollAnchor, anchor: .top) }
+                }
             }
             Divider()
             HStack {
-                Button(model.setupStep == 3 ? "Fertig" : "Abbrechen") { dismiss() }.disabled(model.busy)
+                Button(model.setupStep == 3 ? "Fertig" : "Assistent schließen") { dismiss() }.disabled(model.busy)
+                if model.importing { Text("Der Import läuft beim Schließen weiter.").font(.caption).foregroundStyle(.secondary) }
                 Spacer()
-                if model.setupStep > 0 && model.setupStep < 3 { Button("Zurück") { model.setupStep -= 1 }.disabled(model.busy) }
+                if model.setupStep > 0 && model.setupStep < 3 { Button("Zurück") { model.setupStep -= 1 }.disabled(model.busy || model.importing) }
                 switch model.setupStep {
                 case 0:
                     if let existing {
@@ -90,7 +96,10 @@ struct SetupWizardView: View {
             } else if let profile = model.activeConnection {
                 SetupStatusBadge(text: model.state(for: profile).headline, tone: model.state(for: profile).tone)
                 if model.probing.contains(profile.connectionID) { ProgressView("Lokaler Protokolltest läuft …") }
-                if model.probeResults[profile.connectionID] != nil { Label("Lokaler MCP-Test erfolgreich", systemImage: "checkmark.circle").foregroundStyle(.green) }
+                if let result = model.probeResults[profile.connectionID] {
+                    Text(result.summary).foregroundStyle(result.compatible ? .green : .orange)
+                    Text(result.nextStep).font(.caption)
+                }
                 if let error = model.probeErrors[profile.connectionID] { SetupNotice(text: error, warning: true) }
                 Text("Aktiviere Vauldy in deinem Chatbot und frage nach einem ausgewählten Dokument. Erst eine Anfrage aus dem Chatbot bestätigt dessen Nutzung. Falls er bereits geöffnet ist, starte seine Vauldy-Verbindung neu.").foregroundStyle(.secondary)
                 Text("Der lokale Test prüft nur das MCP-Protokoll und die Freigabe auf diesem Mac.").font(.caption).foregroundStyle(.secondary)

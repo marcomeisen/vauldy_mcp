@@ -4,10 +4,11 @@ import Darwin
 public struct MCPServerInstance: Codable, Equatable, Sendable {
     public var connectionID: UUID?
     public var version: String?
+    public var buildID: String?
     public var diagnostic: Bool
     public var lastRequestAt: Date?
-    public init(connectionID: UUID? = nil, version: String? = nil, diagnostic: Bool = false, lastRequestAt: Date? = nil) {
-        self.connectionID = connectionID; self.version = version; self.diagnostic = diagnostic; self.lastRequestAt = lastRequestAt
+    public init(connectionID: UUID? = nil, version: String? = nil, buildID: String? = nil, diagnostic: Bool = false, lastRequestAt: Date? = nil) {
+        self.connectionID = connectionID; self.version = version; self.buildID = buildID; self.diagnostic = diagnostic; self.lastRequestAt = lastRequestAt
     }
 }
 
@@ -51,7 +52,7 @@ public final class MCPProcessPresence: @unchecked Sendable {
             let stop = directory.appendingPathComponent("menu-stop")
             if FileManager.default.fileExists(atPath: stop.path) { try FileManager.default.removeItem(at: stop) }
         } else if let connectionID {
-            instance = MCPServerInstance(connectionID: connectionID, version: MCPBuild.version, diagnostic: diagnostic)
+            instance = MCPServerInstance(connectionID: connectionID, version: MCPBuild.version, buildID: MCPBuildIdentity.running, diagnostic: diagnostic)
             do { try writeInstance() }
             catch { stop(); throw error }
         }
@@ -101,7 +102,7 @@ public final class MCPProcessPresence: @unchecked Sendable {
                 let values = try metadata.resourceValues(forKeys: [.isSymbolicLinkKey, .isRegularFileKey, .fileSizeKey])
                 guard values.isSymbolicLink != true, values.isRegularFile == true, (values.fileSize ?? Int.max) <= 2_048 else { throw PresenceError.unavailable }
                 instance = try JSONDecoder().decode(MCPServerInstance.self, from: Data(contentsOf: metadata))
-                guard (instance.version?.utf8.count ?? 0) <= 64 else { throw PresenceError.unavailable }
+                guard (instance.version?.utf8.count ?? 0) <= 64, (instance.buildID?.utf8.count ?? 0) <= 64 else { throw PresenceError.unavailable }
             }
             if try isLocked(marker) { instances.append(instance) }
         }

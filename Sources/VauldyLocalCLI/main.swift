@@ -14,6 +14,7 @@ struct VauldyLocalCLI {
         }
     }
     static func execute(_ args: [String]) async throws {
+        if args == ["--build-info"] { try output(MCPBuildInformation()); return }
         if args == ["--version"] { print("vauldy-local \(MCPBuild.version)"); return }
         if args.first?.hasPrefix("oauth-") == true {
             guard args.count >= 3, args[1] == "--root", args[2].hasPrefix("/") else { throw OAuthFailure.invalidRequest }
@@ -120,12 +121,34 @@ struct VauldyLocalCLI {
             return
         }
         guard args.count >= 3, args[1] == "--store", args[2].hasPrefix("/") else {
-            FileHandle.standardError.write(Data("Aufruf: vauldy-local import --store /bestand /datei.pdf […]\n        vauldy-local status --store /bestand\n        vauldy-local import-folder --store /bestand /ordner [--recursive]\n        vauldy-local originals-preview|originals-migrate --store /bestand /quellordner […]\n        vauldy-local check-originals --store /bestand\n        vauldy-local watch-add --store /bestand /ordner […] [--recursive]\n        vauldy-local watch-list --store /bestand\n        vauldy-local watch-pause|watch-resume|watch-remove --store /bestand --folder UUID\n        vauldy-local watch-start --store /bestand\n        vauldy-local retry --store /bestand --document UUID\n        vauldy-local analyze --store /bestand --document UUID\n        vauldy-local example --output /neues-beispiel.pdf\n        vauldy-local connect --client chatgpt|claude --profile /pfad/profile.json\n        vauldy-local logs --profile /pfad/profile.json [--verify]\n        vauldy-local mcp-status --root /installation\n        vauldy-local status-menu --root /installation\n        vauldy-local status-menu-stop --root /installation\n".utf8))
+            FileHandle.standardError.write(Data("Aufruf: vauldy-local create-sqlite --store /neuer-bestand\n        vauldy-local import --store /bestand /datei.pdf […]\n        vauldy-local status --store /bestand\n        vauldy-local import-folder --store /bestand /ordner [--recursive]\n        vauldy-local originals-preview|originals-migrate --store /bestand /quellordner […]\n        vauldy-local check-originals --store /bestand\n        vauldy-local watch-add --store /bestand /ordner […] [--recursive]\n        vauldy-local watch-list --store /bestand\n        vauldy-local watch-pause|watch-resume|watch-remove --store /bestand --folder UUID\n        vauldy-local watch-start --store /bestand\n        vauldy-local retry --store /bestand --document UUID\n        vauldy-local analyze --store /bestand --document UUID\n        vauldy-local example --output /neues-beispiel.pdf\n        vauldy-local connect --client chatgpt|claude --profile /pfad/profile.json\n        vauldy-local logs --profile /pfad/profile.json [--verify]\n        vauldy-local mcp-status --root /installation\n        vauldy-local status-menu --root /installation\n        vauldy-local status-menu-stop --root /installation\n".utf8))
             Foundation.exit(64)
         }
         let store = LocalDocumentStore(root: URL(fileURLWithPath: args[2]))
         let service = LocalImportWorker(store: store, executable: URL(fileURLWithPath: CommandLine.arguments[0]))
         switch args[0] {
+        case "storage-preview", "storage-migrate", "storage-restore":
+            let migration = LocalStorageMigration(source: store.root)
+            if args[0] == "storage-preview" {
+                guard args.count == 5, args[3] == "--format", let format = LocalStorageMigration.Format(rawValue: args[4]) else { throw MCPAccessError.invalidArguments }
+                try output(migration.preview(format: format))
+            } else if args[0] == "storage-migrate" {
+                guard args.count == 9, args[3] == "--format", let format = LocalStorageMigration.Format(rawValue: args[4]),
+                      args[5] == "--to", args[6].hasPrefix("/"), args[7] == "--expected" else { throw MCPAccessError.invalidArguments }
+                try output(migration.transfer(to: URL(fileURLWithPath: args[6]), format: format, expected: args[8]))
+            } else {
+                guard args.count == 7, args[3] == "--to", args[4].hasPrefix("/"), args[5] == "--expected" else { throw MCPAccessError.invalidArguments }
+                try output(migration.transfer(to: URL(fileURLWithPath: args[4]), format: .same, expected: args[6], restoringBackup: true))
+            }
+        case "storage-rebuild-projections":
+            guard args.count == 3 else { throw MCPAccessError.invalidArguments }
+            try await store.rebuildSQLiteProjections()
+            try output(["projections": "rebuilt"])
+        case "create-sqlite":
+            guard args.count == 3 else { throw LocalImportError.invalidDocument }
+            let created = try LocalDocumentStore.createSQLite(at: store.root)
+            struct Created: Encodable { let storage: String; let vaultPath: String; let created = true }
+            try output(Created(storage: created.storageKind, vaultPath: created.snapshotURL.path))
         case "inventory-quality":
             guard args.count == 3 else { throw LocalImportError.invalidDocument }
             let report = try await MCPInventoryQualityService(store: store).report()
@@ -215,6 +238,13 @@ struct VauldyLocalCLI {
             struct AnalysisStatus: Encodable { let documentID: UUID; let status: String; let logicalDocuments: Int }
             try output(AnalysisStatus(documentID: id, status: document.baseAnalysisStatus, logicalDocuments: document.currentBaseAnalysis?.documents.count ?? 0))
             if document.baseAnalysisStatus != "completed" { Foundation.exit(2) }
+        case "refine":
+            guard args.count == 5, args[3] == "--document", let id = UUID(uuidString: args[4]),
+                  let document = try await store.document(id: id) else { throw LocalImportError.invalidDocument }
+            let preserving = try EvidencePreservingLocalOCR(document: document)
+            let outcome = try await LocalImportService(store: store, ocr: preserving).retry(documentID: id, expected: document, progress: showProgress)
+            try output(outcome)
+            if outcome.state != .completed { Foundation.exit(2) }
         case "retry":
             guard (args.count == 5 || (args.count == 6 && args[5] == "--fresh")), args[3] == "--document", let id = UUID(uuidString: args[4]) else { throw LocalImportError.staleAttempt }
             let result = try await service.retry(documentID: id, fresh: args.count == 6, progress: showProgress)

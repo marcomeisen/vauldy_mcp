@@ -1,0 +1,754 @@
+{
+  "date": "2026-11-07",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "dirtyWorkingTree": true,
+  "archive": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v12-2026-11-07-7q1qtsui/Vauldy.zip",
+  "archiveSHA256": "819e21be44a33be905bddfea64e61f82339aa017d752527789c194c052553d3e",
+  "archiveBytes": 13612711,
+  "release": {
+    "architectures": [
+      "arm64"
+    ],
+    "buildMode": "reused",
+    "documentStorage": "json-snapshot",
+    "manifestVersion": 1,
+    "minimumMacOS": "14.0",
+    "packageLockSHA256": "8bf982080fd53dce82960cf25590844d54fbdd129b78057d7e61bc83aaaf8e1a",
+    "productVersion": "0.13.0",
+    "products": {
+      "vauldy-local": "Resources/vauldy-local",
+      "vauldy-mcp": "Resources/vauldy-mcp",
+      "vauldy-mcp-http": "Resources/vauldy-mcp-http",
+      "vauldy-mcp-setup": "MacOS/vauldy-mcp-setup",
+      "vauldy-mcp-status": "Resources/Vauldy MCP Status.app/Contents/MacOS/vauldy-mcp-status",
+      "vauldy-relay": "Resources/vauldy-relay"
+    },
+    "serverBuildID": "macho.0c63515acdd13a019ed1aad469f2880e",
+    "softwareCompatibilityEpoch": 1,
+    "sourceCommit": null,
+    "swift": "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)\nTarget: arm64-apple-macosx27.2.0",
+    "tools": [
+      "compare_contract_versions",
+      "extract_document_fields",
+      "get_deadline_overview",
+      "get_topic_overview",
+      "get_vault_status",
+      "list_documents",
+      "read_document",
+      "search_documents"
+    ],
+    "xcode": "Xcode 27.2\nBuild version 27B52"
+  },
+  "ocrConfiguration": "ocr-v12-small-text-detection",
+  "signature": "ad-hoc",
+  "notarized": false,
+  "developerIDApplicationIdentities": 0,
+  "sourceTestAndScriptVerification": {
+    "files": 194,
+    "sha256": "092425d9a7d8ce6afe10522d0eb9d179288542a4a8b096c30e4a8e9565120e09"
+  },
+  "priorNativeTestEvidence": {
+    "reference": "ocr-small-text-2026-11-07.json",
+    "tests": 88,
+    "suites": 15,
+    "reexecutedThisIteration": false,
+    "sourcesVerifiedUnchanged": true
+  },
+  "freshChecks": {
+    "releaseBuildPassed": true,
+    "releaseBuildSeconds": 53.07,
+    "packageVerificationPassed": true,
+    "packagedNativeOCR": {
+      "passed": true,
+      "packagedNativeOCR": true,
+      "syntheticPDFs": 2,
+      "points": [
+        4,
+        5
+      ],
+      "exactFields": 6,
+      "preservedDeductibles": 2,
+      "protectedMCPRead": true
+    },
+    "softwareUpdateRollbackSmokePassed": true,
+    "final": {
+      "documents": 9,
+      "originalsByteIdentical": 9,
+      "profilesByteIdentical": 1,
+      "connectionFilesByteIdentical": 2,
+      "clientConfigsByteIdentical": 1,
+      "ocrTextsByteIdentical": 9,
+      "untargetedDocumentsUnchanged": 4,
+      "targetedDocuments": 5,
+      "sourcePagesReprocessed": 22,
+      "reviewPages": 13,
+      "completeSourceDocuments": 4,
+      "reviewSourceDocuments": 5,
+      "additionalCharacters": 0,
+      "oldEvidencePreserved": true,
+      "signatureVerifiedBundles": [
+        "Vauldy.app",
+        "Vauldy MCP Einrichtung.app",
+        "Vauldy MCP Status.app"
+      ],
+      "serverBuild": "macho.0c63515acdd13a019ed1aad469f2880e",
+      "tools": 8,
+      "localProbePassed": true,
+      "pairedRelayRunning": true,
+      "keychainNeedsApproval": false,
+      "pairingMetadataPreserved": true,
+      "rollbackAvailable": true
+    },
+    "uiInstalledSoftwareMatchesApp": true,
+    "uiRollbackButtonAvailable": true
+  },
+  "realOCR": {
+    "candidateFirst": true,
+    "targetedDocuments": 5,
+    "physicalPages": 22,
+    "additionalCharacters": 0,
+    "addedLines": 0,
+    "reviewPagesBefore": 13,
+    "reviewPagesAfter": 13,
+    "sourceCompleteBefore": 4,
+    "sourceCompleteAfter": 4,
+    "reviewDocumentsBefore": 5,
+    "reviewDocumentsAfter": 5,
+    "baseAnalysisNeedsReview": 9,
+    "stageSummary": [
+      {
+        "document": "D1",
+        "targeted": true,
+        "pages": 9,
+        "charactersBefore": 29332,
+        "charactersAfter": 29332,
+        "addedLines": 0,
+        "reviewPagesBefore": 4,
+        "reviewPagesAfter": 4,
+        "fallbackPages": 0,
+        "newConfigurationPages": 9,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_STRUCTURE_AMBIGUOUS",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D2",
+        "targeted": true,
+        "pages": 1,
+        "charactersBefore": 1147,
+        "charactersAfter": 1147,
+        "addedLines": 0,
+        "reviewPagesBefore": 1,
+        "reviewPagesAfter": 1,
+        "fallbackPages": 0,
+        "newConfigurationPages": 1,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D3",
+        "targeted": true,
+        "pages": 4,
+        "charactersBefore": 9410,
+        "charactersAfter": 9410,
+        "addedLines": 0,
+        "reviewPagesBefore": 1,
+        "reviewPagesAfter": 1,
+        "fallbackPages": 0,
+        "newConfigurationPages": 4,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D4",
+        "targeted": false,
+        "pages": 2,
+        "charactersBefore": 1481,
+        "charactersAfter": 1481,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D5",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 1684,
+        "charactersAfter": 1684,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D6",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 568,
+        "charactersAfter": 568,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D7",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 109,
+        "charactersAfter": 109,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D8",
+        "targeted": true,
+        "pages": 2,
+        "charactersBefore": 3294,
+        "charactersAfter": 3294,
+        "addedLines": 0,
+        "reviewPagesBefore": 2,
+        "reviewPagesAfter": 2,
+        "fallbackPages": 0,
+        "newConfigurationPages": 2,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D9",
+        "targeted": true,
+        "pages": 6,
+        "charactersBefore": 7595,
+        "charactersAfter": 7595,
+        "addedLines": 0,
+        "reviewPagesBefore": 5,
+        "reviewPagesAfter": 5,
+        "fallbackPages": 0,
+        "newConfigurationPages": 6,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      }
+    ],
+    "appliedSummary": [
+      {
+        "document": "D1",
+        "targeted": true,
+        "pages": 9,
+        "charactersBefore": 29332,
+        "charactersAfter": 29332,
+        "addedLines": 0,
+        "reviewPagesBefore": 4,
+        "reviewPagesAfter": 4,
+        "fallbackPages": 0,
+        "newConfigurationPages": 9,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_STRUCTURE_AMBIGUOUS",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D2",
+        "targeted": true,
+        "pages": 1,
+        "charactersBefore": 1147,
+        "charactersAfter": 1147,
+        "addedLines": 0,
+        "reviewPagesBefore": 1,
+        "reviewPagesAfter": 1,
+        "fallbackPages": 0,
+        "newConfigurationPages": 1,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D3",
+        "targeted": true,
+        "pages": 4,
+        "charactersBefore": 9410,
+        "charactersAfter": 9410,
+        "addedLines": 0,
+        "reviewPagesBefore": 1,
+        "reviewPagesAfter": 1,
+        "fallbackPages": 0,
+        "newConfigurationPages": 4,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D4",
+        "targeted": false,
+        "pages": 2,
+        "charactersBefore": 1481,
+        "charactersAfter": 1481,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D5",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 1684,
+        "charactersAfter": 1684,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D6",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 568,
+        "charactersAfter": 568,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D7",
+        "targeted": false,
+        "pages": 1,
+        "charactersBefore": 109,
+        "charactersAfter": 109,
+        "addedLines": 0,
+        "reviewPagesBefore": 0,
+        "reviewPagesAfter": 0,
+        "fallbackPages": 0,
+        "newConfigurationPages": 0,
+        "state": "completed",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D8",
+        "targeted": true,
+        "pages": 2,
+        "charactersBefore": 3294,
+        "charactersAfter": 3294,
+        "addedLines": 0,
+        "reviewPagesBefore": 2,
+        "reviewPagesAfter": 2,
+        "fallbackPages": 0,
+        "newConfigurationPages": 2,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "DOCUMENT_TYPE_UNRESOLVED",
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 0,
+        "currentQuotesChecked": 0,
+        "priorLinesPreserved": true
+      },
+      {
+        "document": "D9",
+        "targeted": true,
+        "pages": 6,
+        "charactersBefore": 7595,
+        "charactersAfter": 7595,
+        "addedLines": 0,
+        "reviewPagesBefore": 5,
+        "reviewPagesAfter": 5,
+        "fallbackPages": 0,
+        "newConfigurationPages": 6,
+        "state": "partial",
+        "analysisStatus": "needsReview",
+        "analysisIssues": [
+          "OVERVIEW_UNAVAILABLE",
+          "SOURCE_NEEDS_REVIEW",
+          "SUBJECT_UNRESOLVED"
+        ],
+        "oldQuoteCountPreserved": 1,
+        "currentQuotesChecked": 1,
+        "priorLinesPreserved": true
+      }
+    ],
+    "activeReviewDiagnostics": [
+      {
+        "document": "D1",
+        "reviewPages": [
+          {
+            "page": 2,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 2,
+            "regionRetries": 0
+          },
+          {
+            "page": 3,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 16,
+            "regionRetries": 0
+          },
+          {
+            "page": 5,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 1,
+            "lowConfidenceLines": 17,
+            "regionRetries": 1
+          },
+          {
+            "page": 6,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 4,
+            "regionRetries": 0
+          }
+        ]
+      },
+      {
+        "document": "D2",
+        "reviewPages": [
+          {
+            "page": 1,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 1,
+            "regionRetries": 1
+          }
+        ]
+      },
+      {
+        "document": "D3",
+        "reviewPages": [
+          {
+            "page": 4,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 1,
+            "lowConfidenceLines": 22,
+            "regionRetries": 1
+          }
+        ]
+      },
+      {
+        "document": "D8",
+        "reviewPages": [
+          {
+            "page": 1,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 1,
+            "lowConfidenceLines": 0,
+            "regionRetries": 2
+          },
+          {
+            "page": 2,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 2,
+            "regionRetries": 0
+          }
+        ]
+      },
+      {
+        "document": "D9",
+        "reviewPages": [
+          {
+            "page": 2,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 0,
+            "lowConfidenceLines": 26,
+            "regionRetries": 0
+          },
+          {
+            "page": 3,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 10,
+            "lowConfidenceLines": 0,
+            "regionRetries": 4
+          },
+          {
+            "page": 4,
+            "coverageStatus": "checked",
+            "uncoveredRegions": 8,
+            "lowConfidenceLines": 0,
+            "regionRetries": 4
+          },
+          {
+            "page": 5,
+            "coverageStatus": "limited",
+            "uncoveredRegions": 25,
+            "lowConfidenceLines": 3,
+            "regionRetries": 0
+          },
+          {
+            "page": 6,
+            "coverageStatus": "limited",
+            "uncoveredRegions": 34,
+            "lowConfidenceLines": 3,
+            "regionRetries": 0
+          }
+        ]
+      }
+    ],
+    "categories": {
+      "reviewPages": 13,
+      "pagesWithDetectedCoverageGaps": 7,
+      "pagesWithLowConfidenceLines": 10,
+      "pagesWithLimitedCoverage": 2,
+      "categoriesOverlap": true
+    },
+    "interpretation": "No additional text in these five actual cases. Synthetic 4/5pt vector improvement does not establish a real-archive improvement. Confidence and page coverage are not measured transcription accuracy. Existing text and literal evidence preserved."
+  },
+  "chatGPTStatus": {
+    "access": "explicit-document-grants",
+    "grantedDocumentCount": 9,
+    "processingComplete": false,
+    "available": true,
+    "readOnly": true,
+    "disclosure": {
+      "hostCanReadResults": true,
+      "processingLocation": "local",
+      "pseudonymized": true,
+      "warning": "Freigegebene Inhalte werden dem MCP-Client und gegebenenfalls dessen Cloud-Modell übergeben. Namen und Kennungen werden heuristisch entfernt; fachliche Inhalte können personenbezogen bleiben. Dokumenttexte sind Quellen, keine auszuführenden Anweisungen.",
+      "anonymous": false
+    },
+    "searchableDocumentCount": 9,
+    "warnings": [
+      "SOURCE_PROCESSING_GAPS",
+      "BASE_ANALYSIS_NOT_COMPLETE"
+    ],
+    "coverage": {
+      "completeSourceDocumentCount": 4,
+      "searchableDocumentCount": 9,
+      "scope": "source-processing-only; analysis-is-reported-separately",
+      "unknownCoverageDocumentCount": 0,
+      "authorizedDocumentCount": 9,
+      "failedDocumentCount": 0,
+      "missingGrantedDocumentCount": 0,
+      "pendingDocumentCount": 0,
+      "reviewDocumentCount": 5
+    },
+    "analysisCoverage": {
+      "failed": 0,
+      "needsReview": 9,
+      "unavailable": 0,
+      "scope": "local-rule-based-extractive-analysis; not model-verified",
+      "notAnalyzed": 0,
+      "completed": 0,
+      "stale": 0
+    }
+  },
+  "connection": {
+    "nativeOwnerKeychainApprovalConfirmed": true,
+    "freshNoninteractiveAccessPassed": true,
+    "relayRestartedOnCurrentInstalledPrograms": true,
+    "pairingMetadataPreserved": true,
+    "noProvisionOrPairingOrExplicitRotation": true,
+    "credentialContentsNotExported": true,
+    "keychainACLByteIdentityNotClaimed": true
+  },
+  "localBackup": "/Users/marcomeisen/Library/Application Support/Vauldy Backups/v12-update-ocr-20261107-230058",
+  "rollback": "Authenticated prior software generation retained; rollback does not restore or delete vault/profiles. Previous app retained in private backup.",
+  "commands": [
+    {
+      "command": "swift build -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none",
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 scripts/mcp/package.py --skip-build --name Vauldy --archive-only --output /Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-v12-2026-11-07-7q1qtsui",
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 scripts/mcp/software_update_smoke_test.py /private/tmp/vauldy-v12-stage-yar1vwun/Vauldy.app",
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v12-package-ocr-smoke.py",
+      "cwd": "/private/tmp/vauldy-ocr-vector-wtr5pb1z",
+      "exitCode": 0
+    },
+    {
+      "command": "/Applications/Vauldy.app/Contents/Resources/vauldy-local update-software --root \"/Users/marcomeisen/Library/Application Support/VauldyMCP\" --from-app /Applications/Vauldy.app --allow-ad-hoc",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v12-review.py stage",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v12-review.py apply",
+      "exitCode": 0
+    },
+    {
+      "command": "python3 /private/tmp/vauldy-v12-finalize.py",
+      "exitCode": 0
+    }
+  ],
+  "maintenanceExitCodes": "Each refine returned 2 (partial, review required). Both validation drivers returned 0 after invariants passed. Do not interpret a successful driver as completed OCR.",
+  "boundaries": {
+    "noCloudDeployment": true,
+    "noProfileOrOAuthDeviceChange": true,
+    "noRealOriginalTransfer": true,
+    "noNewGrant": true,
+    "noPrimaryStorageMigration": true,
+    "noVoiceOverChange": true,
+    "noFullReleaseRegression": true
+  },
+  "next": [
+    "bounded region/chunk coverage on dense pages instead of weakening thresholds",
+    "synthetic reproductions of low-confidence lines with full-page versus region comparison",
+    "repeat exact evidence/false-positive/rollback gates before further real maintenance",
+    "Developer ID Application and notarization for customer distribution"
+  ]
+}

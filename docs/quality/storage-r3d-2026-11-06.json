@@ -1,0 +1,1473 @@
+{
+  "iteration": "R3d",
+  "recordedAt": "2026-11-06T16:40:51.306936+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "decision": "NO-GO for large full grants and general SQLite default; scoped 100-document grants pass the defined local gates",
+  "build": {
+    "reusedR3cReleaseBinaries": true,
+    "newSwiftBuild": false,
+    "newSwiftTestRun": false,
+    "byteComparedSourceAndTests": {
+      "comparedFiles": 133,
+      "differentFiles": [],
+      "files": [
+        {
+          "path": "Package.swift",
+          "sha256": "89643811b5a4195e8ce5a8e6851d2a8d068cb1e9e753b79f0b07843a08413f03"
+        },
+        {
+          "path": "Sources/VauldyCore/FileVaultSnapshotSource.swift",
+          "sha256": "e040f4698ce00632c1cebf15424f2c89875d54ccadb9602e85c465c57891a3c5"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalBaseAnalysis.swift",
+          "sha256": "25e6936512fb7f9e6046ef6bf787d6f2498013bdf425904a6a6f9488b1945cf5"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalDocumentStore.swift",
+          "sha256": "4c684cc3675a4378f459a54030af4d5cb413e518c645cb6987e3a520fce0640e"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalImportModels.swift",
+          "sha256": "7e5b7542658b7ed980a8163137c2af23a29d9ff4e5bb9cf54ac8de1a7c657a93"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalImportService.swift",
+          "sha256": "f5814f43088951ab57d6a5114facc9575d08e4cc6c8218019124976f3ff350b0"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalImportWorker.swift",
+          "sha256": "eca6fb6cad19d8e8468848785e09d5926d48c04ab7466ccc54dd29033bc3c574"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalInventoryReconciliation.swift",
+          "sha256": "ccf9534cf57bbb7639e19c4041fd66e85a873169fd9d043a029851038dc82258"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalOCRMetrics.swift",
+          "sha256": "1083a6fabbd5f45ff121cad991a46a068d04d994e0535ad547ddad44f718b15e"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalOCRPageCache.swift",
+          "sha256": "ffac6424eca030210a8e45727ea7264f56d361512886dc94a71cedb1ce8f6652"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalOriginalMigration.swift",
+          "sha256": "c8a6f0a471cac0d3dfb43977e695807db8f3ab8919ae0041654f269896020e4c"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalOriginalReference.swift",
+          "sha256": "483bda9de65af1dd4bb133c1c752580eab93d3b512b246fa2aeb2f0b6e370ca2"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalStorageMigration.swift",
+          "sha256": "c4eed34ed120b29b8f64ad588bc87dee699e2e67c3f77f492679f86f6ff38d49"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalVaultSnapshotSource.swift",
+          "sha256": "ca04d49d5725c1df604682aecfec43a0e4a4ca40074b91b7bf142fbe82783960"
+        },
+        {
+          "path": "Sources/VauldyCore/LocalWatchedFolders.swift",
+          "sha256": "8c3eac6d211d6a08a49318019801f299a24ce96d1947f64eaa0be56232e2d50a"
+        },
+        {
+          "path": "Sources/VauldyCore/NativeLocalDocumentOCR.swift",
+          "sha256": "5c4ff7e17057ba21844f84e86084d0f436a963e6601312ae3f966df24060cbf5"
+        },
+        {
+          "path": "Sources/VauldyCore/OCRLineRecovery.swift",
+          "sha256": "d2290adcc55a893c25e2c1c77d4e6e8478685589fe2d30c4f0d71a7e98c3ceb6"
+        },
+        {
+          "path": "Sources/VauldyCore/OCRWhiteMargins.swift",
+          "sha256": "68d858aa27744156a006b78312194e050db2ecc370f1c922ece3e518d60c1919"
+        },
+        {
+          "path": "Sources/VauldyCore/PDFContentInspection.swift",
+          "sha256": "006920ccb9446864d15351dc4abdf344007b6bbfe5f579aba799867a60dcdf3f"
+        },
+        {
+          "path": "Sources/VauldyCore/PageMarkedText.swift",
+          "sha256": "f732457d197a4ff639446f6d445bbb6c082190d79d4ef0ed6b3ab527416eb0c6"
+        },
+        {
+          "path": "Sources/VauldyCore/SQLiteDocumentStorePilot.swift",
+          "sha256": "04de4038ff37352188d92df9146e56336c76bb478a8f56d1b6cb5c003273f23e"
+        },
+        {
+          "path": "Sources/VauldyCore/SQLiteVaultTokenIndex.swift",
+          "sha256": "1bc02266b7e7d68bacd21269cfc070dc8d4b2278483a50ce502ce61412527d20"
+        },
+        {
+          "path": "Sources/VauldyCore/VaultDocumentFilter.swift",
+          "sha256": "a8f01603bd9d4d431147456566282af08aef7b3ff21467d2a3158859981d9211"
+        },
+        {
+          "path": "Sources/VauldyCore/VaultModels.swift",
+          "sha256": "0386329621182e3cad41618bea2ae8558f568720014f9f58da74e8cd1bdb5dff"
+        },
+        {
+          "path": "Sources/VauldyCore/VaultRuntime.swift",
+          "sha256": "ceb9d5aff52564f3cbb0b5826ac32063ed87fc97ef389ad584317ec87135f729"
+        },
+        {
+          "path": "Sources/VauldyCore/VaultSearchText.swift",
+          "sha256": "72f7c981aa9123cc538ff8a8d473326ef0a353b44c656d6c321aa6138e671a0b"
+        },
+        {
+          "path": "Sources/VauldyCore/VaultStorageLimits.swift",
+          "sha256": "fe3a8a0953c2a5f15d8c696f45be040532b18440b2a86c6fcfed1380126f0184"
+        },
+        {
+          "path": "Sources/VauldyDemoDocuments/ExampleDocument.swift",
+          "sha256": "88252748cf9e6844fcda2bbfb9bab02350d0aa7483c738c1c5b9629375373278"
+        },
+        {
+          "path": "Sources/VauldyDemoDocuments/SyntheticDocumentWriter.swift",
+          "sha256": "9a9b46b4c1fec07dc971118ac60c7129024fd9d82aa42be3245603f6189ad6a9"
+        },
+        {
+          "path": "Sources/VauldyDocumentCore/PageMarkedText.swift",
+          "sha256": "69466dbb425f4afa745a292d787eea4e9c3bbaee740533c490401b28391c3587"
+        },
+        {
+          "path": "Sources/VauldyDocumentIntelligence/BaseAnalysisModels.swift",
+          "sha256": "d16acfef3fac568e301aa4b7c7eb321b7623175d9161efd04d608439bde52460"
+        },
+        {
+          "path": "Sources/VauldyDocumentIntelligence/BaseAnalysisPipeline.swift",
+          "sha256": "1d8f060a9351850139fa5a004bc6de4be6bdd64742f625a2efc187223df75494"
+        },
+        {
+          "path": "Sources/VauldyDocumentIntelligence/LocalRuleBasedDocumentAnalyzer.swift",
+          "sha256": "a758a18adb1b4a2240b55b56528fba570da1d6323ba6218955e08d2af1395b3b"
+        },
+        {
+          "path": "Sources/VauldyLocalCLI/main.swift",
+          "sha256": "a45ce7116f7fd2addf58b47b6d349f4c0f453ca79f44a8b0e14682206d4d134f"
+        },
+        {
+          "path": "Sources/VauldyMCPHTTP/HTTPListener.swift",
+          "sha256": "1ae2e5acc1bbd4f19416a750ee02043ef6813a55927e2f49afb201b918104a11"
+        },
+        {
+          "path": "Sources/VauldyMCPHTTP/HTTPRouter.swift",
+          "sha256": "a2329c6d9375e6a6e4968680a23ec317e209ab5b6aafb6f05f916d880ed3b3cb"
+        },
+        {
+          "path": "Sources/VauldyMCPHTTP/main.swift",
+          "sha256": "855b67b6d3c13da02874fc71e9cae9c2f208c181b79e764ac3017ac7f64060f3"
+        },
+        {
+          "path": "Sources/VauldyMCPProtocol/InitializationCompatibilityTransport.swift",
+          "sha256": "bb62d7deb392e68a1e18064aa1d961b24e8e9cd8b3de9cf872883f913ab9f559"
+        },
+        {
+          "path": "Sources/VauldyMCPProtocol/OutputSchemas.swift",
+          "sha256": "227cc94f28fca65f7f7435e6140795a1e4f5cea6f857798f095f852a8cdac655"
+        },
+        {
+          "path": "Sources/VauldyMCPProtocol/ServerFactory.swift",
+          "sha256": "3f69f9d6ce2ecc11b026629e365a7fbe9859c3b3ad205e5da8e701885e16003f"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPAccessProfile.swift",
+          "sha256": "48a94a80aa40b97d5420146bd999b2f2a46fe1df9286a03ec313bf2d80057c81"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPAuditLog.swift",
+          "sha256": "83f7c11a94f559fc0bb6ee83b26e228facc679bec826553ec5cfab1b050fa9dd"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPBaseAnalysis.swift",
+          "sha256": "9110afefd2a0ea6338018bcb8b706d3977cd5a8d97ce8c27dea4bb70f560d1a8"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPBuild.swift",
+          "sha256": "bf9ea4fc00532541603b49c7c0589438107a7249d464f63b91b53fe258e1043e"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPBuildIdentity.swift",
+          "sha256": "c5246ef8b78460cea678896406b1a630f0d8f6724f394b099f684daa56e7e43c"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPClientRegistration.swift",
+          "sha256": "7ca29d953ebccb84ed3b6791d8e463c52428cd1f78b3fb0ad39aa384497d98d4"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPConnectionState.swift",
+          "sha256": "1f84112ba5c07243b3bb19d00f5c280ea150e0f2dc18422e97919b9e5ffc0b34"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPContractComparison.swift",
+          "sha256": "3bc598a4f26371fefc1060e1ace6d98d77e5d7e99581170d77469431075b7f67"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPDeadlineOverview.swift",
+          "sha256": "5436391264304335303028a99cab4ddf690888d93c20dd3e08fbd9a2f3cd0382"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPFieldExtraction.swift",
+          "sha256": "69d371c5608d5b95c373e405c5b88703469433d20ef14eeff934199a3e346e13"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPFileVersion.swift",
+          "sha256": "7bdd6e55aada12260bfcd058627e067b9ce105e2e59a5ddb9127805771e68fa9"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPInstallation.swift",
+          "sha256": "02fcf74228210b91d9297f2dc0c937474bf75af76833760e21a6e0dfd672b945"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPInventoryQuality.swift",
+          "sha256": "1975e27a36374098a2427507e6d4cba354a8c13cb2123a536d56e0a773fa78f7"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPLocalProbe.swift",
+          "sha256": "439981f97d50e8ada186c1daa575335671a0761fbf6d5b2fa9978a59ac5b157b"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPManagement.swift",
+          "sha256": "f9f872a2e5664bc86e5a150b16d87721ed7887ce9384745698a3cc9ad2d65f6b"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPProcessPresence.swift",
+          "sha256": "1e651c30ac4413f411d040edd0c08b79e10c508294b37064c0cebef168e4967f"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPProcessingCoverage.swift",
+          "sha256": "347518614aba152d4025c37c9168598e54ac1c100ee80d3a34306c3d478ce21f"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPRemovalState.swift",
+          "sha256": "14ab8b05846eedf65c7146801d689172d04bae2ea71be79125fa960bd04c9bf1"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPResults.swift",
+          "sha256": "8d48b7aff0632a539ea54f122642f10c9d221498e6b93e89db08fd7f9b7dc2e1"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPSoftwareUpdate.swift",
+          "sha256": "98d6ffd822c59189518510a952cbe36e654b5721c9f14bebbe34964f57d1cc32"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/MCPSourceExcerpt.swift",
+          "sha256": "d17214b51ef95fbd60d335b26207f93c106dc2a3b1519aff5e03a53a02c3873a"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/PersistentMCPIndex.swift",
+          "sha256": "b6c48411b4e78590fd539d51ebd7e5ac52664659b3abf2f88b7034aa53ea7cf5"
+        },
+        {
+          "path": "Sources/VauldyMCPRuntime/ReadOnlyMCPRuntime.swift",
+          "sha256": "be6fc1c3d9e42e694a13065e78cf069b15e95209e050d7e2e79e50b01fab2673"
+        },
+        {
+          "path": "Sources/VauldyMCPServer/main.swift",
+          "sha256": "bab2d70d01d4d2175f2de5c4f2669e31fc31fb3614d794a620d6ad93eab0d1ea"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/InventoryWorkflowModel.swift",
+          "sha256": "1f4bff85035931c9622b808bd44e195b52768c52ba5be06b32f096be7adff9e1"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/InventoryWorkflowView.swift",
+          "sha256": "8ac413dba6f611275a707ab3fedaf3b4ea289ad5fb805e32f371c4ec02c30f2c"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupDetailViews.swift",
+          "sha256": "738246c33dd461354eac57fbc0fd5906657668a871258168955a947cf78267f3"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupDocumentAnalysisView.swift",
+          "sha256": "38810e3aee5ddc2d63f9c6adb5af47e7ee442573e764a01daf94221ef1cbd362"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupImportReport.swift",
+          "sha256": "50a807d8eccc8fd0f6b86f936506aee9bdabc2eb8e0a411c229b1f58bb0badd0"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupImportStatusView.swift",
+          "sha256": "ce3b63fdb459b2e9d8473cd6a0a4fadc2bed3faaa7eeab64028d5b1e531afcaf"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupModel+Management.swift",
+          "sha256": "abca6a2c7ee738ccc3de9e7882506113bf5f94a3291ab740c8d7e10b0d34634b"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupModel+OAuth.swift",
+          "sha256": "87a0913f63f6fa93963ce4fa193d41050fbdf7bd0c1c86a74584bc21f0fa97ad"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupModel+Originals.swift",
+          "sha256": "61d551d537a2f898772068cdd949798f393760a5800489eaf32707c8de29add3"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupModel.swift",
+          "sha256": "deca04d5d935331c6400ba9006c8461925f501863fc7be2a8bd6eda4d4e2026b"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupOAuthView.swift",
+          "sha256": "1690cac5f2d81f308c5822c162cb55e6676e3f90bbef6d0306a618c86e8f5988"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupRelayView.swift",
+          "sha256": "2c243e9186cbc1cf4113995feba3e25dd051db642bc5dd00c63f37784d4eeeec"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupText.swift",
+          "sha256": "9756d49b0625167683754f21c2626b9435ce03dae00c32fc4c68450880552f4a"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupView.swift",
+          "sha256": "344de80913d6608d997baadc03b61c73206425a49f7df73b4dacb682723c7566"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SetupWizardView.swift",
+          "sha256": "1fac77ea38e9ea6e08796aa845f74c7a45434792a8243899e46abf5ed9928397"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/SoftwareInstallationWizard.swift",
+          "sha256": "424eb4e4749e2d4d9a471e72777d146290d013c83eaadc7c57a2df1a0b1b4694"
+        },
+        {
+          "path": "Sources/VauldyMCPSetup/main.swift",
+          "sha256": "2eacc792e4cf74249c0578dcf0d935a56187f7aa127e9c6f5bec4361441626a0"
+        },
+        {
+          "path": "Sources/VauldyMCPStatus/main.swift",
+          "sha256": "3218436d62940f416e8184a819b4d3a117874f482b1ba3de639860e9ec09f6de"
+        },
+        {
+          "path": "Sources/VauldyOAuth/OAuthAuthorization.swift",
+          "sha256": "f7b8cbb3d7c67490732891c1ede5d37f50c2e14907a968f23e2f41f9022f1162"
+        },
+        {
+          "path": "Sources/VauldyOAuth/OAuthConfiguration.swift",
+          "sha256": "5fe8bccb13a9a9937a19b02b7c78cf02204d772af9895408893eb02977888732"
+        },
+        {
+          "path": "Sources/VauldyOAuth/OAuthServiceController.swift",
+          "sha256": "f15e3cc963f48ef4a1bfbe8bd68d55d00da11466d6818bf81a959ad497d7f0fd"
+        },
+        {
+          "path": "Sources/VauldyOAuth/OAuthStore.swift",
+          "sha256": "fa4e8330f4532cb9cfd1d1113a07174aafcc067d060f3cf3c6fdb9caaf555134"
+        },
+        {
+          "path": "Sources/VauldyOAuth/OAuthWebService.swift",
+          "sha256": "c09d651d969c63877660dc79650bde11cd2415f16347e45bbe9654cf65990b57"
+        },
+        {
+          "path": "Sources/VauldyPrivacy/ExternalPersonalDataDetector.swift",
+          "sha256": "1dc708cec13750787a4b6634fa247d45ce6c3791f0c952121b15de09be1cc6e2"
+        },
+        {
+          "path": "Sources/VauldyPrivacy/IdentifierPrivacySession.swift",
+          "sha256": "9ec8e68f91b5b84fe2d5e2e713ab4797735649a62aafdbb31d3ffc12ffbc9161"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayClient.swift",
+          "sha256": "425eff2e0f4181ac4d2d14618eb50e0033cc943cfb5bc44a640e5ada1fffc844"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayCredentials.swift",
+          "sha256": "86a5e38a33693a7d18e9bc840cd700790e81912b839178ba91c0e6bacf104efc"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayKeychain.swift",
+          "sha256": "9db1b6ad4ab5b19049a512387b04fce88d847c661b1f11c32bc7cd13c11e2301"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayLocalMCP.swift",
+          "sha256": "c078962a3ad9c27cf5fff6fc7f071c1132396cfae8b59005983a68378d3c2226"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayService.swift",
+          "sha256": "e4642860d78e485fdc7619e61571776bb07c5ab09768663feb20f4349de9bde9"
+        },
+        {
+          "path": "Sources/VauldyRelay/RelayUIControl.swift",
+          "sha256": "99c22cce20410a3e7b088f52e0c06d1e8de6470d5fa8144510491cac2d42b6f8"
+        },
+        {
+          "path": "Sources/VauldyRelayAgent/main.swift",
+          "sha256": "bfdd1d8ab721b61ca11b347a80174160614bcf5c6a432ed9d98e3f5f05e2ba79"
+        },
+        {
+          "path": "Sources/VauldyResearchMCP/ChatReport.swift",
+          "sha256": "893503d98ccfd79e87142e5147cb555144bd94a49e05ba51b07fc37906171e46"
+        },
+        {
+          "path": "Sources/VauldyResearchMCP/main.swift",
+          "sha256": "fa481b3e48766fdc0633b74046a8bec2398f52839c3d7660f06fff4878007ffb"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/BaseAnalysisCorpusReport.swift",
+          "sha256": "504aea8af8e86c803d2d14b1577649f0ab1e3971e1f7668af43fa844921d872f"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/BaseAnalysisCorpusTests.swift",
+          "sha256": "9d42fd6df3f2776a73d619918ecb2c65a98f54edca872a8f36531753b2a0d3a4"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/BaseAnalysisMCPTests.swift",
+          "sha256": "60fd1e0a2a30a5d540f6d4de8132d613afc60c76df4fafa99ebe9a03f4c74bd4"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/Fixtures/overview-corpus.json",
+          "sha256": "33bb3cff3383e9a3e1b42f00c6cb11e3dbfff6aa364b341ab730beb1c8959e42"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/Fixtures/relay-webcrypto-vector.json",
+          "sha256": "f0d1432b9f2e5fe3fa075d16748c71f0f9befbfbfe9eeb2f02ce13ff89a4f82e"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/IdentifierPrivacyCompletionTests.swift",
+          "sha256": "6a5fe3a34d54b3bd40ace4f966dec95220164ddb9aa767ffde251e11ac5e7ef1"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/InventoryWorkflowTests.swift",
+          "sha256": "d377cb0efe42eedc64cf688655cfc33d64707ffd867e0c360315d9a30953ca7e"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/LocalImportTests.swift",
+          "sha256": "6a86105267f3f6b0f9416d7693e509dd61634d5a243fe545b7edc6479131e9f9"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/LocalOptimizationTests.swift",
+          "sha256": "2d967fa78489a05ff30b441462586a331bc627db25d726097315e32f77cb0e0f"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/LocalOriginalReferenceTests.swift",
+          "sha256": "dfe0ab10b1d236676289f2e290f408f448042f2e0585bd259c4be14e93fd59aa"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/LocalWatchedFolderTests.swift",
+          "sha256": "7cf224481e397aee73c4a0fe3a9f3de9a8656e8da22d171889bd74fb18161bb2"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/LocalWorkerTests.swift",
+          "sha256": "03534e045f49cfe441144e81d3bfa721b2ba78f5d46ed39bb848fbd0ec4e9c99"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPAuditLogTests.swift",
+          "sha256": "62db4083cf3c9cdee69fe0d877ade618b11253b9f55d08d6019fc3c679bcef5c"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPBuildDiagnosisTests.swift",
+          "sha256": "99448fa00f61bfb0eadae1b7679936828a84a969c6cb603dcb74df9cb8a442f8"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPClientRegistrationTests.swift",
+          "sha256": "5c851048127feae9a83c0795f7a44943dc0166a71f3b95045e88c1b73dec4232"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPConnectionRemovalTests.swift",
+          "sha256": "f6fb7e5784e20d3748898afd4cd5686aa0e680f31ca70ea24db265a2d8ebc421"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPFieldExtractionTests.swift",
+          "sha256": "9844b0d30f47ef53b4fecffa48328ae151c9dddb042b947d4f212c49fa0e76fb"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPInstallationTests.swift",
+          "sha256": "375f4235daa9e6d5fcfbec8bdcc3c59d38c693076aaf60234bd63363205437d7"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPManagementTests.swift",
+          "sha256": "b47f44877453398e0a7dfbffdb0cb80b7a578b330951f63206bd547806765d1d"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPPassageTests.swift",
+          "sha256": "d6448948135b95f920e9e9f9d758410f656cfba64367d5a289652f2e73b439c5"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPPrivacyBoundaryTests.swift",
+          "sha256": "8dfb9de6fcd2389a645d71e3b7eb1eeaf781b59265a637268abb98f7cc8136ce"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPProcessPresenceTests.swift",
+          "sha256": "ea81eeae2249bd2b0e49ad28838f01a2994d8e11cdeea72e6c0f92a4453ce530"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPRetrievalCompletenessTests.swift",
+          "sha256": "620a92f6fe2a3ce8bfbcdc13ed9190311677b541c0db90071f0270f6256c410a"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/MCPScalabilityTests.swift",
+          "sha256": "318636e6454fe42d5dfaf594167bf2017faf76e995d9072d0f555c06d0536e51"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/OAuthConnectionTests.swift",
+          "sha256": "b0cee6f073ef328057899cdb03a9da9a50d596aa6973ce7dee0b7461b8a1ce92"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/OCRTargetedRetryTests.swift",
+          "sha256": "8bca979d00b6bab065e1d2376d5236e1f51273c18e87f8ac779ebf07ec6c8639"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/OCRWhiteMarginsTests.swift",
+          "sha256": "f1091162fd01dcc627d954aff8e230e02d04dfa1890790c3de27eedb53a421a3"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/RelayConnectionTests.swift",
+          "sha256": "ad8d554809a2a415cadabd6ee8fbb327c9d81efbf6437cd949d4746be9fda028"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/RelayKeychainInteractionTests.swift",
+          "sha256": "1953dc9877cfb33d5a89d9d986aa6a4640521786f3dd68bfb9e7163ffcfc6e41"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/SQLiteDocumentStorePilotTests.swift",
+          "sha256": "42253a680d216b4f0920fc8a2b60eda5ffcdf19692ec2938004451187526c5ed"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/SQLiteIntegrationTests.swift",
+          "sha256": "83efc370c3235b4d75e3353a43d4a31786c19b46a31a4cb48615bdd3197d759d"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/SearchTextNormalizationTests.swift",
+          "sha256": "b988c47c43f7d2cb7a5e33a8c955f735f1d6ac0922d5ba35010de109759567a7"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/StorageBoundaryTests.swift",
+          "sha256": "58c5dafabda8838046935af871fc2f6e2c401c97892c8a57bacb5b6ebf9e4fca"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/StorageMigrationTests.swift",
+          "sha256": "2800a16b490d42fcfb1e11268cc8a5a240df4bb8cf5f184eb5fa56b549de2ba1"
+        },
+        {
+          "path": "Tests/VauldyMCPRuntimeTests/VaultRuntimeTests.swift",
+          "sha256": "ebe6fca8ddd0467ede37f1257ba4e156eac7a77f4737fbdba7838f3c077e8520"
+        }
+      ]
+    }
+  },
+  "hardware": {
+    "hw.memsize": "17179869184",
+    "hw.ncpu": "8",
+    "machdep.cpu.brand_string": "Apple M1 Pro",
+    "macOS": "27.2",
+    "architecture": "arm64"
+  },
+  "runnerSHA256": "7ce9c235a493b5f867146cf2cf8b8d399b33de5a507cc7b7299a6ba5533b83b2",
+  "command": "python3 scripts/mcp/sqlite_load_acceptance.py /private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-local /private/tmp/vauldy-deadlines.kTXJpJXZ/source/.build/release/vauldy-mcp --output /private/tmp/vauldy-r3d-matrix.json > /private/tmp/vauldy-r3d-matrix.log 2>&1",
+  "runnerExitCode": 0,
+  "runnerExitCodeMeans": "measurement completed; acceptance is matrix.go, not process exit code",
+  "matrix": {
+    "scope": "Local stdio, synthetic long OCR records, no relay or installed data; not ChatGPT latency or 20k native OCR ingestion.",
+    "gates": {
+      "coldStatusMS": 5000,
+      "warmCompactP95MS": 1000,
+      "warmStatusP95MS": 1000,
+      "peakRSSBytes": 536870912,
+      "filteredListMS": 5000
+    },
+    "emergencyRSSLimitBytes": 1610612736,
+    "samplesRequested": 25,
+    "textBytesPerGeneratedDocument": 32768,
+    "localSHA256": "0564380d40600232535078b9e72186557af2c7c8000c869efb23a3cbab3ef414",
+    "mcpSHA256": "2004bb3041399bd7c867c226307e2ed2081ffdddf5b13534280d8c96d851b7eb",
+    "cases": [
+      {
+        "documents": 1000,
+        "seedWriteMS": 373.665,
+        "payloadBytes": 35213432,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 809.562,
+          "concurrentList": {
+            "samples": 13,
+            "medianMS": 34.701,
+            "p95MS": 93.995
+          },
+          "concurrentSourceChangeErrors": 0,
+          "finalDocuments": 1000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 70.411,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 37695488,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 79.70854197628796,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 26.702,
+              "p95MS": 38.645,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 63.992,
+              "p95MS": 77.954,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 56.978,
+              "complete": true
+            },
+            "narrowGrantMS": 25.602,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 83.265
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 720.395,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 546.315,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 546.383,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 1401.42,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 51249152,
+            "peakRSSBytes": 51888128,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 1000,
+            "options": [],
+            "coldStatusMS": 469.9723750236444,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 134.566,
+              "p95MS": 146.534,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 78.561,
+              "p95MS": 90.991,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 1000,
+              "calls": 10,
+              "totalMS": 668.167,
+              "complete": true
+            },
+            "narrowGrantMS": 23.671,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 214.302
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 250,
+                "actual": 250,
+                "milliseconds": 5978.487,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 249,
+                "actual": 249,
+                "milliseconds": 5213.032,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 5135.304,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 10626.584,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 152928256,
+            "peakRSSBytes": 154697728,
+            "failedGates": [
+              "filterLatencyOrCompleteness"
+            ],
+            "go": false
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": false
+      },
+      {
+        "documents": 2000,
+        "seedWriteMS": 718.423,
+        "payloadBytes": 70497432,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 582.854,
+          "concurrentList": {
+            "samples": 10,
+            "medianMS": 32.943,
+            "p95MS": 99.745
+          },
+          "concurrentSourceChangeErrors": 4,
+          "finalDocuments": 2000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 73.238,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 75419648,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 95.08404199732468,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 29.662,
+              "p95MS": 42.436,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 64.09,
+              "p95MS": 89.038,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 60.929,
+              "complete": true
+            },
+            "narrowGrantMS": 23.787,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 86.202
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 614.569,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 562.036,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 540.593,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 1397.226,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 50921472,
+            "peakRSSBytes": 51429376,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 2000,
+            "options": [],
+            "coldStatusMS": 1088.1017919746228,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 876.888,
+              "p95MS": 920.354,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 723.051,
+              "p95MS": 891.603,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 2000,
+              "calls": 20,
+              "totalMS": 2088.089,
+              "complete": true
+            },
+            "narrowGrantMS": 23.023,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 102.479
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 500,
+                "actual": 500,
+                "milliseconds": 11498.897,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 499,
+                "actual": 499,
+                "milliseconds": 11125.286,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 11301.319,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 21819.088,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 215449600,
+            "peakRSSBytes": 215449600,
+            "failedGates": [
+              "filterLatencyOrCompleteness"
+            ],
+            "go": false
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": false
+      },
+      {
+        "documents": 5000,
+        "seedWriteMS": 1892.005,
+        "payloadBytes": 176349432,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 738.524,
+          "concurrentList": {
+            "samples": 11,
+            "medianMS": 29.874,
+            "p95MS": 118.105
+          },
+          "concurrentSourceChangeErrors": 3,
+          "finalDocuments": 5000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 74.931,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 188596224,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 68.50529095390812,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 35.257,
+              "p95MS": 44.207,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 63.354,
+              "p95MS": 84.392,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 62.187,
+              "complete": true
+            },
+            "narrowGrantMS": 22.561,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 67.918
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 607.872,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 547.714,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 532.612,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 1407.018,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 50855936,
+            "peakRSSBytes": 51347456,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 5000,
+            "options": [],
+            "coldStatusMS": 2288.9781669946387,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 2167.985,
+              "p95MS": 2409.248,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 1763.038,
+              "p95MS": 2503.476,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 5000,
+              "calls": 50,
+              "totalMS": 7642.723,
+              "complete": true
+            },
+            "narrowGrantMS": 63.99,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 209.269
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 1250,
+                "actual": 1250,
+                "milliseconds": 28864.82,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 1249,
+                "actual": 1249,
+                "milliseconds": 27504.019,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 27439.959,
+                "passed": true
+              }
+            ],
+            "correctness": "incomplete-or-failed",
+            "failureType": "TimeoutError",
+            "sampledMaxRSSBytes": 462258176,
+            "peakRSSBytes": 462258176,
+            "failedGates": [
+              "warmStatus",
+              "warmCompact",
+              "correctnessIncomplete",
+              "filterLatencyOrCompleteness"
+            ],
+            "go": false
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": false
+      },
+      {
+        "documents": 10000,
+        "seedWriteMS": 3810.484,
+        "payloadBytes": 352769432,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 669.164,
+          "concurrentList": {
+            "samples": 10,
+            "medianMS": 38.423,
+            "p95MS": 99.483
+          },
+          "concurrentSourceChangeErrors": 3,
+          "finalDocuments": 10000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 78.73,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 377286656,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 75.91983303427696,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 32.125,
+              "p95MS": 45.023,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 60.614,
+              "p95MS": 78.938,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 71.347,
+              "complete": true
+            },
+            "narrowGrantMS": 40.095,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 52.174
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 608.387,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 545.631,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 544.653,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 1382.178,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 51363840,
+            "peakRSSBytes": 51609600,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 10000,
+            "options": [],
+            "coldStatusMS": 4531.345708004665,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 4302.234,
+              "p95MS": 4336.249,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 3386.842,
+              "p95MS": 3466.763,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 10000,
+              "calls": 100,
+              "totalMS": 13927.005,
+              "complete": true
+            },
+            "narrowGrantMS": 29.826,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 141.965
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 2500,
+                "timedOutAfterSeconds": 30,
+                "passed": false
+              }
+            ],
+            "correctness": "incomplete-or-failed",
+            "failureType": "TimeoutError",
+            "sampledMaxRSSBytes": 664829952,
+            "peakRSSBytes": 664829952,
+            "failedGates": [
+              "peakRSSBytes",
+              "warmStatus",
+              "warmCompact",
+              "correctnessIncomplete",
+              "filterLatencyOrCompleteness"
+            ],
+            "go": false
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": false
+      },
+      {
+        "documents": 20000,
+        "seedWriteMS": 7914.791,
+        "payloadBytes": 705609432,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 759.73,
+          "concurrentList": {
+            "samples": 12,
+            "medianMS": 34.914,
+            "p95MS": 100.024
+          },
+          "concurrentSourceChangeErrors": 4,
+          "finalDocuments": 20000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 82.282,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 754511872,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 73.13291705213487,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 30.74,
+              "p95MS": 40.572,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 60.898,
+              "p95MS": 91.389,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 61.516,
+              "complete": true
+            },
+            "narrowGrantMS": 21.978,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 62.062
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 604.2,
+                "passed": true
+              },
+              {
+                "query": "Befund",
+                "expected": 25,
+                "actual": 25,
+                "milliseconds": 546.428,
+                "passed": true
+              },
+              {
+                "query": "NichtvorhandenerSuchbegriff",
+                "expected": 0,
+                "actual": 0,
+                "milliseconds": 543.556,
+                "passed": true
+              }
+            ],
+            "rankedExactMarkerMS": 1401.361,
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 51150848,
+            "peakRSSBytes": 51675136,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 20000,
+            "options": [],
+            "coldStatusMS": 9207.935416023247,
+            "warmStatus": {
+              "samples": 14,
+              "medianMS": 8673.122,
+              "p95MS": 8822.147,
+              "completedRequestedSamples": false
+            },
+            "warmCompact": {
+              "samples": 17,
+              "medianMS": 6807.769,
+              "p95MS": 11823.226,
+              "completedRequestedSamples": false
+            },
+            "pagination": {
+              "documents": 20000,
+              "calls": 200,
+              "totalMS": 33661.818,
+              "complete": true
+            },
+            "narrowGrantMS": 44.459,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 306.048
+            },
+            "filters": [
+              {
+                "query": "Versicherung",
+                "expected": 5000,
+                "timedOutAfterSeconds": 30,
+                "passed": false
+              }
+            ],
+            "correctness": "incomplete-or-failed",
+            "failureType": "TimeoutError",
+            "sampledMaxRSSBytes": 1255604224,
+            "peakRSSBytes": 1255604224,
+            "failedGates": [
+              "coldStatusMS",
+              "peakRSSBytes",
+              "warmStatus",
+              "warmCompact",
+              "correctnessIncomplete",
+              "filterLatencyOrCompleteness"
+            ],
+            "go": false
+          }
+        },
+        "persistentIndexLifecycle": {
+          "granted": 100,
+          "revokedWhileStagingObserved": true,
+          "revokedReplyContainedNoData": true,
+          "builderSIGKILL": true,
+          "restartRebuiltAndRemovedStaging": true,
+          "restartQueryMS": 783.817,
+          "derivedIndexBytes": 180224
+        },
+        "readOnlySourceUnchanged": true,
+        "go": false
+      }
+    ],
+    "go": false
+  },
+  "pilot": {
+    "preliminary": true,
+    "note": "Earlier pilot placed revocation after filters; final matrix is authoritative.",
+    "result": {
+      "scope": "Local stdio, synthetic long OCR records, no relay or installed data; not ChatGPT latency or 20k native OCR ingestion.",
+      "gates": {
+        "coldStatusMS": 5000,
+        "warmCompactP95MS": 1000,
+        "warmStatusP95MS": 1000,
+        "peakRSSBytes": 536870912,
+        "filteredListMS": 5000
+      },
+      "emergencyRSSLimitBytes": 1610612736,
+      "samplesRequested": 25,
+      "textBytesPerGeneratedDocument": 32768,
+      "localSHA256": "0564380d40600232535078b9e72186557af2c7c8000c869efb23a3cbab3ef414",
+      "mcpSHA256": "2004bb3041399bd7c867c226307e2ed2081ffdddf5b13534280d8c96d851b7eb",
+      "cases": [
+        {
+          "documents": 1000,
+          "seedWriteMS": 349.068,
+          "payloadBytes": 35213432,
+          "lifecycle": {
+            "uncommittedSQLCrashRolledBack": true,
+            "workerKilledDuringOCR": true,
+            "automaticWorkerRestart": true,
+            "importIncludingRecoveryMS": 655.692,
+            "concurrentList": {
+              "samples": 11,
+              "medianMS": 29.172,
+              "p95MS": 102.055
+            },
+            "concurrentSourceChangeErrors": 2,
+            "finalDocuments": 1000,
+            "newImportDidNotExpandGrant": true,
+            "oldHandlesAndCursorsRejected": true,
+            "originalUnchanged": true,
+            "restartStatusMS": 125.411,
+            "revocationAfterRestart": true
+          },
+          "databaseBytes": 37683200,
+          "selectionCases": {
+            "small": {
+              "granted": 100,
+              "options": [],
+              "coldStatusMS": 108.39062498416752,
+              "warmStatus": {
+                "samples": 25,
+                "medianMS": 36.461,
+                "p95MS": 82.311,
+                "completedRequestedSamples": true
+              },
+              "warmCompact": {
+                "samples": 25,
+                "medianMS": 62.975,
+                "p95MS": 103.004,
+                "completedRequestedSamples": true
+              },
+              "pagination": {
+                "documents": 100,
+                "calls": 1,
+                "totalMS": 66.819,
+                "complete": true
+              },
+              "filters": [
+                {
+                  "query": "Versicherung",
+                  "expected": 25,
+                  "actual": 25,
+                  "milliseconds": 573.288,
+                  "passed": true
+                },
+                {
+                  "query": "Befund",
+                  "expected": 25,
+                  "actual": 25,
+                  "milliseconds": 551.572,
+                  "passed": true
+                },
+                {
+                  "query": "NichtvorhandenerSuchbegriff",
+                  "expected": 0,
+                  "actual": 0,
+                  "milliseconds": 553.742,
+                  "passed": true
+                }
+              ],
+              "rankedExactMarkerMS": 1410.73,
+              "narrowGrantMS": 33.92,
+              "revocation": {
+                "readListSearchBlocked": true,
+                "threeCallsMS": 72.718
+              },
+              "correctness": "pass",
+              "sampledMaxRSSBytes": 51347456,
+              "peakRSSBytes": 51445760,
+              "failedGates": [],
+              "go": true
+            },
+            "all": {
+              "granted": 1000,
+              "options": [],
+              "coldStatusMS": 460.9695830149576,
+              "warmStatus": {
+                "samples": 25,
+                "medianMS": 127.747,
+                "p95MS": 143.837,
+                "completedRequestedSamples": true
+              },
+              "warmCompact": {
+                "samples": 25,
+                "medianMS": 75.041,
+                "p95MS": 129.908,
+                "completedRequestedSamples": true
+              },
+              "pagination": {
+                "documents": 1000,
+                "calls": 10,
+                "totalMS": 783.009,
+                "complete": true
+              },
+              "filters": [
+                {
+                  "query": "Versicherung",
+                  "expected": 250,
+                  "actual": 250,
+                  "milliseconds": 5184.454,
+                  "passed": true
+                },
+                {
+                  "query": "Befund",
+                  "expected": 249,
+                  "actual": 249,
+                  "milliseconds": 5245.811,
+                  "passed": true
+                },
+                {
+                  "query": "NichtvorhandenerSuchbegriff",
+                  "expected": 0,
+                  "actual": 0,
+                  "milliseconds": 5156.801,
+                  "passed": true
+                }
+              ],
+              "rankedExactMarkerMS": 10644.812,
+              "narrowGrantMS": 54.465,
+              "revocation": {
+                "readListSearchBlocked": true,
+                "threeCallsMS": 183.956
+              },
+              "correctness": "pass",
+              "sampledMaxRSSBytes": 154370048,
+              "peakRSSBytes": 154501120,
+              "failedGates": [
+                "filterLatencyOrCompleteness"
+              ],
+              "go": false
+            }
+          },
+          "readOnlySourceUnchanged": true,
+          "go": false
+        }
+      ],
+      "go": false
+    }
+  },
+  "limitations": [
+    "Synthetic long text rows, two native OCR imports per size; not 20k OCR-ingestion throughput.",
+    "Concurrent import and persistent-index crash/revoke use 100 grants; full grants are separate sequential query tests.",
+    "25 requested repetitions for status/list only; filter and ranked search are single measurements.",
+    "Cold means new MCP process, not flushed OS disk cache.",
+    "Peak RSS is MCP server only and only until timeout where applicable.",
+    "No ChatGPT, relay, real documents, installed profiles, installer or customer migration changed."
+  ],
+  "verification": {
+    "runnerHelpExitCode": 0,
+    "gitDiffCheckExitCode": 0,
+    "pythonAST": "pass",
+    "runnerHashAndReportConsistency": "pass",
+    "completePaginationAndRevocationVariants": 10,
+    "remainingOwnedNativeProcesses": 0,
+    "remainingTemporaryFixtureDirectories": 0
+  }
+}

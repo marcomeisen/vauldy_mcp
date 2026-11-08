@@ -20,18 +20,19 @@ public struct LocalImportService: Sendable {
         }
         return try await recognize(staged.document.id, progress: progress)
     }
-    public func retry(documentID: UUID, borrowedAccess: Data? = nil,
+    public func retry(documentID: UUID, borrowedAccess: Data? = nil, expected: VaultDocument? = nil,
                       progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
         try await store.recoverInterrupted()
-        return try await recognize(documentID, borrowedAccess: borrowedAccess, progress: progress)
+        return try await recognize(documentID, borrowedAccess: borrowedAccess, expected: expected, progress: progress)
     }
-    private func recognize(_ id: UUID, borrowedAccess: Data? = nil, progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalImportOutcome {
+    private func recognize(_ id: UUID, borrowedAccess: Data? = nil, expected: VaultDocument? = nil,
+                           progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalImportOutcome {
         let lease = try await store.acquireWorker()
         defer { lease.release() }
         let attempt = UUID()
         let clock = LocalStopwatch()
-        let access = try await store.start(id, attempt: attempt, borrowedAccess: borrowedAccess)
+        let access = try await store.start(id, attempt: attempt, borrowedAccess: borrowedAccess, expected: expected)
         defer { access.close() }
         let original = access.url
         let validation = clock.milliseconds
@@ -61,10 +62,11 @@ public struct LocalImportService: Sendable {
             outcome.analysisStatus = document.baseAnalysisStatus
             return outcome
         } catch {
-            let failure = error is CancellationError ? LocalImportError.cancelled : (error as? LocalImportError ?? .invalidDocument)
+            let failure = error is CancellationError ? LocalImportError.cancelled : (error as? LocalImportError ?? (error is LocalStoreCapacityError ? .storageUnavailable : .invalidDocument))
             _ = try await store.fail(id, attempt: attempt, error: failure, originalState: (error as? LocalOriginalError)?.state)
             if error is CancellationError { throw CancellationError() }
             if let error = error as? LocalOriginalError { throw error }
+            if let error = error as? LocalStoreCapacityError { throw error }
             throw failure
         }
     }

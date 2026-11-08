@@ -13,6 +13,12 @@ public enum LocalInventoryError: LocalizedError {
 }
 public enum LocalInventoryFingerprint {
     public static func snapshot(_ url: URL) throws -> String {
+        if let generation = try LocalVaultSnapshotSource(fileURL: url).generation {
+            // A replaced database with a restored generation must also invalidate reports.
+            let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+            let identity = "\(attributes[.systemNumber] ?? ""):\(attributes[.systemFileNumber] ?? ""):\(generation)"
+            return SHA256.hash(data: Data(identity.utf8)).map { String(format: "%02x", $0) }.joined()
+        }
         let v = try url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
         guard v.isRegularFile == true, v.isSymbolicLink != true, (v.fileSize ?? Int.max) <= 64 * 1024 * 1024 else { throw LocalInventoryError.wrongStore }
         return SHA256.hash(data: try Data(contentsOf: url)).map { String(format: "%02x", $0) }.joined()

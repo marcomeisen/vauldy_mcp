@@ -1,0 +1,575 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceState": "existing local changes retained; no commit/push/PR",
+  "productVersion": "0.13.0",
+  "ocrConfiguration": "ocr-v14-consistent-line-review- plus OS version",
+  "sourceVerification": {
+    "files": 201,
+    "sha256": "3c627dc409d902253b5788abe152a323ff0abd531c0b11fd8eb149a84d841782"
+  },
+  "sourceVerificationNote": "Final fingerprint includes the corrected relative-path Python helper; Swift sources/tests unchanged since the final 108-test run.",
+  "swiftTests": {
+    "passed": 108,
+    "suites": 19,
+    "seconds": 39.017,
+    "log": "/private/tmp/vauldy-ocr-vector-wtr5pb1z/line-v14-regression-final.log"
+  },
+  "stepsIncludingFailedAttempts": [
+    {
+      "name": "line-v14-source-final",
+      "command": [
+        "python3",
+        "/private/tmp/vauldy-small-source-verify.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.098
+    },
+    {
+      "name": "line-v14-regression-final",
+      "command": [
+        "swift",
+        "test",
+        "-c",
+        "release",
+        "--disable-sandbox",
+        "--disable-automatic-resolution",
+        "--jobs",
+        "4",
+        "-debug-info-format",
+        "none",
+        "--no-parallel",
+        "--filter",
+        "OCRConsistentLineTests|OCRDensePageTests|OCRLineContextTests|LocalWorkerTests|OCRSmallRegionTests|OCRSmallTextMCPFixturesTests|EvidencePreservingOCRTests|OCRMarkedRegionRecoveryTests|OCRBlockCoverageTests|OCRLayoutTests|PDFVectorTextOCRTests|OCRTargetedRetryTests|OCRWhiteMarginsTests|LocalImportTests|LocalOriginalReferenceTests|BaseAnalysisMCPTests|LocalDocumentReviewTests|SQLiteIntegrationTests|MCPFieldExtractionTests"
+      ],
+      "exitCode": 0,
+      "seconds": 64.536
+    },
+    {
+      "name": "line-v14-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/line_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "line-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 4.261
+    },
+    {
+      "name": "line-v14-dense-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/dense_ocr_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "dense-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 2.082
+    },
+    {
+      "name": "line-v14-coverage-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/visual_coverage_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "region-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 2.747
+    },
+    {
+      "name": "line-v14-raster-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/raster_ocr_quality_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "raster-fixtures"
+      ],
+      "exitCode": 1,
+      "seconds": 0.084
+    },
+    {
+      "name": "line-v14-raster-wire-final",
+      "command": [
+        "python3",
+        "scripts/mcp/raster_ocr_quality_smoke_test.py",
+        ".build/out/Products/Release/vauldy-local",
+        ".build/out/Products/Release/vauldy-mcp",
+        "raster-fixtures"
+      ],
+      "exitCode": 0,
+      "seconds": 2.826,
+      "log": "line-v14-raster-wire-retry.log",
+      "note": "Retry after normalizing relative fixture paths; first invocation failed before OCR."
+    }
+  ],
+  "finalRequiredChecksPassed": true,
+  "wire": {
+    "lines": {
+      "passed": true,
+      "syntheticImages": 3,
+      "nativeExactFields": 6,
+      "protectedVerifiedExcerpts": 5,
+      "contractIdentifierRedacted": true,
+      "ambiguousIdentifierRemainsReview": true,
+      "persistedReasons": true,
+      "sameWorker": true,
+      "freshRetryPreservesEvidence": true,
+      "repeatReasonsStable": true,
+      "originalAndGrantUnchanged": true,
+      "sourcePage": 1,
+      "diagnosticsRemainLocal": true,
+      "revocations": 3
+    },
+    "dense": {
+      "passed": true,
+      "syntheticPDFs": 1,
+      "embeddedRows": 140,
+      "exactRecoveredFields": 5,
+      "comparedRegions": 147,
+      "storedRegions": 128,
+      "preservedDeductible": true,
+      "sourcePage": 1,
+      "metadataRemainsLocal": true,
+      "sameWorkerFreshRetry": true,
+      "originalUnchanged": true,
+      "grantUnchanged": true,
+      "revocation": true
+    },
+    "regions": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "recoveredFields": 6,
+      "preservedValues": 3,
+      "numericConflictPreserved": true,
+      "physicalPage": 1,
+      "metadataRemainsLocal": true,
+      "evidencePreservingRefinement": true,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    },
+    "raster": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "exactStoredFields": 12,
+      "cases": [
+        {
+          "name": "raster-pdf",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-other-values",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-light",
+          "state": "partial",
+          "review": true
+        }
+      ],
+      "grants": true,
+      "privacy": true,
+      "physicalPage": 1,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    }
+  },
+  "nativeLineCorpus": {
+    "mode": "Current-build legacy line branch versus current line recovery, same synthetic images, no cache; not execution of the installed production binary.",
+    "cases": 35,
+    "fieldsBefore": 52,
+    "fieldsAfter": 52,
+    "expectedFields": 79,
+    "improvedCases": 0,
+    "regressedCases": 0,
+    "rows": [
+      {
+        "group": "LINE-V14",
+        "case": "clean",
+        "before": 3,
+        "after": 3,
+        "expected": 3,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "LINE-V14",
+        "case": "faint-words",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "LINE-V14",
+        "case": "invoice",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "LINE-V14",
+        "case": "payroll",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "LINE-V14",
+        "case": "date",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "LINE-V14",
+        "case": "ambiguous",
+        "before": 1,
+        "after": 1,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "LINE-V14",
+        "case": "dense",
+        "before": 6,
+        "after": 6,
+        "expected": 6,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-9-88-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-9-88-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-9-93-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-9-93-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-11-88-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-11-88-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-11-93-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-11-93-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-13-88-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-13-88-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-13-93-15",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "HARD-LINE",
+        "case": "grid-13-93-25",
+        "before": 0,
+        "after": 0,
+        "expected": 2,
+        "reviewBefore": true,
+        "reviewAfter": true
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-78-fuer",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-78-Fahrrad",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-85-fuer",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-85-Fahrrad",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-92-fuer",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "MIXED-LINE",
+        "case": "mixed-92-Fahrrad",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Times-Italic-11",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Times-Italic-14",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Courier-Oblique-11",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Courier-Oblique-14",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Helvetica-Oblique-11",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "ITALIC-LINE",
+        "case": "italic-Helvetica-Oblique-14",
+        "before": 2,
+        "after": 2,
+        "expected": 2,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "TILTED-LINE",
+        "case": "tilted-9-left",
+        "before": 3,
+        "after": 3,
+        "expected": 3,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "TILTED-LINE",
+        "case": "tilted-9-right",
+        "before": 1,
+        "after": 1,
+        "expected": 3,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "TILTED-LINE",
+        "case": "tilted-12-left",
+        "before": 3,
+        "after": 3,
+        "expected": 3,
+        "reviewBefore": false,
+        "reviewAfter": false
+      },
+      {
+        "group": "TILTED-LINE",
+        "case": "tilted-12-right",
+        "before": 3,
+        "after": 3,
+        "expected": 3,
+        "reviewBefore": false,
+        "reviewAfter": false
+      }
+    ],
+    "regularCaseRepeatedRuns": 7,
+    "exactFieldAccuracyGainDemonstrated": false,
+    "remainingLimit": "Very faint/noisy small text remains unread or incomplete; confident errors can remain unmarked. Review is not measured OCR accuracy."
+  },
+  "policyEvidence": {
+    "unconfirmedFailurePaths": 4,
+    "ambiguousCodeCannotBeConfirmedAway": true,
+    "unattemptedRiskLinesRemainReview": true,
+    "weakWordsPrioritizedBeforeClearSmallIdentifiers": true,
+    "fragmentJoinAtMost": 4,
+    "unchangedWeakLineNeedsTwoMatchingStrongReads": true,
+    "numberAndIdentifierConflictGatesRetained": true,
+    "fourLineAttemptsPerPage": true,
+    "maximumLineNativeReadsPerPage": 8,
+    "maximumPixelsPerLineRead": 1000000,
+    "contrastLimits": [
+      3,
+      2
+    ],
+    "storedReasonsContentFree": true,
+    "cachedDecisionReasonsRetained": true,
+    "v13CheckpointsExcluded": true
+  },
+  "compatibility": {
+    "legacyMetricsWithoutLineReviewDecode": true,
+    "lineReviewOptional": true,
+    "MCPToolsUnchanged": true,
+    "readOnlyMCPPreserved": true,
+    "primaryStorageUnchanged": true,
+    "oldArchivesNotAutomaticallyRewritten": true
+  },
+  "correctedFailures": [
+    {
+      "stage": "first build",
+      "outcome": "Escaped Swift key path in new test; corrected, no tests had executed."
+    },
+    {
+      "stage": "second build",
+      "outcome": "Missing fixture initializer arguments; corrected, no tests had executed."
+    },
+    {
+      "stage": "first line wire",
+      "outcome": "Expected unmasked synthetic word Schutz; existing NER masks it as a place. Gate now checks full native source, permitted suffix and identifier redaction separately; privacy unchanged."
+    },
+    {
+      "stage": "private synthetic wire diagnosis",
+      "outcome": "Confirmed existing mask; no real content or production profile used."
+    },
+    {
+      "stage": "first raster wire",
+      "outcome": "Relative fixture path rejected before OCR; path resolver corrected and actual test rerun successfully."
+    }
+  ],
+  "notPerformed": [
+    "production installation or real-document OCR",
+    "regular live ChatGPT answer-quality test",
+    "native visual UI acceptance",
+    "full release/installer regression",
+    "Developer-ID/notarization or customer Mac acceptance"
+  ],
+  "next": [
+    "Independent raster/line detection work with a required increase on the fixed hard corpus and false-correction gates.",
+    "Source-bound reasons for high-confidence wrong transcriptions; no automatic correction of ungrounded numeric or ID values.",
+    "Separate package and explicit real five-document maintenance only after suitable quality evidence."
+  ]
+}

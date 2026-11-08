@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-07",
+  "verifiedAt": "2026-11-07T13:04:07.649741+01:00",
+  "branch": "codex/local-first-product-readiness",
+  "installedVersion": "0.13.0",
+  "serverBuildID": "macho.2a3541f019733a7c8e4c4517b61bb230",
+  "explicitUserApproval": {
+    "connectExactlyNineDocuments": true,
+    "nativeConsentConfirmedAtActionTime": true
+  },
+  "connection": {
+    "existingOwnerPrivateSite": true,
+    "ownerOnlyAllowedAccountCount": 1,
+    "externalVisitors": 0,
+    "existingServiceCredentialReprovisionedViaHiddenStdin": true,
+    "newBypassTokenGenerated": false,
+    "cloudDeploymentChanged": false,
+    "cloudAccessPolicyChanged": false,
+    "browserSignedIn": true,
+    "nativePairingCompleted": true,
+    "nativeAgentRunningObserved": true
+  },
+  "regularChat": {
+    "url": "https://chatgpt.com/c/6aef1354-9d1c-83ed-bac6-3885a5044c52",
+    "title": "Dokumente prüfen Vauldy",
+    "chatMode": "Chat",
+    "privatePluginSelected": true,
+    "observedTableRows": 9,
+    "observedGrantedCount": 9,
+    "observedReachableCount": 9,
+    "observedInventoryComplete": true,
+    "observedHasMore": false,
+    "mcpRequests": 2,
+    "operations": [
+      "get_vault_status",
+      "list_documents"
+    ],
+    "documentReadCalls": 0,
+    "tableFirstAbsentObservationSeconds": 14.682,
+    "tableFirstPresentObservationSeconds": 25.516,
+    "timingMethod": "AX observations after submission; sampled visibility interval, not continuous first-pixel timing",
+    "promptRequestedNoExcerpts": true,
+    "rawListArgumentsNotSeparatelyExpanded": true,
+    "visibleTableContainsOnlyNeutralIdentifiersAndCoverage": true
+  },
+  "localAudit": {
+    "protectedFiles": 44,
+    "changedProtectedFiles": 0,
+    "browserChatMCPRequests": 2,
+    "requests": [
+      {
+        "operation": "status",
+        "preparedCount": 9,
+        "localPreparationMilliseconds": 92.0
+      },
+      {
+        "operation": "list",
+        "preparedCount": 9,
+        "localPreparationMilliseconds": 68.0
+      }
+    ],
+    "deniedRequests": 0
+  },
+  "followupConnectorCheck": {
+    "available": true,
+    "readOnly": true,
+    "grantedDocumentCount": 9,
+    "searchableDocumentCount": 9,
+    "missingGrantedDocumentCount": 0,
+    "completeSourceDocumentCount": 3,
+    "reviewDocumentCount": 6,
+    "pendingDocumentCount": 0,
+    "failedDocumentCount": 0,
+    "processingComplete": false,
+    "analysisNeedsReview": 9,
+    "analysisCompleted": 0,
+    "warnings": [
+      "SOURCE_PROCESSING_GAPS",
+      "BASE_ANALYSIS_NOT_COMPLETE"
+    ]
+  },
+  "dataPreservation": {
+    "protectedFilesChecked": 44,
+    "protectedFilesChanged": 0,
+    "existingGrantUnchanged": true,
+    "noNewDocumentsGranted": true,
+    "noOriginalsTransferred": true
+  },
+  "limits": [
+    "Inventory/status reachability verified; no full-text or contract-content correctness test.",
+    "Real existing nine-document selection, not the deferred synthetic R6 acceptance.",
+    "No new Swift test run or package build in this connection iteration.",
+    "Source processing gaps in six documents; base analysis needs review in all nine."
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vauldy MCP Entwicklung"
+  short_description: "Local-First-Architektur und macOS-Releases"
+  default_prompt: "Nutze $vauldy-mcp-development für eine gezielte Architektur- oder Implementierungsänderung am lokalen Vauldy MCP."

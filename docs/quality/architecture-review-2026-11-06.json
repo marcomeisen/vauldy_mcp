@@ -1,0 +1,203 @@
+{
+  "binarySHA256": "30162a65a0420e04cbc2817e404e4ead5a3c0fa09b109802e26cd4f3e21f37b4",
+  "scope": "Local stdio only; first call and three repeats; no P95, RSS or chat latency claim.",
+  "storage": [
+    {
+      "documents": 20000,
+      "granted": 1,
+      "snapshotBytes": 2820000,
+      "statusMS": [
+        110.5,
+        20.6,
+        24.7,
+        18.8
+      ],
+      "isError": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "documents": 20001,
+      "granted": 1,
+      "snapshotBytes": 2820141,
+      "statusMS": [
+        120.9,
+        91.4,
+        90.7,
+        100.5
+      ],
+      "isError": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "lastResponseText": "Der freigegebene lokale Bestand ist nicht lesbar. Original und Bestand bleiben unverändert."
+    },
+    {
+      "documents": 500,
+      "granted": 1,
+      "snapshotBytes": 60058500,
+      "statusMS": [
+        120.6,
+        20.1,
+        9.1,
+        19.8
+      ],
+      "isError": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "documents": 500,
+      "granted": 1,
+      "snapshotBytes": 70054500,
+      "statusMS": [
+        143.7,
+        112.8,
+        128.4,
+        104.9
+      ],
+      "isError": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "textSearch": {
+    "variants": [
+      "Versicherung",
+      "Versiche-\nrung",
+      "Versiche­rung"
+    ],
+    "allDocuments": 3,
+    "listMatched": 1,
+    "searchHits": 1
+  },
+  "date": "2026-11-06",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "sourceAndTestsMatchExistingBuildCopy": true,
+  "newBuildPerformed": false,
+  "ocr": {
+    "tests": 9,
+    "suites": 2,
+    "seconds": 2.88,
+    "passed": true,
+    "cases": [
+      {
+        "name": "clean-control",
+        "baselineExact": 4,
+        "retryExact": 4,
+        "expected": 4,
+        "retries": 0,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": false,
+        "baselineRecognitionMS": 126,
+        "retryRecognitionMS": 118
+      },
+      {
+        "name": "small-print",
+        "baselineExact": 4,
+        "retryExact": 4,
+        "expected": 4,
+        "retries": 0,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": false,
+        "baselineRecognitionMS": 105,
+        "retryRecognitionMS": 114
+      },
+      {
+        "name": "faint-copy",
+        "baselineExact": 4,
+        "retryExact": 4,
+        "expected": 4,
+        "retries": 0,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": false,
+        "baselineRecognitionMS": 105,
+        "retryRecognitionMS": 107
+      },
+      {
+        "name": "skewed-scan",
+        "baselineExact": 4,
+        "retryExact": 4,
+        "expected": 4,
+        "retries": 0,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": false,
+        "baselineRecognitionMS": 104,
+        "retryRecognitionMS": 107
+      },
+      {
+        "name": "raster-pdf",
+        "baselineExact": 0,
+        "retryExact": 0,
+        "expected": 4,
+        "retries": 4,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": true,
+        "baselineRecognitionMS": 184,
+        "retryRecognitionMS": 335
+      },
+      {
+        "name": "ambiguous-identifier",
+        "baselineExact": 3,
+        "retryExact": 3,
+        "expected": 4,
+        "retries": 1,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": true,
+        "baselineRecognitionMS": 120,
+        "retryRecognitionMS": 188
+      },
+      {
+        "name": "dense-amounts",
+        "baselineExact": 4,
+        "retryExact": 4,
+        "expected": 4,
+        "retries": 0,
+        "recovered": 0,
+        "baselineReview": false,
+        "retryReview": false,
+        "baselineRecognitionMS": 107,
+        "retryRecognitionMS": 104
+      }
+    ]
+  },
+  "wireChecks": {
+    "deadline": {
+      "passed": true,
+      "fixtures": 22,
+      "documentsPerMeasuredCall": 5,
+      "deadlineCalls": 1,
+      "deadlineMS": 177.4
+    },
+    "fieldExtraction": {
+      "passed": true,
+      "documents": 7,
+      "checkGroups": 17,
+      "extractionCalls": 1
+    }
+  },
+  "limits": [
+    "Synthetic local stdio only; no regular ChatGPT timing or call-count acceptance.",
+    "No new native UI, installer, notarization, offline customer-Mac, peak-RSS or P95 acceptance.",
+    "OCR exact fields are seven synthetic scans; not a general OCR accuracy rate.",
+    "The earlier malformed-profile exploratory run was discarded and is not performance evidence."
+  ]
+}

@@ -37,6 +37,7 @@ final class SetupModel: ObservableObject {
     @Published var documentSearch = ""
     @Published var documentFilter: SetupDocumentFilter = .all
     @Published var showingInstallation = false
+    var connectAfterInstallation = false
     @Published var showingSetup = false
     @Published var setupStep = 0
     @Published var resumeCandidate: MCPAccessProfile?
@@ -59,7 +60,12 @@ final class SetupModel: ObservableObject {
 
     @Published var documents: [VaultDocument] = []
     @Published var selected: Set<UUID> = []
-    @Published var vaultURL: URL?
+    @Published var ocrSelected: Set<UUID> = []
+    @Published var editingDocumentGrants = false
+    @Published var retryingOCR = false
+    @Published var vaultURL: URL? { didSet { updateLocalVaultIdentity() } }
+    @Published var localSnapshotURL: URL? { didSet { updateLocalVaultIdentity() } }
+    @Published var isLocalVault = false
     @Published var acknowledged = false
     @Published var busy = false
     @Published var message = ""
@@ -73,6 +79,10 @@ final class SetupModel: ObservableObject {
     @Published var importProgress: LocalImportProgress?
     @Published var importTotal: Int?
     @Published var importProcessed = 0
+    @Published var importFileName: String?
+    @Published var importCancelling = false
+    @Published var importReport: SetupImportReport?
+    @Published var shownImportDocumentIDs: Set<UUID>?
     private var importProgressToken: UUID?
     @Published var importing = false
     @Published var watchedFolders: [LocalWatchedFolder] = []
@@ -99,6 +109,7 @@ final class SetupModel: ObservableObject {
             installation = MCPInstallation(root: root)
             registration = MCPClientRegistration(home: root.appendingPathComponent("test-client-home"))
         } else { installation = MCPInstallation(); registration = MCPClientRegistration() }
+        localSnapshotURL = localStore.snapshotURL
         refreshConnections()
         if FileManager.default.isExecutableFile(atPath: installation.binaryURL.path) {
             showStatusMenu()
@@ -134,7 +145,7 @@ final class SetupModel: ObservableObject {
                 watchRunning = try await worker.status().running
                 watchScans = try await worker.watchStatus()
             }
-            if !busy && vaultURL == localStore.snapshotURL { try await refreshLocalDocuments() }
+            if !busy && isLocalVault { try await refreshLocalDocuments() }
             watchFailure = ""
         } catch { watchFailure = (error as? LocalizedError)?.errorDescription ?? "Die Ordnerüberwachung ist nicht verfügbar." }
     }
@@ -194,8 +205,8 @@ final class SetupModel: ObservableObject {
     func chooseVault() {
         let panel = NSOpenPanel()
         panel.title = "Vauldy-Bestand auswählen"
-        panel.message = "Wähle einen kompatiblen documents.json-Snapshot. Er wird ausschließlich gelesen."
-        panel.allowedContentTypes = [.json]
+        panel.message = "Wähle documents.json oder records.sqlite aus einem geprüften lokalen Bestand. Er wird ausschließlich gelesen; bestehende Verbindungen bleiben unverändert."
+        panel.allowedContentTypes = [.json, UTType(filenameExtension: "sqlite") ?? .data]
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.directoryURL = FileVaultSnapshotSource.defaultVaultURL().deletingLastPathComponent()
@@ -219,6 +230,7 @@ final class SetupModel: ObservableObject {
     func chooseImports() {
         let panel = NSOpenPanel()
         panel.title = "Dokumente lokal importieren"
+        panel.prompt = "Importieren"
         panel.message = "PDFs und Bilder werden in den eigenen lokalen Bestand kopiert und auf diesem Mac gelesen. Der Import erteilt keine Chatbot-Freigabe."
         panel.allowedContentTypes = [UTType.pdf, .png, .jpeg, .tiff, .heic]
         panel.canChooseDirectories = false; panel.allowsMultipleSelection = true
@@ -233,37 +245,48 @@ final class SetupModel: ObservableObject {
                 try await refreshLocalDocuments()
                 message = "Eigenständiger lokaler Bestand geladen. Neue Importe sind zunächst nicht für MCP freigegeben."
                 failure = false
-            } catch { showError((error as? LocalImportError)?.errorDescription ?? "Der lokale Bestand ist nicht lesbar.") }
+            } catch { showError((error as? LocalStoreCapacityError)?.errorDescription ?? (error as? LocalImportError)?.errorDescription ?? "Der lokale Bestand ist nicht lesbar.") }
             busy = false
         }
     }
 
-    func importFiles(_ urls: [URL], retry: UUID? = nil, folderRecursive: Bool? = nil) {
-        guard !importing, retry != nil || !urls.isEmpty else { return }
+    func importFiles(_ urls: [URL], retry: UUID? = nil, retries: [UUID] = [], folderRecursive: Bool? = nil) {
+        let retryIDs = retry.map { [$0] } ?? retries
+        let isRetry = !retryIDs.isEmpty
+        guard !importing, isRetry || !urls.isEmpty else { return }
+        guard !isRetry || isLocalVault else { return }
+        let retryNames = Dictionary(uniqueKeysWithValues: documents.map { ($0.id, documentDisplayName($0)) })
         guard let executable = localExecutable else {
             showError("Das lokale Importprogramm fehlt im Paket."); return
         }
+        retryingOCR = isRetry
         importing = true; failure = false; configuration = nil
+        importReport = nil; importFileName = nil; importCancelling = false
         importProcessed = 0
-        importTotal = folderRecursive == nil ? (retry == nil ? urls.count : 1) : nil
-        message = "Originale und Texterkennung bleiben auf diesem Mac."
+        importTotal = folderRecursive == nil ? (isRetry ? retryIDs.count : urls.count) : nil
+        message = ""
         let service = LocalImportWorker(store: localStore, executable: executable, watchFolders: false)
         importTask = Task { [self] in
-            var completed = 0; var review = 0; var failed = 0; var reused = 0
-            var analyzed = 0; var analysisReview = 0
-            var lastError: String?
+            var report = SetupImportReport(isRetry: isRetry)
             do {
                 let batch: LocalFolderImportBatch?
                 if let folderRecursive { batch = try await service.folderImportBatch(urls, recursive: folderRecursive) }
                 else { batch = nil }
                 defer { batch?.close() }
                 let files = batch?.files ?? urls
-                let total = retry == nil ? files.count : 1
-                let unavailableFolders = batch?.unavailableFolderCount ?? 0
+                let total = isRetry ? retryIDs.count : files.count
+                report.items += (batch?.unsupportedFiles ?? []).map {
+                    .init(name: $0.lastPathComponent, result: .skipped, detail: "Dateityp wird nicht unterstützt.")
+                }
+                report.items += (batch?.unavailableFolders ?? []).map {
+                    .init(name: $0.lastPathComponent, result: .unavailableFolder, detail: "Wähle den Ordner erneut aus und prüfe den Zugriff.")
+                }
                 importTotal = total
 
                 for index in 0..<total {
                     try Task.checkCancellation()
+                    let name = isRetry ? (retryNames[retryIDs[index]] ?? "Gespeichertes Dokument") : files[index].lastPathComponent
+                    importFileName = name
                     let token = UUID()
                     importProgressToken = token
                     importProgress = nil
@@ -275,43 +298,41 @@ final class SetupModel: ObservableObject {
                     }
                     do {
                         let outcome: LocalImportOutcome
-                        if let retry { outcome = try await service.retry(documentID: retry, fresh: true, progress: updates) }
+                        if isRetry { outcome = try await service.retry(documentID: retryIDs[index], fresh: true, progress: updates) }
                         else {
                             outcome = try await service.importFile(files[index], storage: batch == nil ? .managedCopy : .referenced,
                                                                    progress: updates)
                         }
-                        if outcome.analysisStatus == "completed" { analyzed += 1 } else { analysisReview += 1 }
-                        if outcome.reusedOriginal { reused += 1 }
-                        if outcome.state == .completed { completed += 1 }
-                        else if outcome.state == .partial { review += 1 }
-                        else { failed += 1 }
-                    } catch is CancellationError { throw CancellationError() }
+                        report.items.append(.init(name: name, outcome: outcome, isRetry: isRetry))
+                    } catch is CancellationError {
+                        report.items.append(.init(name: name, result: .cancelled, detail: "Der laufende Auftrag wurde abgebrochen.",
+                            documentID: isRetry ? retryIDs[index] : nil))
+                        throw CancellationError()
+                    }
                     catch {
-                        failed += 1
-                        lastError = (error as? LocalizedError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden."
+                        let result: SetupImportReport.Item.Result = (error as? LocalImportError) == .unsupportedFile ? .skipped : .failed
+                        report.items.append(.init(name: name, result: result,
+                            detail: (error as? LocalizedError)?.errorDescription ?? "Ein Dokument konnte nicht verarbeitet werden.",
+                            documentID: isRetry ? retryIDs[index] : nil))
+                        // A full store affects the remaining batch too; do not repeatedly reread it.
+                        if error is LocalStoreCapacityError { throw error }
                     }
                     importProgressToken = nil
                     importProgress = nil
                     importProcessed += 1
                 }
-                if total == 0 {
-                    message = "Keine unterstützten Dokumente gefunden."
-                } else {
-                    message = "\(importProcessed) von \(total) Dokumenten verarbeitet. Text erfasst: \(completed) · OCR prüfen: \(review) · Nicht abgeschlossen: \(failed) · Bereits vorhanden: \(reused). Basisanalyse vorhanden: \(analyzed) · Basisanalyse prüfen: \(analysisReview). Neue Dokumente bitte ausdrücklich freigeben."
-                }
-                if unavailableFolders > 0 { message += " Ordner nicht lesbar: \(unavailableFolders)." }
-                if let lastError { message += " " + lastError }
-                failure = failed > 0 || review > 0 || analysisReview > 0 || unavailableFolders > 0
             } catch is CancellationError {
-                let count = importTotal.map { " nach \(importProcessed) von \($0) Dokumenten" } ?? ""
-                message = "Import\(count) abgebrochen. Gesicherte Originale bleiben erhalten. Ausstehende Texterkennung kann erneut gestartet werden."
+                report.cancelled = true
             } catch {
-                showError((error as? LocalizedError)?.errorDescription ?? "Die ausgewählten Ordner konnten nicht gelesen werden.")
+                report.batchError = (error as? LocalizedError)?.errorDescription ?? "Die ausgewählten Ordner konnten nicht gelesen werden."
             }
-            importProgressToken = nil; importProgress = nil
+            importProgressToken = nil; importProgress = nil; importFileName = nil
             do { try await refreshLocalDocuments() }
-            catch { showError((error as? LocalImportError)?.errorDescription ?? "Der Bestand konnte nicht neu geladen werden.") }
-            importTotal = nil; importing = false; importTask = nil
+            catch { showError((error as? LocalStoreCapacityError)?.errorDescription ?? (error as? LocalImportError)?.errorDescription ?? "Der Bestand konnte nicht neu geladen werden.") }
+            if isRetry { ocrSelected.subtract(report.items.compactMap(\.documentID)) }
+            importReport = report
+            retryingOCR = false
+            importTotal = nil; importing = false; importTask = nil; importCancelling = false
         }
     }
 
@@ -325,38 +346,35 @@ final class SetupModel: ObservableObject {
         }
     }
     func cancelImport() {
-        importTask?.cancel()
-        message = "Abbruch angefordert. Vauldy wartet auf das Ende der laufenden System-Texterkennung; Originale bleiben erhalten."
+        guard !importCancelling, let importTask else { return }
+        importCancelling = true
+        importTask.cancel()
     }
 
     func refreshLocalDocuments() async throws {
         let loaded = try await localStore.documents()
-        if vaultURL != localStore.snapshotURL { editing = nil; selected = []; acknowledged = false }
+        localSnapshotURL = localStore.snapshotURL
+        if !isLocalVault { editing = nil; selected = []; acknowledged = false }
         vaultURL = localStore.snapshotURL
         documents = loaded.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
         selected.formIntersection(Set(loaded.map(\.id)))
+        ocrSelected.formIntersection(Set(loaded.map(\.id)))
     }
 
-    func importLabel(_ document: VaultDocument) -> String {
-        guard let metadata = document.localImport else { return document.isSearchable ? "" : "noch nicht durchsuchbar" }
-        if metadata.originalState == .changed { return "Original verändert · gespeicherter Text ist historisch" }
-        if metadata.originalState == .unavailable { return "Original nicht erreichbar · gespeicherter Text bleibt erhalten" }
-        switch metadata.state {
-        case .completed: return "Text erfasst · \(SetupText.pages(document.pageCount ?? 0))"
-        case .partial: return "Text teilweise erfasst · bitte prüfen"
-        case .queued: return "Texterkennung ausstehend"
-        case .recognizing: return "Texterkennung läuft"
-        case .failed, .interrupted, .cancelled: return metadata.error?.errorDescription ?? "Texterkennung erneut starten"
-        }
+    func importLabel(_ document: VaultDocument, compact: Bool = false) -> String {
+        let guidance = SetupDocumentGuidance(document)
+        return compact ? guidance.textStatus : guidance.textStatus + (guidance.nextStep.map { " · " + $0 } ?? "")
     }
 
     func load(_ url: URL, profile: MCPAccessProfile? = nil) {
+        shownImportDocumentIDs = nil
+        localSnapshotURL = localStore.snapshotURL
         let generation = UUID(); loadGeneration = generation
         busy = true; message = "Bestand wird lokal gelesen …"; failure = false
         configuration = nil; acknowledged = false; registrationMessage = ""
         Task {
             do {
-                let loaded = try await Task.detached { try FileVaultSnapshotSource(fileURL: url).loadDocuments() }.value
+                let loaded = try await Task.detached { try LocalVaultSnapshotSource(fileURL: url).loadDocuments() }.value
                 guard generation == loadGeneration else { return }
                 documents = loaded.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
                 vaultURL = url
@@ -367,7 +385,7 @@ final class SetupModel: ObservableObject {
             } catch {
                 guard generation == loadGeneration else { return }
                 documents = []; vaultURL = nil; selected = []; editing = nil
-                showError("Der Bestand ist nicht lesbar. Bitte die documents.json auswählen oder zuerst das Beispiel verwenden. Es wurde nichts verändert.")
+                showError("Der Bestand ist nicht lesbar. Bitte einen geprüften JSON- oder SQLite-Bestand auswählen oder zuerst das Beispiel verwenden. Es wurde nichts verändert.")
             }
             busy = false
         }

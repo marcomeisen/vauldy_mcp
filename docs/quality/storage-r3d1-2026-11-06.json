@@ -1,0 +1,529 @@
+{
+  "iteration": "R3d.1",
+  "recordedAt": "2026-11-06T19:10:21.538094+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "environment": {
+    "macOS": "27.2",
+    "architecture": "arm64"
+  },
+  "sourceAndTestFilesByteCompared": 135,
+  "runnerSHA256": "2ee22b8504a2be40e68b6ab49da9a2b2438fe56d8fb89e4ba41448fef8b2cf97",
+  "benchmarkCommand": "python3 scripts/mcp/sqlite_load_acceptance.py /private/tmp/vauldy-r3d1.XUlyQpRs/.build/release/vauldy-local /private/tmp/vauldy-r3d1.XUlyQpRs/.build/release/vauldy-mcp --projection-gates --output /private/tmp/vauldy-r3d1.XUlyQpRs/matrix.json",
+  "regressionCommand": "swift test -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none --no-parallel --filter 'SQLiteIntegrationTests|SQLiteDocumentStorePilotTests|StorageMigrationTests|MCPScalabilityTests|MCPPrivacyBoundaryTests|MCPRetrievalCompletenessTests'",
+  "swiftTests": {
+    "reported": 53,
+    "passed": 52,
+    "skipped": [
+      "largeSyntheticStorageComparison"
+    ],
+    "suites": 6,
+    "seconds": 6.365
+  },
+  "wireSmoke": "pass",
+  "relayDiscoveryParity": "pass",
+  "projectionGates": "go",
+  "combinedSQLiteAcceptance": "pending R3d.2 and R3d.3",
+  "matrix": {
+    "scope": "R3d.1 only: status, unfiltered compact lists and reads from compact handles. Text-search acceptance excluded.",
+    "gates": {
+      "coldStatusMS": 5000,
+      "warmCompactP95MS": 1000,
+      "warmStatusP95MS": 1000,
+      "peakRSSBytes": 536870912
+    },
+    "emergencyRSSLimitBytes": 1610612736,
+    "samplesRequested": 25,
+    "textBytesPerGeneratedDocument": 32768,
+    "localSHA256": "c06ce626d92b3e1165ea9666977812ecdde47ae5409b4868a7c9ccf53e37bb6a",
+    "mcpSHA256": "4eec30c35677f8b49cf47eff3f2f84d16f45a48731243b57f8291daf98ed04e7",
+    "cases": [
+      {
+        "documents": 1000,
+        "seedWriteMS": 336.538,
+        "payloadBytes": 35213432,
+        "projectionBackfillMS": 462.515,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 893.552,
+          "concurrentList": {
+            "samples": 19,
+            "medianMS": 31.649,
+            "p95MS": 52.814
+          },
+          "concurrentSourceChangeErrors": 3,
+          "finalDocuments": 1000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 43.564,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 38010880,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 28.738458000589162,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 26.627,
+              "p95MS": 61.78,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 65.622,
+              "p95MS": 86.487,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 60.228,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 357.594,
+            "narrowGrantMS": 27.009,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 73.525
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 31899648,
+            "peakRSSBytes": 31997952,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 1000,
+            "options": [],
+            "coldStatusMS": 40.55283300112933,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 31.125,
+              "p95MS": 50.423,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 68.527,
+              "p95MS": 101.794,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 1000,
+              "calls": 10,
+              "totalMS": 844.464,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 374.757,
+            "narrowGrantMS": 24.966,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 90.384
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 33013760,
+            "peakRSSBytes": 33112064,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 2000,
+        "seedWriteMS": 743.965,
+        "payloadBytes": 70497432,
+        "projectionBackfillMS": 835.556,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 646.976,
+          "concurrentList": {
+            "samples": 14,
+            "medianMS": 32.892,
+            "p95MS": 51.926
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 2000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 24.436,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 76054528,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 38.68358401814476,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 27.255,
+              "p95MS": 49.521,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 63.843,
+              "p95MS": 77.136,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 57.441,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 351.773,
+            "narrowGrantMS": 47.078,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 157.276
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 31784960,
+            "peakRSSBytes": 31883264,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 2000,
+            "options": [],
+            "coldStatusMS": 73.46454198705032,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 33.541,
+              "p95MS": 54.53,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 75.634,
+              "p95MS": 115.083,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 2000,
+              "calls": 20,
+              "totalMS": 1626.735,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 369.694,
+            "narrowGrantMS": 23.945,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 114.37
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 34668544,
+            "peakRSSBytes": 35028992,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 5000,
+        "seedWriteMS": 1916.924,
+        "payloadBytes": 176349432,
+        "projectionBackfillMS": 2006.585,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 779.854,
+          "concurrentList": {
+            "samples": 17,
+            "medianMS": 28.24,
+            "p95MS": 63.807
+          },
+          "concurrentSourceChangeErrors": 1,
+          "finalDocuments": 5000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 30.177,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 190242816,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 160.1877500070259,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 32.173,
+              "p95MS": 54.616,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 62.587,
+              "p95MS": 90.221,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 87.089,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 358.847,
+            "narrowGrantMS": 27.836,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 114.262
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 31686656,
+            "peakRSSBytes": 31784960,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 5000,
+            "options": [],
+            "coldStatusMS": 103.10745798051357,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 41.159,
+              "p95MS": 73.033,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 79.226,
+              "p95MS": 102.186,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 5000,
+              "calls": 50,
+              "totalMS": 4349.136,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 378.881,
+            "narrowGrantMS": 33.647,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 162.495
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 38830080,
+            "peakRSSBytes": 38928384,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 10000,
+        "seedWriteMS": 4169.93,
+        "payloadBytes": 352769432,
+        "projectionBackfillMS": 4026.502,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 905.624,
+          "concurrentList": {
+            "samples": 22,
+            "medianMS": 27.357,
+            "p95MS": 38.186
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 10000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 30.439,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 380407808,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 25.5279159755446,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 33.87,
+              "p95MS": 47.362,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 66.201,
+              "p95MS": 75.053,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 78.538,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 377.764,
+            "narrowGrantMS": 54.971,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 68.965
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 31539200,
+            "peakRSSBytes": 31735808,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 10000,
+            "options": [],
+            "coldStatusMS": 164.68154196627438,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 60.588,
+              "p95MS": 84.377,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 97.97,
+              "p95MS": 113.22,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 10000,
+              "calls": 100,
+              "totalMS": 11187.14,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 425.755,
+            "narrowGrantMS": 36.606,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 216.823
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 46661632,
+            "peakRSSBytes": 46759936,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      },
+      {
+        "documents": 20000,
+        "seedWriteMS": 8415.652,
+        "payloadBytes": 705609432,
+        "projectionBackfillMS": 8081.254,
+        "lifecycle": {
+          "uncommittedSQLCrashRolledBack": true,
+          "workerKilledDuringOCR": true,
+          "automaticWorkerRestart": true,
+          "importIncludingRecoveryMS": 771.042,
+          "concurrentList": {
+            "samples": 17,
+            "medianMS": 30.855,
+            "p95MS": 45.136
+          },
+          "concurrentSourceChangeErrors": 2,
+          "finalDocuments": 20000,
+          "newImportDidNotExpandGrant": true,
+          "oldHandlesAndCursorsRejected": true,
+          "originalUnchanged": true,
+          "restartStatusMS": 29.512,
+          "revocationAfterRestart": true
+        },
+        "databaseBytes": 760975360,
+        "selectionCases": {
+          "small": {
+            "granted": 100,
+            "options": [],
+            "coldStatusMS": 31.11275000264868,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 27.649,
+              "p95MS": 54.208,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 65.731,
+              "p95MS": 76.144,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 100,
+              "calls": 1,
+              "totalMS": 57.019,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 378.818,
+            "narrowGrantMS": 38.706,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 165.007
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 31965184,
+            "peakRSSBytes": 32063488,
+            "failedGates": [],
+            "go": true
+          },
+          "all": {
+            "granted": 20000,
+            "options": [],
+            "coldStatusMS": 317.56770896026865,
+            "warmStatus": {
+              "samples": 25,
+              "medianMS": 84.205,
+              "p95MS": 101.066,
+              "completedRequestedSamples": true
+            },
+            "warmCompact": {
+              "samples": 25,
+              "medianMS": 129.677,
+              "p95MS": 154.594,
+              "completedRequestedSamples": true
+            },
+            "pagination": {
+              "documents": 20000,
+              "calls": 200,
+              "totalMS": 45703.355,
+              "complete": true
+            },
+            "readFromCompactHandleMS": 528.87,
+            "narrowGrantMS": 116.428,
+            "revocation": {
+              "readListSearchBlocked": true,
+              "threeCallsMS": 250.47
+            },
+            "correctness": "pass",
+            "sampledMaxRSSBytes": 64176128,
+            "peakRSSBytes": 64405504,
+            "failedGates": [],
+            "go": true
+          }
+        },
+        "readOnlySourceUnchanged": true,
+        "go": true
+      }
+    ],
+    "go": true
+  }
+}

@@ -40,7 +40,7 @@ let package = Package(
         .target(name: "VauldyOAuth", dependencies: ["VauldyMCPRuntime"]),
         .target(name: "VauldyMCPProtocol", dependencies: ["VauldyMCPRuntime", "VauldyCore", .product(name: "MCP", package: "swift-sdk")]),
         .executableTarget(name: "VauldyMCPHTTP", dependencies: ["VauldyOAuth", "VauldyMCPProtocol", .product(name: "NIOCore", package: "swift-nio"), .product(name: "NIOPosix", package: "swift-nio"), .product(name: "NIOHTTP1", package: "swift-nio")]),
-        .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyDocumentCore", "VauldyPrivacy"]),
+        .target(name: "VauldyMCPRuntime", dependencies: ["VauldyCore", "VauldyDocumentCore", "VauldyDocumentIntelligence", "VauldyPrivacy"]),
         .executableTarget(name: "VauldyMCPSetup", dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyDemoDocuments", "VauldyOAuth", "VauldyRelay"]),
         .executableTarget(name: "VauldyMCPStatus", dependencies: ["VauldyMCPRuntime", "VauldyCore"]),
         .executableTarget(name: "VauldyResearchMCP", dependencies: [
@@ -56,7 +56,7 @@ let package = Package(
         ),
         .testTarget(
             name: "VauldyMCPRuntimeTests",
-            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence", "VauldyOAuth", "VauldyRelay"],
+            dependencies: ["VauldyMCPRuntime", "VauldyCore", "VauldyPrivacy", "VauldyDemoDocuments", "VauldyDocumentIntelligence", "VauldyOAuth", "VauldyRelay", "VauldyMCPSetup"],
             resources: [.process("Fixtures")]
         )
     ]

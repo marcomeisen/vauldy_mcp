@@ -10,7 +10,10 @@ public struct MCPAnalysisCoverage: Encodable, Sendable {
     public let scope = "local-rule-based-extractive-analysis; not model-verified"
     var warnings: [String] { needsReview + unavailable + failed + notAnalyzed + stale > 0 ? ["BASE_ANALYSIS_NOT_COMPLETE"] : [] }
     init(_ documents: [VaultDocument]) {
-        let states = documents.map(\.baseAnalysisStatus)
+        self.init(states: documents.map(\.baseAnalysisStatus))
+    }
+
+    init(states: [String]) {
         completed = states.filter { $0 == "completed" }.count
         needsReview = states.filter { $0 == "needsReview" }.count
         unavailable = states.filter { $0 == "unavailable" }.count

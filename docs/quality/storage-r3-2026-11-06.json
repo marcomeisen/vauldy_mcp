@@ -1,0 +1,547 @@
+{
+  "generatedAt": "2026-11-06T13:58:03.706004+00:00",
+  "branch": "codex/local-first-product-readiness",
+  "baseCommit": "87ab76c3d7f79b53a2723235c036bf224c7573d6",
+  "dirtyBeforeTask": true,
+  "scope": "R3 only; isolated synthetic stores; no production migration, install, relay, credential or grant changes",
+  "boundaries": {
+    "scope": "Local stdio; one grant; 25 warm samples; native per-process peak RSS; no ChatGPT latency or 20k-real-archive acceptance.",
+    "binarySHA256": "953b71fd181035a82c1e40e43ad28f2c3ce164e13765be25d3fcb822a5e45217",
+    "beforeSHA256": "15dd0f16dc2ad40b69d1d4ef145e9d864aab9bc90e77d06d0de65fa724dbe6be",
+    "cases": [
+      {
+        "documents": 20000,
+        "granted": 1,
+        "snapshotBytes": 4320000,
+        "averageRecordBytes": 216,
+        "before": {
+          "coldStatusMS": 103.728,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 15.19,
+            "p95MS": 34.409
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 24.529,
+            "p95MS": 32.889
+          },
+          "peakRSSBytes": 55148544
+        },
+        "after": {
+          "coldStatusMS": 119.497,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 23.222,
+            "p95MS": 40.449
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 30.023,
+            "p95MS": 63.895
+          },
+          "peakRSSBytes": 17170432,
+          "restartStatusMS": 145.2562499907799,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 17104896
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 20001,
+        "granted": 1,
+        "snapshotBytes": 4320216,
+        "averageRecordBytes": 216,
+        "before": {
+          "coldStatusMS": 97.344,
+          "isError": true,
+          "errorText": "Der freigegebene lokale Bestand ist nicht lesbar. Original und Bestand bleiben unverändert.",
+          "peakRSSBytes": 53493760
+        },
+        "after": {
+          "coldStatusMS": 119.289,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 19.596,
+            "p95MS": 33.903
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 18.659,
+            "p95MS": 27.478
+          },
+          "peakRSSBytes": 17367040,
+          "restartStatusMS": 122.21183400833979,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 17252352
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 67107840,
+        "averageRecordBytes": 134216,
+        "before": {
+          "coldStatusMS": 124.965,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 15.025,
+            "p95MS": 20.968
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 44.111,
+            "p95MS": 82.064
+          },
+          "peakRSSBytes": 161759232
+        },
+        "after": {
+          "coldStatusMS": 209.294,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 29.975,
+            "p95MS": 44.427
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 44.007,
+            "p95MS": 53.713
+          },
+          "peakRSSBytes": 20791296,
+          "restartStatusMS": 217.0487089897506,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 17760256
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 67109888,
+        "averageRecordBytes": 134220,
+        "before": {
+          "coldStatusMS": 137.83,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 107.405,
+            "p95MS": 115.756
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 133.744,
+            "p95MS": 149.731
+          },
+          "peakRSSBytes": 226279424
+        },
+        "after": {
+          "coldStatusMS": 214.764,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 24.068,
+            "p95MS": 38.295
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 44.959,
+            "p95MS": 65.477
+          },
+          "peakRSSBytes": 21331968,
+          "restartStatusMS": 208.16020900383592,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 17481728
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 100662272,
+        "averageRecordBytes": 201325,
+        "before": {
+          "coldStatusMS": 186.994,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 152.828,
+            "p95MS": 162.182
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 183.908,
+            "p95MS": 205.959
+          },
+          "peakRSSBytes": 304578560
+        },
+        "after": {
+          "coldStatusMS": 295.224,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 23.331,
+            "p95MS": 49.118
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 56.69,
+            "p95MS": 72.281
+          },
+          "peakRSSBytes": 22872064,
+          "restartStatusMS": 318.6638749903068,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 17924096
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 100664320,
+        "averageRecordBytes": 201329,
+        "before": {
+          "coldStatusMS": 174.764,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 151.486,
+            "p95MS": 159.975
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 185.79,
+            "p95MS": 199.911
+          },
+          "peakRSSBytes": 309248000
+        },
+        "after": {
+          "coldStatusMS": 296.326,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 28.451,
+            "p95MS": 53.292
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 53.899,
+            "p95MS": 71.179
+          },
+          "peakRSSBytes": 22528000,
+          "restartStatusMS": 305.9755000285804,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 18087936
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 134216704,
+        "averageRecordBytes": 268433,
+        "before": {
+          "coldStatusMS": 235.706,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 193.323,
+            "p95MS": 222.119
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 239.312,
+            "p95MS": 259.589
+          },
+          "peakRSSBytes": 394035200
+        },
+        "after": {
+          "coldStatusMS": 385.967,
+          "isError": false,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 17.34,
+            "p95MS": 53.095
+          },
+          "listWithQuery": {
+            "samples": 25,
+            "medianMS": 60.833,
+            "p95MS": 70.082
+          },
+          "peakRSSBytes": 26066944,
+          "restartStatusMS": 384.9184580030851,
+          "revocationBlockedReadAndList": true,
+          "restartPeakRSSBytes": 18661376
+        },
+        "sourceUnchanged": true
+      },
+      {
+        "documents": 500,
+        "granted": 1,
+        "snapshotBytes": 134218752,
+        "averageRecordBytes": 268438,
+        "before": {
+          "coldStatusMS": 45.268,
+          "isError": true,
+          "errorText": "Der freigegebene lokale Bestand ist nicht lesbar. Original und Bestand bleiben unverändert.",
+          "peakRSSBytes": 148799488
+        },
+        "after": {
+          "coldStatusMS": 19.256,
+          "isError": true,
+          "errorText": "Der Inhalt überschreitet die Grenzen dieser Version. Es wurde kein unvollständiger Inhalt als vollständig ausgegeben.",
+          "peakRSSBytes": 14778368
+        },
+        "sourceUnchanged": true
+      }
+    ]
+  },
+  "fullSelection": {
+    "scope": "Full selection above the 64/96 MiB cache budgets; status only; 25 warm samples; no speedup promise.",
+    "cases": [
+      {
+        "snapshotBytes": 73400320,
+        "documents": 500,
+        "granted": 500,
+        "serverOptions": [],
+        "before": {
+          "coldStatusMS": 338.4207090130076,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 316.278,
+            "p95MS": 329.811
+          },
+          "peakRSSBytes": 225591296
+        },
+        "after": {
+          "coldStatusMS": 445.0869160355069,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 317.159,
+            "p95MS": 329.887
+          },
+          "peakRSSBytes": 230653952
+        }
+      },
+      {
+        "snapshotBytes": 102760448,
+        "documents": 500,
+        "granted": 500,
+        "serverOptions": [
+          "--experimental-sqlite-index"
+        ],
+        "before": {
+          "coldStatusMS": 454.70279100118205,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 430.754,
+            "p95MS": 469.896
+          },
+          "peakRSSBytes": 312442880
+        },
+        "after": {
+          "coldStatusMS": 599.5120829902589,
+          "warmStatus": {
+            "samples": 25,
+            "medianMS": 430.662,
+            "p95MS": 445.295
+          },
+          "peakRSSBytes": 304726016
+        }
+      }
+    ]
+  },
+  "concurrentImport": {
+    "snapshotBytes": 72705000,
+    "initialRecords": 500,
+    "finalRecords": 501,
+    "grantedBeforeAndAfter": 1,
+    "realWorkerImportMS": 2737.321,
+    "concurrentList": {
+      "samples": 28,
+      "medianMS": 45.148,
+      "p95MS": 280.504
+    },
+    "transientSourceRotationErrors": 2,
+    "successfulReadsWhileImporting": 26,
+    "restart": true,
+    "revocation": true,
+    "existingOCRUnchanged": true,
+    "sourceAndGrantUnchanged": true,
+    "localSHA256": "137596677186b46839c1f68e2ac65264a84e0aaf10451fe4184ad1e762b8bf9f",
+    "mcpSHA256": "953b71fd181035a82c1e40e43ad28f2c3ce164e13765be25d3fcb822a5e45217"
+  },
+  "sqlitePilot": {
+    "documents": 500,
+    "fullJSONReadRewriteMS": [
+      447.83902168273926,
+      421.7209815979004,
+      430.9699535369873
+    ],
+    "pointReadMS": [
+      0.8900165557861328,
+      0.7050037384033203,
+      0.6400346755981445,
+      0.7200241088867188,
+      0.6771087646484375,
+      0.758051872253418,
+      0.7009506225585938,
+      0.7790327072143555,
+      0.7599592208862305,
+      0.7539987564086914,
+      0.7140636444091797,
+      0.697016716003418,
+      0.6809234619140625,
+      0.722050666809082,
+      0.6519556045532227,
+      0.6690025329589844,
+      0.6400346755981445,
+      0.7189512252807617,
+      0.7649660110473633,
+      0.6730556488037109,
+      0.6560087203979492,
+      0.7879734039306641,
+      0.7590055465698242,
+      0.6719827651977539,
+      0.661015510559082
+    ],
+    "pointWriteMS": [
+      7.16710090637207,
+      4.5310258865356445,
+      9.13691520690918,
+      4.192948341369629,
+      4.616022109985352,
+      3.7779808044433594,
+      3.152012825012207,
+      3.0939579010009766,
+      3.4040212631225586,
+      2.8170347213745117,
+      4.459023475646973,
+      3.744959831237793,
+      2.9500722885131836,
+      2.6369094848632812,
+      2.462029457092285,
+      2.5930404663085938,
+      2.6009082794189453,
+      3.024935722351074,
+      2.611994743347168,
+      2.5529861450195312,
+      5.304932594299316,
+      2.79998779296875,
+      2.892017364501953,
+      2.789020538330078,
+      2.7289390563964844
+    ],
+    "scope": "Storage only; explicit SQLite pilot; JSON control excludes backup rotation; not an MCP or customer acceptance",
+    "snapshotBytes": 114141393,
+    "sqliteImportMS": 836.8430137634277,
+    "pointReadMSSummary": {
+      "samples": 25,
+      "medianMS": 0.7050037384033203,
+      "p95MS": 0.7879734039306641
+    },
+    "pointWriteMSSummary": {
+      "samples": 25,
+      "medianMS": 3.024935722351074,
+      "p95MS": 7.16710090637207
+    },
+    "fullJSONReadRewriteMSSummary": {
+      "samples": 3,
+      "medianMS": 430.9699535369873,
+      "p95MS": 447.83902168273926
+    }
+  },
+  "swiftTests": {
+    "executedAndPassed": 79,
+    "skippedInRegularRun": 1,
+    "separateStorageBenchmarkPassed": 1,
+    "regularSuiteCount": 9,
+    "regularSeconds": 16.485,
+    "separateBenchmarkSeconds": 2.637,
+    "configuration": "release",
+    "log": "/private/tmp/vauldy-r3-final-tests.log"
+  },
+  "sourceSHA256": {
+    "Sources/VauldyCore/FileVaultSnapshotSource.swift": "e040f4698ce00632c1cebf15424f2c89875d54ccadb9602e85c465c57891a3c5",
+    "Sources/VauldyCore/VaultStorageLimits.swift": "fe3a8a0953c2a5f15d8c696f45be040532b18440b2a86c6fcfed1380126f0184",
+    "Sources/VauldyCore/LocalDocumentStore.swift": "62204eea488c2d471d634182618c5d431272c0ac36f7b369e96c5968a7c40662",
+    "Sources/VauldyCore/LocalImportService.swift": "f5814f43088951ab57d6a5114facc9575d08e4cc6c8218019124976f3ff350b0",
+    "Sources/VauldyCore/LocalImportWorker.swift": "6ce815b1a953e65463b456f97a56126bc2b758a2780ad2bc2dd1c356be49e51d",
+    "Sources/VauldyCore/SQLiteDocumentStorePilot.swift": "3edaac936e5b6aac26678f055ea77a8d10d2bc72cfe0934cabd61fe085ea508c",
+    "Sources/VauldyMCPRuntime/MCPFileVersion.swift": "1d6101e9107fa8c19761a071b1e7051b9b5e03cd903f766c20e28e4f6a6e9b04",
+    "Sources/VauldyMCPRuntime/ReadOnlyMCPRuntime.swift": "a71dd96c42a6a991747288c7887f5bc489a78c34082f62b253906525d5a6df07",
+    "Sources/VauldyMCPSetup/SetupModel.swift": "e9e0b0c3229d985209916bbb599d92f449693751d993c2efd5039d56e7db477c",
+    "Tests/VauldyMCPRuntimeTests/StorageBoundaryTests.swift": "58c5dafabda8838046935af871fc2f6e2c401c97892c8a57bacb5b6ebf9e4fca",
+    "Tests/VauldyMCPRuntimeTests/SQLiteDocumentStorePilotTests.swift": "42253a680d216b4f0920fc8a2b60eda5ffcdf19692ec2938004451187526c5ed",
+    "Tests/VauldyMCPRuntimeTests/LocalWorkerTests.swift": "03534e045f49cfe441144e81d3bfa721b2ba78f5d46ed39bb848fbd0ec4e9c99",
+    "scripts/mcp/storage_boundary_benchmark.py": "2f0ab5b3c74eae1ebf038f9fe6968526c6e138f850e72325308dce878ea55693",
+    "scripts/mcp/storage_import_smoke_test.py": "0236d826542498fa9084819860aae607407218ae7bfac03f436c88795f3e5211",
+    "scripts/mcp/regression_test.py": "d64f8ccd4f80fd77f4ce60048c0d00fe8a39801bd15af40652bfa92898cddcd6"
+  },
+  "validationNotes": [
+    "The regular Swift run reports 80 tests including one skipped optional benchmark. 79 actually executed there; the benchmark executed and passed separately.",
+    "First implementation regressed uncached full selection; final implementation reuses the bulk reader only after immutable file generation and exact scope were verified.",
+    "Full selection above cache budgets remains expensive; cold reads of long snapshots are slower than baseline.",
+    "SQLite is a package-internal record store pilot, not selected by production worker or MCP.",
+    "The real concurrent import may explicitly fail closed while the source rotates; no success may widen the grant.",
+    "No entire installer/release regression, signing, notarization, fresh customer Mac or regular ChatGPT acceptance is claimed."
+  ],
+  "wireChecks": {
+    "v1Contract": "passed",
+    "searchNormalization": {
+      "passed": true,
+      "variants": 7,
+      "controls": 5,
+      "privateDocuments": 1,
+      "modes": [
+        {
+          "mode": [
+            "default"
+          ],
+          "matchingDocuments": 7,
+          "enumerationMS": 69.3,
+          "literalPageEvidence": true,
+          "changedSourceAndRevocation": true
+        },
+        {
+          "mode": [
+            "--memory-sqlite-index"
+          ],
+          "matchingDocuments": 7,
+          "enumerationMS": 96.4,
+          "literalPageEvidence": true,
+          "changedSourceAndRevocation": true
+        },
+        {
+          "mode": [
+            "--persistent-sqlite-index"
+          ],
+          "matchingDocuments": 7,
+          "enumerationMS": 109.7,
+          "literalPageEvidence": true,
+          "changedSourceAndRevocation": true
+        }
+      ]
+    },
+    "note": "The two small functional wire checks ran concurrently after all performance measurements. Their printed timings are not performance claims."
+  },
+  "checks": {
+    "gitDiffCheck": "passed",
+    "buildCopySourcesTestsPackageByteEqual": true,
+    "nativeSetupBuilt": true,
+    "nativeSetupUIRun": false,
+    "installerBuilt": false
+  },
+  "commandsDocument": "docs/storage-r3.md#ausgeführte-kommandos",
+  "goNoGo": {
+    "r3TestedCodeAndIsolatedPilot": "GO",
+    "productionSQLiteSwitch": "NO-GO pending explicit integration and migration acceptance",
+    "real20000DocumentArchive": "NO-GO",
+    "customerMacAndAgensi": "Not newly accepted; existing release and target-client gates remain open"
+  }
+}

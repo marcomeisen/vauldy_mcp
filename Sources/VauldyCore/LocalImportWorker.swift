@@ -18,6 +18,7 @@ public struct LocalImportWorker: Sendable {
         var progress: LocalImportProgress?
         var outcome: LocalImportOutcome?
         var error: LocalImportError?
+        var capacityError: LocalStoreCapacityError?
         var finishedAt: Date?
     }
     public struct Status: Codable, Sendable {
@@ -46,15 +47,18 @@ public struct LocalImportWorker: Sendable {
             return .init(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
                          reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
         }
-        return try await submit(staged.document.id, progress: progress)
+        let outcome = try await submit(staged.document.id, progress: progress)
+        guard staged.duplicate else { return outcome }
+        return .init(documentID: outcome.documentID, state: outcome.state, reusedOriginal: true,
+                     pageCount: outcome.pageCount, metrics: outcome.metrics, analysisStatus: outcome.analysisStatus)
     }
     public func importFolder(_ url: URL, recursive: Bool = false,
                              progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> [LocalImportOutcome] {
-        _ = try await store.documents()
-        let (access, files) = try await Task.detached { try folderFiles(url, recursive: recursive) }.value
+        try await store.validateStorage()
+        let (access, scan) = try await Task.detached { try folderFiles(url, recursive: recursive) }.value
         defer { access.close() }
         var outcomes: [LocalImportOutcome] = []
-        for file in files {
+        for file in scan.supported {
             try Task.checkCancellation()
             outcomes.append(try await importFile(file, storage: .referenced, progress: progress))
         }
@@ -63,40 +67,49 @@ public struct LocalImportWorker: Sendable {
 
     /// Counts every distinct supported file before import and keeps folder access open until the caller finishes.
     public func folderImportBatch(_ urls: [URL], recursive: Bool) async throws -> LocalFolderImportBatch {
-        _ = try await store.documents()
+        try await store.validateStorage()
         // The detached scan is joined on cancellation so no folder access outlives the request.
         let scan = Task.detached {
-            var files: [URL] = []
+            var files: [URL] = [], unsupported: [URL] = [], unavailable: [URL] = []
             var seen: Set<String> = []
             var accesses: [LocalOriginalAccess] = []
-            var unavailable = 0
             for url in urls {
                 try Task.checkCancellation()
-                let source: (LocalOriginalAccess, [URL])
-                do { source = try folderFiles(url, recursive: recursive) }
+                let access: LocalOriginalAccess
+                let source: (supported: [URL], unsupported: [URL])
+                do {
+                    (access, source) = try folderFiles(url, recursive: recursive, includeUnsupported: true)
+                }
                 catch is CancellationError { throw CancellationError() }
                 catch LocalWatchError.scanLimit { throw LocalWatchError.scanLimit }
-                catch { unavailable += 1; continue }
+                catch { unavailable.append(url); continue }
                 let count = files.count
-                for file in source.1 where seen.insert(file.resolvingSymlinksInPath().path).inserted {
+                for file in source.supported where seen.insert(file.resolvingSymlinksInPath().path).inserted {
                     guard files.count < 20_000 else { throw LocalWatchError.scanLimit }
                     files.append(file)
                 }
-                if files.count > count { accesses.append(source.0) }
+                for file in source.unsupported where seen.insert(file.resolvingSymlinksInPath().path).inserted {
+                    guard unsupported.count < 20_000 else { throw LocalWatchError.scanLimit }
+                    unsupported.append(file)
+                }
+                if files.count > count { accesses.append(access) }
             }
             try Task.checkCancellation()
-            return LocalFolderImportBatch(files: files, unavailableFolderCount: unavailable, accesses: accesses)
+            return LocalFolderImportBatch(files: files, unsupportedFiles: unsupported, unavailableFolders: unavailable, accesses: accesses)
         }
         return try await withTaskCancellationHandler { try await scan.value } onCancel: { scan.cancel() }
     }
 
-    private func folderFiles(_ url: URL, recursive: Bool) throws -> (LocalOriginalAccess, [URL]) {
+    private func folderFiles(_ url: URL, recursive: Bool, includeUnsupported: Bool = false) throws
+        -> (LocalOriginalAccess, (supported: [URL], unsupported: [URL])) {
         let folder = try LocalWatchedFolder.authorizing(url, recursive: recursive)
         let access = try folder.openDirectory()
-        let files = try LocalWatchedFolderMonitor.files(folder, excluding: store.root, directory: access.url)
-        return (access, files)
+        return (access, try LocalWatchedFolderMonitor.scanFiles(folder, excluding: store.root, directory: access.url,
+                                                               includeUnsupported: includeUnsupported))
     }
 
+    /// Fresh reads bypass checkpoints and preserve existing literal evidence.
+    /// A changed prior line keeps the previous page and remains reviewable.
     public func retry(documentID: UUID, fresh: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try await submit(documentID, fresh: fresh, progress: progress)
     }
@@ -131,6 +144,7 @@ public struct LocalImportWorker: Sendable {
             let current = try read(jobURL(job.id), as: Job.self)
             if let update = current.progress, update != lastProgress { progress(update); lastProgress = update }
             if let outcome = current.outcome { if cancelSent { throw CancellationError() }; return outcome }
+            if let error = current.capacityError { throw error }
             if let error = current.error { if error == .cancelled { throw CancellationError() }; throw error }
             if Task.isCancelled && !cancelSent {
                 try write(Data(), to: cancellationURL(job.id)); cancelSent = true
@@ -152,7 +166,7 @@ public struct LocalImportWorker: Sendable {
             for _ in 0..<20 {
                 if let details = try? read(directory.appendingPathComponent("instance-details"), as: InstanceDetails.self),
                    let instance = try? read(directory.appendingPathComponent("instance"), as: UUID.self),
-                   details.id == instance, details.protocolVersion == 2 { compatible = true; break }
+                   details.id == instance, details.protocolVersion == 3 { compatible = true; break }
                 Thread.sleep(forTimeInterval: 0.01)
             }
             guard compatible else { throw LocalImportError.workerBusy }
@@ -166,7 +180,7 @@ public struct LocalImportWorker: Sendable {
         return job
     }
     private func prepare() async throws {
-        _ = try await store.documents() // Refuse foreign/corrupt stores before touching IPC state.
+        try await store.validateStorage() // Refuse foreign/corrupt stores before touching IPC state.
         guard (try? directory.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) != true else { throw LocalImportError.storageUnavailable }
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
         try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: directory.path)
@@ -197,7 +211,7 @@ public struct LocalImportWorker: Sendable {
         }
         throw LocalImportError.workerBusy
     }
-    private struct InstanceDetails: Codable { let id: UUID; var protocolVersion = 2 }
+    private struct InstanceDetails: Codable { let id: UUID; var protocolVersion = 3 }
     public func serve(idleSeconds: Double = 120, ocr: (any LocalDocumentOCR)? = nil, watchInterval: Double = 5, watchFolders: Bool = true) async throws {
         try await prepare()
         let lease: LocalWorkerLease
@@ -239,7 +253,13 @@ public struct LocalImportWorker: Sendable {
                 idle = Date(); job.state = "running"; try save(job)
                 let jobID = job.id, documentID = job.documentID, fresh = job.fresh, borrowedAccess = job.borrowedAccess
                 let task = Task {
-                    try await LocalImportService(store: store, ocr: ocr ?? (fresh ? NativeLocalDocumentOCR() : nil)).retry(documentID: documentID, borrowedAccess: borrowedAccess) { update in
+                    let previous = try await store.document(id: documentID)
+                    var engine: (any LocalDocumentOCR)? = ocr ?? (fresh ? NativeLocalDocumentOCR() : nil)
+                    if fresh, let previous, !previous.baseAnalysisPages.isEmpty {
+                        engine = try EvidencePreservingLocalOCR(document: previous, candidate: engine ?? NativeLocalDocumentOCR())
+                    }
+                    return try await LocalImportService(store: store, ocr: engine).retry(documentID: documentID,
+                        borrowedAccess: borrowedAccess, expected: fresh ? previous : nil) { update in
                         // Only this worker writes running-job progress; readers see atomic snapshots.
                         if var current = try? read(jobURL(jobID), as: Job.self) { current.progress = update; try? save(current) }
                     }
@@ -252,7 +272,10 @@ public struct LocalImportWorker: Sendable {
                     }
                 }
                 do { job.outcome = try await task.value }
-                catch { job.error = error is CancellationError ? .cancelled : (error as? LocalImportError ?? .storageUnavailable) }
+                catch {
+                    job.capacityError = error as? LocalStoreCapacityError
+                    job.error = error is CancellationError ? .cancelled : (error as? LocalImportError ?? .storageUnavailable)
+                }
                 monitor.cancel(); await monitor.value
                 // Native cancellation has joined before publishing completion or processing another job.
                 if job.error == .workerBusy { job.state = "queued"; job.error = nil; try save(job); await pause(); continue }
@@ -295,7 +318,9 @@ public struct LocalImportWorker: Sendable {
 
 public struct LocalFolderImportBatch: Sendable {
     public let files: [URL]
-    public let unavailableFolderCount: Int
+    public let unsupportedFiles: [URL]
+    public let unavailableFolders: [URL]
+    public var unavailableFolderCount: Int { unavailableFolders.count }
     fileprivate let accesses: [LocalOriginalAccess]
 
     public func close() { accesses.forEach { $0.close() } }

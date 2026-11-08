@@ -37,7 +37,7 @@ struct SoftwareInstallationWizard: View {
                             .foregroundStyle(.green)
                             .accessibilityIdentifier("software-installation-complete")
                         Text("Der lokale Server hat den Starttest bestanden.")
-                        Text("Wenn du einen Chatbot verbinden möchtest, wähle danach „Chatbot verbinden“. Dort entscheidest du, welche Dokumente er lesen darf.")
+                        Text("Weiter mit „Chatbot verbinden“: Der nächste Assistent führt dich durch Chatbot-Auswahl, Dokumentimport und Freigabe. Du entscheidest, welche Dokumente der Chatbot lesen darf.")
                             .foregroundStyle(.secondary)
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(2)
@@ -48,9 +48,12 @@ struct SoftwareInstallationWizard: View {
                 case .installing:
                     EmptyView()
                 case .complete:
+                    Button("Später einrichten") { model.finishInstallation(connectChatbot: false) }
+                        .accessibilityIdentifier("software-installation-later")
                     Spacer()
-                    Button("Fertig") { dismiss() }
+                    Button("Chatbot verbinden") { model.finishInstallation(connectChatbot: true) }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("software-installation-connect")
                 case .review, .failed:
                     Button("Abbrechen") { dismiss() }
                     Spacer()
