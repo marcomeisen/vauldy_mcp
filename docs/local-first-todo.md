@@ -6,6 +6,68 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## App-Icon und Paket mit Icon · 08.11.2026
+
+Ein passendes Icon mit dem integrierten ImageGen-Werkzeug erstellt: gefaltetes weißes
+Dokument als V, türkisfarbener Archivordner und dunkelblaue macOS-Kachel. PNG-Master
+mit 1024 Pixeln, vollständiges ICNS, Erstellprompt und Herkunft unter `assets/app-icon/`.
+PNG-Alpha und die zehn Standardgrößen geprüft; kleine 64-Pixel-Ansicht visuell geprüft.
+`iconutil` benötigte den regulären macOS-Laufzeitkontext; der Sandbox-Versuch zählte nicht
+als bestanden.
+
+Icon-Assets, Erstellprompt, Paketierung und die Paketnachweise werden im anschließenden
+Git-Abschluss auf Nutzerauftrag nach `main` übernommen. Der Bytevergleich bestätigt
+das bereits in der geprüften ZIP enthaltene ICNS. Die vorhandene ZIP behält ihre
+korrekte Kennzeichnung als Paket mit wiederverwendeten Programmen.
+
+`package.py` übernimmt das Icon künftig vor der Signierung in Haupt- und Status-App
+und setzt `CFBundleIconFile`. Für die sofort nutzbare ZIP die gerade geprüften Programme
+aus `main` (`d905ea4`) wiederverwendet und die App mit dem Icon neu ad hoc signiert.
+
+- Neues Paket: `dist/mcp/main-d905ea4-icon-20261108/Vauldy.zip`, 19.112.592 Bytes.
+- SHA-256: `c120cf9c4443d5f1c98ccec1d555f15273f525e308e59092ec770119706db87f`.
+- Alle sechs Mach-O-UUIDs und Programmversionen erhalten, Serverbuild und neun Werkzeuge
+  identisch. Manifest korrekt `buildMode=reused`, `sourceCommit=null`; das neue Asset
+  ist noch kein versionierter sauberer Release. Binärherkunft separat im Nachweis erhalten.
+- Tatsächliches ZIP erneut entpackt: tiefe/strikte Signaturprüfung und beide Iconverweise
+  samt ICNS-Bytes bestanden. Paketmetadaten-, stdio-, Werkzeugparitäts- und Update-/Rollback-
+  Prüfungen bestanden. Keine erneuten Swift-/OCR-Tests für die reine Bild-/Paketänderung.
+
+Keine Produktivinstallation oder bestehende Verbindung verändert. Voriges ZIP erhalten.
+Nachweis und Prüfprotokolle liegen neben dem neuen ZIP. Nächster Distributionsschritt bleibt
+ein versionierter Source-Release mit verfügbarer Developer-ID-Signierung und Notarisierung.
+
+## Aktuelle Vauldy.zip aus main · 08.11.2026
+
+Auf Nutzerauftrag ein neues Paket aus dem sauberen, mit `origin/main` abgeglichenen
+Commit `d905ea4dfb747da81c6ca93d15f24a4a6b7b2b68` erstellt. Alle sechs Paketprogramme
+in einer isolierten lokalen Git-Kopie frisch gebaut; keine kompilierten Artefakte übernommen.
+Sieben vorhandene Abhängigkeits-Checkouts vorab gegen `Package.resolved` geprüft.
+
+- ZIP: `dist/mcp/main-d905ea4-20261108/Vauldy.zip`, 15.795.191 Bytes.
+- SHA-256: `4a053aec3d8790113f26cf814d4b1ebe0f75778c3c5ba61df18bafa0fa887e4d`.
+- Version 0.13.0, arm64, macOS ab 14.0, neun MCP-Werkzeuge;
+  Serverbuild `macho.57094ddeb9de3ba7b37f54cb01088bb6`.
+- Manifest bestätigt `buildMode=release` und den obigen Quellcommit.
+  Paket mit `package.py --name Vauldy --archive-only --output …` erstellt.
+  Lokal ad hoc signiert, nicht Developer-ID-signiert und nicht notarisiert.
+- 24 native Tests in vier Suites neu bestanden (9,120 s):
+  `MCPDocumentInventoryTests|SetupDocumentGuidanceTests|LocalImportTests|EvidencePreservingOCRTests`.
+- ZIP erneut entpackt und tief/strikt signaturgeprüft. Paketmetadatenprüfung,
+  echter stdio-Smoke-Test, Relay-Werkzeugparität, Update/Rollback und synthetischer
+  nativer Setup-Start bestanden. Inventar-Wiretest mit JSON, SQLite, Altprojektion
+  sowie 20.000 Dokumenten über 200 Seiten bestanden. Der erste Inventaraufruf
+  verwendete einen relativen Fixturepfad und brach ab; Wiederholung mit absoluten
+  Pfaden erfolgreich. Keine Produktcodeänderung dafür erforderlich.
+- 22 während der Synchronisation erschienene, bytegleiche unversionierte
+  Dateiduplikate nach Vergleich mit den kanonischen Dateien entfernt.
+
+Buildprotokoll, Testprotokolle, Inventarbericht und `package-verification.json` liegen
+neben dem ZIP. Temporäre Buildkopie nach Prüfung entfernt. Keine Produktivinstallation
+oder Änderung der bestehenden Verbindung durchgeführt. Der gesamte Regressionsrunner,
+ein physischer Offline-Kundenmac und eine fachliche Zielchat-Abnahme bleiben separate
+Prüfungen; Developer-ID-Signierung und Notarisierung bleiben der nächste Distributionsschritt.
+
 ## Git-Integration und temporäre Dateien · 08.11.2026
 
 Auf Nutzerauftrag alle vorhandenen Branchänderungen für `main` zusammengeführt: 15 bereits

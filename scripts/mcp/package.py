@@ -100,6 +100,20 @@ def remove_signing_detritus(app):
             run(['/usr/bin/xattr', '-d', name, str(path)])
 
 
+def install_app_icon(app):
+    icon = ROOT / 'assets' / 'app-icon' / 'Vauldy.icns'
+    if not icon.is_file():
+        raise SystemExit('Missing Vauldy app icon: assets/app-icon/Vauldy.icns')
+    for bundle in (app, app / 'Contents' / 'Resources' / 'Vauldy MCP Status.app'):
+        resources = bundle / 'Contents' / 'Resources'
+        resources.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(icon, resources / icon.name)
+        info = bundle / 'Contents' / 'Info.plist'
+        metadata = plistlib.loads(info.read_bytes())
+        metadata['CFBundleIconFile'] = icon.name
+        info.write_bytes(plistlib.dumps(metadata))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, default=ROOT / 'dist' / 'mcp')
@@ -180,6 +194,7 @@ def main():
                     NSHighResolutionCapable=True,
                     CFBundleURLTypes=[dict(CFBundleURLName='Vauldy OAuth connection', CFBundleURLSchemes=['vauldy-mcp'])])
         with (app / 'Contents' / 'Info.plist').open('wb') as f: plistlib.dump(info, f)
+        install_app_icon(app)
         remove_signing_detritus(app)
         sign = ['codesign', '--force', '--sign', args.identity]
         if args.identity != '-': sign += ['--options', 'runtime', '--timestamp']
