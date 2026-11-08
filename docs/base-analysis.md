@@ -186,3 +186,33 @@ werden dadurch nicht erweitert. Manueller Titel und eigene Notizen bleiben erhal
 Start mit allen Helferprogrammen: `python3 scripts/mcp/run_ui.py`.
 Gesamte Regression: `python3 scripts/mcp/regression_test.py`.
 Mit `--update-reports` werden die gemessenen Qualitätsberichte unter `docs/quality/` aktualisiert.
+
+
+## Konkrete Qualitätsanzeige und lokale Fundstellen (08.11.2026)
+
+Die technische Dokumentliste, der Bestands-Qualitätsbericht und die lokale Prüfansicht
+verwenden dieselbe abgeleitete `LocalDocumentQuality`. Sie trennt Originalzugriff,
+Seitenverarbeitung, unsicheren Text, Dokumentart, Basisangaben und Analysezustand.
+„N von N vorhandenen Seiten verarbeitet“ bestätigt weder vollständige Originalunterlagen
+noch richtige OCR. Unlesbare Erkennung, nicht zugeordneter Seitentext und tatsächlich
+fehlende Originalseiten werden nicht gleichgesetzt. Ein leeres Original bleibt eine
+als leer erkannte, verarbeitete Seite.
+
+Konkrete Gründe werden aus gespeicherten Nachlese-, Konflikt-, Kennungs-, Abdeckungs-
+und Analysehinweisen abgeleitet. Fehlende optionale Basisangaben heißen „nicht belegt“;
+ohne fachliches Pflichtfeldschema wird keine Pflichtverletzung behauptet. Ein unbekannter
+Dokumenttyp erfordert nicht automatisch einen neuen Textlauf. Tabellen und abschließende
+manuelle Prüfung bleiben ausdrücklich separat und nicht dokumentiert, soweit dafür kein
+Nachweis vorliegt. Es gibt keine Qualitätsprozentzahl und keinen Status „modellvalidiert“.
+Der MCP-Analysescope beschreibt die regelbasierte Extraktion ohne unabhängige Inhaltsprüfung.
+
+Jeder lokalisierbare Grund öffnet seine physische Seite. Aktuelle, an Originalhash,
+Seitentext, OCR-Konfiguration und Geometrie gebundene Bildregionen werden hervorgehoben
+und als Ausschnitt dargestellt. Basisangaben öffnen ihren wörtlichen Quellbeleg.
+Aggregierte alte Zeilenhinweise ohne Koordinaten öffnen die ganze Seite mit entsprechender
+Erklärung. Veraltete Geometrie wird nicht als aktuelle Fundstelle verwendet. Die Vorschau
+verifiziert weiter die Originalbytes und hält ihren bestehenden Access-Lease.
+
+Dies ist eine lokale Präsentationsänderung. Erkennungsverfahren, OCR-Caches, Originale,
+Speicherformat und Freigaben werden nicht automatisch verändert; GLM, Docling und Jev
+werden durch diese Anzeige nicht installiert oder gestartet.

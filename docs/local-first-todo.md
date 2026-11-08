@@ -6,6 +6,171 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Konkrete Qualitätsgründe und lokale Fundstellen · 08.11.2026
+
+Auf Nutzerauftrag die technische Dokumentliste, den Bestands-Qualitätsbericht und
+die lokale Prüfansicht um dieselbe abgeleitete `LocalDocumentQuality` ergänzt.
+Die zuvor gestoppte GLM-/Docling-Integration bleibt gestoppt.
+
+- [x] Verarbeitung, Originalzugriff, unsichere OCR, Dokumentart, nicht belegte
+  Basisangaben und Analysezustand getrennt. Keine Qualitätsprozentzahl und kein
+  Status „modellvalidiert“. Der MCP-Analysescope benennt regelbasierte Extraktion
+  ohne unabhängige Inhaltsprüfung; fehlende Modellprüfung ist kein eigener Warnstatus.
+- [x] Konkrete Gründe für unlesbare/nicht zugeordnete Seiten, unbestätigte Zeilen,
+  Kennungen, Lesekonflikte, begrenzte Nachlese, visuelle Abdeckung und Feldbelege.
+  Optionale nicht belegte Angaben werden nicht als fehlende Pflichtangaben ausgegeben.
+  Tabellenprüfung und abschließende manuelle Prüfung bleiben ohne Nachweis offen.
+- [x] Fundstellen öffnen die physische Quellseite. Aktuelle Bildregionen werden
+  markiert und vergrößert, Basisangaben öffnen den wörtlichen Beleg. Ohne genaue
+  Koordinaten wird ausdrücklich die ganze Seite angezeigt. Fremde Archivansichten
+  erhalten keine Schaltfläche auf den eigenen lokalen Originalspeicher.
+- [x] PDF-Vorschau skaliert Crop-/Rotationstransformation explizit. Der sichtbare
+  Test fand die frühere versetzte Darstellung; neue Pixeltests prüfen einen
+  versetzten Crop-Ursprung und 0/90/180/270 Grad gegen tatsächliche Originalpixel.
+- [x] Finaler nativer Lauf: **41 Tests in fünf Suites**, 68,950 s, bestanden:
+  `LocalDocumentQualityTests`, `LocalDocumentReviewTests`, `SetupDocumentGuidanceTests`,
+  `InventoryWorkflowTests`, `OCRLayoutTests`. Zusätzlich echter stdio-Smoke-Test
+  mit beiden Antwortkanälen, Freigabe, Privacy und Widerruf bestanden.
+- [x] Vollständiges ad hoc signiertes Testbundle über `scripts/mcp/run_ui.py`, eigener
+  `--setup-root` und eigene Bundlekennung. Sichtbar geprüft: unklare Dokumentart,
+  Seitenzugriff, markierte Bildregion, korrekter vergrößerter Ausschnitt und
+  wörtlicher Datumsbeleg. UI-Testhinweise waren synthetisch injiziert und sind
+  kein Qualitätsnachweis des OCR-Detektors. Vier geschützte Snapshot-/Originaldateien
+  nach UI-Lesen bytegleich; eigener Testprozess anschließend beendet.
+
+Prüfbefehl: `swift test --disable-sandbox --disable-automatic-resolution --jobs 4
+--no-parallel --filter '(LocalDocumentQualityTests|LocalDocumentReviewTests|SetupDocumentGuidanceTests|InventoryWorkflowTests|OCRLayoutTests)'`.
+Isolierte, gegen Git-Blobs geprüfte Buildkopie:
+`/private/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-quality-ui-8hgfegu8`.
+Ein erster Lauf ohne reguläre macOS-Rechte wurde wegen Sandbox-Verweigerungen
+nicht als gültiger Qualitätslauf gewertet. Die vorhandene fremde reine
+Whitespace-Änderung im alten `faint-line-corpus.json` bleibt unangetastet.
+
+Fortschritt: Anzeige und Fundstellen umgesetzt, nativ geprüft und auf zusätzlichen
+Nutzerauftrag als Installationspaket bereitgestellt:
+`dist/mcp/quality-review-20261108/Vauldy.zip`, 19.315.984 Bytes, SHA-256
+`7cc565481dedfdc9db1d0e3c27a9de0e44e3e0208d663a4f1c25b06c571afd29`.
+
+- Version 0.13.0, arm64, macOS ab 14.0, Serverbuild
+  `macho.62591573d7d73ae8a27e738feeddc892`. Alle 112 Swift-Quelldateien der isolierten
+  Buildkopie gegen den aktuellen Checkout und sieben Abhängigkeiten gegen ihre Pins
+  geprüft. Alle sechs Programme in dieser Iteration neu gebaut; ihre UUIDs und beide
+  Icondateien stimmen auch im tatsächlich ausgelieferten ZIP überein.
+- Paketierung der aktuellen bereits gebauten Programme mit `--skip-build --name Vauldy
+  --archive-only`; daher ehrlich `buildMode=reused`, `sourceCommit=null`. Es handelt sich
+  um den aktuellen lokalen Arbeitsstand auf Basis von `f4abac1`, keinen sauberen
+  bereits veröffentlichten main-Release. Lokal ad hoc signiert, nicht notarisiert.
+- Tatsächliches bereitgestelltes ZIP erneut entpackt: CRC, tiefe/strikte Signaturen,
+  Versionen, Buildidentitäten und Icons geprüft. stdio gegen genau dessen Server,
+  Paketmetadaten, Update-/Rollback einschließlich Fehler-/Crashfällen sowie nativer
+  Setup-Start mit synthetischem aktivem Watch-Ordner bestanden.
+- Maschinenlesbarer Nachweis: `docs/quality/quality-review-ui-2026-11-08.json`;
+  Protokolle im gleichnamigen Verzeichnis. Paketnachweis und Prüfsumme liegen beim ZIP.
+
+Produktivinstallation, Archive und Freigaben unverändert; kein Push oder Relay-Rollout.
+Eine spätere öffentliche Distribution benötigt weiterhin Developer-ID-Signierung und
+Notarisierung. Die gestoppte Modellintegration ist kein Bestandteil dieses Pakets.
+
+## Deutscher Mehrseitenkorpus und OCR-/IDP-Vergleich V2 · 08.11.2026
+
+Auf Nutzerauftrag den Test gegenüber dem früheren Zeilenkorpus verbreitert und
+Apple Vision, Docling Python, docling.rs, GLM-OCR sowie MiniCPM-Jev vollständig lokal
+wiederholt. [Bericht](german-document-comparison-v2.md), eingefrorenes Manifest und
+vollständige Auswertung unter `docs/quality/german-document-*-v2-2026-11-08.json`.
+
+- [x] 15 synthetische Raster-PDFs, 31 physische Seiten, zwölf Dokumentarten,
+  133 unterschiedliche wörtliche Label-Wert-Ziele, 19 Tabellen/345 befüllte Zellen.
+  Umlaute/ß/€, mehrere Schriftfamilien, Dezimalkommas, Mehrseiten-Scans und drei
+  Leer-/Rauschkontrollen. Keine versteckte Textebene; PDF-/PNG-Pixel identisch.
+  Alle Seiten gerendert und visuell geprüft; vor OCR eingefrorenes Manifest
+  `e8d6d5a7bb874081381eacdd541b686acb0643d1249bd36cc4785fb5ace947c0`.
+- [x] Alle vier OCR-Pfade erfolgreich auf allen 31 Seiten: Apple 132/133,
+  Python-Docling 130/133, Rust 125/133, GLM 133/133. Zeichenfehlerraten einschließlich
+  Lesereihenfolge 10,20/4,48/7,50/0,48 %. Keine sichtbaren Leerbild-Ausgaben.
+  GLM erfüllt das V2-Feldgate; die andersartigen V1-Regressionen bleiben gültig.
+- [x] Median Dokumentzeit je Inhaltsseite 0,61/2,43/4,40/25,65 s; Prozess-RSS
+  1,25/2,61/2,17/1,31 GiB. Apple-Ausreißer und separater identischer Nachlauf
+  dokumentiert. MLX-Peak 3,41 GiB separat, nicht auf RSS addiert.
+- [x] Beide Docling-Pfade rekonstruieren 15/19 Tabellen vollständig. Getrennter
+  GLM-Tabellenprompt mit vorgegebenen Regionen: 243/345 strenge Positionszellen,
+  4/19 Raster; Formatabweichungen und materielle Dezimalkommafehler getrennt belegt.
+- [x] Jev: offizieller v8.5-Renderer, drei Kalibrierfälle bestanden, 124 tatsächliche
+  OCR-Ausgaben und 112 Fehler-/Referenzkontrollen vollständig geprüft. Einheitlich
+  max. 1024 Bildtokens/Bild; unbeschränkter Pilot separat. Scoreauswahl 133/133,
+  CER 0,79 %; kein Feldgewinn gegenüber GLM. 24/28 Absatz-Auslassungen bei Schwelle
+  0,5 akzeptiert, daher kein Status „modellvalidiert“ gerechtfertigt.
+- [x] 42 unveränderte Modell-/Downloadartefakte, 40 native Swift-Quelldateien,
+  63 Rendererdateien und 20 KaTeX-Fonts gegen eingefrorene Herkunft geprüft.
+  Bestehenden Modell-/Lizenzaudit übernommen; neue Renderabhängigkeiten und Notices
+  ergänzt. Keine pauschale Vertriebsfreigabe eines neuen Fremdmodell-Bundles.
+- [x] Vollständige Auswertung mit `--require-jev`, acht Prüfungen der Auswertung und
+  Integrität sowie `git diff --check` bestanden. Zwei aus den fertigen Archiven
+  per CRC/Eintragshash geprüfte ZIPs mit Korpus bzw. Rohdaten-/Reproduktionsbelegen.
+
+Fortschritt: Vergleich abgeschlossen. Das breitere synthetische Design ersetzt
+keinen unabhängig annotierten echten Kundenbestand. Produktionsquellen, Archive,
+Prüfstatus und App-Pakete unverändert. Nächster fachlicher Schritt: getrennten
+GLM-Zweitlauf und Docling-Tabellen an einem echten zurückgehaltenen Bestand bewerten;
+Jev nicht als automatische Vollständigkeitsfreigabe verwenden.
+
+## Historischer IDP-/OCR-Zeilenvergleich V1 · 08.11.2026
+
+Auf Nutzerauftrag Docling, docling.rs, GLM-OCR und MiniCPM-Jev tatsächlich lokal
+und sequenziell am eingefrorenen deutschen Korpus geprüft. Bericht:
+[local-idp-comparison.md](local-idp-comparison.md), Rohtexte, Zeiten, Speicher und
+Modellhashes in `docs/quality/local-idp-comparison-2026-11-08.json`.
+
+- [x] Apple zweimal cachefrei: jeweils 52/79, alle 35 Texte identisch. Python-Docling
+  31/79, Rust 46/79, GLM 51/79; jede Alternative verliert bestehende exakte Felder.
+- [x] Jev F16/Metal: drei offizielle Kalibrierfälle bestanden, 140 tatsächliche
+  OCR-Kandidaten und zwölf Fehlerkontrollen bewertet. Scoreauswahl 54/79, aber ein
+  Apple-Feld verloren; Vollständigkeits-AUROC 0,587. Kein Modellvalidierungsnachweis.
+- [x] Separate Umlaut-/ß-/€- und Leerbildkontrollen: GLM erzeugt auf drei leeren
+  Bildern `www.ibm.com`; Apple und beide Docling-Pfade bleiben leer.
+- [x] Initialisierung, erster Aufruf, Folgebilder und RSS getrennt dokumentiert;
+  GPU-/Apple-Service-Grenzen ausdrücklich benannt. Keine MPS-/CoreML-Abnahme.
+- [x] Konkrete Gewichts-/Code-Lizenzen, 107/75/21 installierte Python-Distributionen
+  und 691 Rust-Lockfile-Einträge geprüft. LGPL-/MPL-Notices, GCC-Ausnahme und
+  optionalen GPL-v3-Browser-Codegenerator getrennt ausgewiesen.
+- [x] Eingaben/Artefakte per Hash, vollständige Fallzahlen und Score-Text-Bindung
+  durch `python3 scripts/mcp/local_idp_comparison.py --root … --output …` validiert.
+- [x] Zwei Integritätstests gegen geänderte Bildbytes und fremde Score-Texthashes
+  bestanden; `local_idp_comparison_test.py TESTROOT` und `git diff --check` sauber.
+
+Fortschritt: Vergleich abgeschlossen; alle Austausch-/Auswahlvarianten verfehlen
+das unveränderte Feldgate. Keine produktive Integration, Archivänderung oder
+Veröffentlichung. Neue Benchmarks ändern die bisherige App/ZIP nicht.
+Nächster Schritt: Apple beibehalten; unabhängigen deutschen Dokumentkorpus mit
+Tabellen und expliziten Auslassungslabels ergänzen, bevor GLM/Jev weiter bewertet
+oder mit einer binärspezifischen Lizenzfreigabe paketiert werden.
+
+## Frischer main-Build mit versioniertem App-Icon · 08.11.2026
+
+Auf Nutzerauftrag aus dem sauberen und mit `origin/main` abgeglichenen Commit
+`f4abac14747be0d4b26fe334b96e5236ccc946c6` alle sechs Paketprogramme frisch gebaut.
+Sieben lokale Abhängigkeits-Checkouts gegen `Package.resolved` geprüft. Paketierung:
+`python3 scripts/mcp/package.py --name Vauldy --archive-only --output …`.
+
+- ZIP: `dist/mcp/main-f4abac1-20261108/Vauldy.zip`, 19.112.777 Bytes.
+- SHA-256: `3218752ce4777d88b1028a39c6a909344976df0ec1efecc93d0828af9f9c4598`.
+- Version 0.13.0, arm64, macOS ab 14.0; Manifest bestätigt den obigen Quellcommit
+  und `buildMode=release`. Serverbuild `macho.1ae5a530326f3e4a824d2ee2cfac3dd9`.
+- Neues Icon in Haupt- und Status-App enthalten: beide Plist-Verweise und sämtliche
+  ICNS-Bytes gegen das versionierte Asset geprüft. Tatsächliche ZIP erneut entpackt,
+  CRC sowie tiefe/strikte Signaturen geprüft.
+- Paketmetadatenprüfung, echter stdio-Smoke-Test, exakte Relay-Werkzeugparität,
+  Update/Rollback und nativer Setup-Start mit synthetischem Watch-Ordner bestanden.
+  Alle sechs Programmversionen, neun Werkzeuge und Serverbuild mit dem Manifest abgeglichen.
+- Swift-Sources und Tests haben dieselben Git-Bäume wie beim vorangegangenen erfolgreichen
+  nativen Lauf mit 24 Tests in vier Suites. Diesen Nachweis über die identischen Quellen
+  übernommen; keine erneuten Swift-Testzahlen oder OCR-Qualitätsmessungen behauptet.
+
+Build- und Prüfprotokolle sowie `package-verification.json` liegen neben dem ZIP.
+Temporäre Buildkopie nach Prüfung entfernt. Lokal ad hoc signiert und nicht notarisiert;
+keine Produktivinstallation oder Änderung der bestehenden Verbindung durchgeführt.
+Nächster Distributionsschritt bleibt Developer-ID-Signierung und Notarisierung. Der
+vollständige Regressionsrunner, physische Offline-Kundenmac und Zielchat-Abnahme bleiben separat.
+
 ## App-Icon und Paket mit Icon · 08.11.2026
 
 Ein passendes Icon mit dem integrierten ImageGen-Werkzeug erstellt: gefaltetes weißes

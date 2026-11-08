@@ -17,6 +17,8 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     let installation: MCPInstallation
     let store: LocalDocumentStore
     let worker: LocalImportWorker
+    let localExecutable: URL
+    @Published var qualityByID: [UUID: LocalDocumentQuality] = [:]
     @Published var profile: MCPAccessProfile
     let updatesChatGPT: Bool
     let didUpdate: @MainActor (RelayUIState?) -> Void
@@ -45,6 +47,7 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     init(installation: MCPInstallation, executable: URL, profile: MCPAccessProfile, updatesChatGPT: Bool,
          didUpdate: @escaping @MainActor (RelayUIState?) -> Void) {
         self.installation = installation; self.profile = profile; self.updatesChatGPT = updatesChatGPT; self.didUpdate = didUpdate
+        localExecutable = executable
         store = .init(root: installation.root.appendingPathComponent("vault"))
         worker = .init(store: store, executable: executable, watchFolders: false)
     }
@@ -102,6 +105,11 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
         let digest = try await store.recordOriginalVerification(states, expectedDigest: observed.snapshotDigest)
         let value = try await MCPInventoryQualityService(store: store).report(using: .init(snapshotDigest: digest,
             checkedAt: observed.createdAt, verifiedIDs: observed.nativeVerification.verifiedIDs))
+        let documents = try await store.documents()
+        guard try LocalInventoryFingerprint.snapshot(store.snapshotURL) == value.snapshotDigest else { throw LocalInventoryError.changed }
+        qualityByID = Dictionary(uniqueKeysWithValues: documents.compactMap { document in
+            LocalDocumentReview(document).map { (document.id, $0.quality) }
+        })
         report = value
         selected = (priorSelection ?? profile.allowedDocumentIDs).intersection(value.eligibleIDs)
         step = 1

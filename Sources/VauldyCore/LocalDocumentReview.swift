@@ -11,12 +11,35 @@ package struct LocalDocumentReview: Sendable {
         package let info: LocalOCRPageInfo?
         package let layout: LocalOCRPageLayout?
 
+        package func focus(quote: String) -> LocalDocumentQuality.Focus {
+            guard let text, !quote.isEmpty, let range = text.range(of: quote) else { return .init(page: id) }
+            let selected = NSRange(range, in: text)
+            let boxes = layout?.geometry.lines.filter {
+                NSIntersectionRange(selected, NSRange(location: $0.location, length: $0.length)).length > 0
+            }.map(\.bounds) ?? []
+            return .init(page: id, quote: quote, bounds: boxes)
+        }
+
+        /// PDF geometry is in unrotated crop coordinates; the preview is upright.
+        package func previewBounds(for focus: LocalDocumentQuality.Focus?) -> [CGRect] {
+            guard let focus, focus.page == id, let layout else { return [] }
+            return focus.bounds.map { box in
+                switch layout.geometry.rotationDegrees {
+                case 90: CGRect(x: box.minY, y: 1 - box.maxX, width: box.height, height: box.width)
+                case 180: CGRect(x: 1 - box.maxX, y: 1 - box.maxY, width: box.width, height: box.height)
+                case 270: CGRect(x: 1 - box.maxY, y: box.minX, width: box.height, height: box.width)
+                default: box
+                }
+            }
+        }
+
         package var needsReview: Bool {
             info?.needsReview == true || info?.metrics?.lineReview?.needsReview == true
-                || info?.method == .unreadable || text == nil
+                || info?.method == .unreadable || text == nil && info?.method != .blank
         }
         package var reason: String {
             if info?.method == .unreadable { return "Auf dieser Seite wurde kein lesbarer Text erkannt." }
+            if info?.method == .blank { return "Die Seite wurde als leer erkannt." }
             if text == nil { return "Dieser Seite ist kein gespeicherter Text eindeutig zugeordnet." }
             var reasons: [String] = []
             if info?.metrics?.evidencePreservedFallback == true {
@@ -55,7 +78,8 @@ package struct LocalDocumentReview: Sendable {
     package let importProblem: String?
     package let analysisStatus: String
     package let pages: [Page]
-    package var firstReviewPage: Int { pages.first(where: \.needsReview)?.id ?? 1 }
+    package let quality: LocalDocumentQuality
+    package var firstReviewPage: Int { quality.issues.first(where: { $0.requiresReview && $0.focus != nil })?.focus?.page ?? pages.first(where: \.needsReview)?.id ?? 1 }
 
     package init?(_ document: VaultDocument) {
         guard let metadata = document.localImport else { return nil }
@@ -81,6 +105,7 @@ package struct LocalDocumentReview: Sendable {
                 page: index, text: texts[index] ?? "", configuration: LocalOCRPageCache.configuration) == true
             return Page(id: index, text: texts[index], info: pageInfo, layout: valid ? layout : nil)
         }
+        quality = LocalDocumentQuality(document: document, pages: pages)
     }
 }
 
@@ -142,7 +167,11 @@ private enum LocalReviewImage {
         else { throw LocalImportError.unreadableFile }
         context.setFillColor(gray: 1, alpha: 1)
         context.fill(canvas)
-        context.concatenate(page.getDrawingTransform(.cropBox, rect: canvas, rotate: 0, preserveAspectRatio: true))
+        // Quartz may center a 1× page in an enlarged bitmap. Scale the canonical
+        // crop/rotation transform explicitly so normalized source geometry matches.
+        context.scaleBy(x: canvas.width / width, y: canvas.height / height)
+        context.concatenate(page.getDrawingTransform(.cropBox,
+            rect: CGRect(x: 0, y: 0, width: width, height: height), rotate: 0, preserveAspectRatio: true))
         context.drawPDFPage(page)
         guard let image = context.makeImage() else { throw LocalImportError.unreadableFile }
         return image

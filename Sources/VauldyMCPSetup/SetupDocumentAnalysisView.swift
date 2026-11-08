@@ -5,6 +5,7 @@ import VauldyDocumentIntelligence
 /// Local presentation of the current persisted analysis; no OCR or model work in views.
 struct SetupDocumentAnalysisView: View {
     let document: VaultDocument
+    var openEvidence: ((BaseEvidenceField) -> Void)? = nil
     var body: some View {
         DisclosureGroup("Übersicht und Basisangaben") {
             VStack(alignment: .leading, spacing: 12) {
@@ -17,7 +18,11 @@ struct SetupDocumentAnalysisView: View {
                             ForEach(card.fields.filter { [.issuer, .recipient, .issueDate, .subject, .titleYear].contains($0.role) }, id: \.role) { field in
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("\(label(field.role)): \(field.value)").textSelection(.enabled).help(field.quote)
-                                    Text("Quelle: Seite \(field.page)").font(.caption).foregroundStyle(.secondary)
+                                    if let openEvidence {
+                                        Button("Beleg auf Seite \(field.page) ansehen") { openEvidence(field) }.font(.caption)
+                                    } else {
+                                        Text("Quelle: Seite \(field.page)").font(.caption).foregroundStyle(.secondary)
+                                    }
                                 }
                             }
                             Text("Originalseiten: \(card.pages.map(String.init).joined(separator: ", "))")

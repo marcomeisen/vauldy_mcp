@@ -6,6 +6,8 @@ import VauldyMCPRuntime
 struct InventoryWorkflowView: View {
     @ObservedObject var model: InventoryWorkflowModel
     @Environment(\.dismiss) private var dismiss
+    @State private var inspection: Inspection?
+    private struct Inspection: Identifiable { let id: UUID; var focus: LocalDocumentQuality.Focus? = nil }
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -36,6 +38,10 @@ struct InventoryWorkflowView: View {
             if !model.error.isEmpty { SetupNotice(text: model.error, warning: true) }
         }.padding(24).frame(minWidth: 780, idealWidth: 880, minHeight: 620)
         .task { await model.loadSources() }
+        .sheet(item: $inspection) { item in
+            SetupQualityReviewView(store: model.store, executable: model.localExecutable, documentID: item.id,
+                initialPage: item.focus?.page, initialFocus: item.focus) { _ in model.reportOnly() }
+        }
         .interactiveDismissDisabled(model.busy)
         .quickLookPreview($model.previewURL)
         .onChange(of: model.previewURL) { _, url in if url == nil { model.previewAccess?.close(); model.previewAccess = nil } }
@@ -78,7 +84,7 @@ struct InventoryWorkflowView: View {
         VStack(alignment: .leading, spacing: 12) {
             if let report = model.report {
                 Text("\(SetupText.documents(report.rows.count)) im gesamten lokalen Bestand").font(.headline)
-                Text("\(report.readyIDs.count) ohne offene Verarbeitungs-/Analysehinweise · \(report.reviewIDs.count) lesbar mit Prüfhinweisen · \(report.rows.count - report.eligibleIDs.count) derzeit nicht neu freigebbar")
+                Text("\(report.readyIDs.count) ohne offene automatische Verarbeitungs-/Analysehinweise · \(report.reviewIDs.count) lesbar mit Prüfhinweisen · \(report.rows.count - report.eligibleIDs.count) derzeit nicht neu freigebbar")
                 Text("Geprüft: \(report.createdAt.formatted()). Originalzugriff, Seitenabdeckung und regelbasierte Basisanalyse werden getrennt bewertet. Kein Nachweis fachlicher Richtigkeit.").font(.callout).foregroundStyle(.secondary)
                 issues(model.importIssues)
                 HStack {
@@ -91,11 +97,15 @@ struct InventoryWorkflowView: View {
                     ForEach(model.visibleRows) { row in
                         VStack(alignment: .leading, spacing: 4) {
                             Toggle(row.title, isOn: Binding(get: { model.selected.contains(row.id) }, set: { model.setSelected($0, id: row.id) })).disabled(!row.eligible)
-                            Text("Original: \(originalLabel(row.original)) · Seiten: \(row.processing == "source-ready" ? "vollständig verarbeitet" : "Lücken oder Prüfbedarf") · Basisanalyse: \(analysisLabel(row.analysis))").font(.caption).foregroundStyle(.secondary)
-                            Text("Seiten: \(row.processedPages)/\(row.expectedPages.map(String.init) ?? "unbekannt") erfasst. Nicht belegte Basisangaben: \(row.unfilledBaseFields.isEmpty ? "keine" : row.unfilledBaseFields.joined(separator: ", ")).").font(.caption).foregroundStyle(.secondary)
+                            Text("Original: \(originalLabel(row.original))").font(.caption).foregroundStyle(.secondary)
+                            if let quality = model.qualityByID[row.id] {
+                                SetupDocumentQualityView(quality: quality) { focus in inspection = .init(id: row.id, focus: focus) }
+                            } else {
+                                Text("Keine gespeicherte Detailprüfung verfügbar.").font(.caption).foregroundStyle(.secondary)
+                            }
                             HStack {
                                 if row.original == .available { Button("Original anzeigen") { model.preview(row.id) }.font(.caption) }
-                                if row.original == .available, !row.ready { Button("Text erneut lesen") { model.retry(row.id) }.font(.caption) }
+                                Button("Prüfstellen ansehen") { inspection = .init(id: row.id) }.font(.caption)
                             }
                         }
                     }

@@ -1,0 +1,131 @@
+Building for debugging...
+[Computing dependencies]
+[Using on-disk description]
+[1 / 3] CNIODarwin
+[1 / 2] VauldyMCP_VauldyMCPRuntimeTests
+Build complete! (1,15 Sek.)
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Guided inventory reconciliation and renewed grants" started.
+◇ Test previewClassifiesFilesWithoutWritesAndReportsUnavailableFolders() started.
+✔ Test previewClassifiesFilesWithoutWritesAndReportsUnavailableFolders() passed after 0.096 seconds.
+◇ Test stalePreviewAndChangedSourceDoNotImportUnreviewedBytes() started.
+✔ Test stalePreviewAndChangedSourceDoNotImportUnreviewedBytes() passed after 0.026 seconds.
+◇ Test qualityKeepsSourceCoverageAndAnalysisSeparateAndRetainsMissingRecords() started.
+✔ Test qualityKeepsSourceCoverageAndAnalysisSeparateAndRetainsMissingRecords() passed after 0.100 seconds.
+◇ Test reviewDocumentsRequireSeparateAcknowledgment() started.
+✔ Test reviewDocumentsRequireSeparateAcknowledgment() passed after 0.051 seconds.
+◇ Test reportRejectsSnapshotChangesDuringOriginalVerification() started.
+✔ Test reportRejectsSnapshotChangesDuringOriginalVerification() passed after 0.043 seconds.
+◇ Test renewalPreservesIdentityAndInvalidatesOldHandlesAndCursors() started.
+✔ Test renewalPreservesIdentityAndInvalidatesOldHandlesAndCursors() passed after 0.188 seconds.
+◇ Test pausedAndEmptyGrantsRemainPaused(empty:) started.
+◇ Test case passing 1 argument empty → true to pausedAndEmptyGrantsRemainPaused(empty:) started.
+◇ Test case passing 1 argument empty → false to pausedAndEmptyGrantsRemainPaused(empty:) started.
+✔ Test pausedAndEmptyGrantsRemainPaused(empty:) with 2 test cases passed after 0.108 seconds.
+◇ Test failedCredentialWriteCannotExpandRelayAndCanBeReconfirmed() started.
+✔ Test failedCredentialWriteCannotExpandRelayAndCanBeReconfirmed() passed after 0.105 seconds.
+◇ Test renewalRejectsStaleRevisionForeignProfileAndChangedSnapshot() started.
+✔ Test renewalRejectsStaleRevisionForeignProfileAndChangedSnapshot() passed after 0.050 seconds.
+◇ Test explicitWorkerImportDoesNotResumeUnselectedWatchedFolders() started.
+✔ Test explicitWorkerImportDoesNotResumeUnselectedWatchedFolders() passed after 57.884 seconds.
+◇ Test managerRequiresExplicitDisclosureAndReviewConsent() started.
+✔ Test managerRequiresExplicitDisclosureAndReviewConsent() passed after 0.087 seconds.
+◇ Test sameRevisionProfileTamperingCannotChangeFrozenConsent() started.
+✔ Test sameRevisionProfileTamperingCannotChangeFrozenConsent() passed after 0.052 seconds.
+◇ Test renewedFolderAuthorityRetainsIdentityTextAndGrantsAfterFullHashMatch() started.
+✔ Test renewedFolderAuthorityRetainsIdentityTextAndGrantsAfterFullHashMatch() passed after 0.077 seconds.
+◇ Test staleNativeAttestationsAndInvalidBorrowedCapabilitiesFailClosed() started.
+✔ Test staleNativeAttestationsAndInvalidBorrowedCapabilitiesFailClosed() passed after 0.057 seconds.
+◇ Test borrowedAuthorityCannotBeSubstitutedAcrossDocuments() started.
+✔ Test borrowedAuthorityCannotBeSubstitutedAcrossDocuments() passed after 0.096 seconds.
+◇ Test explicitSourceStatePublicationMakesChatCoverageHonestWithoutChangingTextOrGrant() started.
+✔ Test explicitSourceStatePublicationMakesChatCoverageHonestWithoutChangingTextOrGrant() passed after 0.073 seconds.
+◇ Test olderAgentStatusIsReadableWithoutClaimingUpdateCapability() started.
+✔ Test olderAgentStatusIsReadableWithoutClaimingUpdateCapability() passed after 0.001 seconds.
+◇ Test fragmentedLargeSelectionsRemainBoundedAndDecodeCompletely() started.
+✔ Test fragmentedLargeSelectionsRemainBoundedAndDecodeCompletely() passed after 0.012 seconds.
+✔ Suite "Guided inventory reconciliation and renewed grants" passed after 59.118 seconds.
+◇ Suite "Concrete local quality reasons and source locations" started.
+◇ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() started.
+✔ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() passed after 0.046 seconds.
+◇ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() started.
+✔ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() passed after 0.001 seconds.
+◇ Test completedAnalysisDoesNotProveManualOrTableValidation() started.
+✔ Test completedAnalysisDoesNotProveManualOrTableValidation() passed after 0.007 seconds.
+◇ Test unknownKindAndFieldConflictAreIndependentOfOCR() started.
+✔ Test unknownKindAndFieldConflictAreIndependentOfOCR() passed after 0.006 seconds.
+◇ Test aggregateLineWarningsNeverInventAnExactLocation() started.
+✔ Test aggregateLineWarningsNeverInventAnExactLocation() passed after 0.001 seconds.
+◇ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() started.
+✔ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() passed after 0.001 seconds.
+◇ Test previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewHighlightFollowsPDFRotation(rotation:) started.
+✔ Test previewHighlightFollowsPDFRotation(rotation:) with 4 test cases passed after 0.001 seconds.
+✔ Suite "Concrete local quality reasons and source locations" passed after 0.062 seconds.
+◇ Suite "Local OCR quality review" started.
+◇ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+✔ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) with 4 test cases passed after 0.302 seconds.
+◇ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() started.
+✔ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() passed after 0.001 seconds.
+◇ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() started.
+✔ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() passed after 0.157 seconds.
+✔ Suite "Local OCR quality review" passed after 0.460 seconds.
+◇ Suite "Source-bound OCR line geometry" started.
+◇ Test legacyPagesDecodeAndBindingsRejectStaleOrInvalidGeometry() started.
+✔ Test legacyPagesDecodeAndBindingsRejectStaleOrInvalidGeometry() passed after 0.001 seconds.
+◇ Test pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 0 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 90 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 180 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 270 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 0 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 90 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 180 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 270 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+✔ Test pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) with 8 test cases passed after 3.311 seconds.
+◇ Test imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+◇ Test case passing 1 argument height → 900 to imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+◇ Test case passing 1 argument height → 3600 to imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+✔ Test imageCoordinatesSurviveWhiteMarginsAndTiles(height:) with 2 test cases passed after 0.624 seconds.
+◇ Test storedLayoutIsSourceBoundAndHiddenWhenTextOrOriginalChanges() started.
+✔ Test storedLayoutIsSourceBoundAndHiddenWhenTextOrOriginalChanges() passed after 1.823 seconds.
+◇ Test hybridPageCombinesEmbeddedAndRasterLineOffsets() started.
+✔ Test hybridPageCombinesEmbeddedAndRasterLineOffsets() passed after 0.700 seconds.
+◇ Test tallPDFRegionsKeepPhysicalPageCoordinates() started.
+✔ Test tallPDFRegionsKeepPhysicalPageCoordinates() passed after 2.774 seconds.
+◇ Test rewrittenSourcePageMarkersCannotKeepOldOffsets() started.
+✔ Test rewrittenSourcePageMarkersCannotKeepOldOffsets() passed after 0.072 seconds.
+✔ Suite "Source-bound OCR line geometry" passed after 9.307 seconds.
+◇ Suite "Existing documents do not require another import" started.
+◇ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "needsReview" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "failed" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "stale" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "unavailable" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "pending" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+✔ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) with 5 test cases passed after 0.001 seconds.
+◇ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .partial to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .failed to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .interrupted to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .cancelled to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+✔ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) with 4 test cases passed after 0.001 seconds.
+◇ Test absentTextAndPendingJobsStayDistinct() started.
+✔ Test absentTextAndPendingJobsStayDistinct() passed after 0.001 seconds.
+◇ Test originalAccessIssuesAreNotOCRInstructions() started.
+✔ Test originalAccessIssuesAreNotOCRInstructions() passed after 0.001 seconds.
+◇ Test pageReviewAndLegacyDocumentsArePreserved() started.
+✔ Test pageReviewAndLegacyDocumentsArePreserved() passed after 0.001 seconds.
+◇ Test storedButUnfinishedOutcomesAreNotFailedImports() started.
+✔ Test storedButUnfinishedOutcomesAreNotFailedImports() passed after 0.001 seconds.
+✔ Suite "Existing documents do not require another import" passed after 0.001 seconds.
+✔ Test run with 41 tests in 5 suites passed after 68.950 seconds.

@@ -1,0 +1,13 @@
+{
+  "nativeSourceFilesVerified": 40,
+  "corpusGeneratorHash": "matched frozen manifest",
+  "pythonSourcesParsed": 10,
+  "scoringTestsPassed": 8,
+  "physicalPagesPerEngine": 31,
+  "jevActualCandidates": 124,
+  "jevControls": 112,
+  "calibration": "passed",
+  "evaluation": "complete; --require-jev exit 0",
+  "gitDiffCheck": "passed",
+  "productionSourcesAndTests": "unchanged"
+}

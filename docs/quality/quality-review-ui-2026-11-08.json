@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-08",
+  "baseCommit": "f4abac14747be0d4b26fe334b96e5236ccc946c6",
+  "scope": "local-quality-presentation-and-source-navigation",
+  "sourceSHA256": {
+    "Sources/VauldyCore/LocalDocumentQuality.swift": "7957be315f7a282f7dc193772d92749387802283ad577e63b5a0d110537309c8",
+    "Sources/VauldyCore/LocalDocumentReview.swift": "60e1a7e8b2b844bcdc0ee17ffbd26d7e624a149fff2120bcf36a23c321ca37c7",
+    "Sources/VauldyMCPSetup/SetupDocumentQualityView.swift": "f400334ca311cb9c8bdd0da08c39831641ebe97bedf2990b3b2e4658cb3f68ea",
+    "Sources/VauldyMCPSetup/SetupQualityReviewView.swift": "d9453275603f895621fadbee75fbd0c68722a8513b421d739afeae9ce7befc0b",
+    "Sources/VauldyMCPSetup/SetupDocumentAnalysisView.swift": "12a1248049912dc87bd4e9236e4cce03353d2bcb51c022f85f1913d0c6320a89",
+    "Sources/VauldyMCPSetup/SetupDetailViews.swift": "6f7a123c34ebb52ffc0f1b63f0fc4de16552939239ca0e846346469af924651c",
+    "Sources/VauldyMCPSetup/InventoryWorkflowModel.swift": "be10af4119e9db33f90f9c2d7fb789bd7b18594cfc74f4f5174e140abaf94be0",
+    "Sources/VauldyMCPSetup/InventoryWorkflowView.swift": "6dd6e41691629c20fc0cf34c497f1eb246d23d8a0522e8c0d9f5cc9191736b55",
+    "Sources/VauldyMCPRuntime/MCPBaseAnalysis.swift": "4707d45d75148b009a15108eb69802ee8b31624c2927148e1ab2f9ce22bff9a1",
+    "Tests/VauldyMCPRuntimeTests/LocalDocumentQualityTests.swift": "e3c22ab7d6fb65ba39c57e1ceb3f67c17553234a92e550df966f01cfeee076c4",
+    "Tests/VauldyMCPRuntimeTests/LocalDocumentReviewTests.swift": "5b0d06937e9ab9a2ba48bebb0608e35f376d4a76f58fffe4b2e3041e386326d1"
+  },
+  "releaseTests": {
+    "count": 41,
+    "suites": 5,
+    "seconds": 68.95,
+    "result": "passed",
+    "nativeOCR": true,
+    "physicalPreviewPixelRotations": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "nonzeroCropOrigin": true
+  },
+  "ui": {
+    "fullBundle": true,
+    "isolatedSetupRoot": true,
+    "ownBundleIdentifier": true,
+    "syntheticInjectedReviewReasons": true,
+    "observed": [
+      "unknown-document-kind",
+      "physical-page-navigation",
+      "region-highlight-aligned-with-original",
+      "readable-enlarged-original-crop",
+      "exact-issue-date-quote-and-source-highlight"
+    ],
+    "protectedSnapshotAndOriginalFilesUnchanged": 4,
+    "ownUIProcessStopped": true
+  },
+  "invariants": [
+    "no quality percentage",
+    "no model validation status",
+    "optional unfilled fields are not missing mandatory fields",
+    "unknown exact positions open the physical page",
+    "no GLM/Docling/Jev integration or model downloads",
+    "no storage migration or production installation"
+  ],
+  "testsLogs": {
+    "installer-startup.log": "4cdae75534248702c5032268f910b7aaa47ff7364a8521ad62d0473ba52b3a8e",
+    "release-quality-tests.log": "6f620a714ca5b8d3b467ba637e7a636513c813a0f4295165efc743dbac2d9c33",
+    "installer-stdio.log": "823e2568533317e73383bb902bdd549ef5e748300a6c7f5379d38252c4db01c8",
+    "distribution-package.log": "d6659c31f1966f9aab1e98451dfa48db5546aedafe97990e9d6593b099c44d46",
+    "installer-update.log": "80840e51ea04938d9f1c57eb430dd10f7162e4a5e133df9cdecdc8f434a92742",
+    "package-metadata.log": "82a6ca36506b431063b72e1474b047407c6ed7aa142e3d60d297a73612a9cce6",
+    "final-quality-tests.log": "91994d1745e2dc6b828d03e711356430659f7110d2d89889261efa23db90333d"
+  },
+  "installer": {
+    "archive": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/quality-review-20261108/Vauldy.zip",
+    "app": "/private/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-quality-ui-8hgfegu8/installer-verification/Vauldy.app",
+    "bytes": 19315984,
+    "sha256": "7cc565481dedfdc9db1d0e3c27a9de0e44e3e0208d663a4f1c25b06c571afd29",
+    "productVersion": "0.13.0",
+    "serverBuildID": "macho.62591573d7d73ae8a27e738feeddc892",
+    "buildMode": "reused",
+    "sourceCommit": null,
+    "baseCommit": "f4abac14747be0d4b26fe334b96e5236ccc946c6",
+    "verifiedSwiftSources": 112,
+    "verifiedPinnedDependencies": 7,
+    "binaryUUIDs": {
+      "vauldy-local": "F8889FE5-9A58-3DCB-92AC-C428AD24E558",
+      "vauldy-mcp": "62591573-D7D7-3AE8-A27E-738FEEDDC892",
+      "vauldy-mcp-http": "568FA367-CC8A-32E1-AFF1-F98B28B83331",
+      "vauldy-mcp-setup": "C5F61A51-DE05-377A-9038-E34C8D7C096A",
+      "vauldy-mcp-status": "C9B5FEF2-A5AD-30C3-B3DA-1431CBF3C3D4",
+      "vauldy-relay": "C24A036F-48B3-3F6B-B243-8604BC7D2663"
+    },
+    "iconBytes": "both matched",
+    "zipCRC": "passed",
+    "deepStrictSignature": "passed",
+    "signing": "local ad hoc; not notarized",
+    "reusedExplanation": "All six executables freshly built in this iteration; final package-only step reuses those verified binaries. Working source changes are uncommitted; sourceCommit remains null."
+  },
+  "installerChecks": {
+    "stdio": "passed",
+    "updateRollback": "passed",
+    "startupWithoutWorker": "passed",
+    "packageMetadata": "passed",
+    "zipCRC": "passed",
+    "deepStrictSignature": "passed",
+    "iconBytes": "matched in both apps",
+    "allSixBinaryUUIDs": "matched current build"
+  }
+}

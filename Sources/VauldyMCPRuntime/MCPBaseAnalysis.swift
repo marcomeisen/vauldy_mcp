@@ -7,7 +7,7 @@ public struct MCPAnalysisCoverage: Encodable, Sendable {
     public let failed: Int
     public let notAnalyzed: Int
     public let stale: Int
-    public let scope = "local-rule-based-extractive-analysis; not model-verified"
+    public let scope = "local-rule-based-extractive-analysis; no-independent-content-validation"
     var warnings: [String] { needsReview + unavailable + failed + notAnalyzed + stale > 0 ? ["BASE_ANALYSIS_NOT_COMPLETE"] : [] }
     init(_ documents: [VaultDocument]) {
         self.init(states: documents.map(\.baseAnalysisStatus))

@@ -1,0 +1,320 @@
+{
+  "commit": "b40c34d6a17f1fe609b7b7a8007f47e94ff244dc",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlob": "fd1db70df19bee4b35447d34fad265783c3bcf17",
+      "sha256": "186c8635e1f88660ec113f4935867a612e35b3124aca5c712d97e2e33d7eb677"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/rm_render.py",
+      "gitBlob": "0d875ebd7dbdc52dfa79b6f8835d1d3acc7a20c8",
+      "sha256": "c39533fe1b5c9c48f2b41fec3614ce94aa86b485d4bba4a788ec345af04aa54c"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/infer_vllm.py",
+      "gitBlob": "7d38d64d3e0b247bca42b5999bf1dea562210f09",
+      "sha256": "4c0198b2f2f5fb4ba57443507feb57229c0236e8c0be55b160c8a35115a39455"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/render_triple_rm_labels.py",
+      "gitBlob": "9b03c35ee1972377dd89ab36ad833a03214fbe4e",
+      "sha256": "b36ff1da9f203df0136193e478887d0e1c3125267b201b098591fc6ff8546ce8"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/setup_renderer.sh",
+      "gitBlob": "c53f758a4dfaba8a2dc83d02e5c9abd41847d413",
+      "sha256": "d3be91eb308919f3d19f7dab319df42ad5389b1c4741803e14761ef02ca31952"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/check_renderer.py",
+      "gitBlob": "349fdb4813a883e327b6b405c1d2a5dc73b4646e",
+      "sha256": "85f2a6f947571d38a0e164e5bf4f969d7a3d126e590b28928bd5dbe9da967ecd"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/start_render_score.sh",
+      "gitBlob": "02add67be054d7fbd59b5b4e4ef2ddc6b610b094",
+      "sha256": "d04a5185e6e974e2540a0aaafb31721758a64c45caeab4907fe8ac82e490643f"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/requirements-score.txt",
+      "gitBlob": "a995728ecb8401b1fbdf99084c7d99ff3e1f445d",
+      "sha256": "cc0f8f8faf195eed5511bddc4b8ed3809b30e7404600a7e0084ac11faeea21ea"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/start_engine_sglang.sh",
+      "gitBlob": "09b2427a8bcdf6540c8279c5bcf4321649225b0f",
+      "sha256": "d3ff89ca41b342e3af754cf403ec260d8cca02cdf22145116af968172929fab3"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/setup_render.sh",
+      "gitBlob": "8e8733bdc15029424773ce7074957bda55520eed",
+      "sha256": "ab6fcdc8d387a7c01fe113be5e72a9e942011f13a9ca5c5e75b2f39f393acc62"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/start_score.sh",
+      "gitBlob": "ea49564c68f5b79871273d399b12e9569e2c639a",
+      "sha256": "5c6c51810757a0a8628025be28aadbcd94699002f3c21dbc99ed8715a83971ec"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/app.py",
+      "gitBlob": "cd4fdccf756f2614ed206a4ad2350161137d585c",
+      "sha256": "c9b52e764a5f52b98f8f4edf73140d74231f30b62e7efaa2b330f8599daf500b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/start_engine.sh",
+      "gitBlob": "1aaefa46f12f3ac07d014a9f727104598d536daf",
+      "sha256": "9e799b153e0af07bb4f0e2d549dc7fccb073355ad08b762616d345f19973cb1f"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/render_module/render_label.py",
+      "gitBlob": "fc47192a717e440b9a878b96febbc0fe10f260f4",
+      "sha256": "99b5212fe48e7cdf91277e9457dff5ef0348f99cf53eaa524f83280655652e6e"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/precheck/screen_v225_node.js",
+      "gitBlob": "d472e4df0b2b0f70c244e15de8aa1515a8c1b2f5",
+      "sha256": "b22f412724be3bbc7f7b9b79d4a7c2dfbcab5640ca7f26e95d60afa98d388e79"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/auto-render.min.js",
+      "gitBlob": "0a1f35df54ecfa15d068341f6c6571e27f70567f",
+      "sha256": "e5372d199bcdae8b4de71d0f7ceba72a4ba12774a27c60a6f1f77d03b3228ee4"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/katex.min.css",
+      "gitBlob": "6cf31989a19818b6466acafe19b72a64d8703ba7",
+      "sha256": "0289a02cf451a44dd73add683a09644252363871ac11713a647b732cee8b1ee3"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/katex.min.js",
+      "gitBlob": "a638f462889d892f7e53694218655faba8ee82c6",
+      "sha256": "a29d2961d3146de5949d78ac7c1a9d93ae54955bad22a6db4fbe836e88e8bf48"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Typewriter-Regular.woff2",
+      "gitBlob": "771f1af705f5cef5f578b3a1e7d8eff66f9b76b0",
+      "sha256": "71d517d67827787cfabdf186914cc3358eda539e37931941f2b2fd4a21f68c0b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_AMS-Regular.woff2",
+      "gitBlob": "0acaaff03d4bb7606de02a827aeee338e5a86910",
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Size3-Regular.woff2",
+      "gitBlob": "249a28662218a7a17ad8bd1fe072169ecb666a49",
+      "sha256": "73d591271b1604960cb10bb90fee021670af7297017e0e98480b332d11f51995"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Main-Regular.woff2",
+      "gitBlob": "eb24a7ba282b03d830fa6c63ee897d92a5188736",
+      "sha256": "c2342cd8b869e01752a9321dc17213fc40d4d04c79688c1d43f2cf316abd7866"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Caligraphic-Bold.woff2",
+      "gitBlob": "f390922eceffe1f6dfb81a3dc086a92d98171b02",
+      "sha256": "de7701e42cf1f4cf0b766c03fb27977207eee2f4fd5d76fa82188406da43ea4c"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_SansSerif-Bold.woff2",
+      "gitBlob": "cfaa3bda59246b49e94298478d6de3b3208066c8",
+      "sha256": "e99ae51144bf1232efcc1bfe5add36262c6866b0faab24fa75740e1b98577a62"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Math-Italic.woff2",
+      "gitBlob": "215c143fd7805a5c2b222bd7892a1a2b09610020",
+      "sha256": "7af58c5ec8f132a2ddde9027c6d7814decce4d3b822a11192a42a20e2e973264"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Size4-Regular.woff2",
+      "gitBlob": "680c13085076a2f6c5a7e695935ec3f21cddb65f",
+      "sha256": "a4af7d414440a1c1790825cfb700cf9cf43b0f2c4b04f0ebc523011ad9853ec0"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Fraktur-Bold.woff2",
+      "gitBlob": "395f28beac23c7b0f7f3a1e714bd8dac253dd3bc",
+      "sha256": "74444efd593c005e3f4573b44524704c0af0a937fe911cca9e94068d0d140d3f"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_SansSerif-Italic.woff2",
+      "gitBlob": "349c06dc609f896392fd5bc8b364d3bc3efc9330",
+      "sha256": "00b26ac825e2095056396e0553b8ac26d3f8ad158c3826e28b4c45b385c4714a"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Main-Bold.woff2",
+      "gitBlob": "ab2ad21da6fbe6c171bb869240954d0ead8f68fd",
+      "sha256": "0f60d1b897938ec918c8ce073092411baf9438f6739465693ff18b0f9d20b021"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_SansSerif-Regular.woff2",
+      "gitBlob": "a90eea85f6f7bded69ff5d40114447a6d8b48cfe",
+      "sha256": "68e8c73ef42afd3ccec58bf0fba302cce448938e7fc020a5e31f8a952eee1342"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Main-BoldItalic.woff2",
+      "gitBlob": "5931794de4a2a485fa70099bf2659b145976d043",
+      "sha256": "99cd42a3c072d918f2f44984a807cf7aa16e13545fd0875fc07c6c65f99e715b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Fraktur-Regular.woff2",
+      "gitBlob": "735f6948d63c8cc7f8233735bb9c8d843c83d804",
+      "sha256": "51814d270d06ff0255dba0799994fa4d8c84d11f09951d47595f4abb1f3602dc"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Script-Regular.woff2",
+      "gitBlob": "b3048fc115681ee6c1bc86b0aa158cfbbf59daa3",
+      "sha256": "036d4e95149b69ff9bcc0cd55771efeb25ffa3947293e69acd78d5ac328c684b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Math-BoldItalic.woff2",
+      "gitBlob": "29657023adc09956249f6295746c8ce4469b50d3",
+      "sha256": "dc47344dbb6cb5b655c8460d561f4df5f501b90c804ad3c6cec65fe322351ab1"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Main-Italic.woff2",
+      "gitBlob": "b50920e138807f385d0b0359f4f0f09891f18406",
+      "sha256": "97479ca6cce906abc961ecac96faa5f9ca2e61b8e7670d475826bcdee9a7c267"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Size1-Regular.woff2",
+      "gitBlob": "c5a8462fbfe2c39a7c1857b9e296e62500a8a8a5",
+      "sha256": "6b47c40166b6dbe21a5dfca7718413f2147fd2399be1ba605d8ad39cedf25dfe"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Size2-Regular.woff2",
+      "gitBlob": "e1bccfe2403a4ed770c1697ae7c15b9e1cd9bc4e",
+      "sha256": "d04c54219f9eaec6d4d4fd42dfb28785975a4794d6b2fc71e566b9cd6db842dd"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/renderer/assets/katex-0.16.47/fonts/KaTeX_Caligraphic-Regular.woff2",
+      "gitBlob": "75344a1f98e37e2c631e178065854c3a81fb842f",
+      "sha256": "5d53e70ad607c2352162dec9e0923fb54ecdafaccbf604cd8dcf7d00facb989b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/backends/ollama.yaml",
+      "gitBlob": "a37902a7e4f8637cf4526c2d80ee9e796e3de833",
+      "sha256": "8c5f985d49ceeb772bc855ac8ef808e0767a30710201071afbe6ca9c76bf2f51"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/backends/llamacpp.yaml",
+      "gitBlob": "4541f12b91c6e9524c9155fce8d53a94bbe99204",
+      "sha256": "bbd4745c394fa21452421979574e4a976ce39e20297a8268f86d16aaa173c02f"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/backends/vllm.yaml",
+      "gitBlob": "a992ad2d0386f668a391d6a7165c85413a065e82",
+      "sha256": "54c46ae33ae279fdea297454519d917c7284a03d573929fc17dcb879bd7c8e44"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/backends/sglang.yaml",
+      "gitBlob": "ed23e0a1c6370b69156b357c9a3c1c07e4d7f3f6",
+      "sha256": "f90cdcc9476626b0d413b098948c65e6041ac1f7de5a6b8ffe16e9628d40327a"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/server.py",
+      "gitBlob": "6845c5848ffb648a7a7420eccb2570878bfc75ae",
+      "sha256": "628d80483dfbc89a1f278c6b4cf0bfa1ed6d5248c731f19ab3c9022981518442"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/selfcheck.py",
+      "gitBlob": "8443b6c92171baeece140ff472cdc263e4287e4c",
+      "sha256": "c66db5cfeeaf31d9c4e1cae9c1608b63f854b1dd3f3abf4c28a77a03043f75a6"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/__init__.py",
+      "gitBlob": "0a1bf83f2fb62b8d2af216a244c80cda3c2a861d",
+      "sha256": "2b159f461e7813328ca4095b967ba72f6b6b71641dfad2c1155ac51143df54d4"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/images.py",
+      "gitBlob": "38a75b9576cd02f72af18743018ed44be28196a9",
+      "sha256": "f8b39296f3c9dd1d67faa1afef89de93d0dbeaf1a1932554c392f866c7d07251"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/prompt.py",
+      "gitBlob": "f39e11264fe3adf5f875f870337fa4ec5246b902",
+      "sha256": "bbb5b0aca21c15f9241094955eccb7335b1ba8652df86784d453379a177f5af1"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/scorer.py",
+      "gitBlob": "74ed218768c78f86da7d7ca7840530e3050845b9",
+      "sha256": "e2328c668850d47901ed8058da87638cc1d4049f0c402751ef6d2fe47b8e9335"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/vllm_backend.py",
+      "gitBlob": "70255331d2f0d412496b313494b788d59d43c776",
+      "sha256": "7827303b25a310131215af1d321a27745eab1fbbab56a90e33f2ce5af907ed95"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/sglang_backend.py",
+      "gitBlob": "e7ef6edceaabd48d43d841f0fd10d37a0298eb3a",
+      "sha256": "f19feb244c1a1ab5e5db23100201f7143eb8cca7ffffb085fb14246daf956ffa"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/__init__.py",
+      "gitBlob": "9130c4da5b5842dc84fb054e31eaad22f35f6768",
+      "sha256": "083a16b3dddd90fa5c57a2d8433b6a208722f73c41927ae43602bdba91292e0d"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/ollama_backend.py",
+      "gitBlob": "af537aaad592fb175ad963b9e8e7e82a22967333",
+      "sha256": "a5f4cb96c2eaa31c4f07dec3b50759c4c6e16092d9790c35a7620d70245a9d07"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/llamacpp_backend.py",
+      "gitBlob": "9bfb490376138e28681771cd808d8e8d08b5df5d",
+      "sha256": "17d32b81b6ac6e37adbc11332f6196b792d055453a99afa5acea34d160019fc0"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/sdk/jev_score/backends/base.py",
+      "gitBlob": "3b0229902190dbf1364e3799511d8766678df92c",
+      "sha256": "9d4809db28b064f947c50af320e3c4b6134b9415bbf43bc9442a5ee28bec96b0"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/03_table_gb_standard/block.png",
+      "gitBlob": "6aa872a0062edfeeda48d62fe6b4a8708b62c51b",
+      "sha256": "3a4835f45bebb1d23c945294ca6f187e90a0f06e604a6c3993a2b39da36c481d"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/03_table_gb_standard/case.json",
+      "gitBlob": "185be55d731c4057296025381f217e22f6129f06",
+      "sha256": "f8b572c41b4cb2a0f53712b4ed4cf2ad2c7db6574821b9d47d2cb79111daf101"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/03_table_gb_standard/reference_render.png",
+      "gitBlob": "c9874c5e76dafa156136d1bcf5fb36149d31803b",
+      "sha256": "6675d7cdf5b09c09afe79573658fd8d055fd72988e6145bf3d48cbbfe16d363b"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/02_formula_putnam/block.png",
+      "gitBlob": "6f3b4b1881120d161ef40b0901b00a12b2c07b89",
+      "sha256": "a63f5675a76abfc6e7809051fa33b4c96ec358a5220cabecdf6a7f6401c374f9"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/02_formula_putnam/case.json",
+      "gitBlob": "552a8032e63594c9d2ab77ddf2660899a3720ea6",
+      "sha256": "c45f7dee39a26a6b395f097e09c73aa70511366ad8e3b0795f38045183849283"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/02_formula_putnam/reference_render.png",
+      "gitBlob": "dd1536bf01b7bca6ed0bfd0e0f7e6fbe7787c689",
+      "sha256": "62267b9c26275fae150bd7d3298f0f9d37fadaa7744abef46bd6e163ce1e543c"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/01_text_putnam/block.png",
+      "gitBlob": "a2d9ef67235ddca2052855fa10260abbb1e55966",
+      "sha256": "a05e3bf48c674d25b9dfe684fec813098816943895551161e0da3a8ce13eb069"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/01_text_putnam/case.json",
+      "gitBlob": "b4d8adb328fe762585982ab6c35747d12371a83a",
+      "sha256": "a606b4df23ff288fd608a03101eef9ecc8a8f2e13d97ee14dc69a220a8692754"
+    },
+    {
+      "path": "scripts/minicpm-ocr-jev/examples/01_text_putnam/reference_render.png",
+      "gitBlob": "e4ac67753d14c797b7515861acce761bb2c77e9d",
+      "sha256": "3f703d528157b3f25092db29a3cff7ab68e067669eb9093f80582f3a28d37a9d"
+    }
+  ]
+}

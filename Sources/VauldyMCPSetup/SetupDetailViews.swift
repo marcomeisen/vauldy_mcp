@@ -104,7 +104,7 @@ struct SetupDocumentList: View {
     @ObservedObject var model: SetupModel
     var showsSelectionActions = true
     @State private var reviewSelection: ReviewSelection?
-    private struct ReviewSelection: Identifiable { let id: UUID }
+    private struct ReviewSelection: Identifiable { let id: UUID; var page: Int? = nil; var quote: String? = nil; var focus: LocalDocumentQuality.Focus? = nil }
     private func analysisLabel(_ status: String) -> String {
         switch status {
         case "completed": "Basisanalyse vorhanden (regelbasiert)"
@@ -186,12 +186,19 @@ struct SetupDocumentList: View {
                                     .font(.caption).foregroundStyle(.secondary)
                                     .help("Zeitpunkt des Imports in diesen Bestand, angezeigt in der lokalen Mac-Zeitzone. Kein Dokumentdatum und kein Zeitpunkt eines späteren OCR-Laufs.")
                                     .accessibilityIdentifier("document-import-timestamp")
-                                SetupDocumentAnalysisView(document: document)
+                                if model.isLocalVault, let review = LocalDocumentReview(document) {
+                                    SetupDocumentQualityView(quality: review.quality) { focus in
+                                        reviewSelection = .init(id: document.id, page: focus.page, quote: focus.quote, focus: focus)
+                                    }
+                                }
+                                SetupDocumentAnalysisView(document: document, openEvidence: model.isLocalVault ? { field in
+                                    reviewSelection = .init(id: document.id, page: field.page, quote: field.quote)
+                                } : nil)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                             if model.isLocalVault {
                                 Button("Original öffnen") { model.preview(document) }
                                 if let state = document.localImport?.state, ![.queued, .recognizing].contains(state) {
-                                    Button("Text prüfen") { reviewSelection = .init(id: document.id) }
+                                    Button("Prüfstellen ansehen") { reviewSelection = .init(id: document.id) }
                                         .help("Vergleicht Original und gespeicherten Text. Startet keine Texterkennung.")
                                         .accessibilityIdentifier("document-text-review")
                                 }
@@ -203,7 +210,7 @@ struct SetupDocumentList: View {
             }
         }.id(Self.scrollAnchor)
             .sheet(item: $reviewSelection) { item in
-                SetupQualityReviewView(model: model, documentID: item.id, reportID: nil)
+                SetupQualityReviewView(model: model, documentID: item.id, reportID: nil, initialPage: item.page, initialQuote: item.quote, initialFocus: item.focus)
             }
     }
 }

@@ -1,0 +1,127 @@
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 1537]
+[Planning deferred tasks]
+[Starting]
+[37 / 183] CNIOLinux
+[51 / 185] CNIOOpenBSD
+[60 / 208] VauldyDemoDocuments
+[67 / 193] EventSource
+[73 / 183] SystemPackage
+[98 / 181] SpanPreview
+[99 / 181] NIOConcurrencyHelpers
+[101 / 184] VauldyCore
+[104 / 185]
+[106 / 180] NIOConcurrencyHelpers
+[112 / 182] NIOConcurrencyHelpers
+[113 / 182] _NIOBase64
+/private/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-quality-ui-8hgfegu8/Sources/VauldyCore/VaultRuntime.swift:188:42: warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+186 |         var document: VaultDocument
+187 |         var score: Int
+188 |         var excerpt: VaultPageMarkedText.Section
+    |                                          `- warning: cannot use struct 'Section' in a property declaration member of a type not marked '@_implementationOnly'; 'VauldyDocumentCore' was not imported by this file
+189 |     }
+190 | 
+
+VauldyDocumentCore.VaultPageMarkedText.Section:2:54: note: struct declared here
+1 | enum VaultPageMarkedText {
+2 | public struct VauldyDocumentCore.VaultPageMarkedText.Section : Equatable, Sendable {
+  |                                                      `- note: struct declared here
+3 |     public var page: Int?
+4 |     public var text: String
+[117 / 178] VauldyCore
+[118 / 178] VauldyCore
+[121 / 185] VauldyPrivacy
+[125 / 180] SpanPreview
+[129 / 189] NIOCore
+[129 / 189] CNIOAtomics
+[131 / 185] NIOCore
+[137 / 203] NIOCore
+[138 / 203] NIOCore
+[139 / 203] NIOCore
+[143 / 200] VauldyMCPProtocol
+[143 / 200] VauldyRelay
+[150 / 197] vauldy-mcp-setup-product
+[154 / 194] NIOPosix
+[162 / 198] VauldyMCPProtocol
+[166 / 196] NIOPosix
+[169 / 198] NIOPosix
+[170 / 198] NIOPosix
+[174 / 194] NIOPosix
+[176 / 200] NIOPosix
+[178 / 205] NIOPosix
+[185 / 204] _NIODataStructures
+[187 / 205] VauldyMCPProtocol
+[192 / 206] NIOHTTP1
+[195 / 208] VauldyMCPRuntimeTests-product
+[196 / 208] VauldyMCPRuntimeTests-product
+[198 / 204] NIOHTTP1
+[199 / 206] vauldy-mcp-http-product
+[205 / 216]
+[209 / 216] vauldy-mcp-http-product
+[210 / 216] vauldy-mcp-http-product
+[211 / 216] NIOPosix
+[217 / 223] NIOHTTP1
+[220 / 223] NIOHTTP1
+[222 / 223] vauldy-mcp-http-product
+[223 / 223] vauldy-mcp-http-product
+Build complete! (15,79 Sek.)
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Concrete local quality reasons and source locations" started.
+◇ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() started.
+✔ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() passed after 0.167 seconds.
+◇ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() started.
+✔ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() passed after 0.001 seconds.
+◇ Test completedAnalysisDoesNotProveManualOrTableValidation() started.
+✔ Test completedAnalysisDoesNotProveManualOrTableValidation() passed after 0.013 seconds.
+◇ Test unknownKindAndFieldConflictAreIndependentOfOCR() started.
+✔ Test unknownKindAndFieldConflictAreIndependentOfOCR() passed after 0.006 seconds.
+◇ Test aggregateLineWarningsNeverInventAnExactLocation() started.
+✔ Test aggregateLineWarningsNeverInventAnExactLocation() passed after 0.001 seconds.
+◇ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() started.
+✔ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() passed after 0.003 seconds.
+◇ Test previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewHighlightFollowsPDFRotation(rotation:) started.
+✔ Test previewHighlightFollowsPDFRotation(rotation:) with 4 test cases passed after 0.001 seconds.
+✔ Suite "Concrete local quality reasons and source locations" passed after 0.192 seconds.
+◇ Suite "Local OCR quality review" started.
+◇ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+✔ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) with 4 test cases passed after 0.345 seconds.
+◇ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() started.
+✔ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() passed after 0.001 seconds.
+◇ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() started.
+✔ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() passed after 0.194 seconds.
+✔ Suite "Local OCR quality review" passed after 0.539 seconds.
+◇ Suite "Existing documents do not require another import" started.
+◇ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "needsReview" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "failed" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "stale" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "unavailable" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "pending" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+✔ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) with 5 test cases passed after 0.001 seconds.
+◇ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .partial to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .failed to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .interrupted to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .cancelled to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+✔ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) with 4 test cases passed after 0.001 seconds.
+◇ Test absentTextAndPendingJobsStayDistinct() started.
+✔ Test absentTextAndPendingJobsStayDistinct() passed after 0.001 seconds.
+◇ Test originalAccessIssuesAreNotOCRInstructions() started.
+✔ Test originalAccessIssuesAreNotOCRInstructions() passed after 0.001 seconds.
+◇ Test pageReviewAndLegacyDocumentsArePreserved() started.
+✔ Test pageReviewAndLegacyDocumentsArePreserved() passed after 0.001 seconds.
+◇ Test storedButUnfinishedOutcomesAreNotFailedImports() started.
+✔ Test storedButUnfinishedOutcomesAreNotFailedImports() passed after 0.001 seconds.
+✔ Suite "Existing documents do not require another import" passed after 0.001 seconds.
+✔ Test run with 16 tests in 3 suites passed after 0.733 seconds.
