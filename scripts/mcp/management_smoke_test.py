@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('resources', type=Path)
     args = parser.parse_args()
+    version = json.loads((args.resources / "release.json").read_text())["productVersion"]
     with tempfile.TemporaryDirectory(prefix='vauldy-management-wire-') as temp:
         root = Path(temp).resolve()
         # No GUI companion needed: a diagnostic must not auto-launch a menu.
@@ -31,7 +32,7 @@ def main():
             grant['enabled'] = enabled; grant['revision'] = str(uuid.uuid4())
             profile.write_text(json.dumps(grant)); before = profile.read_bytes()
             result = json.loads(subprocess.check_output([str(local), 'check-connection', '--profile', str(profile)], timeout=20))
-            assert result['serverVersion'] == '0.13.0'
+            assert result['serverVersion'] == version
             assert set(result['discoveredTools']) == {
                 'get_vault_status', 'list_documents', 'search_documents', 'read_document', 'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'
             }
@@ -48,7 +49,7 @@ def main():
         saved_profile, saved_config = profile.read_bytes(), client_config.read_bytes()
         app = args.resources.resolve().parent.parent
         updated = json.loads(subprocess.check_output([str(args.resources.resolve()/'vauldy-local'), 'update-software', '--root', str(root), '--from-app', str(app), '--allow-ad-hoc'], timeout=30))
-        assert updated == dict(updated=True, version='0.13.0', clientRestartRequired=True)
+        assert updated == dict(updated=True, version=version, clientRestartRequired=True)
         assert profile.read_bytes() == saved_profile and vault.read_bytes() == original and client_config.read_bytes() == saved_config
         for name in ['vauldy-mcp', 'vauldy-local', 'vauldy-mcp-http']:
             assert (binary_dir/name).read_bytes() == (args.resources.resolve()/name).read_bytes()
@@ -68,7 +69,7 @@ def main():
             assert len(entries) == 1
             entry = entries[0]
             assert entry['connectionID'].lower() == connection.lower() and entry['diagnostic'] is False
-            assert entry['version'] == '0.13.0' and entry.get('lastRequestAt') is not None
+            assert entry['version'] == version and entry.get('lastRequestAt') is not None
             assert set(entry) <= {'connectionID', 'version', 'buildID', 'diagnostic', 'lastRequestAt'}
             assert entry.get('buildID', '').startswith('macho.')
             assert document not in json.dumps(entry) and str(root) not in json.dumps(entry)

@@ -61,7 +61,9 @@ final class SetupModel: ObservableObject {
     @Published var documents: [VaultDocument] = []
     @Published var selected: Set<UUID> = []
     @Published var ocrSelected: Set<UUID> = []
-    @Published var editingDocumentGrants = false
+    @Published var localChoices: [UUID: String] = [:]
+    @Published var localChoicesError = ""
+    @Published var originalsCheckedAt: Date?
     @Published var retryingOCR = false
     @Published var vaultURL: URL? { didSet { updateLocalVaultIdentity() } }
     @Published var localSnapshotURL: URL? { didSet { updateLocalVaultIdentity() } }

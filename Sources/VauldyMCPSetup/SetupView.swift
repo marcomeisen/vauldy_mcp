@@ -11,8 +11,8 @@ struct SetupView: View {
             VStack(alignment: .leading, spacing: 22) {
                 Label("Vauldy", systemImage: "externaldrive.badge.checkmark")
                     .font(.title2.weight(.semibold)).padding(.horizontal, 12).padding(.top, 18)
-                List(MCPSetupSection.allCases, id: \.self, selection: Binding<MCPSetupSection?>(
-                    get: { model.section }, set: { if let section = $0 { model.navigate(section) } })) { section in
+                List([MCPSetupSection.overview, .documents, .connections, .settings], id: \.self, selection: Binding<MCPSetupSection?>(
+                    get: { model.section == .folders ? .documents : model.section == .oauth ? .connections : model.section }, set: { if let section = $0 { model.navigate(section) } })) { section in
                     Label(section.title, systemImage: section.symbol).tag(section)
                 }.listStyle(.sidebar)
                 Label("Auf diesem Mac", systemImage: "lock.shield").font(.caption).foregroundStyle(.secondary).padding(16)
@@ -29,8 +29,10 @@ struct SetupView: View {
                         case .overview: overview
                         case .connections: connections
                         case .documents: SetupDocumentsView(model: model)
-                        case .folders: SetupFoldersView(model: model)
-                        case .oauth: SetupOAuthView(model: model)
+                        case .folders:
+                            Button("Zur Dokumentliste") { model.navigate(.documents) }
+                            SetupFoldersView(model: model)
+                        case .oauth: connections
                         case .settings: SetupSettingsView(model: model)
                         }
                         if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
@@ -41,10 +43,10 @@ struct SetupView: View {
                 }
             }
         }
-        .navigationTitle("Vauldy · MCP")
-        .toolbar { ToolbarItem(placement: .primaryAction) { Button("Verbindung hinzufügen", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
+        .navigationTitle("Vauldy")
+        .toolbar { ToolbarItem(placement: .primaryAction) { Button("Chatbot verbinden", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
         .frame(minWidth: 860, minHeight: 640)
-        .sheet(item: $model.inventoryWorkflow) { workflow in InventoryWorkflowView(model: workflow) }
+        .sheet(item: Binding(get: { model.showingSetup ? nil : model.inventoryWorkflow }, set: { model.inventoryWorkflow = $0 })) { workflow in InventoryWorkflowView(model: workflow) }
         .sheet(isPresented: $model.showingInstallation, onDismiss: model.installationWizardDismissed) {
             SoftwareInstallationWizard(model: model)
         }
@@ -84,13 +86,13 @@ struct SetupView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(model.section.title).font(.largeTitle.weight(.semibold))
+            Text(model.section == .oauth ? "Verbindungen" : model.section == .folders ? "Dokumente · Ordner" : model.section.title).font(.largeTitle.weight(.semibold))
             Text(subtitle).foregroundStyle(.secondary)
         }
     }
     private var subtitle: String {
         switch model.section {
-        case .overview: "Alles Wichtige zu deinem lokalen MCP-Zugang."
+        case .overview: "Deine Dokumente, Freigaben und nächsten Schritte."
         case .connections: "Dokumentzugriff für jeden Chatbot einzeln verwalten."
         case .documents: "Vorhandene Dokumente prüfen und neue Dateien hinzufügen."
         case .folders: "Ordner einmalig importieren oder automatisch überwachen."
@@ -123,28 +125,16 @@ struct SetupView: View {
             }.padding(.vertical, 22)
         } else {
             softwareBanner
-            if let profile = model.activeConnection { SetupConnectionCard(model: model, profile: profile, expanded: true) }
-            VStack(alignment: .leading, spacing: 16) {
-                HStack { Text("Deine Dokumente im Blick").font(.headline); Spacer(); Text("\(SetupText.documents(model.documents.count)) lokal").foregroundStyle(.secondary) }
-                HStack(alignment: .top, spacing: 14) {
-                    Image(systemName: "tray").foregroundStyle(.secondary)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(SetupText.documents(model.unsharedCount)) ohne Auswahl für diesen Chatbot")
-                        Text("Neue Importe bleiben gesperrt. Du entscheidest einzeln über den Dokumentzugriff.").font(.callout).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Button("Dokumente prüfen") { model.showDocuments(unselected: true) }
-                }
-                Divider()
-                HStack(alignment: .top, spacing: 14) {
-                    Image(systemName: "folder").foregroundStyle(.secondary)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(model.watchedFolders.contains(where: \.enabled) ? "Ordnerüberwachung aktiviert" : "Ordnerüberwachung pausiert oder nicht eingerichtet")
-                        Text("\(SetupText.documents(model.pendingCount)) in Verarbeitung. Importe und MCP-Verbindungen laufen unabhängig.").font(.callout).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Button("Ordner verwalten") { model.section = .folders }
-                }
+            if !model.connections.isEmpty { SetupConnectionPicker(model: model) }
+            if let profile = model.activeConnection {
+                SetupNextStepView(model: model, profile: profile)
+                SetupConnectionCard(model: model, profile: profile)
+            }
+            HStack {
+                Text("\(model.documents.count) Dokumente auf diesem Mac")
+                Spacer()
+                Button("Dokumente hinzufügen") { model.navigate(.documents) }
+                Button("Ordner verwalten") { model.section = .folders }
             }
             Label("Originale und Texterkennung bleiben auf diesem Mac.", systemImage: "internaldrive").font(.callout).foregroundStyle(.secondary)
         }
@@ -164,8 +154,11 @@ struct SetupView: View {
     }
     private var connections: some View {
         VStack(alignment: .leading, spacing: 18) {
-            if model.connections.isEmpty { Text("Noch keine gespeicherte Verbindung. Wähle „Verbindung hinzufügen“, um einen Chatbot einzurichten.").foregroundStyle(.secondary) }
+            if model.connections.isEmpty { Text("Noch keine gespeicherte Verbindung. Wähle „Chatbot verbinden“, um einen Chatbot einzurichten.").foregroundStyle(.secondary) }
             ForEach(model.connections, id: \.connectionID) { profile in SetupConnectionCard(model: model, profile: profile) }
+            DisclosureGroup("Anmeldung und Verbindungshilfe", isExpanded: Binding(get: { model.section == .oauth }, set: { model.section = $0 ? .oauth : .connections })) {
+                SetupOAuthView(model: model)
+            }
         }
     }
 }
@@ -194,8 +187,8 @@ struct SetupConnectionCard: View {
             }
             Divider()
             HStack(spacing: 20) {
-                Label(status.serverLabel, systemImage: status.running ? "checkmark.circle" : "clock")
-                Label("\(SetupText.documents(profile.allowedDocumentIDs.count)) ausgewählt", systemImage: "doc.on.doc")
+                Label(model.relayState.paired && model.relayState.profileID == profile.connectionID ? (model.relayRunning ? "Mac-Dienst läuft" : "Mac-Dienst gestoppt") : status.serverLabel, systemImage: status.running ? "checkmark.circle" : "clock")
+                Label("\(SetupText.documents(profile.allowedDocumentIDs.count)) freigegeben", systemImage: "doc.on.doc")
                 Label(profile.enabled ? "Zugriff freigegeben" : "Zugriff gesperrt", systemImage: profile.enabled ? "checkmark.shield" : "lock.shield")
             }.font(.callout).foregroundStyle(.secondary)
             HStack(spacing: 12) {
@@ -204,8 +197,8 @@ struct SetupConnectionCard: View {
                 } else {
                     Button("Dokumentzugriff fortsetzen") { model.resumeCandidate = profile }.buttonStyle(.borderedProminent).disabled(profile.allowedDocumentIDs.isEmpty || model.accessChanges.contains(profile.connectionID))
                 }
-                Button("Dokumente bearbeiten") { model.edit(profile) }
-                Button("Verbindung prüfen") { model.checkConnection(profile) }
+                Button("Freigabe bearbeiten") { model.startInventoryWorkflow(profile: profile) }
+                Button("Verbindung prüfen") { model.showConnectionHelp(profile) }
             }
             HStack(alignment: .top) {
                 Label("Neue Dokumente werden nie automatisch für diesen Chatbot freigegeben.", systemImage: "lock").font(.caption).foregroundStyle(.secondary)

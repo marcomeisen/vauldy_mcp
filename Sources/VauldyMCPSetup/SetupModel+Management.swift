@@ -4,15 +4,16 @@ import VauldyCore
 import VauldyMCPRuntime
 
 enum SetupDocumentFilter: String, CaseIterable {
-    case all, selected, unselected, review, ocrReview, analysisReview, pending
+    case all, selected, unselected, localOnly, review, ocrReview, analysisReview, pending
     var title: String {
         switch self {
         case .all: "Alle Dokumente"
-        case .selected: "Für Chatbot ausgewählt"
-        case .unselected: "Nicht für Chatbot ausgewählt"
-        case .review: "Prüfbedarf (OCR / Analyse)"
-        case .ocrReview: "Nur OCR prüfen"
-        case .analysisReview: "Nur Basisanalyse prüfen"
+        case .selected: "Für diesen Chatbot freigegeben"
+        case .unselected: "Freigabe ausstehend"
+        case .localOnly: "Nur lokal behalten"
+        case .review: "Alle Prüfhinweise"
+        case .ocrReview: "Hinweise zur Texterkennung"
+        case .analysisReview: "Hinweise zu Basisangaben"
         case .pending: "In Verarbeitung"
         }
     }
@@ -55,8 +56,9 @@ extension SetupModel {
             guard matches else { return false }
             switch documentFilter {
             case .all: return true
-            case .selected: return selected.contains(document.id)
-            case .unselected: return !selected.contains(document.id)
+            case .selected: return activeConnection?.allowedDocumentIDs.contains(document.id) == true
+            case .unselected: return needsGrantDecision(document)
+            case .localOnly: return isKeptLocal(document)
             case .review: return ["needsReview", "failed", "stale"].contains(document.baseAnalysisStatus) || (document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) } ?? false)
             case .ocrReview: return document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) || $0.pages.contains(where: \.needsReview) } ?? false
             case .analysisReview: return ["needsReview", "failed", "stale", "unavailable"].contains(document.baseAnalysisStatus)
@@ -64,16 +66,6 @@ extension SetupModel {
             }
         }
     }
-    var selectedReadableCount: Int { documents.filter { selected.contains($0.id) && $0.isSearchable }.count }
-    var selectableDocumentIDs: Set<UUID> { Set(documents.filter(\.isSearchable).map(\.id)) }
-    var visibleSelectableDocumentIDs: Set<UUID> { Set(filteredDocuments.filter(\.isSearchable).map(\.id)) }
-
-    func selectDocuments(_ ids: Set<UUID>) {
-        guard !busy, editing != nil || showingSetup else { return }
-        selected.formUnion(ids.intersection(selectableDocumentIDs))
-        acknowledged = false
-    }
-
     func showImportedDocuments(_ ids: Set<UUID>) {
         guard !busy else { return }
         if !showingSetup { section = .documents }
@@ -83,22 +75,7 @@ extension SetupModel {
         documentFilter = .all
     }
 
-    func clearDocumentSelection() {
-        guard !busy, editing != nil || showingSetup else { return }
-        selected.removeAll()
-        acknowledged = false
-    }
-
-    func setDocumentSelected(_ value: Bool, id: UUID) {
-        guard !busy else { return }
-        if value { selected.insert(id) } else { selected.remove(id) }
-        acknowledged = false
-    }
-
-    var selectionChanged: Bool { editing.map { selected != $0.allowedDocumentIDs } ?? false }
-    var selectionExpandsAccess: Bool { editing.map { !selected.isSubset(of: $0.allowedDocumentIDs) } ?? false }
     var pendingCount: Int { documents.filter { $0.localImport?.state == .queued || $0.localImport?.state == .recognizing }.count }
-    var unsharedCount: Int { documents.filter { !(activeConnection?.allowedDocumentIDs.contains($0.id) ?? false) }.count }
 
     func state(for profile: MCPAccessProfile) -> MCPConnectionState {
         MCPConnectionState(profile: profile, instances: instances, binding: profile.connectionKind == .oauth ? nil : bindings[profile.connectionID], expectedBuildID: software?.installedBuildID)
@@ -108,6 +85,9 @@ extension SetupModel {
         connections.first { resolvedClients[$0.connectionID] == client && bindings[$0.connectionID] == .registered }
     }
     func bindingLabel(_ profile: MCPAccessProfile) -> String {
+        if relayState.paired && relayState.profileID == profile.connectionID {
+            return relayState.grantNeedsUpdate ? "ChatGPT gekoppelt · Auswahlbestätigung erforderlich" : "ChatGPT gekoppelt"
+        }
         if profile.connectionKind == .oauth {
             return oauthConnections.contains { $0.profileID == profile.connectionID && !$0.revoked } ? "OAuth-Freigabe aktiv" : "Dokumentauswahl bereit · OAuth noch nicht verbunden"
         }
@@ -136,13 +116,20 @@ extension SetupModel {
             // Opening connection management is observational. Starting folder imports
             // remains an explicit action in the folder view or import commands.
             await refreshWatchedFolders()
-            if documents.isEmpty { try? await refreshLocalDocuments() }
+            await refreshRelay()
+            refreshLocalChoices()
+            if documents.isEmpty {
+                if let profile = activeConnection { load(URL(fileURLWithPath: profile.vaultPath), profile: profile) }
+                else { try? await refreshLocalDocuments() }
+            }
             while !Task.isCancelled {
                 do { try await Task.sleep(for: .seconds(3)) } catch { return }
                 await refreshManagement()
                 if Date().timeIntervalSince(lastFoldersRefresh) > 10 {
                     lastFoldersRefresh = Date()
                     await refreshWatchedFolders()
+                    await refreshRelay()
+                    refreshLocalChoices()
                 }
             }
         }
@@ -173,11 +160,13 @@ extension SetupModel {
                     lastInstalledStamp = stamp
                 }
             }
-            if let request = try installer.consumeSetupRequest() {
+            if !busy && !importing && inventoryWorkflow == nil && !showingSetup, let request = try installer.consumeSetupRequest() {
                 section = request.section
                 if let id = request.connectionID, let profile = connections.first(where: { $0.connectionID == id }) {
                     activeConnectionID = id
-                    if section == .documents { edit(profile) }
+                    refreshLocalChoices()
+                    if request.editGrant == true { startInventoryWorkflow(profile: profile) }
+                    else if section == .documents { edit(profile) }
                     if request.diagnose == true { checkConnection(profile) }
                 } else if section == .documents { showDocuments() }
                 NSApp.windows.first(where: { $0.identifier?.rawValue == "main" })?.makeKeyAndOrderFront(nil)
@@ -213,6 +202,7 @@ extension SetupModel {
     func navigate(_ section: MCPSetupSection) {
         self.section = section
         if section == .documents { showDocuments() }
+        if section == .connections { Task { await refreshRelay(); await refreshOAuth() } }
     }
     func showDocuments(unselected: Bool = false) {
         shownImportDocumentIDs = nil
@@ -223,6 +213,7 @@ extension SetupModel {
     }
     func edit(_ profile: MCPAccessProfile) {
         activeConnectionID = profile.connectionID; section = .documents
+        refreshLocalChoices()
         load(URL(fileURLWithPath: profile.vaultPath), profile: profile)
     }
 
@@ -274,22 +265,6 @@ extension SetupModel {
                 if clientCleanupIncomplete { message += " Ein Client-Eintrag konnte nicht automatisch entfernt werden. Bitte im Chatbot prüfen." }
                 failure = clientCleanupIncomplete
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht entfernt werden. Bitte neu laden.") }
-            await refreshManagement()
-        }
-    }
-
-    func saveSelection() {
-        guard !busy, let profile = editing else { return }
-        busy = true
-        let installer = installation, ids = selected, disclosure = acknowledged
-        Task {
-            defer { busy = false }
-            do {
-                let updated = try await Task.detached { try installer.updateSelection(ids, for: profile.connectionID, expectedRevision: profile.revision, acknowledgedDisclosure: disclosure) }.value
-                editing = updated; acknowledged = false
-                message = updated.enabled ? "Dokumentauswahl gespeichert." : "Dokumentauswahl gespeichert. Der Dokumentzugriff bleibt pausiert."
-                failure = false
-            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Auswahl konnte nicht gespeichert werden.") }
             await refreshManagement()
         }
     }
@@ -346,41 +321,58 @@ extension SetupModel {
         }
     }
 
-    func finishSetup() {
-        guard !busy, acknowledged, selectedReadableCount > 0, let vaultURL, let binary = bundledBinary else { return }
-        let ids = selected.intersection(Set(documents.filter(\.isSearchable).map(\.id)))
+    func prepareNewGrant() {
+        guard !busy, !importing, let vaultURL, let executable = localExecutable else { return }
         let isOAuth = clientSelection.hasPrefix("oauth-")
-        let chosenClient = MCPDesktopClient(rawValue: clientSelection.replacingOccurrences(of: "oauth-", with: ""))
-        let client = isOAuth ? nil : chosenClient
-        var profile = MCPAccessProfile(vaultPath: vaultURL.path, allowedDocumentIDs: ids, enabled: true, acknowledgedCloudDisclosure: true)
-        profile.desktopClient = client
-        profile.connectionKind = isOAuth ? .oauth : .local
-        let title = connectionName.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.connectionName = title.isEmpty || title == "Mein MCP-Client" ? (chosenClient.map { isOAuth ? ($0 == .chatgpt ? "ChatGPT" : "Claude") : $0.title } ?? "Mein Chatbot") : String(title.prefix(80))
-        let final = profile, installer = installation, registrar = registration
-        let local = localExecutable, status = bundledStatusApp, setup = Bundle.main.bundleURL
-        busy = true; failure = false; message = "Verbindung wird lokal eingerichtet …"
-        Task {
-            do {
-                configuration = try await Task.detached { try installer.install(binary: binary, profile: final, localCLI: local, statusApp: status, setupApp: setup) }.value
-                await restartStatusMenu()
-                activeConnectionID = final.connectionID; editing = final
-                if isOAuth {
-                    configuration = nil
-                    registrationMessage = chosenClient == .chatgpt ? "Dokumentauswahl gespeichert. Öffne jetzt die ChatGPT-Anmeldung und verbinde deinen Mac über dein Konto." : "Dokumentauswahl gespeichert. Verbinde Claude über OAuth und bestätige die passende Anfrage in Vauldy."
-                } else if let client {
-                    do {
-                        _ = try await Task.detached { try registrar.register(client, binary: installer.binaryURL, profile: installer.profileURL(final.connectionID)) }.value
-                        registrationMessage = "Im Chatbot eingetragen. Eine erste Anfrage muss noch aus dem Chatbot erfolgen."
-                    } catch { registrationMessage = "Freigabe gespeichert; der Client-Eintrag konnte nicht angelegt werden. " + ((error as? LocalizedError)?.errorDescription ?? "Bitte Zuordnung prüfen.") }
-                } else { registrationMessage = "Konfiguration vorbereitet. Verbinde deinen Chatbot mit der exportierten Konfiguration." }
-                setupStep = 3; software = nil
-                message = "Die Verbindung wurde vorbereitet. Der lokale Test bestätigt noch keine Anfrage aus deinem Chatbot."
-                await refreshManagement(checkBindings: true)
-                if !isOAuth { checkConnection(final, present: false) }
-            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht eingerichtet werden.") }
-            busy = false
+        let client = MCPDesktopClient(rawValue: clientSelection.replacingOccurrences(of: "oauth-", with: ""))
+        var draft = MCPAccessProfile(vaultPath: vaultURL.path)
+        draft.connectionKind = isOAuth ? .oauth : .local
+        draft.desktopClient = isOAuth ? nil : client
+        let name = connectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let recipient = isOAuth ? (client == .chatgpt ? "ChatGPT" : "Claude") : (client?.title ?? "Mein Chatbot")
+        draft.connectionName = name.isEmpty ? recipient : String(name.prefix(80))
+        let workflow = InventoryWorkflowModel(installation: installation, executable: executable, profile: draft,
+            updatesChatGPT: false) { _ in }
+        workflow.createConnection = { [weak self] profile, digest in
+            guard let self else { throw CancellationError() }
+            try await self.finishSetup(profile: profile, digest: digest)
         }
+        workflow.step = 1
+        inventoryWorkflow = workflow
+        workflow.reportOnly()
+    }
+
+    func finishSetup(profile: MCPAccessProfile, digest: String) async throws {
+        guard let binary = bundledBinary else { throw MCPAccessError.configuration }
+        let installer = installation, registrar = registration
+        let local = localExecutable, status = bundledStatusApp, setup = Bundle.main.bundleURL
+        let snapshot = LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath))
+        let store = localStore, localInventory = snapshot == store.snapshotURL
+        busy = true
+        defer { busy = false }
+        configuration = try await Task.detached {
+            let install = {
+                guard try LocalInventoryFingerprint.snapshot(snapshot) == digest else { throw LocalInventoryError.changed }
+                return try installer.install(binary: binary, profile: profile, localCLI: local, statusApp: status, setupApp: setup)
+            }
+            if localInventory { return try store.withUnchangedInventory(digest, perform: install) }
+            return try install()
+        }.value
+        await restartStatusMenu()
+        activeConnectionID = profile.connectionID; editing = profile
+        if profile.connectionKind == .oauth {
+            configuration = nil
+            registrationMessage = "Freigabe gespeichert. Schließe jetzt die Anmeldung für diese Verbindung ab."
+        } else if let client = profile.desktopClient {
+            do {
+                _ = try await Task.detached { try registrar.register(client, binary: installer.binaryURL, profile: installer.profileURL(profile.connectionID)) }.value
+                registrationMessage = "Im Chatbot eingetragen. Stelle jetzt eine Frage zu einem freigegebenen Dokument."
+            } catch { registrationMessage = "Freigabe gespeichert. Der Eintrag im Chatbot benötigt deine Hilfe unter Verbindungen." }
+        } else { registrationMessage = "Freigabe gespeichert. Übertrage die Konfiguration in deinen Chatbot." }
+        setupStep = 2; software = nil
+        await refreshManagement(checkBindings: true)
+        refreshLocalChoices()
+        if profile.connectionKind != .oauth { checkConnection(profile, present: false) }
     }
 
     func checkConnection(_ profile: MCPAccessProfile, present: Bool = true) {

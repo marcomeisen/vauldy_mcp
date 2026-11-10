@@ -19,8 +19,10 @@ struct SetupRelayView: View {
                 } else if model.relayState.paired {
                     Text(model.relayRunning ? "Verbindungsdienst auf diesem Mac läuft." : "Verbindungsdienst auf diesem Mac gestoppt.")
                     Text("Der Mac muss eingeschaltet und mit dem Internet verbunden sein. Wähle Vauldy im ChatGPT-Chat als Plugin. Der lokale Dienststatus bestätigt noch keinen Aufruf aus diesem Chat.").font(.callout).foregroundStyle(.secondary)
-                    if model.relayState.grantNeedsUpdate { Text("Die Dokumentfreigabe hat sich geändert. Bitte die aktualisierte Auswahl bestätigen; deine Anmeldung bleibt erhalten.").foregroundStyle(.orange) }
-                    Button("Bestand und Freigabe aktualisieren …", action: model.startInventoryWorkflow)
+                    if model.relayState.grantNeedsUpdate { Text("Die Dokumentfreigabe hat sich geändert. Bestätige die Auswahl über „Freigabe bearbeiten“.").foregroundStyle(.orange) }
+                    Button("Freigabe bearbeiten") {
+                        if let profile = model.connections.first(where: { $0.connectionID == model.relayState.profileID }) { model.startInventoryWorkflow(profile: profile) }
+                    }
                     HStack {
                         if !model.relayRunning { Button("Mac verbinden", action: model.startRelay) }
                         Button("ChatGPT-Verbindung öffnen") { NSWorkspace.shared.open(URL(string: RelayCredentials.origin)!) }

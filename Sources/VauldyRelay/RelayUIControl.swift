@@ -95,7 +95,7 @@ public enum RelayUIManager {
                 guard profile.revision == revision, try profile.disclosureFingerprint() == fingerprint, LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) == localStore.snapshotURL else { throw RelayFailure.changedGrant }
                 let report = try await MCPInventoryQualityService(store: localStore).report(using: verification)
                 guard report.snapshotDigest == digest else { throw LocalInventoryError.changed }
-                try report.validateSelection(Set(requested), acknowledgedReview: request.acknowledgedReview == true)
+                try report.validateSelection(Set(requested), acknowledgedReview: request.acknowledgedReview == true, preserving: profile.allowedDocumentIDs)
                 try service.requestStop()
                 for _ in 0..<100 {
                     if !service.isRunning { break }

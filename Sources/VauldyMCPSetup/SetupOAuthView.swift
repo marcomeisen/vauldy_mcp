@@ -66,7 +66,7 @@ struct SetupOAuthView: View {
                 }
             }
             if !model.oauthError.isEmpty { SetupNotice(text: model.oauthError, warning: true) }
-            Text("Originale und OCR bleiben auf diesem Mac. Angeforderte, freigegebene Inhalte werden lokal bereinigt und dem Chatbot übergeben. Du kannst den Zugriff hier jederzeit widerrufen.").font(.caption).foregroundStyle(.secondary)
+            Text("Originale und Texterkennung bleiben auf diesem Mac. Angeforderte, freigegebene Inhalte werden lokal bereinigt und dem Chatbot übergeben. Du kannst den Zugriff hier jederzeit widerrufen.").font(.caption).foregroundStyle(.secondary)
             }
         }
         .task { await model.refreshOAuth() }

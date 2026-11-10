@@ -151,13 +151,14 @@ struct MCPManagementTests {
         profile.enabled = false
         let paused = MCPConnectionState(profile: profile, instances: [old])
         #expect(paused.running && paused.headline == "Dokumentzugriff pausiert")
+        #expect(paused.tone == .neutral)
     }
 
     @Test func menuNavigationIsTypedOneShotAndDoesNotChangeGrants() throws {
         let f = try Fixture(), original = try Data(contentsOf: f.path)
-        try f.installer.requestSetup(.init(section: .documents, connectionID: f.profile.connectionID, diagnose: true))
+        try f.installer.requestSetup(.init(section: .documents, connectionID: f.profile.connectionID, diagnose: true, editGrant: true))
         let request = try #require(try f.installer.consumeSetupRequest())
-        #expect(request.section == .documents && request.connectionID == f.profile.connectionID && request.diagnose == true)
+        #expect(request.section == .documents && request.connectionID == f.profile.connectionID && request.diagnose == true && request.editGrant == true)
         #expect(try f.installer.consumeSetupRequest() == nil)
         var expired = MCPSetupRequest(section: .settings); expired.createdAt = Date().addingTimeInterval(-301)
         try f.installer.requestSetup(expired)

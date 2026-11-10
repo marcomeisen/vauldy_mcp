@@ -36,7 +36,7 @@ import VauldyMCPRuntime
     init(root: URL) { installation = .init(root: root) }
     func applicationDidFinishLaunching(_ notification: Notification) {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        self.item = item; item.button?.title = " MCP …"
+        self.item = item; item.button?.title = " Vauldy …"
         let menu = NSMenu(); menu.delegate = self; item.menu = menu; rebuildMenu()
         refreshTask = Task { [weak self] in
             while !Task.isCancelled {
@@ -66,7 +66,7 @@ import VauldyMCPRuntime
             } catch { folderError = true }
         }
         let good = !managementError && !profiles.isEmpty && profiles.allSatisfy(\.enabled) && states.allSatisfy { $0.running && !$0.restartRequired }
-        item?.button?.title = good ? " MCP ✓" : " MCP"
+        item?.button?.title = good ? " Vauldy ✓" : " Vauldy"
         item?.button?.image = NSImage(systemSymbolName: good ? "checkmark.shield" : (profiles.contains(where: { !$0.enabled }) ? "pause.circle" : "circle.dotted"), accessibilityDescription: title)
         item?.button?.contentTintColor = good ? .systemGreen : .labelColor
         item?.button?.toolTip = "Vauldy · " + title
@@ -97,10 +97,10 @@ import VauldyMCPRuntime
             let row = NSMenuItem(title: String(profile.connectionName.prefix(55)) + " · " + state.headline, action: nil, keyEquivalent: "")
             row.image = NSImage(systemSymbolName: state.symbol, accessibilityDescription: state.headline)
             let sub = NSMenu(); row.submenu = sub
-            sub.addItem(disabled(state.serverLabel)); sub.addItem(disabled(profile.allowedDocumentIDs.count == 1 ? "1 Dokument ausgewählt" : "\(profile.allowedDocumentIDs.count) Dokumente ausgewählt")); sub.addItem(disabled(state.accessLabel))
+            sub.addItem(disabled(state.serverLabel)); sub.addItem(disabled(profile.allowedDocumentIDs.count == 1 ? "1 Dokument freigegeben" : "\(profile.allowedDocumentIDs.count) Dokumente freigegeben")); sub.addItem(disabled(state.accessLabel))
             sub.addItem(.separator())
             sub.addItem(action(profile.enabled ? "Dokumentzugriff pausieren" : "Dokumentzugriff fortsetzen …", #selector(toggleAccess(_:)), value: profile))
-            sub.addItem(action("Dokumentauswahl bearbeiten …", #selector(editDocuments(_:)), value: profile.connectionID))
+            sub.addItem(action("Freigabe bearbeiten …", #selector(editDocuments(_:)), value: profile.connectionID))
             sub.addItem(action("Verbindung prüfen …", #selector(diagnose(_:)), value: profile.connectionID)); menu.addItem(row)
         }
         if managementError { menu.addItem(disabled("Verbindungen konnten nicht vollständig gelesen werden.")) }
@@ -157,9 +157,9 @@ import VauldyMCPRuntime
             lastFoldersRead = .distantPast; await refresh()
         }
     }
-    private func open(_ section: MCPSetupSection, id: UUID? = nil, diagnose: Bool = false) {
+    private func open(_ section: MCPSetupSection, id: UUID? = nil, diagnose: Bool = false, editGrant: Bool = false) {
         do {
-            try installation.requestSetup(.init(section: section, connectionID: id, diagnose: diagnose))
+            try installation.requestSetup(.init(section: section, connectionID: id, diagnose: diagnose, editGrant: editGrant))
             let enclosing = Bundle.main.bundleURL.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             guard let app = [installation.setupAppURL, enclosing].first(where: { Bundle(url: $0)?.bundleIdentifier == "com.marcomeisen.vauldy.mcp-setup" }) else { throw MCPAccessError.configuration }
             let config = NSWorkspace.OpenConfiguration(); config.activates = true
@@ -176,7 +176,7 @@ import VauldyMCPRuntime
     @objc private func openDocuments() { open(.documents) }
     @objc private func openFolders() { open(.folders) }
     @objc private func openSettings() { open(.settings) }
-    @objc private func editDocuments(_ sender: NSMenuItem) { open(.documents, id: sender.representedObject as? UUID) }
+    @objc private func editDocuments(_ sender: NSMenuItem) { open(.documents, id: sender.representedObject as? UUID, editGrant: true) }
     @objc private func diagnose(_ sender: NSMenuItem) { open(.connections, id: sender.representedObject as? UUID, diagnose: true) }
     @objc private func openFolder() { NSWorkspace.shared.open(installation.root) }
     @objc private func quit() { NSApp.terminate(nil) }

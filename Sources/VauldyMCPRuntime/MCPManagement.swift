@@ -30,9 +30,10 @@ public struct MCPSetupRequest: Codable, Sendable {
     public var section: MCPSetupSection
     public var connectionID: UUID?
     public var diagnose: Bool?
+    public var editGrant: Bool?
     public var createdAt: Date
-    public init(section: MCPSetupSection, connectionID: UUID? = nil, diagnose: Bool = false) {
-        self.section = section; self.connectionID = connectionID; self.diagnose = diagnose; createdAt = Date()
+    public init(section: MCPSetupSection, connectionID: UUID? = nil, diagnose: Bool = false, editGrant: Bool = false) {
+        self.section = section; self.connectionID = connectionID; self.diagnose = diagnose; self.editGrant = editGrant; createdAt = Date()
     }
 }
 

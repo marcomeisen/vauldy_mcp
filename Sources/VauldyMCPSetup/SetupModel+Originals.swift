@@ -55,6 +55,7 @@ extension SetupModel {
                 let checked = try await localStore.checkOriginals()
                 let issues = checked.filter { $0.localImport?.originalState == .changed || $0.localImport?.originalState == .unavailable }.count
                 try await refreshLocalDocuments()
+                originalsCheckedAt = Date()
                 message = "Originalzugriff geprüft: \(issues) Dokumente benötigen Prüfung. Gespeicherter Text bleibt erhalten."
                 failure = issues > 0
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Der Originalzugriff konnte nicht geprüft werden.") }

@@ -22,6 +22,7 @@ def main():
     parser.add_argument('http_binary', type=Path)
     args = parser.parse_args()
     local, server = args.local_binary.resolve(), args.http_binary.resolve()
+    expected_version = subprocess.check_output([str(local), '--version'], text=True).strip().split()[-1]
     with tempfile.TemporaryDirectory(prefix='vauldy-oauth-wire-') as temp:
         root = Path(temp).resolve(); installation = root/'installation'
         with socket.socket() as pick:
@@ -126,13 +127,14 @@ def main():
             for provider in ['chatgpt','claude']:
                 flows[provider]=connect(provider)
                 status,initialized=rpc(flows[provider],'initialize',dict(protocolVersion='2025-06-18',clientInfo=dict(name='Synthetic OAuth client',version='1'),capabilities=dict(experimental={'nested':{'ok':True}})))
-                assert status==200 and initialized['result']['serverInfo']['version'].split('+', 1)[0]=='0.13.0',(status,initialized)
+                assert status==200 and initialized['result']['serverInfo']['version'].split('+', 1)[0]==expected_version,(status,initialized)
                 assert rpc(flows[provider],'notifications/initialized',notify=True)[0]==202
                 status,tools=rpc(flows[provider],'tools/list')
-                assert status==200 and len(tools['result']['tools'])==8
+                assert status==200 and len(tools['result']['tools'])==9
                 assert any(t['name']=='get_topic_overview' for t in tools['result']['tools'])
                 assert any(t['name']=='compare_contract_versions' for t in tools['result']['tools'])
                 assert any(t['name']=='get_deadline_overview' for t in tools['result']['tools'])
+                assert any(t['name']=='get_document_inventory' for t in tools['result']['tools'])
                 assert all(t['securitySchemes']==[dict(type='oauth2',scopes=['documents:read'])] and t['_meta']['securitySchemes']==t['securitySchemes'] for t in tools['result']['tools'])
             chat=flows['chatgpt'];claude=flows['claude']
             status,overview=rpc(chat,'tools/call',dict(name='get_topic_overview',arguments=dict(query='wartung')))

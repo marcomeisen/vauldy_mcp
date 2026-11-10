@@ -11,7 +11,12 @@ struct RelayConnectionTests {
         defer { try? FileManager.default.removeItem(at: root) }
         let installation = MCPInstallation(root: root)
         let project = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let server = project.appendingPathComponent(".build/debug/vauldy-mcp")
+        #if DEBUG
+        let configuration = "debug"
+        #else
+        let configuration = "release"
+        #endif
+        let server = project.appendingPathComponent(".build/\(configuration)/vauldy-mcp")
         try FileManager.default.createDirectory(at: installation.binaryURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: server, to: installation.binaryURL)
         let document = UUID(), other = UUID(), vault = root.appendingPathComponent("documents.json")

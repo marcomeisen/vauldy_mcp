@@ -44,7 +44,7 @@ struct SetupDocumentGuidance {
         } else if needsTextReview {
             textStatus = hasText ? "Text vorhanden · Prüfhinweise" : "Noch kein lesbarer Text"
             nextStep = hasText
-                ? "Vergleiche Original und Text über „Text prüfen“. Nur bei fehlendem oder fehlerhaftem Text erneut lesen; kein erneuter Import nötig."
+                ? "Vergleiche Original und Text über „Prüfstellen ansehen“. Nur bei fehlendem oder fehlerhaftem Text erneut lesen; kein erneuter Import nötig."
                 : "Prüfe das gespeicherte Original. Wenn es lesbar und erreichbar ist, kannst du „Text erneut lesen“ verwenden; kein erneuter Import nötig."
         } else {
             textStatus = hasText ? "Text vorhanden" : "Kein Text erkannt"

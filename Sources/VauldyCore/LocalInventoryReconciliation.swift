@@ -5,7 +5,7 @@ public enum LocalInventoryError: LocalizedError {
     case changed, wrongStore, noSources
     public var errorDescription: String? {
         switch self {
-        case .changed: "Bestand oder Quelle wurde inzwischen verändert. Bitte den Abgleich erneut erstellen."
+        case .changed: "Die Dokumente oder Originaldateien haben sich inzwischen geändert. Wähle „Dokumente erneut prüfen“ und bestätige anschließend die aktuelle Auswahl."
         case .wrongStore: "Der geführte Abgleich benötigt den eigenen lokalen MCP-Bestand. Ein fremdes Archiv wird nicht verändert."
         case .noSources: "Bitte mindestens einen Quellordner auswählen."
         }

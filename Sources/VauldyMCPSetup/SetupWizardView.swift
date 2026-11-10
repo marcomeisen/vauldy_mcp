@@ -4,7 +4,7 @@ import VauldyMCPRuntime
 struct SetupWizardView: View {
     @ObservedObject var model: SetupModel
     @Environment(\.dismiss) private var dismiss
-    private let steps = ["Chatbot", "Dokumente", "Freigabe", "Verbindung prüfen"]
+    private let steps = ["Chatbot", "Dokumente", "Verbindung"]
     private var existing: MCPAccessProfile? {
         MCPDesktopClient(rawValue: model.clientSelection).flatMap { model.existingConnection(for: $0) }
     }
@@ -31,8 +31,7 @@ struct SetupWizardView: View {
                             if !model.importing { SetupImportStatusView(model: model) }
                             SetupDocumentSource(model: model)
                             SetupDocumentList(model: model)
-                        case 2: consent
-                        default: completion
+                                                default: completion
                         }
                         if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
                     }.padding(2)
@@ -42,21 +41,21 @@ struct SetupWizardView: View {
             }
             Divider()
             HStack {
-                Button(model.setupStep == 3 ? "Fertig" : "Assistent schließen") { dismiss() }.disabled(model.busy)
+                Button(model.setupStep == 2 ? "Fertig" : "Assistent schließen") { dismiss() }.disabled(model.busy)
                 if model.importing { Text("Der Import läuft beim Schließen weiter.").font(.caption).foregroundStyle(.secondary) }
                 Spacer()
-                if model.setupStep > 0 && model.setupStep < 3 { Button("Zurück") { model.setupStep -= 1 }.disabled(model.busy || model.importing) }
+                if model.setupStep > 0 && model.setupStep < 2 { Button("Zurück") { model.setupStep -= 1 }.disabled(model.busy || model.importing) }
                 switch model.setupStep {
                 case 0:
                     if let existing {
                         Button("Bestehende Verbindung verwalten") { model.activeConnectionID = existing.connectionID; model.section = .connections; dismiss() }.buttonStyle(.borderedProminent)
                     } else { Button("Dokumente auswählen") { model.setupStep = 1 }.buttonStyle(.borderedProminent) }
-                case 1: Button("Freigabe prüfen") { model.setupStep = 2 }.buttonStyle(.borderedProminent).disabled(model.selectedReadableCount == 0 || model.busy || model.importing)
-                case 2: Button("Freigeben und einrichten", action: model.finishSetup).buttonStyle(.borderedProminent).disabled(!model.acknowledged || model.busy)
+                case 1: Button("Dokumente auswählen", action: model.prepareNewGrant).buttonStyle(.borderedProminent).disabled(model.documents.isEmpty || model.busy || model.importing)
                 default: EmptyView()
                 }
             }
         }.padding(28).frame(width: 800, height: 660).interactiveDismissDisabled(model.busy)
+        .sheet(item: $model.inventoryWorkflow) { workflow in InventoryWorkflowView(model: workflow) }
     }
     private var client: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -73,17 +72,6 @@ struct SetupWizardView: View {
             }
             TextField("Name der Verbindung (optional)", text: $model.connectionName).textFieldStyle(.roundedBorder)
             Text(model.clientSelection == "oauth-chatgpt" ? "Nach der Dokumentauswahl meldest du dich im Browser mit deinem ChatGPT-Konto an. Der Mac verbindet sich ausgehend; du gibst keinen API- oder Runtime-Schlüssel ein." : model.clientSelection == "oauth-claude" ? "Claude nutzt Standard-OAuth. Der Betreiber benötigt einen erreichbaren HTTPS-Anschluss; du bestätigst den Dokumentzugriff lokal." : "Dieser Anschluss gilt für einen lokalen MCP-Host. Für normale ChatGPT-Chats wähle die Anmeldung mit deinem Konto.").font(.callout).foregroundStyle(.secondary)
-        }
-    }
-    private var consent: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            Text("Prüfe deine Freigabe.").font(.title2.weight(.semibold))
-            LabeledContent("Empfänger", value: model.clientSelection == "oauth-chatgpt" ? "ChatGPT" : model.clientSelection == "oauth-claude" ? "Claude" : MCPDesktopClient(rawValue: model.clientSelection)?.title ?? "Dein manuell verbundener Chatbot")
-            LabeledContent("Auswahl", value: model.selectedReadableCount == 1 ? "1 lesbares Dokument" : "\(model.selectedReadableCount) lesbare Dokumente")
-            ForEach(model.documents.filter { model.selected.contains($0.id) }, id: \.id) { Text($0.title).font(.callout) }
-            Text("Dein Chatbot kann Inhalte aus diesen Dokumenten lesen und an seinen Cloud-Anbieter übertragen. Die Freigabe gilt nur für diese Auswahl. Neue Importe bleiben gesperrt.").foregroundStyle(.secondary)
-            Toggle("Ich erlaube die Weitergabe der ausgewählten Dokumentinhalte an diesen Chatbot und gegebenenfalls dessen Cloud-Anbieter.", isOn: $model.acknowledged)
-            Text("Du kannst den Zugriff jederzeit unter „Verbindungen“ oder im Statusmenü pausieren.").font(.callout).foregroundStyle(.secondary)
         }
     }
     private var completion: some View {

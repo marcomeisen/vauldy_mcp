@@ -52,7 +52,7 @@ def main():
             prepared = root/'prepared'
             command(local, 'storage-migrate', '--store', store, '--format', 'sqlite', '--to', prepared, '--expected', plan['fingerprint'])
             updated = command(local, 'update-software', '--root', installation, '--from-app', args.app, '--allow-ad-hoc')
-            assert updated['updated'] and updated['version'] == '0.13.1'
+            assert updated['updated'] and updated['version'] == json.loads((resources/'release.json').read_text())['productVersion']
             denied = subprocess.run([str(local), 'rollback-software', '--root', str(installation), '--allow-ad-hoc'], capture_output=True, timeout=30)
             assert denied.returncode != 0  # No return to a JSON-only writer.
             activated = command(local, 'storage-activate-sqlite', '--store', store, '--prepared', prepared, '--expected', plan['fingerprint'])

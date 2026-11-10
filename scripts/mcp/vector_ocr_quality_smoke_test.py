@@ -41,7 +41,7 @@ def main():
                 body = document['ocrText'].split('\n', 1)[1]
                 assert layout['version'] == 1 and layout['page'] == 1 and layout['sourceHash'] == original_hash
                 assert layout['textHash'] == hashlib.sha256(body.encode()).hexdigest()
-                assert layout['geometry']['configuration'].startswith('ocr-v10-marked-region-recovery-')
+                assert layout['geometry']['configuration'].startswith('ocr-v14-consistent-line-review-')
                 assert layout['geometry']['coordinateSpace'] == 'pdfCropBottomLeft'
                 assert len(layout['geometry']['lines']) >= 4
                 assert hashlib.sha256(file.read_bytes()).hexdigest() == original_hash
@@ -65,7 +65,7 @@ def main():
             wire = json.dumps(read, ensure_ascii=False)
             assert all(value in wire for value in ('49,99 EUR', '27.01.2026', 'Hausrat'))
             assert all(value not in wire for value in (str(root), *imported, '82,47 EUR', '19.08.2027'))
-            assert all(value not in wire for value in ('sourceHash', 'textHash', 'geometry', 'layout', 'ocr-v10'))
+            assert all(value not in wire for value in ('sourceHash', 'textHash', 'geometry', 'layout', 'ocr-v'))
             assert read['segments'] and all(segment['page'] == 1 and
                 segment['source'] == f'[Quelle:{handle}:S.1]' for segment in read['segments'])
             assert (store / 'documents.json').read_bytes() == store_bytes

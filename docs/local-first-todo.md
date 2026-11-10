@@ -6,6 +6,43 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Konsistente Nutzerführung und Installationspaket 0.14.0 · 10.11.2026
+
+- [x] Vier Bereiche: Übersicht, Dokumente, Verbindungen und Einstellungen. Die Übersicht
+  zeigt den nächsten nötigen Schritt für die ausgewählte Verbindung. Bewusste Pausen,
+  ausstehende Dokumententscheidungen und fehlende Originale erhalten eigene Aktionen.
+- [x] Gemeinsame Freigabeansicht für Ersteinrichtung, Dokumentliste, Verbindungen und
+  Menüleiste: Empfänger bleibt fest, Auswahl wird geprüft und einmal ausdrücklich bestätigt.
+  Originalzugriff wiederherstellen bleibt von einer neuen Dokumentfreigabe getrennt.
+- [x] „Nur lokal behalten“ wird je Verbindung und Inhaltsfassung gespeichert. Bereits
+  freigegebene, nicht erreichbare Originale werden nicht stillschweigend abgewählt.
+  Prüfhinweise bleiben sichtbar; unveränderte Freigaben benötigen keine erneute Zustimmung.
+- [x] 328 Swift-Tests in 52 Suites und alle 44 Stufen der synthetischen Gesamtregression
+  bestanden. Veraltete Testannahmen zu Releaseversion, Werkzeugzahl und bestehender
+  OCR-Konfiguration korrigiert; fehlgeschlagene Stufen erneut erfolgreich ausgeführt.
+  Nach den letzten UI-Korrekturen zusätzlich 22 gezielte Tests in drei Suites bestanden.
+- [x] Finales ZIP erneut entpackt: Prüfsumme, Integrität, tiefe strikte Codesignatur,
+  echte MCP-Aufrufe, Client-Installation, Verwaltung und Update/Rollback bestanden.
+  Nativer Start mit aktivem synthetischem Watch-Ordner startet keinen gestoppten Worker;
+  Bestand, Ordnerkonfiguration und Original bleiben unverändert.
+- [ ] Visuelle Klick-Abnahme offen: Der Mac war gesperrt. Die isolierte App wurde über
+  `run_ui.py --setup-root` gestartet, konnte aber nicht visuell bedient werden. Der Nutzer
+  wurde um Entsperren gebeten; der eigene Testprozess wurde anschließend beendet.
+
+Paket: `dist/mcp/vauldy-0.14.0-20261110/Vauldy.zip`, 17.283.894 Bytes,
+Apple Silicon ab macOS 14.0. SHA-256:
+`01a1edf7d1d902844a6b8a617303409d4d9a1a5839a3129f270a11bad929cc94`.
+MCP-Build: `macho.6f3b00191a9936a6a48f947d3c782d43`, Kompatibilitätsepoche 2.
+260 Dateien der isolierten Quellkopie sind bytegleich zum geprüften Arbeitsstand;
+die sieben Abhängigkeiten entsprechen `Package.resolved`. Das separat frisch gebaute
+Release wurde mit `package.py --skip-build --name Vauldy --archive-only` gebündelt;
+daher stehen im Manifest `buildMode=reused` und `sourceCommit=null`.
+
+[Maschineller Prüfnachweis](quality/ux-guidance-0.14.0-2026-11-10.json).
+Ad-hoc-signiertes lokales Paket; Developer-ID-Signatur, Notarisierung, frischer
+Offline-Mac und echter Zielchat bleiben eigenständige offene Abnahmen.
+Die synthetischen Funktionstests begründen keine vollständige OCR-Qualitätszusage.
+
 ## Lokales Installationspaket · 10.11.2026
 
 `dist/mcp/vauldy-0.13.1-20261110/Vauldy.zip` enthält Vauldy 0.13.1 für Apple Silicon

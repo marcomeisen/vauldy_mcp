@@ -35,7 +35,8 @@ public struct MCPConnectionState: Sendable {
     }
     public var accessLabel: String { profile.enabled ? "Dokumentzugriff freigegeben" : "Dokumentzugriff gesperrt" }
     public var tone: Tone {
-        if !profile.enabled || restartRequired || binding == .conflict { return .attention }
+        if !profile.enabled { return .neutral }
+        if restartRequired || binding == .conflict { return .attention }
         if !serverKnown { return .unknown }
         return running ? .good : .neutral
     }

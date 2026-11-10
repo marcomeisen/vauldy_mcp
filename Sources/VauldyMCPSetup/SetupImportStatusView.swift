@@ -14,7 +14,7 @@ struct SetupImportProgress: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(model.importCancelling ? "Abbruch läuft" : (model.retryingOCR ? "OCR wird erneut ausgeführt" : "Lokaler Import")).font(.headline)
+            Text(model.importCancelling ? "Abbruch läuft" : (model.retryingOCR ? "Text wird erneut gelesen" : "Lokaler Import")).font(.headline)
             if let total = model.importTotal, total > 0 {
                 ProgressView(value: Double(model.importProcessed), total: Double(total)) {
                     Text("\(model.importProcessed) von \(total) Dokumenten verarbeitet")
@@ -38,7 +38,7 @@ struct SetupImportProgress: View {
                     : "Originale und Texterkennung bleiben auf diesem Mac.")
                     .font(.caption).foregroundStyle(.secondary)
                 Spacer()
-                Button(model.retryingOCR ? "OCR abbrechen" : "Import abbrechen", action: model.cancelImport).disabled(model.importCancelling)
+                Button(model.retryingOCR ? "Texterkennung abbrechen" : "Import abbrechen", action: model.cancelImport).disabled(model.importCancelling)
             }
         }.padding(16).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
     }
@@ -52,8 +52,8 @@ struct SetupImportResultView: View {
     private enum DetailScope { case issues, review, all }
 
     private var title: String {
-        if report.cancelled { return report.isRetry ? "OCR abgebrochen" : "Import abgebrochen" }
-        if report.batchError != nil { return report.isRetry ? "OCR konnte nicht abgeschlossen werden" : "Import konnte nicht abgeschlossen werden" }
+        if report.cancelled { return report.isRetry ? "Texterkennung abgebrochen" : "Import abgebrochen" }
+        if report.batchError != nil { return report.isRetry ? "Texterkennung konnte nicht abgeschlossen werden" : "Import konnte nicht abgeschlossen werden" }
         return report.isRetry ? "Ergebnis der Texterkennung" : "Importergebnis"
     }
 

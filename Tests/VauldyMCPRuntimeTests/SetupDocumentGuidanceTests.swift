@@ -26,7 +26,7 @@ struct SetupDocumentGuidanceTests {
         let display = SetupDocumentGuidance(metadata: metadata(state), hasText: true, analysisStatus: "needsReview")
         #expect(display.needsTextReview)
         #expect(display.textStatus.contains("Text vorhanden"))
-        #expect(display.nextStep?.contains("Text prüfen") == true)
+        #expect(display.nextStep?.contains("Prüfstellen ansehen") == true)
         #expect(display.nextStep?.contains("kein erneuter Import nötig") == true)
     }
 

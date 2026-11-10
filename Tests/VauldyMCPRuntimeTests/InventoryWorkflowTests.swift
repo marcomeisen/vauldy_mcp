@@ -5,6 +5,7 @@ import VauldyDemoDocuments
 @testable import VauldyCore
 @testable import VauldyMCPRuntime
 @testable import VauldyRelay
+@testable import VauldyMCPSetup
 
 private struct InventoryOCR: LocalDocumentOCR {
     func recognize(file: URL, progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalOCRResult {
@@ -188,7 +189,12 @@ struct InventoryWorkflowTests {
         let wantedBytes = try Data(contentsOf: wanted), unwantedBytes = try Data(contentsOf: unwanted)
         _ = try await LocalWatchedFolderStore(store: f.store).add([automatic])
         let project = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let worker = LocalImportWorker(store: f.store, executable: project.appendingPathComponent(".build/debug/vauldy-local"), watchFolders: false)
+        #if DEBUG
+        let configuration = "debug"
+        #else
+        let configuration = "release"
+        #endif
+        let worker = LocalImportWorker(store: f.store, executable: project.appendingPathComponent(".build/\(configuration)/vauldy-local"), watchFolders: false)
         let service = LocalInventoryReconciler(store: f.store)
         let plan = try await service.inspect([service.source(f.sources, recursive: true)])
         let result = try await service.apply(plan, worker: worker)
@@ -206,7 +212,7 @@ struct InventoryWorkflowTests {
     }
     @Test func managerRequiresExplicitDisclosureAndReviewConsent() async throws {
         let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
-        let id = try await f.imported("one.pdf", "one"), p = try f.profile([id], enabled: false)
+        let id = try await f.imported("one.pdf", "one"), p = try f.profile([], enabled: false)
         var docs = try await f.store.documents(); docs[0].baseAnalysis = nil
         try f.store.locked { try f.store.save(docs) }
         let c = try f.credentials(p), memory = try InventoryCredentialMemory(c), store = RelayCredentialStore(installation: f.installation, persistence: memory)
@@ -315,5 +321,121 @@ struct InventoryWorkflowTests {
         try await writer.value
         #expect(decoded.documentIDs == request.documentIDs && decoded.operation == .updateGrant)
         #expect(!decoded.operation.allowsUserInteraction)
+    }
+}
+
+
+@Suite("Consistent document decisions")
+struct DocumentDecisionTests {
+    @Test @MainActor func unavailableGrantedDocumentsSurviveReviewAndCanBeDeselectedAndRestored() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let missing = try await f.imported("missing.pdf", "missing")
+        let fresh = try await f.imported("fresh.pdf", "fresh")
+        let profile = try f.profile([missing])
+        try FileManager.default.removeItem(at: f.sources.appendingPathComponent("missing.pdf"))
+        let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"), profile: profile, updatesChatGPT: false) { _ in }
+        try await model.makeReport()
+        #expect(model.selected == [missing])
+        model.setSelected(false, id: missing)
+        model.setSelected(true, id: missing)
+        model.setSelected(true, id: fresh)
+        #expect(model.selected == [missing, fresh])
+        let report = try #require(model.report)
+        try report.validateSelection(model.selected, acknowledgedReview: true, preserving: profile.allowedDocumentIDs)
+        #expect(throws: MCPAccessError.notAuthorized) { try report.validateSelection([missing], acknowledgedReview: true) }
+        let unknown = UUID()
+        #expect(throws: MCPAccessError.notAuthorized) { try report.validateSelection([unknown], acknowledgedReview: true, preserving: profile.allowedDocumentIDs) }
+        try await model.makeReport()
+        #expect(model.selected == [missing, fresh])
+        #expect(!model.acknowledged)
+    }
+
+    @Test func localDecisionsPersistPerRecipientAndOriginalContentWithoutChangingGrants() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let id = try await f.imported("one.pdf", "original")
+        let first = try f.profile([], enabled: false), second = try f.profile([], enabled: false)
+        let path = f.installation.profileURL(first.connectionID)
+        let before = try Data(contentsOf: path)
+        let documents = try await f.store.documents()
+        let choices = MCPLocalDocumentChoices(installation: f.installation)
+        try choices.keepLocal(documents, for: first)
+        #expect(try choices.load(for: first.connectionID)[id] == documents[0].localImport?.contentHash)
+        #expect(try choices.load(for: second.connectionID).isEmpty)
+        #expect(try Data(contentsOf: path) == before)
+        var reread = documents[0]
+        reread.ocrText += " corrected OCR"
+        #expect(MCPLocalDocumentChoices.fingerprint(reread) == MCPLocalDocumentChoices.fingerprint(documents[0]))
+        reread.localImport?.contentHash = String(repeating: "b", count: 64)
+        #expect(MCPLocalDocumentChoices.fingerprint(reread) != MCPLocalDocumentChoices.fingerprint(documents[0]))
+        _ = try f.installation.updateSelection([id], for: first.connectionID, expectedRevision: first.revision, acknowledgedDisclosure: true)
+        #expect(throws: MCPAccessError.stale) { try choices.keepLocal(documents, for: first) }
+    }
+
+    @Test @MainActor func keepLocalSurvivesReopeningAndDoesNotHideOtherRecipients() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let id = try await f.imported("one.pdf", "original")
+        let profile = try f.profile([], enabled: false)
+        let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"), profile: profile, updatesChatGPT: false) { _ in }
+        try await model.makeReport()
+        model.onlyUnshared = true
+        #expect(model.visibleRows.count == 1)
+        model.keepLocal(id)
+        #expect(model.visibleRows.isEmpty)
+        try await model.makeReport()
+        #expect(model.isKeptLocal(id))
+        model.onlyUnshared = false
+        #expect(model.visibleRows.count == 1)
+        model.setSelected(true, id: id)
+        #expect(model.selected == [id])
+    }
+
+    @Test @MainActor func failedRefreshRetainsDraftSelection() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let id = try await f.imported("one.pdf", "original")
+        let profile = try f.profile([], enabled: false)
+        let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"), profile: profile, updatesChatGPT: false) { _ in }
+        try await model.makeReport()
+        model.setSelected(true, id: id)
+        let bytes = try Data(contentsOf: f.installation.profileURL(profile.connectionID))
+        try Data("broken".utf8).write(to: f.installation.profileURL(profile.connectionID))
+        await #expect(throws: (any Error).self) { try await model.makeReport() }
+        try bytes.write(to: f.installation.profileURL(profile.connectionID))
+        try await model.makeReport()
+        #expect(model.selected == [id])
+    }
+
+    @Test @MainActor func confirmedRemovalBecomesAnExplicitLocalDecision() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let first = try await f.imported("first.pdf", "first")
+        let second = try await f.imported("second.pdf", "second")
+        let profile = try f.profile([first])
+        let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"), profile: profile, updatesChatGPT: false) { _ in }
+        try await model.makeReport()
+        model.setSelected(false, id: first)
+        model.setSelected(true, id: second)
+        model.acknowledged = true
+        model.acknowledgedReview = true
+        model.prepareApproval()
+        for _ in 0..<200 {
+            if !model.busy { break }
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        #expect(model.completed && model.error.isEmpty)
+        let saved = try FileMCPProfileSource(url: f.installation.profileURL(profile.connectionID)).load()
+        #expect(saved.allowedDocumentIDs == [second])
+        #expect(try MCPLocalDocumentChoices(installation: f.installation).load(for: profile.connectionID)[first] != nil)
+    }
+
+    @Test func legacyArchiveUsesCommonReviewWithoutInventingOriginalVerification() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let id = UUID(), snapshot = root.appendingPathComponent("archive.json")
+        try JSONSerialization.data(withJSONObject: [["id": id.uuidString, "title": "Fixture", "status": "indexed", "ocrText": "Synthetic text"]]).write(to: snapshot)
+        let report = try await MCPInventoryQualityService.archiveReport(at: snapshot)
+        #expect(report.eligibleIDs == [id])
+        #expect(report.rows.first?.original == nil)
+        #expect(report.nativeVerification.verifiedIDs.isEmpty)
+        try report.validateSelection([id], acknowledgedReview: true)
     }
 }

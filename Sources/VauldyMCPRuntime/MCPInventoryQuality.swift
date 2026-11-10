@@ -26,7 +26,8 @@ public struct MCPInventoryQualityReport: Sendable {
         public let expectedPages: Int?
         public let processedPages: Int
         public let unfilledBaseFields: [String]
-        public var eligible: Bool { original == .available && readable }
+        public var requiresOriginalVerification = true
+        public var eligible: Bool { (original == .available || !requiresOriginalVerification) && readable }
         public var ready: Bool { eligible && processing == "source-ready" && analysis == "completed" }
     }
     public let createdAt: Date
@@ -39,14 +40,33 @@ public struct MCPInventoryQualityReport: Sendable {
     public var eligibleIDs: Set<UUID> { Set(rows.filter(\.eligible).map(\.id)) }
     public var readyIDs: Set<UUID> { Set(rows.filter(\.ready).map(\.id)) }
     public var reviewIDs: Set<UUID> { eligibleIDs.subtracting(readyIDs) }
-    public func validateSelection(_ ids: Set<UUID>, acknowledgedReview: Bool) throws {
-        guard ids.isSubset(of: eligibleIDs), acknowledgedReview || ids.isDisjoint(with: reviewIDs) else { throw MCPAccessError.notAuthorized }
+    public func validateSelection(_ ids: Set<UUID>, acknowledgedReview: Bool, preserving existingIDs: Set<UUID> = []) throws {
+        guard ids.isSubset(of: eligibleIDs.union(existingIDs)), acknowledgedReview || ids.subtracting(existingIDs).isDisjoint(with: reviewIDs) else { throw MCPAccessError.notAuthorized }
     }
 }
 
 public struct MCPInventoryQualityService: Sendable {
     public let store: LocalDocumentStore
     public init(store: LocalDocumentStore) { self.store = store }
+    /// Legacy imported archives have no managed-original metadata. Their text remains
+    /// readable through the existing snapshot contract, with an explicit review notice.
+    public static func archiveReport(at url: URL) async throws -> MCPInventoryQualityReport {
+        let digest = try LocalInventoryFingerprint.snapshot(url)
+        let documents = try LocalVaultSnapshotSource(fileURL: url).loadDocuments()
+        let archiveStore = LocalDocumentStore(root: url.deletingLastPathComponent())
+        var rows: [MCPInventoryQualityReport.Row] = []
+        for document in documents {
+            let original = try await archiveStore.verifiedOriginalState(for: document)
+            let state = MCPSourceState(document)
+            rows.append(.init(id: document.id, title: document.title, original: original,
+                processing: state.processingStatus, coverage: state.sourceCoverage,
+                analysis: document.baseAnalysisStatus, readable: document.isSearchable && !document.ocrText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                expectedPages: document.pageCount, processedPages: 0, unfilledBaseFields: [],
+                requiresOriginalVerification: document.localImport != nil))
+        }
+        guard try LocalInventoryFingerprint.snapshot(url) == digest else { throw LocalInventoryError.changed }
+        return .init(createdAt: Date(), snapshotDigest: digest, rows: rows)
+    }
     public func report(using verification: MCPNativeOriginalVerification? = nil, progress: @escaping @Sendable (Int, Int) -> Void = { _, _ in }) async throws -> MCPInventoryQualityReport {
         _ = try await store.documents()
         let digest = try LocalInventoryFingerprint.snapshot(store.snapshotURL)
