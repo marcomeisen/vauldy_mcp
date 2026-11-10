@@ -6,6 +6,33 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Lokales Installationspaket · 10.11.2026
+
+`dist/mcp/vauldy-0.13.1-20261110/Vauldy.zip` enthält Vauldy 0.13.1 für Apple Silicon
+ab macOS 14.0. Das ZIP ist 17.212.159 Bytes groß. Die SHA-256-Prüfsumme lautet
+`3f0fa82fa6b307039c97c8f2760c1af03bd0595d840c4ee5b469f4dcf88cb0d8`.
+
+Alle sechs Programme wurden aus `1d09e67` in einer isolierten Kopie neu gebaut.
+417 Dateien wurden vor und nach dem Build gegen den Git-Index geprüft. Die sieben
+Abhängigkeiten stimmen mit `Package.resolved` überein. Der Release-Build lief mit
+`swift build --build-system native -c release --disable-sandbox --disable-automatic-resolution --jobs 4 -debug-info-format none -Xswiftc -parse-as-library`.
+`package.py --skip-build --name Vauldy --archive-only` bündelte die frisch gebauten
+Programme. Das Manifest weist deshalb `buildMode=reused` und `sourceCommit=null` aus.
+Der MCP-Build trägt die Kennung `macho.e89251e6f8a234628ed7236ef65cc56d`.
+
+Bestanden sind `shasum -a 256 -c SHA256SUMS`, `unzip -tq`, die strikte tiefe
+Signaturprüfung des entpackten Bundles und die Manifestprüfung für Version,
+Architektur, Mindestversion und Softwarekompatibilitätsepoche 2. `smoke_test.py`,
+`client_install_smoke_test.py` und `software_update_smoke_test.py` liefen mit den
+entpackten Programmen erfolgreich. Der Managementtest bestand mit auf 0.13.1
+aktualisierten Versionserwartungen in einer temporären Testkopie.
+`setup_startup_smoke_test.py` bestand außerhalb der Codex-Sandbox mit nativem
+Vision-Import und synthetischem Bestand. Die Sandbox hatte zuvor die Erstellung
+des Ordner-Bookmarks blockiert. Beim Start blieb der gestoppte Worker inaktiv.
+
+Das Paket ist ad hoc signiert. Developer-ID-Signatur, Notarisierung und die Abnahme
+auf einem frischen Offline-Mac bleiben für eine Kundenfreigabe offen.
+
 ## SQLite als führender Bestand · 08.11.2026
 
 Ausdrücklicher Nutzerauftrag: vorhandenen Datenbestand migrieren und SQLite ab sofort führen.
