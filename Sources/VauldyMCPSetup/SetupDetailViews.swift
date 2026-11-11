@@ -12,7 +12,7 @@ struct SetupDocumentsView: View {
             HStack {
                 if let profile = model.activeConnection,
                    model.vaultURL == LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) {
-                    Text("\(profile.allowedDocumentIDs.count) Dokumente für \(profile.connectionName) freigegeben")
+                    Text("\(SetupText.documents(profile.allowedDocumentIDs.count)) für \(profile.connectionName) freigegeben")
                     Spacer()
                     Button("Freigabe bearbeiten") { model.startInventoryWorkflow(profile: profile) }
                 } else {

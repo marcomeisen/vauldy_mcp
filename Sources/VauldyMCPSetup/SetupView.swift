@@ -131,7 +131,7 @@ struct SetupView: View {
                 SetupConnectionCard(model: model, profile: profile)
             }
             HStack {
-                Text("\(model.documents.count) Dokumente auf diesem Mac")
+                Text("\(SetupText.documents(model.documents.count)) auf diesem Mac")
                 Spacer()
                 Button("Dokumente hinzufügen") { model.navigate(.documents) }
                 Button("Ordner verwalten") { model.section = .folders }

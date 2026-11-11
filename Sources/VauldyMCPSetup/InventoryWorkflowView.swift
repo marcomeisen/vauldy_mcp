@@ -139,7 +139,7 @@ struct InventoryWorkflowView: View {
     private var consent: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Freigabe für \(model.profile.connectionName)").font(.headline)
-            Text("Danach \(model.selected.count) Dokumente freigegeben · \(model.addedCount) zusätzlich · \(model.removedCount) entfernt")
+            Text("Danach \(SetupText.documents(model.selected.count)) freigegeben · \(model.addedCount) zusätzlich · \(model.removedCount) entfernt")
             ForEach(model.report?.rows.filter { model.selected.contains($0.id) != model.profile.allowedDocumentIDs.contains($0.id) } ?? []) { row in
                 Label(row.title, systemImage: model.selected.contains(row.id) ? "plus.circle" : "minus.circle")
             }
@@ -148,7 +148,7 @@ struct InventoryWorkflowView: View {
             }
             let localRows = model.report?.rows.filter { !model.selected.contains($0.id) } ?? []
             if !localRows.isEmpty {
-                DisclosureGroup("\(localRows.count) weitere Dokumente für diese Verbindung nur lokal behalten") {
+                DisclosureGroup("Für diese Verbindung nur lokal behalten: \(SetupText.documents(localRows.count))") {
                     ForEach(localRows) { row in Text(row.title) }
                 }
             }
@@ -156,7 +156,7 @@ struct InventoryWorkflowView: View {
             if !model.profile.enabled && !model.isNewConnection { Text("Der Dokumentzugriff ist pausiert. Die neue Auswahl wird für später gespeichert.").foregroundStyle(.orange) }
             if model.selected.isEmpty { Text("Du entfernst alle Dokumente aus der Freigabe. Dadurch wird der Dokumentzugriff pausiert.").foregroundStyle(.orange) }
             if model.reviewCount > 0 {
-                Toggle("Die \(model.reviewCount) ausgewählten Dokumente mit Prüfhinweisen dürfen mit ihren Einschränkungen verwendet werden.", isOn: $model.acknowledgedReview)
+                Toggle("Ich erlaube die Nutzung der ausgewählten Dokumente mit Prüfhinweisen (\(model.reviewCount)) unter den angegebenen Einschränkungen.", isOn: $model.acknowledgedReview)
             }
             Toggle("Ich erlaube diesem Empfänger den Zugriff auf die angezeigte Dokumentauswahl.", isOn: $model.acknowledged)
             HStack {
@@ -172,9 +172,11 @@ struct InventoryWorkflowView: View {
     private var completion: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Freigabe gespeichert", systemImage: "checkmark.circle.fill").font(.title3)
-            Text("\(model.selected.count) Dokumente für \(model.profile.connectionName) ausgewählt.")
+            Text("\(SetupText.documents(model.selected.count)) für \(model.profile.connectionName) ausgewählt.")
             if model.isNewConnection {
                 Text("Schließe dieses Fenster, um die Einrichtung der Verbindung fortzusetzen.")
+            } else if model.selected.isEmpty {
+                Text("Für diese Verbindung sind keine Dokumente mehr freigegeben. Um den Zugriff später fortzusetzen, wähle zuerst unter „Freigabe bearbeiten“ wieder Dokumente aus.")
             } else {
                 Text(model.updatedAccessEnabled ? "Stelle jetzt eine Frage zu einem freigegebenen Dokument in deinem Chatbot." : "Der Dokumentzugriff ist pausiert. Du kannst ihn unter Verbindungen fortsetzen.")
                 if !model.updatesChatGPT { Text("Lade bei Bedarf die Vauldy-Verbindung im Chatbot neu.").foregroundStyle(.secondary) }

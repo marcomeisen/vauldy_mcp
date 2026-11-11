@@ -47,7 +47,7 @@ extension SetupModel {
             let candidates = pendingGrantDocuments
             try MCPLocalDocumentChoices(installation: installation).keepLocal(candidates, for: profile)
             refreshLocalChoices()
-            message = "\(candidates.count) Dokumente für \(profile.connectionName) nur lokal behalten. Du kannst sie später unter Dokumente freigeben."
+            message = "\(SetupText.documents(candidates.count)) für \(profile.connectionName) nur lokal behalten. Du kannst sie später unter Dokumente freigeben."
             failure = false
         } catch { showError(error.localizedDescription) }
     }
@@ -79,36 +79,41 @@ struct SetupNextStepView: View {
                     else { model.section = .oauth }
                 }.buttonStyle(.borderedProminent)
             } else if !profile.enabled {
-                Text("Der Dokumentzugriff für \(profile.connectionName) ist pausiert.")
-                Button("Dokumentzugriff fortsetzen") { model.resumeCandidate = profile }
-                    .disabled(profile.allowedDocumentIDs.isEmpty || model.accessChanges.contains(profile.connectionID))
-                Button("Freigabe bearbeiten") { model.startInventoryWorkflow(profile: profile) }
+                if profile.allowedDocumentIDs.isEmpty {
+                    Text("Für \(profile.connectionName) sind keine Dokumente freigegeben. Wähle zuerst die Dokumente aus, die dieser Chatbot lesen darf.")
+                    Button("Dokumente auswählen") { model.startInventoryWorkflow(profile: profile) }.buttonStyle(.borderedProminent)
+                } else {
+                    Text("Der Dokumentzugriff für \(profile.connectionName) ist pausiert.")
+                    Button("Dokumentzugriff fortsetzen") { model.resumeCandidate = profile }
+                        .disabled(model.accessChanges.contains(profile.connectionID))
+                    Button("Freigabe bearbeiten") { model.startInventoryWorkflow(profile: profile) }
+                }
             } else if model.state(for: profile).restartRequired || model.bindings[profile.connectionID] == .conflict || model.bindings[profile.connectionID] == .notRegistered {
                 Text(model.state(for: profile).explanation)
-                Button("Verbindung wiederherstellen") { model.showConnectionHelp(profile) }.buttonStyle(.borderedProminent)
+                Button(model.bindings[profile.connectionID] == .notRegistered ? "Verbindung einrichten" : "Verbindung wiederherstellen") { model.showConnectionHelp(profile) }.buttonStyle(.borderedProminent)
             } else if profile.connectionKind == .oauth && !paired && !model.oauthConnections.contains(where: { $0.profileID == profile.connectionID && !$0.revoked }) {
                 Text("Schließe die Anmeldung für \(profile.connectionName) ab.")
                 Button("Anmeldung fortsetzen") { model.relayProfileID = profile.connectionID; model.section = .oauth }.buttonStyle(.borderedProminent)
             } else if !model.unavailableGrantedDocuments.isEmpty {
-                Text("\(model.unavailableGrantedDocuments.count) freigegebene Originale sind verändert oder nicht erreichbar.")
-                Text("Diese Dokumente sind derzeit nicht im Chat nutzbar.").foregroundStyle(.secondary)
+                Text("Original nicht erreichbar oder verändert.")
+                Text("Derzeit nicht im Chat nutzbar: \(SetupText.documents(model.unavailableGrantedDocuments.count)).").foregroundStyle(.secondary)
                 Button("Originalzugriff wiederherstellen") { model.startInventoryWorkflow(profile: profile, sources: true) }.buttonStyle(.borderedProminent)
             } else if model.importing || model.pendingCount > 0 {
                 Text("Neue Dokumente werden eingelesen. Danach kannst du sie für \(profile.connectionName) auswählen.")
-                Text("\(profile.allowedDocumentIDs.count) Dokumente sind bereits freigegeben.").foregroundStyle(.secondary)
+                Text("Bereits freigegeben: \(SetupText.documents(profile.allowedDocumentIDs.count)).").foregroundStyle(.secondary)
             } else if !model.pendingGrantDocuments.isEmpty {
-                Text("\(model.pendingGrantDocuments.count) Dokumente warten auf deine Entscheidung für \(profile.connectionName).")
+                Text("Offene Entscheidung für \(profile.connectionName): \(SetupText.documents(model.pendingGrantDocuments.count)).")
                 HStack {
                     Button("Dokumente auswählen") { model.startInventoryWorkflow(profile: profile, newDocuments: true) }.buttonStyle(.borderedProminent)
                     Button("Nur lokal behalten", action: model.keepPendingLocal)
                 }
             } else {
                 Text("Deine Dokumentauswahl ist gespeichert.")
-                Text("\(profile.allowedDocumentIDs.count) Dokumente sind für \(profile.connectionName) freigegeben. Stelle deine nächste Frage im Chatbot.").foregroundStyle(.secondary)
+                Text("Für \(profile.connectionName) freigegeben: \(SetupText.documents(profile.allowedDocumentIDs.count)). Stelle deine nächste Frage im Chatbot.").foregroundStyle(.secondary)
             }
             let reviewCount = model.documents.filter { SetupDocumentGuidance($0).needsTextReview }.count
             if reviewCount > 0 {
-                Button("Prüfhinweise für \(reviewCount) Dokumente ansehen") {
+                Button("Prüfhinweise für \(SetupText.documents(reviewCount)) ansehen") {
                     model.showDocuments()
                     model.documentFilter = .ocrReview
                 }

@@ -6,6 +6,41 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Visuelle UX-Abnahme und Korrekturen 0.14.1 · 11.11.2026
+
+- [x] Die am Vortag blockierte visuelle Prüfung nach Entsperren nachgeholt: Installation,
+  Beispieleinlese, Ersteinrichtung, gemeinsame Freigabeansicht, ausdrückliche Zustimmung,
+  Pausieren/Fortsetzen und spätere Freigabebearbeitung in einem isolierten Testbestand.
+- [x] Zwei Empfänger geprüft: Freigabe für A und „Nur lokal behalten“ für B bleiben getrennt.
+  Die lokale Entscheidung bleibt nach erneutem Öffnen erhalten und wird im Filter für
+  offene Entscheidungen nicht erneut angeboten.
+- [x] Nicht erreichbares künstliches Original bleibt ausgewählt und zeigt den getrennten
+  Wiederherstellungsweg. Nach Wiederherstellen derselben Bytes bleibt die Freigabe erhalten.
+- [x] Gefundene Texthindernisse korrigiert und erneut nativ geprüft: „Verbindung einrichten“
+  beim ersten Anschluss, Dokumentauswahl statt Fortsetzen bei leerer Freigabe, passender
+  Abschluss nach Entfernen aller Freigaben sowie einheitliche Einzahl-/Mehrzahltexte.
+- [x] Installations- und Ablaufanleitung auf die sichtbaren Schaltflächen aktualisiert.
+  Die verlinkte `inventory-workflow.md` wird nun ebenfalls im Installationspaket mitgeliefert.
+- [x] 328 Swift-Tests in 52 Suites und alle 44 Regressionstufen erneut bestanden.
+  Am endgültigen ZIP: Prüfsumme, Integrität, tiefe strikte Signatur, MCP-/Privacy-Aufrufe,
+  Client-Anbindung, Verwaltung, Update/Rollback und unverändernder nativer Start bestanden.
+
+`dist/mcp/vauldy-0.14.1-20261111/Vauldy.zip`: 17.290.823 Bytes,
+Apple Silicon ab macOS 14.0; SHA-256:
+`f9f8796c2bf99379335609a93c113b1358b9d8c59c0624eb01d143e03ba15a09`.
+MCP-Build: `macho.88696f4a804c3b81beda661fa3c2bbb6`, Kompatibilitätsepoche 2.
+116 Produkt-/Paketdateien der Buildkopie gegen `17b5812` plus die fünf eigenen geänderten
+Swift-Dateien geprüft. Parallele OCR-Implementierungsänderungen sind nicht in diesem
+Paket oder Commit enthalten. Die letzte Textpräzisierung zum Originalzugriff wurde nach
+dem Gesamttest-Build separat kompiliert und im finalen nativen Ablauf geprüft.
+
+Die UI-Testkopie erhielt eine eigene Bundlekennung zur eindeutigen Steuerung. Die
+Installationsprüfungen verwendeten das unveränderte endgültige ZIP. Eigene Testprozesse
+wurden beendet; Produktionsprofile und Clientkonfigurationen wurden nicht verändert.
+[Prüfnachweis](quality/ux-guidance-0.14.1-2026-11-11.json).
+Ad-hoc-signiert, nicht notarisiert; Developer ID, frischer Offline-Mac und tatsächliche
+Zielchat-Nutzung bleiben separate Abnahmen. Keine allgemeine OCR-Qualitätszusage.
+
 ## Konsistente Nutzerführung und Installationspaket 0.14.0 · 10.11.2026
 
 - [x] Vier Bereiche: Übersicht, Dokumente, Verbindungen und Einstellungen. Die Übersicht

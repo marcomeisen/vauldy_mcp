@@ -177,7 +177,7 @@ def main():
                 if license_file.is_file():
                     shutil.copy2(license_file, notices / (checkout.name + '-' + license_file.name))
         shutil.copy2(ROOT / 'docs' / 'mcp-installation.md', resources / 'Anleitung.md')
-        for guide in ['base-analysis.md', 'mcp-mvp.md', 'provenance.md', 'mcp-oauth.md', 'mcp-chatgpt-sso.md']:
+        for guide in ['inventory-workflow.md', 'base-analysis.md', 'mcp-mvp.md', 'provenance.md', 'mcp-oauth.md', 'mcp-chatgpt-sso.md']:
             shutil.copy2(ROOT / 'docs' / guide, resources / guide)
         release_info = dict(manifestVersion=1, productVersion=version, sourceCommit=commit,
                             serverBuildID=build_info["buildID"], tools=build_info["tools"], documentStorage=build_info["documentStorage"],

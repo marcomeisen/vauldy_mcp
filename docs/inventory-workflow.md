@@ -1,21 +1,24 @@
-# Geführter Bestandsabgleich und Freigabeaktualisierung (0.13.0)
+# Dokumentauswahl und Originalzugriff (0.14.1)
 
-Einstieg in „Dokumente“ über „Bestand abgleichen und neu freigeben …“ oder bei einer
-bestehenden ChatGPT-Anmeldung über „Bestand und Freigabe aktualisieren …“.
+„Freigabe bearbeiten“ öffnet in Dokumenten, Verbindungen und Menüleiste dieselbe Ansicht
+für den gewählten Empfänger. Die Ersteinrichtung verwendet ebenfalls diese Auswahl.
+Die Übersicht führt abhängig vom Zustand zu Dokumentauswahl, Verbindungsabschluss,
+bewusstem Fortsetzen oder Wiederherstellung des Originalzugriffs.
 
-1. **Bestand abgleichen:** konfigurierte Quellen auswählen oder weitere Ordner für diesen
-   einmaligen Lauf hinzufügen. Eine Vorschau zeigt neue, geänderte, vorhandene, ausstehende
-   und inhaltsgleiche Dateien sowie Zugriffs-/Größenprobleme. Erst der nächste ausdrückliche
-   Schritt importiert. Alternativ lässt sich nur der gespeicherte Bestand prüfen.
-2. **Qualitätsbericht:** Originale erneut auf Zugriff und Inhaltsgleichheit prüfen. Pro
-   Dokument Seitenverarbeitung, Basisanalyse und unbelegte Basisangaben getrennt anzeigen.
-   Originalvorschau und frisches erneutes Lesen sind explizite Einzelaktionen. Lesbare
-   Dokumente mit Prüfhinweisen sind gesondert auswählbar. Fehlende, veränderte oder nicht
-   überprüfbare Originale sowie Dokumente ohne durchsuchbaren Text sind nicht neu freigebbar.
-3. **Neu freigeben:** Empfänger, gesamte Auswahl, hinzugefügte/entfernte Dokumente und
-   Prüfhinweise anzeigen. Weitergabe und eingeschlossene Prüfhinweise separat bestätigen.
-   Der abschließende Dialog friert Profil, Bestand und Auswahl ein. Leere Auswahl pausiert;
-   eine bereits pausierte Verbindung wird nicht automatisch aktiviert.
+1. **Dokumente auswählen:** Der Originalzugriff wird beim Öffnen geprüft. Bereits
+   freigegebene Dokumente bleiben ausgewählt, auch wenn ihr Original derzeit nicht erreichbar
+   ist. Solche Dokumente sind nicht im Chat nutzbar. Neue Dokumente ohne lesbaren Text oder
+   überprüfbares Original sind nicht neu freigebbar. Originalvorschau und Prüfhinweise
+   stehen pro Dokument bereit. „Nur lokal behalten“ gilt je Empfänger und Inhaltsfassung.
+2. **Auswahl überprüfen:** Empfänger, gesamte Auswahl und hinzugefügte/entfernte Dokumente
+   prüfen. Die Weitergabe und neu ausgewählte Dokumente mit Prüfhinweisen ausdrücklich
+   bestätigen. „Auswahl für … freigeben“ speichert ohne einen zweiten Bestätigungsdialog.
+   Eine leere Auswahl pausiert; eine bereits pausierte Verbindung wird nicht aktiviert.
+3. **Bei fehlendem Originalzugriff:** „Originalzugriff wiederherstellen“ öffnet den
+   getrennten Quellenabgleich. Originalordner auswählen und Dateien vergleichen. Erst
+   „Originale zuordnen und neue Dateien einlesen“ übernimmt den Abgleich. Inhaltsgleiche
+   Originale behalten ihre Identität und Freigabe. Neue Dateien und Fassungen benötigen
+   anschließend eine eigene Freigabeentscheidung.
 
 Die Quellenprüfung umfasst unterstützte PDFs/Bilder in den gewählten Ordnern. Versteckte
 Dateien, Pakete und symbolische Links werden nicht importiert; Grenzen und Zugriffsprobleme
@@ -32,7 +35,7 @@ weiterhin schreibgeschützte Verweise. Neue Importe bleiben bis zur Bestätigung
 regelbasierte Basisanalyse. Optionale, nicht belegte Angaben bleiben leer. Es ist keine
 fachliche Prüfung, keine garantierte OCR-Genauigkeit und keine Qualitätszusage für Chatprosa.
 Der Bericht ist ausschließlich lokal; rohe Titel und dauerhafte Kennungen gehen nicht durch
-neue MCP-Werkzeuge nach außen. Die bestehenden vier lesenden Werkzeuge, Datenschutzprüfung,
+neue MCP-Werkzeuge nach außen. Die bestehenden neun lesenden Werkzeuge, Datenschutzprüfung,
 Belege, Verarbeitungsabdeckung und vollständige Listenpagination bleiben die Chat-Grenze.
 
 ## Bestehende ChatGPT-Verbindung aktualisieren

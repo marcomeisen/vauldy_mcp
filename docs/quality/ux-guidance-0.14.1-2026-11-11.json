@@ -1,0 +1,278 @@
+{
+  "date": "2026-11-11",
+  "productVersion": "0.14.1",
+  "sourceVerification": {
+    "baseCommit": "17b581202c433fa7703920a2dd1476abff2fce4a",
+    "overlay": [
+      "Sources/VauldyMCPRuntime/MCPBuild.swift",
+      "Sources/VauldyMCPSetup/InventoryWorkflowView.swift",
+      "Sources/VauldyMCPSetup/SetupDetailViews.swift",
+      "Sources/VauldyMCPSetup/SetupNextStepView.swift",
+      "Sources/VauldyMCPSetup/SetupView.swift"
+    ],
+    "productFiles": 116,
+    "allMatch": true,
+    "sha256": "efd4fa9218444eb806eff22c41d47bc47dbc4c361b1d0fb40fdab201b6cc2369",
+    "concurrentOCREditsIncluded": false
+  },
+  "swiftTests": {
+    "passed": true,
+    "tests": 328,
+    "suites": 52,
+    "durationSeconds": 159.002
+  },
+  "regression": {
+    "allPassed": true,
+    "stages": [
+      {
+        "name": "faint-ocr-gate-policy",
+        "passed": true
+      },
+      {
+        "name": "local-ocr-comparison-conversion",
+        "passed": true
+      },
+      {
+        "name": "swift-tests",
+        "passed": true
+      },
+      {
+        "name": "package-metadata",
+        "passed": true
+      },
+      {
+        "name": "package",
+        "passed": true
+      },
+      {
+        "name": "relay-worker-tests",
+        "passed": true
+      },
+      {
+        "name": "relay-tool-parity",
+        "passed": true
+      },
+      {
+        "name": "smoke_test",
+        "passed": true
+      },
+      {
+        "name": "index_recovery_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "research_agent_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "topic_overview_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "search_normalization_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "storage_boundary_benchmark",
+        "passed": true
+      },
+      {
+        "name": "storage_import_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "sqlite_integration_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "storage_migration_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "field_extraction_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "contract_comparison_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "deadline_overview_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "document_inventory_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "product_acceptance",
+        "passed": true
+      },
+      {
+        "name": "product_answer_check",
+        "passed": true
+      },
+      {
+        "name": "product_acceptance_test",
+        "passed": true
+      },
+      {
+        "name": "base_analysis_wire_test",
+        "passed": true
+      },
+      {
+        "name": "import_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "raster_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "vector_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "visual_coverage_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "dense_ocr_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "line_ocr_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "small_text_chat_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "audit_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "client_install_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "management_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "software_update_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "status_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "watch_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "setup_startup_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "original_reference_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "oauth_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "scalability_benchmark",
+        "passed": true
+      },
+      {
+        "name": "tunnel_launcher_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "benchmark_ocr",
+        "passed": true
+      },
+      {
+        "name": "retrieval_benchmark",
+        "passed": true
+      }
+    ]
+  },
+  "finalSourceNote": "After the full-test build, the final original-access status wording was compiled separately and the final UI and ZIP were checked. No OCR implementation changes included.",
+  "visualAcceptance": {
+    "passed": true,
+    "isolatedSetupRoot": true,
+    "scope": [
+      "Installation and first manual connection with synthetic example document",
+      "Fixed recipient in the shared selection, explicit consent and return to setup",
+      "Paused access remains paused after saving a selection; explicit resume confirmation",
+      "Empty grant directs the user to document selection; completion no longer suggests immediate resume",
+      "Unregistered connection offers Verbindung einrichten",
+      "Singular document labels in overview, document list, selection and completion",
+      "Recipient A grant stays separate from recipient B local-only decision",
+      "Local-only decision survives reopening and is hidden by pending-decision filter",
+      "Unavailable synthetic original stays selected with an explicit restore action",
+      "Restoring identical original bytes and checking again retains the existing grant",
+      "Explicit removal of all documents shows the corrected completion guidance"
+    ],
+    "testWrapper": "Final source built in an isolated bundle. Its bundle identifier/display name were changed for unambiguous UI targeting; installation/update checks used the unmodified final ZIP. The changed wrapper therefore differs from the installed bundle.",
+    "notCovered": "No live provider login/target-chat session or visual end-to-end folder rebinding; automated source/relay tests cover those local contracts."
+  },
+  "finalZIPChecks": {
+    "checksum": true,
+    "archiveIntegrity": true,
+    "deepStrictSignature": true,
+    "bundledGuideBytes": true,
+    "stdioPrivacyRevocation": true,
+    "clientInstall": true,
+    "management": true,
+    "softwareUpdateRollback": true,
+    "nativeStartupNoWorkerMutation": true
+  },
+  "package": {
+    "bytes": 17290823,
+    "sha256": "f9f8796c2bf99379335609a93c113b1358b9d8c59c0624eb01d143e03ba15a09",
+    "manifest": {
+      "architectures": [
+        "arm64"
+      ],
+      "buildMode": "reused",
+      "documentStorage": "json-or-sqlite",
+      "manifestVersion": 1,
+      "minimumMacOS": "14.0",
+      "packageLockSHA256": "8bf982080fd53dce82960cf25590844d54fbdd129b78057d7e61bc83aaaf8e1a",
+      "productVersion": "0.14.1",
+      "products": {
+        "vauldy-local": "Resources/vauldy-local",
+        "vauldy-mcp": "Resources/vauldy-mcp",
+        "vauldy-mcp-http": "Resources/vauldy-mcp-http",
+        "vauldy-mcp-setup": "MacOS/vauldy-mcp-setup",
+        "vauldy-mcp-status": "Resources/Vauldy MCP Status.app/Contents/MacOS/vauldy-mcp-status",
+        "vauldy-relay": "Resources/vauldy-relay"
+      },
+      "serverBuildID": "macho.88696f4a804c3b81beda661fa3c2bbb6",
+      "softwareCompatibilityEpoch": 2,
+      "sourceCommit": null,
+      "swift": "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)\nTarget: arm64-apple-macosx27.2.0",
+      "tools": [
+        "compare_contract_versions",
+        "extract_document_fields",
+        "get_deadline_overview",
+        "get_document_inventory",
+        "get_topic_overview",
+        "get_vault_status",
+        "list_documents",
+        "read_document",
+        "search_documents"
+      ],
+      "xcode": "Xcode 27.2\nBuild version 27B52"
+    },
+    "path": "dist/mcp/vauldy-0.14.1-20261111/Vauldy.zip",
+    "signing": "ad-hoc",
+    "notarized": false
+  }
+}

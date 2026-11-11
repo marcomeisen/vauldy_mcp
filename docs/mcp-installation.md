@@ -1,32 +1,48 @@
-# Vauldy MCP einrichten (macOS, Version 0.13.0)
+# Vauldy MCP einrichten (macOS, Version 0.14.1)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
 Assistenten oder `vauldy-local`; die MCP-Schnittstelle bleibt ausschließlich lesend.
 
-## Bestehenden Bestand und Chatfreigabe aktualisieren
+## Dokumentauswahl und Originalzugriff
 
-Ab 0.13 führt „Dokumente → Bestand abgleichen und neu freigeben …“ durch Quellenabgleich,
-Qualitätsbericht und ausdrückliche Auswahlbestätigung. Bei bestehender ChatGPT-Anmeldung
-steht derselbe Ablauf unter „ChatGPT & Claude“. Die Verbindung muss nicht gelöscht werden;
-Anmeldung und Ablaufdatum bleiben erhalten. Zuerst unter „Einstellungen“ die installierte
-MCP-Software aktualisieren. [Ablauf und Grenzen](inventory-workflow.md).
+Die **Übersicht** zeigt den nächsten nötigen Schritt für die gewählte Verbindung.
+Neue Importe werden nicht automatisch freigegeben. „Dokumente auswählen“ führt zur
+Entscheidung für neue Dokumente; „Nur lokal behalten“ speichert die Entscheidung für
+diesen Empfänger und diese Inhaltsfassung. Du kannst sie später ändern.
+
+**„Freigabe bearbeiten“** öffnet unter Dokumente, Verbindungen und in der Menüleiste
+immer denselben Ablauf. Empfänger, zusätzliche und entfernte Dokumente bleiben sichtbar.
+Eine bestehende ChatGPT-Anmeldung muss dafür nicht gelöscht werden.
+**„Originalzugriff wiederherstellen“** wird bei nicht erreichbaren oder veränderten
+Originalen angeboten. Dieser Quellenabgleich ist von der Freigabe neuer Dokumente
+getrennt. [Ablauf und Grenzen](inventory-workflow.md).
 
 ## Einrichtung ohne bestehende App
 
 1. `Vauldy.zip` entpacken, `Vauldy.app` nach Programme verschieben und öffnen. Pakete mit den bisherigen Namen `Vauldy-MCP-macOS.zip` / `Vauldy MCP Einrichtung.app` werden genauso verwendet. Voraussetzung: macOS 14 oder neuer und eine zum Paket passende Prozessorarchitektur.
 2. Beim ersten gewöhnlichen Start ohne installierte Software und ohne Verbindungen öffnet sich der Installationsassistent automatisch. Er zeigt Version und Speicherort. Mit **„Installieren“** werden die lokalen Programme geprüft, eingerichtet und mit einem synthetischen Profil gestartet. Der Abschluss zeigt die installierte Version und das Ergebnis des lokalen Starttests. Für diesen Schritt brauchst du kein Konto. Nach „Abbrechen“ kannst du ihn über **Übersicht → Installation starten** wieder öffnen.
-3. Am erfolgreichen Abschluss **„Chatbot verbinden“** wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Freigabe → Verbindung prüfen**. Mit **„Später einrichten“** beendest du die Installation ohne Chatbot-Verbindung. Der Verbindungsassistent bleibt über die Übersicht erreichbar.
-4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder mit „Dateien importieren …“ lokal kopieren, mit „Ordner einmal importieren …“ Originale am vorhandenen Ort verknüpfen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zeigt die Gesamtzahl gefundener unterstützter Dokumente, die aktuelle Datei und den Verarbeitungsschritt. „Import abbrechen“ zeigt den laufenden Abbruch. Beim Schließen des Assistenten läuft der Import weiter. Die Freigabe erfolgt separat.
-5. Lesbare Dokumente auswählen, Empfänger und Auswahl prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
-6. „Freigeben und einrichten“ speichert die Dokumentauswahl. Für normale Chats anschließend unter „ChatGPT & Claude“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird ein passender Client-Eintrag angelegt. Konflikte mit bestehenden Einträgen bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
+3. Am erfolgreichen Abschluss **„Chatbot verbinden“** wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Verbindung**. Mit **„Später einrichten“** beendest du die Installation ohne Chatbot-Verbindung. Der Verbindungsassistent bleibt über die Übersicht erreichbar.
+4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder mit „Neue Dateien hinzufügen …“ lokal kopieren, mit „Ordner einmal importieren …“ Originale am vorhandenen Ort verknüpfen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zeigt die Gesamtzahl gefundener unterstützter Dokumente, die aktuelle Datei und den Verarbeitungsschritt. „Import abbrechen“ zeigt den laufenden Abbruch. Beim Schließen des Assistenten läuft der Import weiter. Die Freigabe erfolgt separat.
+5. „Dokumente auswählen“ öffnet die gemeinsame Freigabeansicht. Lesbare Dokumente markieren, mit „Auswahl überprüfen“ Empfänger und Änderungen prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
+6. „Auswahl für … freigeben“ speichert die Dokumentauswahl. Mit „Fertig“ zur Einrichtung zurückkehren. Für normale Chats anschließend unter „Verbindungen“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird ein passender Client-Eintrag angelegt. Konflikte mit bestehenden Einträgen bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
 7. Der lokale Protokolltest prüft Handshake und Freigabestatus. Aktiviere Vauldy anschließend im Chatbot und starte dessen Verbindung bei Bedarf neu. Unter **Verbindungen** kannst du einzelne Zugriffe pausieren oder nach Bestätigung fortsetzen.
 
 **Dokumente** bietet Suche, Auswahl-/Qualitätsfilter und eine lokale Vorschau importierter Originale.
 Der Importbericht bleibt oberhalb der Liste sichtbar und unterscheidet neue, bereits vorhandene, fehlgeschlagene und übersprungene Dateien. „Fehler anzeigen“ führt zu den betroffenen Dateinamen und Gründen. Hinweise zu Texterkennung und Basisanalyse erscheinen separat. „Neu importierte Dokumente anzeigen“ filtert die Liste auf diesen Import.
 
-**„Sichtbare Dokumente auswählen“** markiert die lesbaren Treffer der aktuellen Suche und Filter. **„Gesamten Bestand auswählen“** markiert auch die lesbaren Dokumente außerhalb der Ansicht. „Auswahl aufheben“ leert den Entwurf. Die Freigabebestätigung und „Auswahl speichern“ stehen oberhalb der Liste. Erst das Speichern ändert die Freigabe.
-„Auswahl speichern“ ändert nur die Dokumentauswahl. Ein pausierter Zugriff bleibt pausiert; zusätzliche Dokumente benötigen eine neue Bestätigung. Eine leere Auswahl sperrt den Zugriff. Änderungen aus dem Statusmenü können nicht durch einen veralteten Entwurf überschrieben werden; dann die gespeicherte Auswahl neu laden.
+In **„Freigabe bearbeiten“** ergänzt „Lesbare Treffer hinzufügen“ die aktuelle Auswahl
+um die lesbaren Treffer der Suche und Filter. „Auswahl überprüfen“ zeigt anschließend
+alle Änderungen. Erst die ausdrückliche Bestätigung speichert die Freigabe.
+Ein pausierter Zugriff bleibt pausiert; eine leere Auswahl sperrt den Zugriff.
+Nicht erreichbare, zuvor freigegebene Originale bleiben ausgewählt, bis du sie ausdrücklich
+entfernst. Zusätzliche Dokumente mit Prüfhinweisen benötigen eine gesonderte Zustimmung.
+„Nur Dokumente mit offener Freigabeentscheidung“ blendet bereits freigegebene und bewusst
+lokal behaltene Dokumente aus. Über alle Dokumente kannst du diese Entscheidung später ändern.
+
+Die Auswahlkästchen in der normalen **Dokumentliste** dienen dagegen ausschließlich dem
+optionalen „Ausgewählten Text erneut lesen“. „Prüfstellen ansehen“ öffnet Original und
+gespeicherten Text ohne erneute Texterkennung. Diese Aktionen ändern keine Freigabe.
 
 Unter **Einstellungen** erfolgt das Softwareupdate unabhängig von Freigaben und Client-Einträgen.
 Bestehende Profile bleiben bytegenau erhalten, einschließlich pausierter Zustände. Das Update startet die Statusanzeige neu, aber keine Chatbot-Verbindung. Bereits laufende Server müssen im Chatbot neu gestartet werden.
@@ -38,7 +54,7 @@ vauldy-local update-software --root /bestehende/installation --from-app "/pfad/V
 vauldy-local check-connection --profile /bestehende/installation/connections/UUID/profile.json
 ```
 
-Der Check prüft die tatsächliche Serverversion, alle vier Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
+Der Check prüft die tatsächliche Serverversion, alle neun Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
 
 „Lokalen MCP-Bestand laden“ lädt frühere Importe und erkennt unterbrochene OCR-Läufe. Für fehlgeschlagene,
 unterbrochene, teilweise und bereits als abgeschlossen markierte Dokumente steht „Text erneut lesen“ zur Verfügung.
@@ -409,7 +425,7 @@ vauldy-local update-software --root /bestehende/installation --from-app "/pfad/V
 vauldy-local check-connection --profile /bestehende/installation/connections/UUID/profile.json
 ```
 
-Der Check prüft die tatsächliche Serverversion, alle vier Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
+Der Check prüft die tatsächliche Serverversion, alle neun Werkzeuge und den Freigabestatus. Er lädt keine Dokumenttexte und ist kein Nachweis eines verbundenen fremden Chats. Bestehende Hostprozesse benötigen nach dem Softwareupdate einen gezielten MCP-Neustart. Normale gehostete Chats benötigen zusätzlich ihren eigenen eingerichteten Plugin-/Remote-Anschluss. [Architekturanalyse und Skalierung](https://github.com/marcomeisen/vauldy_mcp/blob/main/docs/audits/mcp-2026-11-03-architecture/README.md).
 
 „Lokalen MCP-Bestand laden“ zeigt die importierten Dokumente. Eine bereits
 geöffnete lokale Dokumentliste aktualisiert sich automatisch, ohne neue Freigaben zu setzen.
