@@ -6,6 +6,7 @@ import VauldyDocumentIntelligence
 package struct LocalDocumentQuality: Sendable {
     package enum Category: String, CaseIterable, Sendable {
         case source, processing, text, tables, classification, fields, analysis
+        package var isBasisInformation: Bool { [.classification, .fields, .analysis].contains(self) }
         package var title: String {
             switch self {
             case .source: "Originalzugriff"
@@ -38,10 +39,14 @@ package struct LocalDocumentQuality: Sendable {
     package let recognitionLabel: String
     package let issues: [Issue]
     package let pending: Bool
-    package var reviewCount: Int { issues.filter(\.requiresReview).count }
+    package var textIssues: [Issue] { issues.filter { !$0.category.isBasisInformation } }
+    package var basisIssues: [Issue] { issues.filter { $0.category.isBasisInformation } }
+    /// Optional metadata never lowers the displayed text-quality status.
+    package var reviewCount: Int { textIssues.filter(\.requiresReview).count }
+    package static let basisExplanation = "Optionale Orientierung aus dem gespeicherten Text. Fehlende oder unsichere Basisangaben bewerten nicht die Texterkennung. Für fachliche Aussagen sind die Belegstellen maßgeblich."
     package var headline: String {
         if pending { return "Verarbeitung noch nicht abgeschlossen" }
-        return reviewCount == 0 ? "Automatische Grundprüfung ohne Befund" : "Prüfung erforderlich · \(reviewCount) \(reviewCount == 1 ? "Hinweis" : "Hinweise")"
+        return reviewCount == 0 ? "Textprüfung: keine automatischen Prüfhinweise" : "Textprüfung · \(reviewCount) \(reviewCount == 1 ? "Hinweis" : "Hinweise")"
     }
     package static let completenessExplanation = "Erfasste PDF-Seiten bestätigen nicht, dass dem Original keine Seiten fehlen."
     package static let manualReviewLabel = "Abschließende Prüfung: nicht dokumentiert"
@@ -60,11 +65,11 @@ package struct LocalDocumentQuality: Sendable {
         recognitionLabel = methods.contains(.vision) || methods.contains(.embeddedTextAndVision)
             ? "Apple Vision / vorhandene PDF-Textebene" : methods.contains(.embeddedText) ? "Vorhandene PDF-Textebene" : "Kein Erkennungsverfahren belegt"
         switch document.baseAnalysisStatus {
-        case "completed": analysisLabel = "Regelbasierte Basisanalyse vorhanden"
-        case "needsReview": analysisLabel = "Basisanalyse mit Prüfhinweisen"
-        case "stale": analysisLabel = "Basisanalyse veraltet"
-        case "failed": analysisLabel = "Basisanalyse fehlgeschlagen"
-        default: analysisLabel = "Keine aktuelle Basisanalyse vorhanden"
+        case "completed": analysisLabel = "Basisangaben automatisch ermittelt"
+        case "needsReview": analysisLabel = "Basisangaben teilweise ermittelt"
+        case "stale": analysisLabel = "Basisangaben beziehen sich auf früheren Text"
+        case "failed": analysisLabel = "Basisangaben nicht ermittelt"
+        default: analysisLabel = "Keine aktuellen Basisangaben ermittelt"
         }
         var findings: [Issue] = []
         func add(_ category: Category, _ code: String, _ title: String, _ detail: String,
@@ -90,6 +95,9 @@ package struct LocalDocumentQuality: Sendable {
             }
             for page in pages {
                 let focus = Focus(page: page.id)
+                for revision in page.revisions {
+                    add(.text, "reading-\(revision.id)", "Lesung geändert", "Die Nachlesungen stimmen überein. Die frühere Lesung bleibt lokal erhalten. Prüfe die Änderung am Original.", focus: page.focus(quote: revision.current))
+                }
                 if page.info?.method == .unreadable {
                     add(.text, "unreadable", "Kein lesbarer Text erkannt", "Vergleiche Seite \(page.id) mit dem Original. Eine unlesbare Erkennung ist keine fehlende Seite.", focus: focus)
                 } else if page.info == nil || page.text == nil && page.info?.method != .blank {

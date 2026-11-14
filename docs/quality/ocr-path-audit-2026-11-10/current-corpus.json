@@ -1,0 +1,261 @@
+{
+  "images": 35,
+  "exact": 52,
+  "expected": 79,
+  "unmarkedIncorrect": [
+    {
+      "file": "tilted-9-right.png",
+      "exact": 1,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    }
+  ],
+  "cases": [
+    {
+      "file": "ambiguous.png",
+      "exact": 1,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.6666666666666666
+    },
+    {
+      "file": "clean.png",
+      "exact": 3,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "date.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "dense.png",
+      "exact": 6,
+      "expected": 6,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "faint-words.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "grid-11-88-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-11-88-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-11-93-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-11-93-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-13-88-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-13-88-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-13-93-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-13-93-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-9-88-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-9-88-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-9-93-15.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "grid-9-93-25.png",
+      "exact": 0,
+      "expected": 2,
+      "review": true,
+      "confidence": 0.5
+    },
+    {
+      "file": "invoice.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Courier-Oblique-11.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Courier-Oblique-14.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Helvetica-Oblique-11.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Helvetica-Oblique-14.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Times-Italic-11.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "italic-Times-Italic-14.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-78-Fahrrad.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-78-fuer.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-85-Fahrrad.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-85-fuer.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-92-Fahrrad.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "mixed-92-fuer.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "payroll.png",
+      "exact": 2,
+      "expected": 2,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "tilted-12-left.png",
+      "exact": 3,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "tilted-12-right.png",
+      "exact": 3,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "tilted-9-left.png",
+      "exact": 3,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    },
+    {
+      "file": "tilted-9-right.png",
+      "exact": 1,
+      "expected": 3,
+      "review": false,
+      "confidence": 1
+    }
+  ]
+}

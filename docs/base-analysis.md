@@ -20,7 +20,8 @@ Termin bleiben davon getrennt. Ein ausdrücklich angegebenes Bezugsjahr hat Vorr
 Ausstellungsjahr; bei Konto-/Nebenkostenabrechnungen, Steuer- und Beschäftigungsunterlagen wird
 kein fehlendes Bezugsjahr aus dem Ausstellungsdatum ersetzt.
 
-Titel entstehen aus belegtem Aussteller, Gegenstand, Dokumenttyp und geeignetem Jahr.
+Titel bevorzugen plausible Dokumentüberschriften und ergänzen belegten Aussteller,
+kurzen Gegenstand und geeignetes Jahr. Bei Unsicherheit bleibt der Titel neutral.
 Manuell geänderte Titel und eigene Notizen bleiben bei erneuter Analyse erhalten. Änderungen
 am OCR-Text, Seitenumfang oder Review-Signal machen gespeicherte Analyse veraltet (`stale`).
 Eine explizite Neuanalyse speichert nur gegen den unveränderten Ausgangsdatensatz.
@@ -216,3 +217,78 @@ verifiziert weiter die Originalbytes und hält ihren bestehenden Access-Lease.
 Dies ist eine lokale Präsentationsänderung. Erkennungsverfahren, OCR-Caches, Originale,
 Speicherformat und Freigaben werden nicht automatisch verändert; GLM, Docling und Jev
 werden durch diese Anzeige nicht installiert oder gestartet.
+
+## Dokumenttitel und gezielte Titelpflege (13. November 2026)
+
+`DocumentTitlePolicy` prüft Überschriften und Titelbestandteile separat auf Eignung:
+Satzzeichen, Anrede, typische finite Verben/Vertragsklauseln, Satzenden, Länge und
+Anweisungsfragmente schließen Fließtext aus. Eine wörtlich belegte Textstelle allein
+reicht nicht als Titel. Akzeptierte konkrete Überschriften wie „Versicherungsschein“
+haben Vorrang vor der breiten Kategorie. Ein kurzer belegter Gegenstand und ein
+explizit als Aussteller beschrifteter Name können den Titel ergänzen. Mehrdeutige
+Dokumenttypen bleiben neutral; ohne belastbare Angaben lautet der Titel
+„Dokument – Aussteller unbekannt“. Dateinamen und Empfänger sind keine Ausstellerbelege.
+Die Erkennung bleibt eine konservative deutschsprachige Textheuristik ohne Layoutmodell;
+unbekannte, kleingeschriebene, mehrzeilige oder komplexe Überschriften können zurückfallen.
+
+`VaultDocument.sourceName` erhält den Originaldateinamen. `generatedTitle` und
+`manualTitle` sind getrennte optionale Felder; `title` bleibt der effektive Anzeigetitel
+für bestehende Leser. Manuelle Änderungen haben Vorrang, auch wenn die eigene Bezeichnung
+zufällig dem automatischen Titel entspricht. Direktes Setzen von `title` gilt als
+manuelle Änderung. Reine Lesezugriffe migrieren keine gespeicherten Daten.
+
+Altbestände ohne diese Zusatzfelder werden erst beim ausdrücklichen Titel-/Analyseschritt
+zugeordnet: Ein exakt dem Dateistamm oder dem früher gespeicherten Analysetitel entsprechender
+Wert gilt als automatisch. Andere Bezeichnungen bleiben als manuelle Überschreibung erhalten.
+Eine historische manuelle Änderung, die exakt dem damaligen automatischen Titel entspricht,
+ist mangels alter Herkunftsangabe nicht unterscheidbar. Alte Writer sollten nach Einführung
+der Zusatzfelder nicht parallel weiterverwendet werden: Sie erhalten deren Trennung nicht.
+
+Die lokale Dokumentliste bietet „Titel neu bestimmen“ und zeigt Originaldateiname,
+automatischen Titel und gegebenenfalls eigene Bezeichnung getrennt unter „Titelangaben“.
+Die CLI erlaubt dieselbe gezielte Neubestimmung sowie manuelle Korrektur und Rücknahme:
+
+```sh
+vauldy-local retitle --store /absoluter/bestand --document UUID
+vauldy-local set-title --store /absoluter/bestand --document UUID --title "Eigene Bezeichnung"
+vauldy-local reset-title --store /absoluter/bestand --document UUID
+```
+
+`retitle` liest vorhandenen OCR-/PDF-Text und speichert ausschließlich Titelmetadaten.
+Es startet keinen Import, keine OCR und keinen Worker. Gespeicherte Basisanalyse samt
+Belegzeilen, Seiten, Text, Zusammenfassung, Kategorie, Originalverweise und IDs bleiben
+unverändert. Laufende Importe und als verändert bekannte Originale sperren die Neubestimmung;
+unbrauchbarer oder unmarkierter Text führt zum neutralen Titel. Ein Analysefehler schreibt
+nichts. Ein Vergleich des vollständigen Ausgangsdatensatzes unter der Writer-Sperre
+verhindert, dass konkurrierende Text-/Titeländerungen überschrieben werden. Gleiche
+Titelresultate schreiben keinen neuen Snapshot. `reset-title` entfernt nur die manuelle
+Überschreibung; es führt keine neue Analyse aus.
+
+Freigabeprofile, Geräte, Revisionen und ausgewählte IDs werden von diesen Diensten nicht
+geöffnet oder geändert. Bestehende flüchtige MCP-Handles können wie bei anderen Metadaten-
+änderungen ungültig werden; eine frische Liste liefert neue Handles ohne neue Freigabe.
+Es gibt weiterhin keine schreibenden Titelwerkzeuge über MCP. Die separate vollständige
+Neuanalyse (`analyze`) darf weiterhin Analysefelder erneuern; für reine Titelkorrekturen
+ist `retitle` der passende Weg.
+
+Regressionen: `DocumentTitleTests` enthält den wörtlichen Fehler aus dem bereitgestellten
+Screenshot, positive Überschriften mehrerer Domänen, Rollenverwechslungen, neutrale
+Fallbacks, Altdaten, manuelle Überschreibungen, konkurrierende Änderungen und unveränderte
+Belege/Originale/aktive und pausierte Freigaben. `scripts/mcp/title_smoke_test.py` prüft die
+echten lokalen Befehle und die lesende MCP-Ausgabe mit einem isolierten synthetischen Archiv.
+Der Screenshot liefert den angezeigten Fehler, nicht den vollständigen OCR-Text oder die
+Originaldateien der beiden betroffenen Dokumente; deren End-to-End-Abnahme bleibt offen.
+
+## Darstellung optionaler Basisangaben ab 0.14.3
+
+Die Oberfläche trennt Hinweise zu Text/Original von optionalen Basisangaben.
+Fehlender Gegenstand, unbekannter Aussteller, unklare Dokumentart oder eine
+fehlgeschlagene Basisanalyse erhöhen nicht die angezeigte Anzahl der Textprüfhinweise.
+Diese Angaben stehen in einem eigenen neutralen Abschnitt. Echte OCR-, Quellen-
+und Verarbeitungshinweise bleiben sichtbar. Die Anzeige ist keine prozentuale
+Qualitätsbewertung oder Zusage, dass der Text vollständig und fehlerfrei ist.
+
+Die zugrunde liegenden Befunde und die Regeln zur ausdrücklichen Freigabe bleiben
+erhalten. Bei einer neuen Freigabe benennt die Bestätigung deshalb Hinweise zu
+Text, Original oder optionalen Basisangaben ausdrücklich. Bestehende Freigaben
+werden durch diese Darstellungsänderung nicht geschrieben oder erweitert.

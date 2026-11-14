@@ -1,0 +1,1 @@
+PASS: native folder reference without copy, worker restart/fresh OCR, verified legacy migration, both snapshots, unchanged source bytes/mtime/mode, historical OCR and missing-source state.

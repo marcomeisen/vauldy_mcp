@@ -50,16 +50,6 @@ struct SetupDocumentList: View {
     @ObservedObject var model: SetupModel
     @State private var reviewSelection: ReviewSelection?
     private struct ReviewSelection: Identifiable { let id: UUID; var page: Int? = nil; var quote: String? = nil; var focus: LocalDocumentQuality.Focus? = nil }
-    private func analysisLabel(_ status: String) -> String {
-        switch status {
-        case "completed": "Basisanalyse vorhanden (regelbasiert)"
-        case "needsReview": "Basisanalyse: prüfen"
-        case "failed": "Basisanalyse fehlgeschlagen"
-        case "unavailable": "Basisanalyse nicht verfügbar"
-        case "stale": "Basisanalyse veraltet"
-        default: "Basisanalyse noch nicht erfolgt"
-        }
-    }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if !model.documents.isEmpty {
@@ -113,10 +103,20 @@ struct SetupDocumentList: View {
                             Image(systemName: "doc.text").foregroundStyle(.secondary)
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(model.documentDisplayName(document)).font(.body.weight(.medium)).help(document.sourceName)
+                                DisclosureGroup("Titelangaben") {
+                                    Text("Originaldatei: \(document.sourceName)")
+                                    if let title = document.generatedTitle { Text("Automatischer Titel: \(title)") }
+                                    if let title = document.manualTitle { Text("Eigene Bezeichnung: \(title)") }
+                                    if model.isLocalVault {
+                                        Button("Titel neu bestimmen") { model.regenerateTitle(document) }
+                                            .disabled(model.busy || model.importing || [.queued, .recognizing].contains(document.localImport?.state))
+                                            .help("Bestimmt den automatischen Titel aus dem gespeicherten Text. Eigene Titel, Belegzeilen und Chatbot-Freigaben bleiben erhalten.")
+                                            .accessibilityIdentifier("document-retitle")
+                                    }
+                                }.font(.caption).foregroundStyle(.secondary)
                                 HStack(spacing: 10) {
                                     Text(model.documentSharingLabel(document))
                                     Text(model.importLabel(document, compact: true))
-                                    Text(analysisLabel(document.baseAnalysisStatus))
                                 }.font(.caption).foregroundStyle(.secondary)
                                 if let step = SetupDocumentGuidance(document).nextStep {
                                     Text(step).font(.caption).foregroundStyle(.secondary)

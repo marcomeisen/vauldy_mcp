@@ -1,0 +1,48 @@
+{"file":"ambiguous-3-blur.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"ambiguous-3-original.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-3-stretch.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"ambiguous-3-threshold.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-5-blur.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"ambiguous-5-original.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-5-stretch.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-5-threshold.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-8-blur.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"ambiguous-8-original.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-8-stretch.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"ambiguous-8-threshold.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"grid-13-88-15-3-blur.png","readings":[[{"confidence":0.5,"text":"Schlib fuer Fanned und Haustat"}],[{"confidence":0.5,"text":"Leistuing Wartung der Heizungsentage"}]]}
+{"file":"grid-13-88-15-3-original.png","readings":[]}
+{"file":"grid-13-88-15-3-stretch.png","readings":[[{"confidence":0.5,"text":"Schlib fuer Fahred und Haustet"}],[{"confidence":0.5,"text":"Leistung Wartung der Heizungsentage"}]]}
+{"file":"grid-13-88-15-3-threshold.png","readings":[[{"confidence":0.30000001192092896,"text":"sckajz verFakodun"}],[{"confidence":0.30000001192092896,"text":"Lotehing Wadung der H"}]]}
+{"file":"grid-13-88-15-5-blur.png","readings":[[{"confidence":0.5,"text":"Schlib fuer Fanned und Haustel"}],[{"confidence":0.5,"text":"Laistung Wartung der Heizungsenlage"}]]}
+{"file":"grid-13-88-15-5-original.png","readings":[[{"confidence":0.30000001192092896,"text":"Wertung de"}]]}
+{"file":"grid-13-88-15-5-stretch.png","readings":[[{"confidence":0.30000001192092896,"text":"Schlic fuer Fahred und Haustat"}],[{"confidence":0.5,"text":"Leistüing Wartung der Heizungseniage"}]]}
+{"file":"grid-13-88-15-5-threshold.png","readings":[[{"confidence":0.30000001192092896,"text":"a0 2142s"}]]}
+{"file":"grid-13-88-15-8-blur.png","readings":[[{"confidence":0.5,"text":"Schlitz fuer Fanned und Haustal:"}],[{"confidence":0.5,"text":"Leistung Wartung der Heizungsenlage"}]]}
+{"file":"grid-13-88-15-8-original.png","readings":[]}
+{"file":"grid-13-88-15-8-stretch.png","readings":[[{"confidence":0.30000001192092896,"text":"Schlib fuer Fanned und Haustel"}],[{"confidence":0.5,"text":"Laistung Wartung der Heizungsentage"}]]}
+{"file":"grid-13-88-15-8-threshold.png","readings":[[{"confidence":0.30000001192092896,"text":"sapir"}]]}
+{"file":"grid-9-93-25-3-blur.png","readings":[]}
+{"file":"grid-9-93-25-3-original.png","readings":[]}
+{"file":"grid-9-93-25-3-stretch.png","readings":[]}
+{"file":"grid-9-93-25-3-threshold.png","readings":[]}
+{"file":"grid-9-93-25-5-blur.png","readings":[]}
+{"file":"grid-9-93-25-5-original.png","readings":[]}
+{"file":"grid-9-93-25-5-stretch.png","readings":[]}
+{"file":"grid-9-93-25-5-threshold.png","readings":[]}
+{"file":"grid-9-93-25-8-blur.png","readings":[]}
+{"file":"grid-9-93-25-8-original.png","readings":[]}
+{"file":"grid-9-93-25-8-stretch.png","readings":[]}
+{"file":"grid-9-93-25-8-threshold.png","readings":[[{"confidence":0.5,"text":"٧٠"}]]}
+{"file":"tilted-9-right-3-blur.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-3-original.png","readings":[[{"confidence":1,"text":"Beitrag: 82,47 EUR"}]]}
+{"file":"tilted-9-right-3-stretch.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-3-threshold.png","readings":[[{"confidence":0.5,"text":"Beiteg: 82.47 EUR"}]]}
+{"file":"tilted-9-right-5-blur.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-5-original.png","readings":[[{"confidence":1,"text":"Beitrag: 82,47 EUR"}]]}
+{"file":"tilted-9-right-5-stretch.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-5-threshold.png","readings":[[{"confidence":1,"text":"Beitreg: 82.47 EUR"}]]}
+{"file":"tilted-9-right-8-blur.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-8-original.png","readings":[[{"confidence":1,"text":"Beitrag: 82,47 EUR"}]]}
+{"file":"tilted-9-right-8-stretch.png","readings":[[{"confidence":1,"text":"Beitrag: 82.47 EUR"}]]}
+{"file":"tilted-9-right-8-threshold.png","readings":[[{"confidence":0.5,"text":"Beiteg: 82.47 EUR"}]]}

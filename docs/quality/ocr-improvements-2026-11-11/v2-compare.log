@@ -1,0 +1,1 @@
+{"documents": 15, "pages": 31, "expectedFields": 133, "expectedNonemptyCells": 345, "fields": [132, 132], "tableTextCells": [311, 311], "lostFields": 0, "lostCorrectWordOccurrences": 0, "lostCellText": 0, "unchangedTextPages": 31, "reviewPages": [10, 10], "blankFalsePositives": 0}

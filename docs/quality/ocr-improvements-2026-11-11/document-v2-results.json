@@ -1,0 +1,5069 @@
+{
+  "control-01-p01.png.tables.json": {
+    "lines": [],
+    "tables": []
+  },
+  "control-01-p01.png.txt": "",
+  "control-02-p01.png.tables.json": {
+    "lines": [],
+    "tables": []
+  },
+  "control-02-p01.png.txt": "",
+  "control-03-p01.png.tables.json": {
+    "lines": [],
+    "tables": []
+  },
+  "control-03-p01.png.txt": "",
+  "doc-001-p01.png.tables.json": {
+    "lines": [
+      "Kühn & Söhne Fahrzeugtechnik GmbH",
+      "Rechnung für Wartung und Reparatur",
+      "Rechnungsnummer: WS-2026-08417",
+      "Rechnungsdatum: 06.11.2026",
+      "Empfänger: Jörg Müller",
+      "Kennzeichen: PR-Ö 482",
+      "Fälliger Betrag: 183,56 €",
+      "Sehr geehrter Herr Müller, wir berechnen die vereinbarten Arbeiten an Ihrem Fahrzeug. Die Inspektion wurde",
+      "am 04.11.2026 durchgeführt. Die Bremsanlage wurde geprüft und die Flüssigkeit vollständig erneuert. Alle",
+      "eingebauten Teile entsprechen der dokumentierten Freigabe.",
+      "Pos.",
+      "Leistung",
+      "Menge",
+      "Einzelpreis",
+      "Gesamt",
+      "01",
+      "Inspektion gemäß Wartungsplan",
+      "2 Std.",
+      "45,00€",
+      "90,00 €",
+      "02",
+      "Ölfilter für Prüfstandfahrzeug",
+      "1 Stück",
+      "18,75€",
+      "18,75€",
+      "03",
+      "Bremsflüssigkeit erneuern",
+      "1 Satz",
+      "45,50€",
+      "45,50€",
+      "Nettobetrag",
+      "154,25 €",
+      "Umsatzsteuer 19 %",
+      "29.31€",
+      "Bruttobetrag",
+      "183,56 €",
+      "Bitte überweisen Sie den Rechnungsbetrag bis zum 20.11.2026 unter Angabe der Rechnungsnummer. Ein",
+      "bereits erteilter Kostenvoranschlag wird durch diese Rechnung abgeschlossen. Bei Rückfragen nennen Sie",
+      "bitte zusätzlich das Kennzeichen.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Pos."
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Leistung"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Menge"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Einzelpreis"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Gesamt"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "01"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Inspektion gemäß Wartungsplan"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "2 Std."
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "45,00€"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "90,00 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "02"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Ölfilter für Prüfstandfahrzeug"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "1 Stück"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "18,75€"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "18,75€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              6
+            ],
+            "text": "03"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Bremsflüssigkeit erneuern"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1 Satz"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "45,50€"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "45,50€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Nettobetrag"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "154,25 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "Umsatzsteuer 19 %"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "29.31€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "Bruttobetrag"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "183,56 €"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-001-p01.png.txt": "Kühn & Söhne Fahrzeugtechnik GmbH\nRechnung für Wartung und Reparatur\nRechnungsnummer: WS-2026-08417\nRechnungsdatum: 06.11.2026\nEmpfänger: Jörg Müller\nKennzeichen: PR-Ö 482\nFälliger Betrag: 183,56 €\nSehr geehrter Herr Müller, wir berechnen die vereinbarten Arbeiten an Ihrem Fahrzeug. Die Inspektion wurde am 04.11.2026 durchgeführt. Die Bremsanlage wurde geprüft und die Flüssigkeit vollständig erneuert. Alle eingebauten Teile entsprechen der dokumentierten Freigabe.\nPos.\nLeistung\nMenge\nEinzelpreis\nGesamt\n01\nInspektion gemäß Wartungsplan\n2 Std.\n45,00€\n90,00 €\n02\nÖlfilter für Prüfstandfahrzeug\n1 Stück\n18,75€\n18,75€\n03\nBremsflüssigkeit erneuern\n1 Satz\n45,50€\n45,50€\nNettobetrag\n\n\n154,25 €\nUmsatzsteuer 19 %\n\n\n29.31€\nBruttobetrag\n\n\n183,56 €\nBitte überweisen Sie den Rechnungsbetrag bis zum 20.11.2026 unter Angabe der Rechnungsnummer. Ein bereits erteilter Kostenvoranschlag wird durch diese Rechnung abgeschlossen. Bei Rückfragen nennen Sie bitte zusätzlich das Kennzeichen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-001-p02.png.tables.json": {
+    "lines": [
+      "Kühn & Söhne Fahrzeugtechnik GmbH",
+      "Arbeitsnachweis und Gewährleistung",
+      "Auftragsnummer: AU-48392",
+      "Fahrgestellnummer: TESTWWZZZ26K08417",
+      "Kilometerstand: 84.219 km",
+      "Übergabedatum: 05.11.2026",
+      "Ansprechpartnerin: Anke Groß",
+      "Die ausgebauten Teile wurden dem Auftraggeber zur Einsicht bereitgehalten. Es wurden keine zusätzlichen",
+      "Arbeiten außerhalb des bestätigten Umfangs ausgeführt. Eine spätere Hauptuntersuchung ist nicht",
+      "Bestandteil dieses Auftrags.",
+      "Die Hinweise zur Nachkontrolle betreffen ausschließlich den im Auftrag genannten Prüfumfang. Bitte prüfen",
+      "Sie den Flüssigkeitsstand nach ungefähr zweihundert Kilometern erneut. Bei ungewöhnlichen Geräuschen",
+      "wenden Sie sich an die Werkstatt. Dieser Nachweis ersetzt keine eigenständige Fahrzeugprüfung.",
+      "Prüfpunkt",
+      "Ergebnis",
+      "Ausgeführt durch",
+      "Beleuchtung",
+      "ohne Befund",
+      "A. Groß",
+      "Reifendruck",
+      "angepasst auf 2,4 bar",
+      "M. Weiß",
+      "Probefahrt",
+      "12,8 km durchgeführt",
+      "A. Groß",
+      "Fehlerspeicher",
+      "keine neuen Einträge",
+      "M. Weiß",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Prüfpunkt"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Ergebnis"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Ausgeführt durch"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Beleuchtung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "ohne Befund"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "A. Groß"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Reifendruck"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "angepasst auf 2,4 bar"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "M. Weiß"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Probefahrt"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "12,8 km durchgeführt"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "A. Groß"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Fehlerspeicher"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "keine neuen Einträge"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "M. Weiß"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-001-p02.png.txt": "Kühn & Söhne Fahrzeugtechnik GmbH Arbeitsnachweis und Gewährleistung\nAuftragsnummer: AU-48392\nFahrgestellnummer: TESTWWZZZ26K08417\nKilometerstand: 84.219 km\nÜbergabedatum: 05.11.2026\nAnsprechpartnerin: Anke Groß\nDie ausgebauten Teile wurden dem Auftraggeber zur Einsicht bereitgehalten. Es wurden keine zusätzlichen Arbeiten außerhalb des bestätigten Umfangs ausgeführt. Eine spätere Hauptuntersuchung ist nicht Bestandteil dieses Auftrags.\nDie Hinweise zur Nachkontrolle betreffen ausschließlich den im Auftrag genannten Prüfumfang. Bitte prüfen Sie den Flüssigkeitsstand nach ungefähr zweihundert Kilometern erneut. Bei ungewöhnlichen Geräuschen wenden Sie sich an die Werkstatt. Dieser Nachweis ersetzt keine eigenständige Fahrzeugprüfung.\nPrüfpunkt\nErgebnis\nAusgeführt durch\nBeleuchtung\nohne Befund\nA. Groß\nReifendruck\nangepasst auf 2,4 bar\nM. Weiß\nProbefahrt\n12,8 km durchgeführt\nA. Groß\nFehlerspeicher\nkeine neuen Einträge\nM. Weiß\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-002-p01.png.tables.json": {
+    "lines": [
+      "Nordstern Muster-Versicherung AG",
+      "Versicherungsschein Hausrat",
+      "Versicherungsnummer: HR-71-608294",
+      "Versicherungsnehmerin: Özlem Schäfer",
+      "Versicherungsort: Große Mühlenstraße 18, 12345 Prüfstadt",
+      "Versicherungsbeginn: 01.01.2027",
+      "Monatsbeitrag: 28,63 €",
+      "Versichert ist der private Hausrat der bezeichneten Wohnung. Die Wohnfläche beträgt 86 Quadratmeter.",
+      "Versicherungsschutz besteht gegen die in der Leistungsübersicht genannten Gefahren. Der Vertrag gilt für",
+      "den im Versicherungsschein ausdrücklich bezeichneten Versicherungsort.",
+      "Der Beitrag wird monatlich zum dritten Werktag eingezogen. Eine frühere Beitragsangabe im Antrag ist durch",
+      "die hier genannte Bestätigung ersetzt. Bitte prüfen Sie Anschrift und Leistungsumfang. Veränderungen der",
+      "Nutzung sind dem Versicherer mitzuteilen.",
+      "Baustein",
+      "Versicherungssumme",
+      "Selbstbeteiligung",
+      "Hausrat Grundschutz",
+      "86,000，.00 €",
+      "150.00€",
+      "Fahrraddiebstahl",
+      "4,300,00€",
+      "0.00€",
+      "Glasbruch",
+      "3,000，.00 €",
+      "100,00 €",
+      "Elementarschäden",
+      "86.000,00 €",
+      "500,00 €",
+      "Synthetischer Testbeleg - keine echten Vorgange | Seite 1 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Baustein"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Versicherungssumme"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Selbstbeteiligung"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Hausrat Grundschutz"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "86,000，.00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "150.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Fahrraddiebstahl"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "4,300,00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "0.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Glasbruch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "3,000，.00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "100,00 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Elementarschäden"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "86.000,00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "500,00 €"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-002-p01.png.txt": "Nordstern Muster-Versicherung AG\nVersicherungsschein Hausrat\nVersicherungsnummer: HR-71-608294\nVersicherungsnehmerin: Özlem Schäfer\nVersicherungsort: Große Mühlenstraße 18, 12345 Prüfstadt\nVersicherungsbeginn: 01.01.2027\nMonatsbeitrag: 28,63 €\nVersichert ist der private Hausrat der bezeichneten Wohnung. Die Wohnfläche beträgt 86 Quadratmeter.\nVersicherungsschutz besteht gegen die in der Leistungsübersicht genannten Gefahren. Der Vertrag gilt für den im Versicherungsschein ausdrücklich bezeichneten Versicherungsort.\nDer Beitrag wird monatlich zum dritten Werktag eingezogen. Eine frühere Beitragsangabe im Antrag ist durch die hier genannte Bestätigung ersetzt. Bitte prüfen Sie Anschrift und Leistungsumfang. Veränderungen der Nutzung sind dem Versicherer mitzuteilen.\nBaustein\nVersicherungssumme\nSelbstbeteiligung\nHausrat Grundschutz\n86,000，.00 €\n150.00€\nFahrraddiebstahl\n4,300,00€\n0.00€\nGlasbruch\n3,000，.00 €\n100,00 €\nElementarschäden\n86.000,00 €\n500,00 €\nSynthetischer Testbeleg - keine echten Vorgange | Seite 1 von 3",
+  "doc-002-p02.png.tables.json": {
+    "lines": [
+      "Nordstern Muster-Versicherung AG",
+      "Leistungsübersicht und Ausschlüsse",
+      "Tarif: Komfort Plus 2027",
+      "Vertragsablauf: 31.12.2027",
+      "Kündigungsfrist: 3 Monate zum Ablauf",
+      "Fahrradschutz: auch außerhalb verschlossener Räume",
+      "Der Versicherungsschutz umfasst Leitungswasser, Sturm, Hagel und die ausdrücklich eingeschlossenen",
+      "Zusatzbausteine. Für Fahrräder gilt die vereinbarte Sicherungspflicht. Ein Zahlenschloss allein erfüllt diese",
+      "Pflicht nicht. Schmuck ist innerhalb der ausgewiesenen Entschädigungsgrenzen versichert.",
+      "Risiko",
+      "Einschluss",
+      "Grenze je Schaden",
+      "Uberspannung",
+      "ja",
+      "10,000.00€",
+      "Grobe Fahrlässigkeit",
+      "ja",
+      "86,000.00€",
+      "Bargeld im Schrank",
+      "begrenzt",
+      "1,500,00€",
+      "Beruflich genutzte Geräte",
+      "begrenzt",
+      "5,000,00€",
+      "Nicht versichert sind Schäden durch gewöhnlichen Verschleiß oder bewusst herbeigeführte",
+      "Beschädigungen. Eine vorübergehende Abwesenheit von mehr als sechzig Tagen ist anzuzeigen. Diese",
+      "Übersicht erläutert den Vertrag; die im Versicherungsschein bezeichneten Bedingungen bleiben maßgeblich.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Risiko"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Einschluss"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Grenze je Schaden"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Uberspannung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "ja"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "10,000.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Grobe Fahrlässigkeit"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "ja"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "86,000.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Bargeld im Schrank"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "begrenzt"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1,500,00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Beruflich genutzte Geräte"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "begrenzt"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "5,000,00€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-002-p02.png.txt": "Nordstern Muster-Versicherung AG\nLeistungsübersicht und Ausschlüsse\nTarif: Komfort Plus 2027\nVertragsablauf: 31.12.2027\nKündigungsfrist: 3 Monate zum Ablauf\nFahrradschutz: auch außerhalb verschlossener Räume\nDer Versicherungsschutz umfasst Leitungswasser, Sturm, Hagel und die ausdrücklich eingeschlossenen Zusatzbausteine. Für Fahrräder gilt die vereinbarte Sicherungspflicht. Ein Zahlenschloss allein erfüllt diese Pflicht nicht. Schmuck ist innerhalb der ausgewiesenen Entschädigungsgrenzen versichert.\nRisiko\nEinschluss\nGrenze je Schaden\nUberspannung\nja\n10,000.00€\nGrobe Fahrlässigkeit\nja\n86,000.00€\nBargeld im Schrank\nbegrenzt\n1,500,00€\nBeruflich genutzte Geräte\nbegrenzt\n5,000,00€\nNicht versichert sind Schäden durch gewöhnlichen Verschleiß oder bewusst herbeigeführte Beschädigungen. Eine vorübergehende Abwesenheit von mehr als sechzig Tagen ist anzuzeigen. Diese Übersicht erläutert den Vertrag; die im Versicherungsschein bezeichneten Bedingungen bleiben maßgeblich.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+  "doc-002-p03.png.tables.json": {
+    "lines": [
+      "Nordstern Muster-Versicherung AG",
+      "Nachtrag zur Beitragsberechnung",
+      "Nachtragsnummer: NT-2026-1183",
+      "Wirksam ab: 01.02.2027",
+      "Bisheriger Monatsbeitrag: 28,63 €",
+      "Neuer Monatsbeitrag: 30,14 €",
+      "Änderungsgrund: zusätzlicher Fahrradeinschluss",
+      "Auf Ihren Wunsch wird die besondere Fahrradabsicherung erweitert. Die übrigen Vereinbarungen bleiben",
+      "bestehen. Der neue Beitrag gilt erst ab dem bezeichneten Wirksamkeitsdatum. Für Januar wird weiterhin der",
+      "bisherige Beitrag berechnet.",
+      "Dieser Nachtrag gehört zum Versicherungsschein. Bitte bewahren Sie beide Dokumente gemeinsam auf. Die",
+      "abweichenden Beträge stehen für unterschiedliche Zeiträume und sind kein Rechenfehler. Eine Änderung",
+      "der Wohnfläche wurde nicht beantragt.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3"
+    ],
+    "tables": []
+  },
+  "doc-002-p03.png.txt": "Nordstern Muster-Versicherung AG\nNachtrag zur Beitragsberechnung\nNachtragsnummer: NT-2026-1183\nWirksam ab: 01.02.2027\nBisheriger Monatsbeitrag: 28,63 €\nNeuer Monatsbeitrag: 30,14 €\nÄnderungsgrund: zusätzlicher Fahrradeinschluss\nAuf Ihren Wunsch wird die besondere Fahrradabsicherung erweitert. Die übrigen Vereinbarungen bleiben bestehen. Der neue Beitrag gilt erst ab dem bezeichneten Wirksamkeitsdatum. Für Januar wird weiterhin der bisherige Beitrag berechnet.\nDieser Nachtrag gehört zum Versicherungsschein. Bitte bewahren Sie beide Dokumente gemeinsam auf. Die abweichenden Beträge stehen für unterschiedliche Zeiträume und sind kein Rechenfehler. Eine Änderung der Wohnfläche wurde nicht beantragt.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+  "doc-003-p01.png.tables.json": {
+    "lines": [
+      "Musterbank Prüfstadt eG",
+      "Kontoauszug November 2026",
+      "Auszugsnummer: 11/2026-0048",
+      "Kontokennung: TEST-KONTO-638510",
+      "Endsaldo: 2.569,81 €",
+      "Kontoinhaber: Björn Weiß",
+      "Anfangssaldo: 2.184,33 €",
+      "Die nachfolgenden Buchungen betreffen den Zeitraum vom 01.11.2026 bis zum",
+      "06.11.2026. Belastungen sind mit einem Minuszeichen ausgewiesen. Wertstellung und",
+      "Buchungstag können voneinander abweichen. Alle Kontokennungen dieses Belegs sind",
+      "künstliche Testwerte.",
+      "Buchung",
+      "Wertstellung",
+      "Verwendungszweck",
+      "Betrag",
+      "02.11.2026",
+      "02.11.2026",
+      "Gehalt Musterbetrieb",
+      "+2.684,18€",
+      "03.11.2026",
+      "03.11.2026",
+      "Miete Große Straße",
+      "-1.180,00 e",
+      "03.11.2026",
+      "04.11.2026",
+      "Stadtwerke Abschlag",
+      "€ 126,00-",
+      "05.11.2026",
+      "05.11.2026",
+      "Überweisung an J. Kühn",
+      "-992,70€",
+      "06.11.2026",
+      "06.11.2026",
+      "Zinsgutschrift",
+      "+0,00 e",
+      "Bitte prüfen Sie die Umsätze und bewahren Sie diesen Auszug zusammen mit den",
+      "zugehörigen Zahlungsbelegen auf. Die Darstellung einer Zahlung bestätigt nicht den",
+      "Inhalt eines zugrunde liegenden Vertrags.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Buchung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Wertstellung"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Verwendungszweck"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Betrag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "02.11.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "02.11.2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Gehalt Musterbetrieb"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "+2.684,18€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "03.11.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "03.11.2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Miete Große Straße"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "-1.180,00 e"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "03.11.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "04.11.2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Stadtwerke Abschlag"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "€ 126,00-"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "05.11.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "05.11.2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Überweisung an J. Kühn"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "-992,70€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "06.11.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "06.11.2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "Zinsgutschrift"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "+0,00 e"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-003-p01.png.txt": "Musterbank Prüfstadt eG\nKontoauszug November 2026\nAuszugsnummer: 11/2026-0048\nKontokennung: TEST-KONTO-638510\nEndsaldo: 2.569,81 €\nKontoinhaber: Björn Weiß\nAnfangssaldo: 2.184,33 €\nDie nachfolgenden Buchungen betreffen den Zeitraum vom 01.11.2026 bis zum 06.11.2026. Belastungen sind mit einem Minuszeichen ausgewiesen. Wertstellung und Buchungstag können voneinander abweichen. Alle Kontokennungen dieses Belegs sind künstliche Testwerte.\nBuchung\nWertstellung\nVerwendungszweck\nBetrag\n02.11.2026\n02.11.2026\nGehalt Musterbetrieb\n+2.684,18€\n03.11.2026\n03.11.2026\nMiete Große Straße\n-1.180,00 e\n03.11.2026\n04.11.2026\nStadtwerke Abschlag\n€ 126,00-\n05.11.2026\n05.11.2026\nÜberweisung an J. Kühn\n-992,70€\n06.11.2026\n06.11.2026\nZinsgutschrift\n+0,00 e\nBitte prüfen Sie die Umsätze und bewahren Sie diesen Auszug zusammen mit den zugehörigen Zahlungsbelegen auf. Die Darstellung einer Zahlung bestätigt nicht den Inhalt eines zugrunde liegenden Vertrags.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-003-p02.png.tables.json": {
+    "lines": [
+      "Musterbank Prüfstadt eG",
+      "Entgeltübersicht und Kontoinformation",
+      "Abrechnungsmonat: November 2026",
+      "Kontofuhrungsentgelt: 6,90 €|",
+      "Erstatteter Betrag: 6,90 €",
+      "Reklamationskennzeichen: RK-269714",
+      "Das zunächst vorgemerkte",
+      "Kontoführungsentgelt wurde aufgrund",
+      "einer Aktionsvereinbarung vollständig",
+      "erstattet. Die beiden gleich hohen",
+      "Beträge dürfen deshalb nicht als zwei",
+      "Belastungen zusammengefasst werden.",
+      "Diese Entgeltübersicht verändert den",
+      "auf Seite eins genannten Endsaldo",
+      "nicht.",
+      "Für Nachfragen nutzen Sie bitte das",
+      "Reklamationskennzeichen. Antworten auf",
+      "allgemeine Anfragen sind keine",
+      "Bestätigung einzelner Zahlungsaufträge.",
+      "Die angebotenen Kommunikationswege",
+      "setzen die zuvor vereinbarte",
+      "Identitätsprüfung voraus.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": []
+  },
+  "doc-003-p02.png.txt": "Musterbank Prüfstadt eG\nEntgeltübersicht und Kontoinformation\nAbrechnungsmonat: November 2026\nKontofuhrungsentgelt: 6,90 €|\nErstatteter Betrag: 6,90 €\nReklamationskennzeichen: RK-269714\nDas zunächst vorgemerkte Kontoführungsentgelt wurde aufgrund einer Aktionsvereinbarung vollständig erstattet. Die beiden gleich hohen Beträge dürfen deshalb nicht als zwei Belastungen zusammengefasst werden.\nDiese Entgeltübersicht verändert den auf Seite eins genannten Endsaldo nicht.\nFür Nachfragen nutzen Sie bitte das Reklamationskennzeichen. Antworten auf allgemeine Anfragen sind keine Bestätigung einzelner Zahlungsaufträge.\nDie angebotenen Kommunikationswege setzen die zuvor vereinbarte Identitätsprüfung voraus.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-004-p01.png.tables.json": {
+    "lines": [
+      "Wohnraum Musterhof Verwaltung GmbH",
+      "Wohnraummietvertrag",
+      "Vertragsnummer: MV-2026-0318",
+      "Vermieterin: Wohnraum Musterhof Verwaltung GmbH",
+      "Mieter: René König",
+      "Mietobjekt: Ahornweg 7, Wohnung 3 links",
+      "Mietbeginn: 01.12.2026",
+      "Vermietet werden drei Zimmer, Küche, Bad und ein zugeordneter Kellerraum. Die angegebene Wohnfläche von 74,5",
+      "Quadratmetern dient der Beschreibung des Objekts. Die Wohnung wird ausschließlich zu Wohnzwecken überlassen.",
+      "Eine gewerbliche Nutzung bedarf einer gesonderten Vereinbarung.",
+      "Zum Übergabetermin wird ein gemeinsames Protokoll erstellt. Darin werden Zählerstände, Schlüsselanzahl und",
+      "erkennbare Mängel dokumentiert. Das Protokoll ist eine Anlage dieses Vertrags und wird von beiden Parteien",
+      "aufbewahrt.",
+      "Monatliche Zahlung",
+      "Betrag",
+      "Fälligkeit",
+      "Nettokaltmiete",
+      "815,00€",
+      "3. Werktag",
+      "Betriebskostenvorauszahlung",
+      "142,00 €",
+      "3. Werktag",
+      "Heizkostenvorauszahlung",
+      "98,00 €",
+      "3. Werktag",
+      "Gesamtzahlung",
+      "1.055.00€",
+      "3. Werktag",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Monatliche Zahlung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Betrag"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Fälligkeit"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Nettokaltmiete"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "815,00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "3. Werktag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Betriebskostenvorauszahlung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "142,00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "3. Werktag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Heizkostenvorauszahlung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "98,00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "3. Werktag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Gesamtzahlung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "1.055.00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "3. Werktag"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-004-p01.png.txt": "Wohnraum Musterhof Verwaltung GmbH\nWohnraummietvertrag\nVertragsnummer: MV-2026-0318\nVermieterin: Wohnraum Musterhof Verwaltung GmbH\nMieter: René König\nMietobjekt: Ahornweg 7, Wohnung 3 links Mietbeginn: 01.12.2026\nVermietet werden drei Zimmer, Küche, Bad und ein zugeordneter Kellerraum. Die angegebene Wohnfläche von 74,5 Quadratmetern dient der Beschreibung des Objekts. Die Wohnung wird ausschließlich zu Wohnzwecken überlassen.\nEine gewerbliche Nutzung bedarf einer gesonderten Vereinbarung.\nZum Übergabetermin wird ein gemeinsames Protokoll erstellt. Darin werden Zählerstände, Schlüsselanzahl und erkennbare Mängel dokumentiert. Das Protokoll ist eine Anlage dieses Vertrags und wird von beiden Parteien aufbewahrt.\nMonatliche Zahlung\nBetrag\nFälligkeit\nNettokaltmiete\n815,00€\n3. Werktag\nBetriebskostenvorauszahlung\n142,00 €\n3. Werktag\nHeizkostenvorauszahlung\n98,00 €\n3. Werktag\nGesamtzahlung\n1.055.00€\n3. Werktag\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+  "doc-004-p02.png.tables.json": {
+    "lines": [
+      "Wohnraum Musterhof Verwaltung GmbH",
+      "Kaution, Anpassung und Nebenabreden",
+      "Mietsicherheit: 2.445,00 €",
+      "Erste Kautionsrate: 815,00 €",
+      "Staffelbeginn: 01.12.2027",
+      "Neue Nettokaltmiete: 839,00 €",
+      "Vertragsart: unbefristeter Mietvertrag",
+      "Die Mietsicherheit kann in drei gleichen Teilbeträgen geleistet werden. Die erste Rate ist zu Beginn des",
+      "Mietverhältnisses fällig. Die vereinbarte Staffel betrifft ausschließlich die Nettokaltmiete. Vorauszahlungen für",
+      "Betriebs- und Heizkosten werden dadurch nicht automatisch geändert.",
+      "Die Parteien haben keine zusätzliche mündliche Vereinbarung über eine kürzere Vertragslaufzeit getroffen. Das Recht",
+      "zur Kündigung richtet sich nach den vereinbarten Vertragsbedingungen. Eine frühere unverbindliche Reservierung ist",
+      "mit Unterzeichnung dieses Vertrags erledigt.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3"
+    ],
+    "tables": []
+  },
+  "doc-004-p02.png.txt": "Wohnraum Musterhof Verwaltung GmbH\nKaution, Anpassung und Nebenabreden\nMietsicherheit: 2.445,00 €\nErste Kautionsrate: 815,00 €\nStaffelbeginn: 01.12.2027\nNeue Nettokaltmiete: 839,00 €\nVertragsart: unbefristeter Mietvertrag\nDie Mietsicherheit kann in drei gleichen Teilbeträgen geleistet werden. Die erste Rate ist zu Beginn des Mietverhältnisses fällig. Die vereinbarte Staffel betrifft ausschließlich die Nettokaltmiete. Vorauszahlungen für Betriebs- und Heizkosten werden dadurch nicht automatisch geändert.\nDie Parteien haben keine zusätzliche mündliche Vereinbarung über eine kürzere Vertragslaufzeit getroffen. Das Recht zur Kündigung richtet sich nach den vereinbarten Vertragsbedingungen. Eine frühere unverbindliche Reservierung ist mit Unterzeichnung dieses Vertrags erledigt.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+  "doc-004-p03.png.tables.json": {
+    "lines": [
+      "Wohnraum Musterhof Verwaltung GmbH",
+      "Übergabeprotokoll als Vertragsanlage",
+      "Übergabedatum: 30.11.2026",
+      "Stromzähler: Z-8846102",
+      "Stromzählerstand: 18.492 kWh",
+      "Übergebene Schlüssel: 6 Stück",
+      "Festgestellter Mangel: Kratzer an der Küchentür",
+      "Die Wohnung wurde gemeinsam besichtigt. Der bezeichnete Kratzer ist bei Einzug bereits vorhanden und wird im",
+      "Protokoll festgehalten. Weitere sichtbare Schäden wurden nicht festgestellt. Die Erfassung eines Mangels stellt keine",
+      "Aussage über seine technische Ursache dar.",
+      "Schlüsselart",
+      "Anzahl",
+      "Bemerkung",
+      "Haustür",
+      "beide übergeben",
+      "Wohnung",
+      "beide Schließzylinder",
+      "Keller",
+      "gekennzeichnet",
+      "Briefkasten",
+      "Nachlieferung vereinbart",
+      "Die Hausordnung wurde ausgehändigt. Der Mieter bestätigt den Empfang der aufgeführten Schlüssel. Ein fehlender",
+      "Briefkastenschlüssel soll innerhalb von sieben Tagen nachgereicht werden. Die Anlage umfasst diese eine",
+      "Protokollseite.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Schlüsselart"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Anzahl"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Bemerkung"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Haustür"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "beide übergeben"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Wohnung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "beide Schließzylinder"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Keller"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "gekennzeichnet"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Briefkasten"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Nachlieferung vereinbart"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-004-p03.png.txt": "Wohnraum Musterhof Verwaltung GmbH\nÜbergabeprotokoll als Vertragsanlage\nÜbergabedatum: 30.11.2026\nStromzähler: Z-8846102\nStromzählerstand: 18.492 kWh\nÜbergebene Schlüssel: 6 Stück\nFestgestellter Mangel: Kratzer an der Küchentür\nDie Wohnung wurde gemeinsam besichtigt. Der bezeichnete Kratzer ist bei Einzug bereits vorhanden und wird im Protokoll festgehalten. Weitere sichtbare Schäden wurden nicht festgestellt. Die Erfassung eines Mangels stellt keine Aussage über seine technische Ursache dar.\nSchlüsselart\nAnzahl\nBemerkung\nHaustür\n\nbeide übergeben\nWohnung\n\nbeide Schließzylinder\nKeller\n\ngekennzeichnet\nBriefkasten\n\nNachlieferung vereinbart\nDie Hausordnung wurde ausgehändigt. Der Mieter bestätigt den Empfang der aufgeführten Schlüssel. Ein fehlender Briefkastenschlüssel soll innerhalb von sieben Tagen nachgereicht werden. Die Anlage umfasst diese eine\nProtokollseite.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+  "doc-005-p01.png.tables.json": {
+    "lines": [
+      "Hausverwaltung Berg & Brüder OHG",
+      "Betriebskostenabrechnung 2025",
+      "Abrechnungszeitraum: 01.01.2025 bis 31.12.2025",
+      "Ausstellungsdatum: 08.10.2026",
+      "Nutzerin: Gülcan Özdemir",
+      "Wohnungskennung: WE-12-045",
+      "Nachzahlung: 218,47 €",
+      "Die Abrechnung bezieht sich auf das abgeschlossene Kalenderjahr 2025. Das Ausstellungsdatum liegt im",
+      "Folgejahr. Die Wohnung wurde im gesamten Abrechnungszeitraum genutzt. Ihr Anteil wird nach den in der",
+      "Tabelle benannten Schlüsseln ermittelt.",
+      "Die ausgewiesenen Vorauszahlungen wurden vollständig berücksichtigt. Belege können nach",
+      "Terminvereinbarung eingesehen werden. Eine Anpassung künftiger Vorauszahlungen wird auf der letzten",
+      "Seite gesondert erläutert.",
+      "Kostenart",
+      "Gesamtkosten",
+      "Ihr Anteil",
+      "Wasserversorgung",
+      "3,849,26€",
+      "284,83 €",
+      "Müllabfuhr",
+      "2.118,40€",
+      "156.76€",
+      "Gebäudereinigung",
+      "4.726.15€",
+      "349.73€",
+      "Versicherung Gebaude",
+      "3.904,80 €",
+      "288,95 €",
+      "Hausbeleuchtung",
+      "862,40 €",
+      "63.81€",
+      "Grundsteuer",
+      "2.702,70 €",
+      "200,00 €",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Kostenart"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Gesamtkosten"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Ihr Anteil"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Wasserversorgung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "3,849,26€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "284,83 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Müllabfuhr"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "2.118,40€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "156.76€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Gebäudereinigung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "4.726.15€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "349.73€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Versicherung Gebaude"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "3.904,80 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "288,95 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "Hausbeleuchtung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "862,40 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "63.81€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "Grundsteuer"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "2.702,70 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "200,00 €"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-005-p01.png.txt": "Hausverwaltung Berg & Brüder OHG\nBetriebskostenabrechnung 2025\nAbrechnungszeitraum: 01.01.2025 bis 31.12.2025\nAusstellungsdatum: 08.10.2026\nNutzerin: Gülcan Özdemir\nWohnungskennung: WE-12-045\nNachzahlung: 218,47 €\nDie Abrechnung bezieht sich auf das abgeschlossene Kalenderjahr 2025. Das Ausstellungsdatum liegt im Folgejahr. Die Wohnung wurde im gesamten Abrechnungszeitraum genutzt. Ihr Anteil wird nach den in der Tabelle benannten Schlüsseln ermittelt.\nDie ausgewiesenen Vorauszahlungen wurden vollständig berücksichtigt. Belege können nach Terminvereinbarung eingesehen werden. Eine Anpassung künftiger Vorauszahlungen wird auf der letzten Seite gesondert erläutert.\nKostenart\nGesamtkosten\nIhr Anteil\nWasserversorgung\n3,849,26€\n284,83 €\nMüllabfuhr\n2.118,40€\n156.76€\nGebäudereinigung\n4.726.15€\n349.73€\nVersicherung Gebaude\n3.904,80 €\n288,95 €\nHausbeleuchtung\n862,40 €\n63.81€\nGrundsteuer\n2.702,70 €\n200,00 €\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+  "doc-005-p02.png.tables.json": {
+    "lines": [
+      "Hausverwaltung Berg & Brüder OHG",
+      "Heizung und Warmwasser",
+      "Heizungszähler: HK-507381",
+      "Ablesedatum: 31.12.2025",
+      "Verbrauchseinheiten: 4.382,6 Einheiten",
+      "Heizkostenanteil: 892,39 €",
+      "Warmwasseranteil: 238,00 €",
+      "Die Heizkosten werden nach einem Grundkostenanteil und einem Verbrauchskostenanteil verteilt. Für",
+      "Warmwasser wird die gemessene Entnahmemenge zugrunde gelegt. Die hier genannten",
+      "Verbrauchseinheiten sind keine Kilowattstunden und dürfen nicht unmittelbar in einen Stromverbrauch",
+      "umgerechnet werden.",
+      "Gerät",
+      "Alter Stand",
+      "Neuer Stand",
+      "Differenz",
+      "Heizkörper Küche",
+      "512,8",
+      "1.483.9",
+      "971,1",
+      "Heizkörper Wohnraum",
+      "834,2",
+      "2.610.4",
+      "1.776.2",
+      "Heizkörper Schlafzimmer",
+      "201,7",
+      "1.837.0",
+      "1.635.3",
+      "Warmwasserzähler",
+      "86,240 mº",
+      "117,960 m*",
+      "31,720 m*",
+      "Die Ablesewerte wurden elektronisch übernommen. Ein Gerätewechsel im Oktober ist in der gesonderten",
+      "Aufstellung berücksichtigt. Der alte und der neue Zählerstand sind verschiedenen Geräten zugeordnet.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Gerät"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Alter Stand"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Neuer Stand"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Differenz"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Heizkörper Küche"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "512,8"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "1.483.9"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "971,1"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Heizkörper Wohnraum"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "834,2"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "2.610.4"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "1.776.2"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Heizkörper Schlafzimmer"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "201,7"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1.837.0"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1.635.3"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Warmwasserzähler"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "86,240 mº"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "117,960 m*"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "31,720 m*"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-005-p02.png.txt": "Hausverwaltung Berg & Brüder OHG\nHeizung und Warmwasser\nHeizungszähler: HK-507381\nAblesedatum: 31.12.2025\nVerbrauchseinheiten: 4.382,6 Einheiten\nHeizkostenanteil: 892,39 €\nWarmwasseranteil: 238,00 €\nDie Heizkosten werden nach einem Grundkostenanteil und einem Verbrauchskostenanteil verteilt. Für Warmwasser wird die gemessene Entnahmemenge zugrunde gelegt. Die hier genannten Verbrauchseinheiten sind keine Kilowattstunden und dürfen nicht unmittelbar in einen Stromverbrauch umgerechnet werden.\nGerät\nAlter Stand\nNeuer Stand\nDifferenz\nHeizkörper Küche\n512,8\n1.483.9\n971,1\nHeizkörper Wohnraum\n834,2\n2.610.4\n1.776.2\nHeizkörper Schlafzimmer\n201,7\n1.837.0\n1.635.3\nWarmwasserzähler\n86,240 mº\n117,960 m*\n31,720 m*\nDie Ablesewerte wurden elektronisch übernommen. Ein Gerätewechsel im Oktober ist in der gesonderten Aufstellung berücksichtigt. Der alte und der neue Zählerstand sind verschiedenen Geräten zugeordnet.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+  "doc-005-p03.png.tables.json": {
+    "lines": [
+      "Hausverwaltung Berg & Brüder OHG",
+      "Abrechnungsergebnis und Vorauszahlung",
+      "Kosten gesamt: 2.474,47 €",
+      "Vorauszahlungen gesamt: 2.256,00 €",
+      "Zahlbar bis: 15.11.2026",
+      "Neue Vorauszahlung: 206,00 € monatlich",
+      "Neue Vorauszahlung ab: 01.12.2026",
+      "Aus den abgerechneten Kosten und den bereits geleisteten Vorauszahlungen ergibt sich die auf Seite eins",
+      "genannte Nachzahlung. Die erhöhte Vorauszahlung beginnt erst im Dezember. Die Nachzahlung wird nicht",
+      "zusätzlich auf die monatliche Vorauszahlung aufgeschlagen.",
+      "Bitte geben Sie bei Überweisungen die Wohnungskennung an. Einwendungen zu einzelnen Positionen",
+      "können mit Bezeichnung der Kostenart und des betreffenden Zeitraums eingereicht werden. Eine fehlende",
+      "Anlage ist der Verwaltung zeitnah mitzuteilen.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3"
+    ],
+    "tables": []
+  },
+  "doc-005-p03.png.txt": "Hausverwaltung Berg & Brüder OHG\nAbrechnungsergebnis und Vorauszahlung\nKosten gesamt: 2.474,47 €\nVorauszahlungen gesamt: 2.256,00 €\nZahlbar bis: 15.11.2026\nNeue Vorauszahlung: 206,00 € monatlich\nNeue Vorauszahlung ab: 01.12.2026\nAus den abgerechneten Kosten und den bereits geleisteten Vorauszahlungen ergibt sich die auf Seite eins genannte Nachzahlung. Die erhöhte Vorauszahlung beginnt erst im Dezember. Die Nachzahlung wird nicht zusätzlich auf die monatliche Vorauszahlung aufgeschlagen.\nBitte geben Sie bei Überweisungen die Wohnungskennung an. Einwendungen zu einzelnen Positionen können mit Bezeichnung der Kostenart und des betreffenden Zeitraums eingereicht werden. Eine fehlende Anlage ist der Verwaltung zeitnah mitzuteilen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+  "doc-006-p01.png.tables.json": {
+    "lines": [
+      "Stadtwerke Grünau Testversorgung GmbH",
+      "Jahresabrechnung Strom",
+      "Kundennummer: K-4901738",
+      "Rechnungsnummer: ST-2026-66291",
+      "Abrechnungszeitraum: 01.10.2025 bis 30.09.2026",
+      "Verbrauch: 2.684 kWh",
+      "Guthaben: 74,82 €",
+      "Die Jahresabrechnung beruht auf den übermittelten Zählerständen. Der Verbrauch verteilt sich auf zwei",
+      "Preisabschnitte. Das Guthaben wird mit der nächsten fälligen Zahlung verrechnet, sofern keine abweichende",
+      "Auszahlung vereinbart wurde.",
+      "Preisabschnitt",
+      "Menge",
+      "Arbeitspreis",
+      "Kosten",
+      "01.10.2025 bis 31.03.2026",
+      "1.482 kWh",
+      "31,20 ct/kWh",
+      "462.38€",
+      "01.04.2026 bis 30.09.2026",
+      "1.202 kWh",
+      "29,80 ct/kWh",
+      "358.20€",
+      "Grundpreis für zwölf Monate",
+      "12 Monate",
+      "12,80 €/Monat",
+      "153.60 €",
+      "Gezahlte Abschläge",
+      "1.049.00€",
+      "Der auf der Folgeseite genannte Abschlag gilt für den neuen Zeitraum. Er ist weder der Rechnungsbetrag",
+      "noch der durchschnittliche monatliche Verbrauch. Bitte halten Sie bei Nachfragen die Kundennummer bereit.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Preisabschnitt"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Menge"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Arbeitspreis"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Kosten"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "01.10.2025 bis 31.03.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "1.482 kWh"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "31,20 ct/kWh"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "462.38€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "01.04.2026 bis 30.09.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "1.202 kWh"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "29,80 ct/kWh"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "358.20€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Grundpreis für zwölf Monate"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "12 Monate"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "12,80 €/Monat"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "153.60 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Gezahlte Abschläge"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "1.049.00€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-006-p01.png.txt": "Stadtwerke Grünau Testversorgung GmbH\nJahresabrechnung Strom\nKundennummer: K-4901738\nRechnungsnummer: ST-2026-66291\nAbrechnungszeitraum: 01.10.2025 bis 30.09.2026\nVerbrauch: 2.684 kWh\nGuthaben: 74,82 €\nDie Jahresabrechnung beruht auf den übermittelten Zählerständen. Der Verbrauch verteilt sich auf zwei Preisabschnitte. Das Guthaben wird mit der nächsten fälligen Zahlung verrechnet, sofern keine abweichende Auszahlung vereinbart wurde.\nPreisabschnitt\nMenge\nArbeitspreis\nKosten\n01.10.2025 bis 31.03.2026\n1.482 kWh\n31,20 ct/kWh\n462.38€\n01.04.2026 bis 30.09.2026\n1.202 kWh\n29,80 ct/kWh\n358.20€\nGrundpreis für zwölf Monate\n12 Monate\n12,80 €/Monat\n153.60 €\nGezahlte Abschläge\n\n\n1.049.00€\nDer auf der Folgeseite genannte Abschlag gilt für den neuen Zeitraum. Er ist weder der Rechnungsbetrag noch der durchschnittliche monatliche Verbrauch. Bitte halten Sie bei Nachfragen die Kundennummer bereit.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-006-p02.png.tables.json": {
+    "lines": [
+      "Stadtwerke Grünau Testversorgung GmbH",
+      "Zählerdaten und neuer Abschlagsplan",
+      "Zählernummer: 1TEST00389147",
+      "Anfangsstand: 24.183 kWh",
+      "Endstand: 26.867 kWh",
+      "Neuer Abschlag: 83,00 €",
+      "Erster Abschlag: 05.11.2026",
+      "Der neue Abschlag berücksichtigt den bisherigen Jahresverbrauch und die bekannten Preise des",
+      "Folgezeitraums. Eine tatsächliche Verbrauchsänderung kann zu einer späteren Anpassung führen. Die",
+      "Zählernummer bezeichnet das Messgerät und ist nicht mit der Kundennummer identisch.",
+      "Die Ablesung erfolgte am letzten Tag des Abrechnungszeitraums. Der dokumentierte Stand wurde",
+      "plausibilisiert. Eine Schätzung war nicht erforderlich. Bitte melden Sie einen bevorstehenden Umzug",
+      "rechtzeitig mit Datum und neuem Zählerstand.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": []
+  },
+  "doc-006-p02.png.txt": "Stadtwerke Grünau Testversorgung GmbH Zählerdaten und neuer Abschlagsplan\nZählernummer: 1TEST00389147\nAnfangsstand: 24.183 kWh\nEndstand: 26.867 kWh\nNeuer Abschlag: 83,00 €\nErster Abschlag: 05.11.2026\nDer neue Abschlag berücksichtigt den bisherigen Jahresverbrauch und die bekannten Preise des Folgezeitraums. Eine tatsächliche Verbrauchsänderung kann zu einer späteren Anpassung führen. Die Zählernummer bezeichnet das Messgerät und ist nicht mit der Kundennummer identisch.\nDie Ablesung erfolgte am letzten Tag des Abrechnungszeitraums. Der dokumentierte Stand wurde plausibilisiert. Eine Schätzung war nicht erforderlich. Bitte melden Sie einen bevorstehenden Umzug rechtzeitig mit Datum und neuem Zählerstand.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-007-p01.png.tables.json": {
+    "lines": [
+      "Prüfwerk Maschinenbau GmbH",
+      "Entgeltabrechnung Oktober 2026",
+      "Personalnummer: P-004791",
+      "Abrechnungsmonat: Oktober 2026",
+      "Nettoauszahlung: 2.684,18 €",
+      "Arbeitnehmerin: Sörenja Großmann",
+      "Gesamtbrutto: 4.186,40 €",
+      "Diese Abrechnung enthält laufende Bezüge sowie eine einmalige Schichtzulage. Die Werte dienen",
+      "ausschließlich dem synthetischen OCR-Test. Die hier verwendeten Abzüge stellen keine Berechnung für",
+      "eine tatsächliche Person dar.",
+      "Bezug oder Abzug",
+      "Kennung",
+      "Betrag",
+      "Grundentgelt",
+      "L-100",
+      "3,950,00€",
+      "Schichtzulage",
+      "L-215",
+      "236,40€",
+      "Lohnsteuer",
+      "A-410",
+      "612,74€",
+      "Sozialversicherung",
+      "A-520",
+      "889,48€",
+      "Auszahlung",
+      "N-900",
+      "2.684,18 €",
+      "Bitte unterscheiden Sie zwischen Gesamtbrutto, steuerpflichtigem Brutto und Auszahlung. Die",
+      "Arbeitgeberanteile gehören nicht zu den Abzügen vom Nettobetrag. Rückfragen richten Sie mit der",
+      "Personalnummer an die Entgeltabrechnung.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Bezug oder Abzug"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Kennung"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Betrag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Grundentgelt"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "L-100"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "3,950,00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Schichtzulage"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "L-215"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "236,40€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Lohnsteuer"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "A-410"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "612,74€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Sozialversicherung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "A-520"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "889,48€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "Auszahlung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "N-900"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "2.684,18 €"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-007-p01.png.txt": "Prüfwerk Maschinenbau GmbH\nEntgeltabrechnung Oktober 2026\nPersonalnummer: P-004791\nAbrechnungsmonat: Oktober 2026\nNettoauszahlung: 2.684,18 €\nArbeitnehmerin: Sörenja Großmann\nGesamtbrutto: 4.186,40 €\nDiese Abrechnung enthält laufende Bezüge sowie eine einmalige Schichtzulage. Die Werte dienen ausschließlich dem synthetischen OCR-Test. Die hier verwendeten Abzüge stellen keine Berechnung für eine tatsächliche Person dar.\nBezug oder Abzug\nKennung\nBetrag\nGrundentgelt\nL-100\n3,950,00€\nSchichtzulage\nL-215\n236,40€\nLohnsteuer\nA-410\n612,74€\nSozialversicherung\nA-520\n889,48€\nAuszahlung\nN-900\n2.684,18 €\nBitte unterscheiden Sie zwischen Gesamtbrutto, steuerpflichtigem Brutto und Auszahlung. Die Arbeitgeberanteile gehören nicht zu den Abzügen vom Nettobetrag. Rückfragen richten Sie mit der Personalnummer an die Entgeltabrechnung.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-007-p02.png.tables.json": {
+    "lines": [
+      "Prüfwerk Maschinenbau GmbH",
+      "Arbeitszeitkonto und Bescheinigung",
+      "Bescheinigungsnummer: BZ-2026-1928",
+      "Beschäftigungsumfang: 38,5 Stunden pro Woche",
+      "Zeitguthaben: 12,75 Stunden",
+      "Das Arbeitszeitkonto wird unabhängig von der",
+      "Entgeltabrechnung geführt. Nicht jede Zeitbuchung",
+      "löst eine zusätzliche Auszahlung aus. Der",
+      "ausgewiesene Resturlaub bezieht sich auf den",
+      "Stand am Ende des Abrechnungsmonats.",
+      "Eintrittsdatum: 15.03.2021",
+      "Resturlaub: 8,5 Tage",
+      "Die Bescheinigung wurde auf Wunsch der",
+      "Arbeitnehmerin erstellt. Sie bestätigt das",
+      "Beschäftigungsverhältnis zu den angegebenen",
+      "Bedingungen. Eine Zusage über künftige",
+      "Sonderzahlungen ist damit nicht verbunden.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": []
+  },
+  "doc-007-p02.png.txt": "Prüfwerk Maschinenbau GmbH\nArbeitszeitkonto und Bescheinigung\nBescheinigungsnummer: BZ-2026-1928\nBeschäftigungsumfang: 38,5 Stunden pro Woche\nZeitguthaben: 12,75 Stunden\nDas Arbeitszeitkonto wird unabhängig von der Entgeltabrechnung geführt. Nicht jede Zeitbuchung löst eine zusätzliche Auszahlung aus. Der ausgewiesene Resturlaub bezieht sich auf den Stand am Ende des Abrechnungsmonats.\nEintrittsdatum: 15.03.2021\nResturlaub: 8,5 Tage\nDie Bescheinigung wurde auf Wunsch der Arbeitnehmerin erstellt. Sie bestätigt das Beschäftigungsverhältnis zu den angegebenen Bedingungen. Eine Zusage über künftige Sonderzahlungen ist damit nicht verbunden.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-008-p01.png.tables.json": {
+    "lines": [
+      "Finanzamt Musterstadt - Teststelle",
+      "Bescheid über Einkommensteuer 2025",
+      "Steuernummer: TEST-19/482/73016",
+      "Bescheiddatum: 21.09.2026",
+      "Veranlagungsjahr: 2025",
+      "Steuerpflichtiger: André Jäger",
+      "Erstattungsbetrag: 1.284,37 €",
+      "Die Festsetzung betrifft das Veranlagungsjahr 2025. Das Datum des Bescheids liegt im folgenden Kalenderjahr. Die",
+      "Berechnungsgrundlagen und bereits berücksichtigten Zahlungen sind auf den nachfolgenden Seiten erläutert. Dieser",
+      "Beleg ist ausschließlich ein künstliches Testdokument.",
+      "Die Erstattung wird nach der dokumentierten Zahlungsverrechnung ausgeführt. Ein früher genannter",
+      "Vorauszahlungsbetrag ist kein zusätzlicher Erstattungsbetrag. Bitte prüfen Sie die Zuordnung der Zahlungen zu den",
+      "jeweiligen Steuerarten.",
+      "Steuerart",
+      "Festgesetzt",
+      "Angerechnet",
+      "Saldo",
+      "Einkommensteuer",
+      "7.412.00 €",
+      "8.696.37€",
+      "-1.284,37€",
+      "Solidaritätszuschlag",
+      "0.00€",
+      "0,00€",
+      "0,00 €",
+      "Kirchensteuer",
+      "0,00 €",
+      "0.00€",
+      "0.00€",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Steuerart"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Festgesetzt"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Angerechnet"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Saldo"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Einkommensteuer"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "7.412.00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "8.696.37€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "-1.284,37€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Solidaritätszuschlag"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "0.00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "0,00€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "0,00 €"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Kirchensteuer"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "0,00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "0.00€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "0.00€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-008-p01.png.txt": "Finanzamt Musterstadt - Teststelle\nBescheid über Einkommensteuer 2025\nSteuernummer: TEST-19/482/73016\nBescheiddatum: 21.09.2026\nVeranlagungsjahr: 2025\nSteuerpflichtiger: André Jäger\nErstattungsbetrag: 1.284,37 €\nDie Festsetzung betrifft das Veranlagungsjahr 2025. Das Datum des Bescheids liegt im folgenden Kalenderjahr. Die Berechnungsgrundlagen und bereits berücksichtigten Zahlungen sind auf den nachfolgenden Seiten erläutert. Dieser Beleg ist ausschließlich ein künstliches Testdokument.\nDie Erstattung wird nach der dokumentierten Zahlungsverrechnung ausgeführt. Ein früher genannter Vorauszahlungsbetrag ist kein zusätzlicher Erstattungsbetrag. Bitte prüfen Sie die Zuordnung der Zahlungen zu den jeweiligen Steuerarten.\nSteuerart\nFestgesetzt\nAngerechnet\nSaldo\nEinkommensteuer\n7.412.00 €\n8.696.37€\n-1.284,37€\nSolidaritätszuschlag\n0.00€\n0,00€\n0,00 €\nKirchensteuer\n0,00 €\n0.00€\n0.00€\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+  "doc-008-p02.png.tables.json": {
+    "lines": [
+      "Finanzamt Musterstadt - Teststelle",
+      "Berechnungsgrundlagen",
+      "Bruttoarbeitslohn: 52.840,00 €",
+      "Werbungskosten: 2.146,00 €",
+      "Sonderausgaben: 5.372,00 €",
+      "Zu versteuerndes Einkommen: 45.322,00 €",
+      "Die Übersicht ordnet die erklärten Beträge den verwendeten Berechnungsschritten zu. Die Zahlen sind didaktische",
+      "Testwerte. Es wird keine Auskunft über einen tatsächlichen Steuerfall erteilt. Die Darstellung darf nicht als allgemeine",
+      "steuerliche Berechnungsregel verwendet werden.",
+      "Aufwandsart",
+      "Erklärt",
+      "Berücksichtigt",
+      "Fahrtkosten",
+      "1.486.00 €",
+      "1.486.00€",
+      "Fortbildung",
+      "420.00€",
+      "420.00€",
+      "Arbeitsmittel",
+      "240,00€",
+      "240.00€",
+      "Spenden",
+      "180.00€",
+      "180,00€",
+      "Belege zu Fahrtkosten und Fortbildung wurden der Erklärung zugeordnet. Aufwendungen ohne ausreichenden Bezug",
+      "wurden nicht zusätzlich berücksichtigt. Eine doppelte Zuordnung desselben Belegs ist in dieser Zusammenstellung",
+      "nicht vorgesehen.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Aufwandsart"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Erklärt"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Berücksichtigt"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Fahrtkosten"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "1.486.00 €"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "1.486.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Fortbildung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "420.00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "420.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Arbeitsmittel"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "240,00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "240.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Spenden"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "180.00€"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "180,00€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-008-p02.png.txt": "Finanzamt Musterstadt - Teststelle\nBerechnungsgrundlagen\nBruttoarbeitslohn: 52.840,00 €\nWerbungskosten: 2.146,00 €\nSonderausgaben: 5.372,00 €\nZu versteuerndes Einkommen: 45.322,00 €\nDie Übersicht ordnet die erklärten Beträge den verwendeten Berechnungsschritten zu. Die Zahlen sind didaktische Testwerte. Es wird keine Auskunft über einen tatsächlichen Steuerfall erteilt. Die Darstellung darf nicht als allgemeine steuerliche Berechnungsregel verwendet werden.\nAufwandsart\nErklärt\nBerücksichtigt\nFahrtkosten\n1.486.00 €\n1.486.00€\nFortbildung\n420.00€\n420.00€\nArbeitsmittel\n240,00€\n240.00€\nSpenden\n180.00€\n180,00€\nBelege zu Fahrtkosten und Fortbildung wurden der Erklärung zugeordnet. Aufwendungen ohne ausreichenden Bezug wurden nicht zusätzlich berücksichtigt. Eine doppelte Zuordnung desselben Belegs ist in dieser Zusammenstellung nicht vorgesehen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+  "doc-008-p03.png.tables.json": {
+    "lines": [
+      "Finanzamt Musterstadt - Teststelle",
+      "Erläuterungen und Verfahrenshinweis",
+      "Aktenzeichen: E-2025-781460",
+      "Bekanntgabehinweis: Versand am 22.09.2026",
+      "Zahlungsverrechnung: abgeschlossen",
+      "Anlagen: 2 Berechnungsseiten",
+      "Die Erläuterungen beziehen sich auf die für diesen Testfall getroffenen Annahmen. Eine Anderung künftiger",
+      "Vorauszahlungen ist in diesem Bescheid nicht enthalten. Die auf Seite eins dargestellte Erstattung bleibt das",
+      "abschließende Zahlungsergebnis.",
+      "Für Rückfragen ist das Aktenzeichen maßgeblich. Im Schriftverkehr sollen die betroffene Position und das",
+      "Veranlagungsjahr genannt werden. Dieser künstliche Verfahrenshinweis enthält bewusst keine rechtsverbindliche",
+      "Fristberechnung.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3"
+    ],
+    "tables": []
+  },
+  "doc-008-p03.png.txt": "Finanzamt Musterstadt - Teststelle\nErläuterungen und Verfahrenshinweis\nAktenzeichen: E-2025-781460\nBekanntgabehinweis: Versand am 22.09.2026\nZahlungsverrechnung: abgeschlossen\nAnlagen: 2 Berechnungsseiten\nDie Erläuterungen beziehen sich auf die für diesen Testfall getroffenen Annahmen. Eine Anderung künftiger Vorauszahlungen ist in diesem Bescheid nicht enthalten. Die auf Seite eins dargestellte Erstattung bleibt das abschließende Zahlungsergebnis.\nFür Rückfragen ist das Aktenzeichen maßgeblich. Im Schriftverkehr sollen die betroffene Position und das Veranlagungsjahr genannt werden. Dieser künstliche Verfahrenshinweis enthält bewusst keine rechtsverbindliche\nFristberechnung.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+  "doc-009-p01.png.tables.json": {
+    "lines": [
+      "Praxisgemeinschaft Dr. Prüf & Kolleginnen",
+      "Befundbericht zur Verlaufskontrolle",
+      "Befundnummer: BF-2026-38172",
+      "Patientin: Märta Schröder",
+      "Geburtsdatum: 14.02.1984",
+      "Untersuchungsdatum: 03.11.2026",
+      "Berichtsdatum: 05.11.2026",
+      "Die Patientin stellte sich zur vereinbarten Verlaufskontrolle vor. Im Gespräch wurden Beschwerden bei längerer",
+      "Belastung angegeben. Der Bericht enthält künstliche Angaben für einen Dokumententest. Er stellt weder eine",
+      "Diagnose noch eine medizinische Handlungsempfehlung für eine tatsächliche Person dar.",
+      "Untersuchung",
+      "Ergebnis",
+      "Einheit",
+      "Blutdruck systolisch",
+      "128",
+      "mmHg",
+      "Blutdruck diastolisch",
+      "82",
+      "mmHg",
+      "Puls in Ruhe",
+      "71",
+      "pro Minute",
+      "Körpertemperatur",
+      "36,7",
+      "°C",
+      "Die Untersuchung und die Laborentnahme fanden am selben Tag statt. Die Befundfreigabe erfolgte nach Vorliegen",
+      "aller Messwerte. Die auf der Folgeseite aufgeführten Referenzbereiche dienen ausschließlich der Darstellung einer",
+      "typischen Tabelle.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Untersuchung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Ergebnis"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Einheit"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Blutdruck systolisch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "128"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "mmHg"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Blutdruck diastolisch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "82"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "mmHg"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Puls in Ruhe"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "71"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "pro Minute"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Körpertemperatur"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "36,7"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "°C"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-009-p01.png.txt": "Praxisgemeinschaft Dr. Prüf & Kolleginnen\nBefundbericht zur Verlaufskontrolle\nBefundnummer: BF-2026-38172\nPatientin: Märta Schröder\nGeburtsdatum: 14.02.1984\nUntersuchungsdatum: 03.11.2026\nBerichtsdatum: 05.11.2026\nDie Patientin stellte sich zur vereinbarten Verlaufskontrolle vor. Im Gespräch wurden Beschwerden bei längerer Belastung angegeben. Der Bericht enthält künstliche Angaben für einen Dokumententest. Er stellt weder eine Diagnose noch eine medizinische Handlungsempfehlung für eine tatsächliche Person dar.\nUntersuchung\nErgebnis\nEinheit\nBlutdruck systolisch\n128\nmmHg\nBlutdruck diastolisch\n82\nmmHg\nPuls in Ruhe\n71\npro Minute\nKörpertemperatur\n36,7\n°C\nDie Untersuchung und die Laborentnahme fanden am selben Tag statt. Die Befundfreigabe erfolgte nach Vorliegen aller Messwerte. Die auf der Folgeseite aufgeführten Referenzbereiche dienen ausschließlich der Darstellung einer typischen Tabelle.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-009-p02.png.tables.json": {
+    "lines": [
+      "Praxisgemeinschaft Dr. Prüf & Kolleginnen",
+      "Laborwerte und Befundfreigabe",
+      "Laborauftrag: LAB-672905",
+      "Probenentnahme: 03.11.2026 um 08:42 Uhr",
+      "Freigabe durch: Dr. Hannah Weiß",
+      "Kontrolltermin: 17.11.2026 um 09:15 Uhr",
+      "Die Probe wurde vor dem Versand eindeutig dem Laborauftrag zugeordnet. Es handelt sich um einen künstlichen",
+      "Laborbefund ohne Aussage zu einem wirklichen Gesundheitszustand. Ein markierter Wert darf nicht isoliert als",
+      "vollständige medizinische Beurteilung verstanden werden.",
+      "Parameter",
+      "Messwert",
+      "Einheit",
+      "Referenzbereich",
+      "Hämoglobin",
+      "13,8",
+      "g/di",
+      "12.0 bis 16.0",
+      "Leukozyten",
+      "6,42",
+      "10ul",
+      "4.00 bis 10.00",
+      "Glukose nüchtern",
+      "94",
+      "mg/di",
+      "70 bis 99",
+      "Kreatinin",
+      "0,81",
+      "mg/di",
+      "0,50 bis 1,10",
+      "CRP",
+      "2.4",
+      "mg/l",
+      "unter 5,0",
+      "Der Folgetermin dient im Testdokument der Besprechung der Ergebnisse. Der Termin ist kein Ausstellungsdatum und",
+      "kein Geburtsdatum. Diese Rollen sollen bei einer späteren strukturierten Extraktion getrennt erhalten bleiben.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von ?"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Parameter"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Messwert"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Einheit"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Referenzbereich"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Hämoglobin"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "13,8"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "g/di"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "12.0 bis 16.0"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Leukozyten"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "6,42"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "10ul"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "4.00 bis 10.00"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Glukose nüchtern"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "94"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "mg/di"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "70 bis 99"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Kreatinin"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "0,81"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "mg/di"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "0,50 bis 1,10"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "CRP"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "2.4"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "mg/l"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "unter 5,0"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-009-p02.png.txt": "Praxisgemeinschaft Dr. Prüf & Kolleginnen Laborwerte und Befundfreigabe\nLaborauftrag: LAB-672905\nProbenentnahme: 03.11.2026 um 08:42 Uhr\nFreigabe durch: Dr. Hannah Weiß\nKontrolltermin: 17.11.2026 um 09:15 Uhr\nDie Probe wurde vor dem Versand eindeutig dem Laborauftrag zugeordnet. Es handelt sich um einen künstlichen Laborbefund ohne Aussage zu einem wirklichen Gesundheitszustand. Ein markierter Wert darf nicht isoliert als vollständige medizinische Beurteilung verstanden werden.\nParameter\nMesswert\nEinheit\nReferenzbereich\nHämoglobin\n13,8\ng/di\n12.0 bis 16.0\nLeukozyten\n6,42\n10ul\n4.00 bis 10.00\nGlukose nüchtern\n94\nmg/di\n70 bis 99\nKreatinin\n0,81\nmg/di\n0,50 bis 1,10\nCRP\n2.4\nmg/l\nunter 5,0\nDer Folgetermin dient im Testdokument der Besprechung der Ergebnisse. Der Termin ist kein Ausstellungsdatum und kein Geburtsdatum. Diese Rollen sollen bei einer späteren strukturierten Extraktion getrennt erhalten bleiben.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von ?",
+  "doc-010-p01.png.tables.json": {
+    "lines": [
+      "Gesamtschule Am Mühlenberg - Testschule",
+      "Halbjahreszeugnis 2026/2027",
+      "Schülerin: Léonie Küster",
+      "Schulhalbjahr: 1. Halbjahr 2026/2027",
+      "Versäumte Stunden: 12 Stunden, davon 0",
+      "unentschuldigt",
+      "Klasse: 8b",
+      "Zeugnisdatum: 29.01.2027",
+      "Léonie beteiligt sich regelmäßig am Unterricht und bearbeitet Aufgaben überwiegend sorgfältig. In",
+      "Gruppenarbeiten übernimmt sie vereinbarte Aufgaben zuverlässig. Der folgende Leistungsstand ist",
+      "vollständig erfunden und dient ausschließlich der Prüfung deutscher Dokumentverarbeitung.",
+      "Die Bezeichnungen der Fächer, ihre Bewertungen und ergänzende Bemerkungen bilden getrennte",
+      "Tabellenzellen. Die Reihenfolge der Noten muss dem jeweiligen Fach erhalten bleiben. Eine bloße",
+      "Sammlung aller Zahlen reicht für eine Zeugnisinterpretation nicht aus.",
+      "Fach",
+      "Bewertung",
+      "Bemerkung",
+      "Deutsch",
+      "gut",
+      "mündlich sehr aktiv",
+      "Mathematik",
+      "befriedigend",
+      "sicher im Grundwissen",
+      "Englisch",
+      "gut",
+      "flüssiges Lesen",
+      "Französisch",
+      "ausreichend",
+      "Übung empfohlen",
+      "Naturwissenschaften",
+      "gut",
+      "sorgfältige Versuche",
+      "Sport",
+      "sehr gut",
+      "ausdauernde Mitarbeit",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Fach"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Bewertung"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Bemerkung"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Deutsch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "gut"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "mündlich sehr aktiv"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Mathematik"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "befriedigend"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "sicher im Grundwissen"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Englisch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "gut"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "flüssiges Lesen"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Französisch"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "ausreichend"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              4,
+              4
+            ],
+            "text": "Übung empfohlen"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "Naturwissenschaften"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "gut"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              5,
+              5
+            ],
+            "text": "sorgfältige Versuche"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "Sport"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "sehr gut"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              6,
+              6
+            ],
+            "text": "ausdauernde Mitarbeit"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-010-p01.png.txt": "Gesamtschule Am Mühlenberg - Testschule\nHalbjahreszeugnis 2026/2027\nSchülerin: Léonie Küster\nSchulhalbjahr: 1. Halbjahr 2026/2027\nVersäumte Stunden: 12 Stunden, davon 0 unentschuldigt\nKlasse: 8b\nZeugnisdatum: 29.01.2027\nLéonie beteiligt sich regelmäßig am Unterricht und bearbeitet Aufgaben überwiegend sorgfältig. In Gruppenarbeiten übernimmt sie vereinbarte Aufgaben zuverlässig. Der folgende Leistungsstand ist vollständig erfunden und dient ausschließlich der Prüfung deutscher Dokumentverarbeitung.\nDie Bezeichnungen der Fächer, ihre Bewertungen und ergänzende Bemerkungen bilden getrennte Tabellenzellen. Die Reihenfolge der Noten muss dem jeweiligen Fach erhalten bleiben. Eine bloße Sammlung aller Zahlen reicht für eine Zeugnisinterpretation nicht aus.\nFach\nBewertung\nBemerkung\nDeutsch\ngut\nmündlich sehr aktiv\nMathematik\nbefriedigend\nsicher im Grundwissen\nEnglisch\ngut\nflüssiges Lesen\nFranzösisch\nausreichend\nÜbung empfohlen\nNaturwissenschaften\ngut\nsorgfältige Versuche\nSport\nsehr gut\nausdauernde Mitarbeit\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-010-p02.png.tables.json": {
+    "lines": [
+      "Gesamtschule Am Mühlenberg - Testschule",
+      "Lernentwicklung und ergänzende Angaben",
+      "Zeugniskennung: ZG-27-00842",
+      "Beratungstermin: 10.02.2027 um 16:30 Uhr",
+      "Klassenleitung: Frau Anne Krüger",
+      "Förderschwerpunkt: schriftliche Ausdrucksfähigkeit",
+      "Für das kommende Halbjahr wurden kurze",
+      "wöchentliche Schreibübungen vereinbart. Dabei",
+      "sollen Satzbau, Begründung und die Überarbeitung",
+      "eigener Texte geübt werden. Die Aufgaben werden",
+      "gemeinsam mit der Klassenleitung ausgewählt und",
+      "in angemessenen Abständen besprochen.",
+      "Die vereinbarte Förderung ist keine zusätzliche",
+      "Fachnote. Die Bestätigung des Erhalts durch die",
+      "Erziehungsberechtigten dokumentiert",
+      "ausschließlich die Übergabe des Zeugnisses. Der",
+      "Beratungstermin bleibt eine gesonderte",
+      "Terminangabe.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": []
+  },
+  "doc-010-p02.png.txt": "Gesamtschule Am Mühlenberg - Testschule\nLernentwicklung und ergänzende Angaben\nZeugniskennung: ZG-27-00842\nBeratungstermin: 10.02.2027 um 16:30 Uhr\nKlassenleitung: Frau Anne Krüger\nFörderschwerpunkt: schriftliche Ausdrucksfähigkeit\nFür das kommende Halbjahr wurden kurze wöchentliche Schreibübungen vereinbart. Dabei sollen Satzbau, Begründung und die Überarbeitung eigener Texte geübt werden. Die Aufgaben werden gemeinsam mit der Klassenleitung ausgewählt und in angemessenen Abständen besprochen.\nDie vereinbarte Förderung ist keine zusätzliche Fachnote. Die Bestätigung des Erhalts durch die Erziehungsberechtigten dokumentiert ausschließlich die Übergabe des Zeugnisses. Der Beratungstermin bleibt eine gesonderte Terminangabe.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-011-p01.png.tables.json": {
+    "lines": [
+      "Funknetz Musterkommunikation GmbH",
+      "Mobilfunkrechnung Oktober 2026",
+      "Rechnungsnummer: MF-2026-570219",
+      "Kundennummer: KD-841670",
+      "Vertragsinhaber: Günter Fröhlich",
+      "Leistungszeitraum: 01.10.2026 bis 31.10.2026",
+      "Rechnungsbetrag: 42.73 €",
+      "Der Rechnungsbetrag umfasst den monatlichen Tarif sowie die ausgewiesenen zusätzlichen Verbindungen.",
+      "Verbindungen innerhalb der enthaltenen Freimenge werden nicht erneut berechnet. Die Testnummern dieses",
+      "Belegs sind nicht für eine Kontaktaufnahme vorgesehen.",
+      "Die Einziehung erfolgt am angegebenen Zahlungstag. Der Einzelverbindungsnachweis enthält nur",
+      "abrechnungsrelevante Testeinträge. Die Dauer eines Gesprächs darf nicht mit einem Geldbetrag",
+      "verwechselt werden.",
+      "Position",
+      "Zeitraum oder Menge",
+      "Netto",
+      "Brutto",
+      "Tarif Alles Muster",
+      "Oktober 2026",
+      "29,40€",
+      "34.99€",
+      "Auslandsverbindungen",
+      "18 Minuten",
+      "4,61€",
+      "5,49€",
+      "Serviceverbindung",
+      "1 Verbindung",
+      "1,89 €",
+      "2,25 €",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Position"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Zeitraum oder Menge"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Netto"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Brutto"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Tarif Alles Muster"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Oktober 2026"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "29,40€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "34.99€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Auslandsverbindungen"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "18 Minuten"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "4,61€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "5,49€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Serviceverbindung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1 Verbindung"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "1,89 €"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "2,25 €"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-011-p01.png.txt": "Funknetz Musterkommunikation GmbH\nMobilfunkrechnung Oktober 2026\nRechnungsnummer: MF-2026-570219\nKundennummer: KD-841670\nVertragsinhaber: Günter Fröhlich\nLeistungszeitraum: 01.10.2026 bis 31.10.2026\nRechnungsbetrag: 42.73 €\nDer Rechnungsbetrag umfasst den monatlichen Tarif sowie die ausgewiesenen zusätzlichen Verbindungen.\nVerbindungen innerhalb der enthaltenen Freimenge werden nicht erneut berechnet. Die Testnummern dieses Belegs sind nicht für eine Kontaktaufnahme vorgesehen.\nDie Einziehung erfolgt am angegebenen Zahlungstag. Der Einzelverbindungsnachweis enthält nur abrechnungsrelevante Testeinträge. Die Dauer eines Gesprächs darf nicht mit einem Geldbetrag verwechselt werden.\nPosition\nZeitraum oder Menge\nNetto\nBrutto\nTarif Alles Muster\nOktober 2026\n29,40€\n34.99€\nAuslandsverbindungen\n18 Minuten\n4,61€\n5,49€\nServiceverbindung\n1 Verbindung\n1,89 €\n2,25 €\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-011-p02.png.tables.json": {
+    "lines": [
+      "Funknetz Musterkommunikation GmbH",
+      "Einzelverbindungsnachweis",
+      "Anschlusskennung: TEST-MOBIL-2617",
+      "Zahlungstag: 12.11.2026",
+      "Nachweisnummer: EVN-570219-02",
+      "Abrechnungswährung: EUR",
+      "Der Nachweis zeigt beispielhafte Zeitangaben und Gebühren. Für diesen synthetischen Test werden keine",
+      "tatsächlich anwählbaren Zielrufnummern verwendet. Die Daten dürfen deshalb nicht als Telefonprotokoll",
+      "einer wirklichen Person interpretiert werden.",
+      "Datum",
+      "Uhrzeit",
+      "Zielkennung",
+      "Dauer",
+      "Betrag",
+      "09.10.2026",
+      "14:08",
+      "TEST-ZIEL-A",
+      "06:32 min",
+      "1,83€",
+      "17.10.2026",
+      "09:41",
+      "TEST-ZIEL-B",
+      "11:28 min",
+      "3.66€",
+      "25,10.2026",
+      "18:53",
+      "TEST-SERVICE-C",
+      "02:14 min",
+      "2,25€",
+      "Bitte beachten Sie die Zuordnung zwischen Datum, Uhrzeit, Dauer und Betrag. Ein Vergleich der",
+      "OCR-Lösungen muss auch diese Tabellenstruktur prüfen. Die Gesamtrechnung steht auf der vorherigen",
+      "physischen Seite.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Datum"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Uhrzeit"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Zielkennung"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Dauer"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Betrag"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "09.10.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "14:08"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "TEST-ZIEL-A"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "06:32 min"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "1,83€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "17.10.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "09:41"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "TEST-ZIEL-B"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "11:28 min"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "3.66€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "25,10.2026"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "18:53"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "TEST-SERVICE-C"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "02:14 min"
+          },
+          {
+            "columns": [
+              4,
+              4
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "2,25€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-011-p02.png.txt": "Funknetz Musterkommunikation GmbH\nEinzelverbindungsnachweis\nAnschlusskennung: TEST-MOBIL-2617\nZahlungstag: 12.11.2026\nNachweisnummer: EVN-570219-02\nAbrechnungswährung: EUR\nDer Nachweis zeigt beispielhafte Zeitangaben und Gebühren. Für diesen synthetischen Test werden keine tatsächlich anwählbaren Zielrufnummern verwendet. Die Daten dürfen deshalb nicht als Telefonprotokoll einer wirklichen Person interpretiert werden.\nDatum\nUhrzeit\nZielkennung\nDauer\nBetrag\n09.10.2026\n14:08\nTEST-ZIEL-A\n06:32 min\n1,83€\n17.10.2026\n09:41\nTEST-ZIEL-B\n11:28 min\n3.66€\n25,10.2026\n18:53\nTEST-SERVICE-C\n02:14 min\n2,25€\nBitte beachten Sie die Zuordnung zwischen Datum, Uhrzeit, Dauer und Betrag. Ein Vergleich der OCR-Lösungen muss auch diese Tabellenstruktur prüfen. Die Gesamtrechnung steht auf der vorherigen physischen Seite.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+  "doc-012-p01.png.tables.json": {
+    "lines": [
+      "Stadt Prüfhausen - Bürgerdienste",
+      "Gebührenbescheid zur Anmeldung",
+      "Aktenzeichen: BD-2026-083719",
+      "Adressatin: Dörte Bär",
+      "Antragsdatum: 28.10.2026",
+      "Bescheiddatum: 04.11.2026",
+      "Gesamtgebühr: 37,50 €",
+      "Für den bezeichneten künstlichen Verwaltungsvorgang werden die aufgeführten Gebühren erhoben. Die",
+      "Einzelpositionen sind in der Tabelle getrennt dargestellt. Dieser Testbescheid ist ungültig und enthält keine",
+      "Zahlungsaufforderung an eine tatsächliche Person.",
+      "Die Zahlung soll dem Aktenzeichen zugeordnet werden. Ein anderer Verwendungszweck kann eine manuelle",
+      "Klärung erforderlich machen. Der Bescheid und seine Anlage gehören zu demselben Vorgang, stellen aber",
+      "zwei physische Seiten dar.",
+      "Leistung",
+      "Anzahl",
+      "Gebühr je Einheit",
+      "Summe",
+      "Bearbeitung der Testanmeldung",
+      "24.00€",
+      "24.00€",
+      "Beglaubigte Testabschrift",
+      "2",
+      "5,50€",
+      "11.00€",
+      "Portopauschale",
+      "2.50€",
+      "2,50€",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2"
+    ],
+    "tables": [
+      [
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Leistung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Anzahl"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Gebühr je Einheit"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              0,
+              0
+            ],
+            "text": "Summe"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "Bearbeitung der Testanmeldung"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "24.00€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              1,
+              1
+            ],
+            "text": "24.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "Beglaubigte Testabschrift"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "2"
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "5,50€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              2,
+              2
+            ],
+            "text": "11.00€"
+          }
+        ],
+        [
+          {
+            "columns": [
+              0,
+              0
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "Portopauschale"
+          },
+          {
+            "columns": [
+              1,
+              1
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": ""
+          },
+          {
+            "columns": [
+              2,
+              2
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "2.50€"
+          },
+          {
+            "columns": [
+              3,
+              3
+            ],
+            "rows": [
+              3,
+              3
+            ],
+            "text": "2,50€"
+          }
+        ]
+      ]
+    ]
+  },
+  "doc-012-p01.png.txt": "Stadt Prüfhausen - Bürgerdienste\nGebührenbescheid zur Anmeldung\nAktenzeichen: BD-2026-083719\nAdressatin: Dörte Bär\nAntragsdatum: 28.10.2026\nBescheiddatum: 04.11.2026\nGesamtgebühr: 37,50 €\nFür den bezeichneten künstlichen Verwaltungsvorgang werden die aufgeführten Gebühren erhoben. Die Einzelpositionen sind in der Tabelle getrennt dargestellt. Dieser Testbescheid ist ungültig und enthält keine Zahlungsaufforderung an eine tatsächliche Person.\nDie Zahlung soll dem Aktenzeichen zugeordnet werden. Ein anderer Verwendungszweck kann eine manuelle Klärung erforderlich machen. Der Bescheid und seine Anlage gehören zu demselben Vorgang, stellen aber zwei physische Seiten dar.\nLeistung\nAnzahl\nGebühr je Einheit\nSumme\nBearbeitung der Testanmeldung\n\n24.00€\n24.00€\nBeglaubigte Testabschrift\n2\n5,50€\n11.00€\nPortopauschale\n\n2.50€\n2,50€\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+  "doc-012-p02.png.tables.json": {
+    "lines": [
+      "Stadt Prüfhausen - Bürgerdienste",
+      "Anlage: Zahlungszuordnung und Rückfragen",
+      "Kassenzeichen: KZ-91-738204",
+      "Zahlbar bis: 25.11.2026",
+      "Sachbearbeiterin: Frau Helga Süß",
+      "Zimmer: B 2.14",
+      "Sprechzeit: Dienstag 09:00 bis 12:00 Uhr",
+      "Bitte verwenden Sie für Rückfragen das Aktenzeichen und für die Zahlungszuordnung das Kassenzeichen.",
+      "Die beiden Kennungen erfüllen unterschiedliche Aufgaben und dürfen nicht gegeneinander ausgetauscht",
+      "werden. Die Sachbearbeiterin ist keine Empfängerin einer Überweisung.",
+      "Ein persönlicher Besuch ist nur während der bezeichneten Sprechzeit oder nach Terminvereinbarung",
+      "vorgesehen. Das Datum der Fälligkeit betrifft ausschließlich diesen Testvorgang. Diese Anlage enthält",
+      "keinen rechtsverbindlichen Hinweis zu einem echten Verwaltungsverfahren.",
+      "Synthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+    ],
+    "tables": []
+  },
+  "doc-012-p02.png.txt": "Stadt Prüfhausen - Bürgerdienste\nAnlage: Zahlungszuordnung und Rückfragen\nKassenzeichen: KZ-91-738204\nZahlbar bis: 25.11.2026\nSachbearbeiterin: Frau Helga Süß\nZimmer: B 2.14\nSprechzeit: Dienstag 09:00 bis 12:00 Uhr\nBitte verwenden Sie für Rückfragen das Aktenzeichen und für die Zahlungszuordnung das Kassenzeichen.\nDie beiden Kennungen erfüllen unterschiedliche Aufgaben und dürfen nicht gegeneinander ausgetauscht werden. Die Sachbearbeiterin ist keine Empfängerin einer Überweisung.\nEin persönlicher Besuch ist nur während der bezeichneten Sprechzeit oder nach Terminvereinbarung vorgesehen. Das Datum der Fälligkeit betrifft ausschließlich diesen Testvorgang. Diese Anlage enthält keinen rechtsverbindlichen Hinweis zu einem echten Verwaltungsverfahren.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2"
+}

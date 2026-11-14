@@ -1,0 +1,1 @@
+PASS: signed update, authentication and compatibility gates, failed-start recovery, SIGKILL, concurrent update, verified rollback and real stdio.

@@ -1,0 +1,759 @@
+{
+  "version": "0.14.3",
+  "reviewedExistingOCRChanges": true,
+  "nativeTests": 363,
+  "nativeSuites": 58,
+  "optionalTestsSkipped": 2,
+  "nativeSeconds": 261.731,
+  "imageQuality": {
+    "qualityGate": "GO",
+    "corpusImages": 35,
+    "expectedFields": 79,
+    "before": 52,
+    "after": 55,
+    "fresh": 55,
+    "gainedFields": 3,
+    "lostFields": 0,
+    "unmarkedErrors": 0,
+    "allEvidencePreserved": true,
+    "cases": [
+      {
+        "file": "ambiguous.png",
+        "expected": 2,
+        "before": 1,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "clean.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "date.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "dense.png",
+        "expected": 6,
+        "before": 6,
+        "native": {
+          "exact": 6,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 6,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "faint-words.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "invoice.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Courier-Oblique-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Courier-Oblique-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Helvetica-Oblique-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Helvetica-Oblique-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Times-Italic-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Times-Italic-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-78-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-78-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-85-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-85-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-92-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-92-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "payroll.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-12-left.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-12-right.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-9-left.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-9-right.png",
+        "expected": 3,
+        "before": 1,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      }
+    ]
+  },
+  "compiledInputs": 204,
+  "syntheticUI": {
+    "textWarningRemainsVisible": true,
+    "missingBasisDoesNotWarnAboutOCR": true,
+    "basisDisclosureIsNeutral": true
+  },
+  "package": {
+    "sha256": "d9eec291d8e16e5deea0c6260f0a5a284d26bc926556d45721c2a6b524b4a353",
+    "bytes": 18473732,
+    "signing": "ad-hoc",
+    "notarized": false,
+    "architectures": [
+      "arm64"
+    ],
+    "minimumMacOS": "14.0",
+    "buildID": "macho.90aeff6b1fdc3d68a43c4403eeda2983"
+  },
+  "limitations": [
+    "Text-only heuristic titles; no layout or semantic model",
+    "24 faint-image fields remain unresolved in the frozen 79-field corpus",
+    "Two optional tests skipped; no fresh offline Mac or target-chat acceptance claimed"
+  ],
+  "packageIntegration": {
+    "allPassed": true,
+    "stages": [
+      {
+        "name": "title_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "smoke_test",
+        "passed": true
+      },
+      {
+        "name": "import_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "original_reference_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "raster_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "line_ocr_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "vector_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "ocr_policy_repair_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "ocr_numeric_recovery_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "software_update_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "export_relay_tools",
+        "passed": true
+      }
+    ]
+  },
+  "qualityGatePolicyTests": 10
+}

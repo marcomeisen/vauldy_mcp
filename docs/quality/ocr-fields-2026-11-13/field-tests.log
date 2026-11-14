@@ -1,0 +1,18 @@
+[0/1] Planning build
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Source-bound identifiers, table values and units" started.
+◇ Test frozenPDFsRepairEveryReportedExampleWithoutLosingPriorFieldsOrEvidence() started.
+✔ Test frozenPDFsRepairEveryReportedExampleWithoutLosingPriorFieldsOrEvidence() passed after 5.497 seconds.
+◇ Test validValuesAndDigitChangesCannotBeOverwritten() started.
+✔ Test validValuesAndDigitChangesCannotBeOverwritten() passed after 0.001 seconds.
+◇ Test typographyRestoresOnlyReadDigitsAndRequiresRaisedGlyphAndDescender() started.
+✔ Test typographyRestoresOnlyReadDigitsAndRequiresRaisedGlyphAndDescender() passed after 0.013 seconds.
+◇ Test emptyOrUnruledImagesDoNotBecomeTablesAndCancellationPropagates() started.
+✔ Test emptyOrUnruledImagesDoNotBecomeTablesAndCancellationPropagates() passed after 0.002 seconds.
+◇ Test differentSourceExponentsAndEmptyCellsAreNotGuessed() started.
+✔ Test differentSourceExponentsAndEmptyCellsAreNotGuessed() passed after 0.687 seconds.
+✔ Suite "Source-bound identifiers, table values and units" passed after 6.201 seconds.
+✔ Test run with 5 tests in 1 suite passed after 6.201 seconds.

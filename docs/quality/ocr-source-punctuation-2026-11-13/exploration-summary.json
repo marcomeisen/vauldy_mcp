@@ -1,0 +1,19 @@
+{
+  "nativeViews": 288,
+  "counts": {
+    "probe.log": 48,
+    "symbols.log": 16,
+    "symbols-fast.log": 16,
+    "denoise.log": 56,
+    "denoise-correct.log": 56,
+    "wide.log": 20,
+    "glyphs.log": 16,
+    "glyphs-tight.log": 16,
+    "words.log": 29,
+    "pairs.log": 15
+  },
+  "exactFullFieldHits": [],
+  "tesseractViews": 20,
+  "modelsDownloaded": false,
+  "originalsChanged": false
+}

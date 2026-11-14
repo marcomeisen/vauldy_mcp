@@ -1,0 +1,19 @@
+warning: /Users/marcomeisen/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/marcomeisen/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+[0/1] Planning build
+Building for production...
+[0/10] Write sources
+[1/10] Write swift-version--58304C5D6DBC2206.txt
+[3/4] Compiling VauldyMCPRuntimeTests BaseAnalysisCorpusReport.swift
+/private/tmp/vauldy-ocr-numeric-20261113/source/Tests/VauldyMCPRuntimeTests/LocalDocumentQualityTests.swift:20:55: warning: '#require(_:_:)' is redundant because 'LocalOCRPageLayout(sourceHash: hash, page: page)' never equals 'nil' (from macro 'require')
+ 18 |         page.geometry?.lines[0].priorReadings = [prior]
+ 19 |         let hash = try #require(d.localImport?.contentHash)
+ 20 |         d.localImport?.pages[0].layout = try #require(LocalOCRPageLayout(sourceHash: hash, page: page))
+    |                                                       `- warning: '#require(_:_:)' is redundant because 'LocalOCRPageLayout(sourceHash: hash, page: page)' never equals 'nil' (from macro 'require')
+ 21 |         let roundtrip = try JSONDecoder().decode(VaultDocument.self, from: JSONEncoder().encode(d))
+ 22 |         let review = try #require(LocalDocumentReview(roundtrip))
+[4/6] Compiling VauldyMCPPackageTests runner.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking VauldyMCPPackageTests
+Build complete! (53.80s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.

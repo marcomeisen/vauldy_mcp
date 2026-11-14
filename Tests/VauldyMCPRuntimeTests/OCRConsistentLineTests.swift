@@ -132,8 +132,16 @@ struct OCRConsistentLineTests {
             let preserved = EvidencePreservingLocalOCR.preserving(previous: prior, candidate: current)
             let oldLines = prior.text.split(whereSeparator: \.isNewline).map(String.init)
             var iterator = preserved.text.split(whereSeparator: \.isNewline).map(String.init).makeIterator()
-            #expect(oldLines.allSatisfy { old in while let next = iterator.next() { if next == old { return true } }; return false })
+            #expect(oldLines.allSatisfy { old in
+                while let next = iterator.next() {
+                    if next == old { return true }
+                    if preserved.geometry?.lines.contains(where: { $0.policyIdentifierRepair == true && $0.priorReadings?.contains(old) == true }) == true,
+                       OCRPolicyIdentifierRepair.permits(old, next) { return true }
+                }
+                return false
+            })
             if sample.name == "clean" { #expect(after.count == sample.fields.count && !current.info.needsReview) }
+            if sample.name == "ambiguous" { #expect(after.count == sample.fields.count && current.info.needsReview) }
             records.append(["sample":sample.name,"before":String(before.count),"after":String(after.count),"expected":String(sample.fields.count)])
             if let path = ProcessInfo.processInfo.environment["VAULDY_OCR_LINE_FIXTURES"] {
                 let out = URL(fileURLWithPath: path); try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)

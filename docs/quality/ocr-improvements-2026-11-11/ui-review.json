@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "isolatedSetupRoot": true,
+  "installationPerformed": false,
+  "priorReading": "Leistung: Zahnriemerwechsel am Aggregat",
+  "currentReading": "Leistung: Zahnriemenwechsel am Aggregat",
+  "originalCropVisible": true,
+  "priorReadingDisclosureExpanded": true,
+  "reviewReasonVisible": true,
+  "observedUsing": "cua native AX and screenshot"
+}

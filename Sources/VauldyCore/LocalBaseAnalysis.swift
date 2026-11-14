@@ -35,10 +35,7 @@ extension VaultDocument {
         let analysis: DocumentBaseAnalysis
         if proposal.status == .failed || proposal.status == .unavailable { analysis = proposal }
         else { analysis = BaseAnalysisPipeline.finalize(proposal.documents, pages: baseAnalysisPages) }
-        let filenameTitle = URL(fileURLWithPath: sourceName).deletingPathExtension().lastPathComponent
-        if title == filenameTitle || title == prior?.displayTitle {
-            if !analysis.documents.isEmpty { title = analysis.displayTitle }
-        }
+        setGeneratedTitle(analysis.documents.isEmpty ? DocumentTitlePolicy.fallback : analysis.displayTitle)
         if summary.isEmpty || summary == prior?.summary { summary = analysis.summary }
         let priorCategory = prior?.documents.first?.kind.category
         if category == "other" || category == priorCategory {
@@ -58,6 +55,23 @@ public struct LocalBaseAnalysisService: Sendable {
     public init(store: LocalDocumentStore, analyzer: any DocumentBaseAnalyzing = LocalRuleBasedDocumentAnalyzer()) {
         self.store = store; self.analyzer = analyzer
     }
+    /// Refresh only title metadata. Stored analysis, evidence, OCR and grants are untouched.
+    public func regenerateTitle(documentID: UUID) async throws -> VaultDocument {
+        guard let source = try await store.document(id: documentID) else { throw LocalImportError.unreadableFile }
+        guard source.localImport?.state != .recognizing && source.localImport?.state != .queued else { throw LocalImportError.workerBusy }
+        guard source.localImport?.originalState != .changed else { throw LocalImportError.staleAttempt }
+        if source.baseAnalysisPages.isEmpty {
+            return try await store.saveGeneratedTitle(DocumentTitlePolicy.fallback, expected: source)
+        }
+        let proposal = try await analyzer.analyze(pages: source.baseAnalysisPages)
+        try Task.checkCancellation()
+        guard proposal.status != .failed else { throw LocalImportError.invalidDocument }
+        let result = BaseAnalysisPipeline.finalize(proposal.documents, pages: source.baseAnalysisPages)
+        // Unmarked legacy text cannot prove page ownership; use the neutral fallback.
+        let title = result.documents.isEmpty ? DocumentTitlePolicy.fallback : result.displayTitle
+        return try await store.saveGeneratedTitle(title, expected: source)
+    }
+
     public func analyze(documentID: UUID) async throws -> VaultDocument {
         guard let source = try await store.documents().first(where: { $0.id == documentID }) else { throw LocalImportError.unreadableFile }
         guard source.localImport?.state != .recognizing && source.localImport?.state != .queued else { throw LocalImportError.workerBusy }

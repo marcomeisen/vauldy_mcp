@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "imageFieldsBefore": 53,
+  "imageFieldsAfter": 54,
+  "imageFieldsExpected": 79,
+  "imageCount": 35,
+  "changedImageTexts": [
+    "tilted-9-right.png"
+  ],
+  "remainingImageFieldOccurrences": 25,
+  "remaining": [
+    {
+      "file": "ambiguous.png",
+      "fields": [
+        "Policennummer: IO0O-171"
+      ]
+    },
+    {
+      "file": "grid-11-88-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-11-88-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-11-93-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-11-93-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-13-88-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-13-88-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-13-93-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-13-93-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-9-88-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-9-88-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-9-93-15.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    },
+    {
+      "file": "grid-9-93-25.png",
+      "fields": [
+        "Schutz fuer Fahrrad und Hausrat",
+        "Leistung: Wartung der Heizungsanlage"
+      ]
+    }
+  ],
+  "pdfCount": 15,
+  "pdfPages": 31,
+  "pdfFields": 133,
+  "pdfTableContents": 345,
+  "unchangedPDFTexts": 31,
+  "lostCorrectFields": 0,
+  "lostLiteralEvidence": 0,
+  "frozenHashesVerified": true,
+  "nativeAndFreshAgree": true,
+  "configuration": "ocr-v18-source-punctuation-"
+}

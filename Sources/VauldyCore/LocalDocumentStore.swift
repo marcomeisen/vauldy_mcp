@@ -124,6 +124,7 @@ public struct LocalDocumentStore: Sendable {
                                              sourceName: file.lastPathComponent,
                                              importedAt: Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down)),
                                              status: "imported")
+                document.setGeneratedTitle(DocumentTitlePolicy.fallback)
                 var metadata = LocalImportMetadata(contentHash: hash, fileExtension: ext)
                 metadata.originalReference = reference; metadata.originalState = .available
                 document.localImport = metadata
@@ -228,6 +229,32 @@ public struct LocalDocumentStore: Sendable {
     }
 
     /// Optimistic commit: analysis cannot overwrite a concurrently changed source or manual field.
+    func saveGeneratedTitle(_ title: String, expected: VaultDocument) async throws -> VaultDocument {
+        try await changeTitle(expected: expected) { $0.setGeneratedTitle(title) }
+    }
+
+    public func saveManualTitle(_ title: String?, expected: VaultDocument) async throws -> VaultDocument {
+        if let title, title.count > 240 || title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            throw LocalImportError.invalidDocument
+        }
+        return try await changeTitle(expected: expected) { $0.setManualTitle(title) }
+    }
+
+    private func changeTitle(expected: VaultDocument, change: @escaping @Sendable (inout VaultDocument) -> Void) async throws -> VaultDocument {
+        try await run { try locked {
+            var documents = try read(ids: [expected.id])
+            guard let index = documents.firstIndex(where: { $0.id == expected.id }), documents[index] == expected else {
+                throw LocalImportError.staleAttempt
+            }
+            guard documents[index].localImport?.state != .recognizing && documents[index].localImport?.state != .queued else {
+                throw LocalImportError.workerBusy
+            }
+            change(&documents[index])
+            if documents[index] != expected { try save(documents) }
+            return documents[index]
+        } }
+    }
+
     public func saveBaseAnalysis(_ analysis: DocumentBaseAnalysis, expected: VaultDocument) async throws -> VaultDocument {
         try await run { try locked {
             var documents = try read(ids: [expected.id])

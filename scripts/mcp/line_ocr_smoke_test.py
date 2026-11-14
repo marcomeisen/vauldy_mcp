@@ -21,7 +21,7 @@ def main():
     expected = {
         'clean': ['Vertragsnummer: VX-739245', 'Beitrag: 82,47 EUR', 'Versicherungsart: Hausrat'],
         'faint-words': ['Schutz fuer Fahrrad und Hausrat', 'Beitrag: 49,99 EUR'],
-        'ambiguous': ['Beitrag: 81,19 EUR'],
+        'ambiguous': ['Policennummer: IO0O-171', 'Beitrag: 81,19 EUR'],
     }
     with tempfile.TemporaryDirectory(prefix='vauldy-line-wire-') as temporary:
         root = Path(temporary); store = root / 'vault'; client = None; instance = None
@@ -39,6 +39,9 @@ def main():
                 if name == 'ambiguous':
                     assert result['state'] == 'partial' and info['needsReview']
                     assert assessment['ambiguousIdentifiers'] > 0 and assessment['unconfirmedLines'] > 0
+                    lines = info['layout']['geometry']['lines']
+                    assert any(line.get('policyIdentifierRepair') and
+                               'Policennummer: 1000-171' in line.get('priorReadings', []) for line in lines)
                 current = command(args.local, 'worker-status', '--store', store)['instance']
                 if instance is None: instance = current
                 assert current == instance
@@ -57,16 +60,17 @@ def main():
                 handle = listed['items'][0]['document']
                 read = payload(client.call('read_document', document=handle))
                 text = '\n'.join(segment['text'] for segment in read['segments'])
-                public_fields = fields[1:] if name == 'clean' else fields
+                public_fields = fields[1:] if name in ('clean', 'ambiguous') else fields
                 if name == 'faint-words':
                     # Existing local NER can protect "Schutz" as a place name.
                     # Assert full native text above and the unmasked source suffix here.
                     public_fields = ['fuer Fahrrad und Hausrat', 'Beitrag: 49,99 EUR']
                 assert all(field in text for field in public_fields)
                 assert 'VX-739245' not in text
+                assert 'IO0O-171' not in text and '1000-171' not in text
                 assert all(segment['page'] == 1 for segment in read['segments'])
                 assert all(value not in json.dumps(read) for value in
-                           ['lineReview', 'unconfirmedLines', 'normalizedCrops', str(root), doc_id])
+                           ['lineReview', 'unconfirmedLines', 'normalizedCrops', 'policyIdentifierRepair', 'priorReadings', str(root), doc_id])
                 command(args.local, 'retry', '--store', store, '--document', doc_id, '--fresh', accepted=(0, 2))
                 repeated = next(d for d in json.loads((store / 'documents.json').read_text()) if d['id'] == doc_id)
                 assert repeated['ocrText'] == document['ocrText']
@@ -77,8 +81,9 @@ def main():
                 grant.update(enabled=False, revision=str(uuid.uuid4())); profile.write_text(json.dumps(grant))
                 assert client.call('read_document', document=handle)['isError']
                 client.close(); client = None
-            print(json.dumps(dict(passed=True, syntheticImages=3, nativeExactFields=6,
+            print(json.dumps(dict(passed=True, syntheticImages=3, nativeExactFields=7,
                                   protectedVerifiedExcerpts=5, contractIdentifierRedacted=True,
+                                  policyIdentifierCorrectedAndRedacted=True,
                                   ambiguousIdentifierRemainsReview=True, persistedReasons=True,
                                   sameWorker=True, freshRetryPreservesEvidence=True, repeatReasonsStable=True,
                                   originalAndGrantUnchanged=True, sourcePage=1,

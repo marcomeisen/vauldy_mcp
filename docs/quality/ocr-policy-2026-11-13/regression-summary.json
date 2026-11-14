@@ -1,0 +1,197 @@
+{
+  "allPassed": true,
+  "stages": [
+    {
+      "name": "faint-ocr-gate-policy",
+      "passed": true
+    },
+    {
+      "name": "ocr-improvement-gate-policy",
+      "passed": true
+    },
+    {
+      "name": "local-ocr-comparison-conversion",
+      "passed": true
+    },
+    {
+      "name": "swift-tests",
+      "passed": true
+    },
+    {
+      "name": "ocr-improvement-quality",
+      "passed": true
+    },
+    {
+      "name": "package-metadata",
+      "passed": true
+    },
+    {
+      "name": "package",
+      "passed": true
+    },
+    {
+      "name": "relay-worker-tests",
+      "passed": true
+    },
+    {
+      "name": "extract-final-zip",
+      "passed": true
+    },
+    {
+      "name": "verify-final-signature",
+      "passed": true
+    },
+    {
+      "name": "relay-tool-parity",
+      "passed": true
+    },
+    {
+      "name": "smoke_test",
+      "passed": true
+    },
+    {
+      "name": "index_recovery_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "research_agent_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "topic_overview_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "search_normalization_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "storage_boundary_benchmark",
+      "passed": true
+    },
+    {
+      "name": "storage_import_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "sqlite_integration_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "storage_migration_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "field_extraction_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "contract_comparison_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "deadline_overview_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "document_inventory_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "product_acceptance",
+      "passed": true
+    },
+    {
+      "name": "product_answer_check",
+      "passed": true
+    },
+    {
+      "name": "product_acceptance_test",
+      "passed": true
+    },
+    {
+      "name": "base_analysis_wire_test",
+      "passed": true
+    },
+    {
+      "name": "import_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "raster_ocr_quality_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "vector_ocr_quality_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "visual_coverage_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "dense_ocr_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "line_ocr_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "small_text_chat_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "audit_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "client_install_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "management_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "software_update_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "status_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "watch_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "setup_startup_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "original_reference_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "oauth_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "scalability_benchmark",
+      "passed": true
+    },
+    {
+      "name": "tunnel_launcher_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "benchmark_ocr",
+      "passed": true
+    },
+    {
+      "name": "retrieval_benchmark",
+      "passed": true
+    }
+  ]
+}

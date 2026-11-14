@@ -1,0 +1,9 @@
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+swift-driver version: 1.168.6 /var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app/Contents/Resources/vauldy-mcp: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app/Contents/Resources/vauldy-local: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app/Contents/Resources/vauldy-mcp-http: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app/Contents/Resources/vauldy-relay: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app/Contents/Resources/Vauldy MCP Status.app: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-j2a7fmzs/Vauldy.app: replacing existing signature
+/private/tmp/vauldy-policy-20261113/release-regression/package/Vauldy.zip
+Signing: local ad-hoc, not notarized

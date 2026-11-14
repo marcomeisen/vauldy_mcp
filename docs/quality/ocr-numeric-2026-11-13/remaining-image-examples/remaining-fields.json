@@ -1,0 +1,336 @@
+{
+  "images": 14,
+  "missingFieldOccurrences": 26,
+  "originalHashesVerified": true,
+  "cropsPixelIdentical": true,
+  "cases": [
+    {
+      "file": "ambiguous.png",
+      "sha256": "74089948ddb448c3a9bc87c463ab12548ee97056492dc641ad2eb5b38c9075c8",
+      "cropPixels": [
+        40,
+        95,
+        250,
+        125
+      ],
+      "crop": "ambiguous-crop.png",
+      "enlarged": "ambiguous-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Policennummer: IO0O-171",
+          "actual": "Policennummer: 1000-171"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung\nPolicennummer: 1000-171\nBeitrag: 81,19 EUR",
+      "needsReview": true
+    },
+    {
+      "file": "grid-11-88-15.png",
+      "sha256": "1c2b4463c7dc48b35d31c4f7ca7f3827c2153595d54b8eb890f2ca730f2e1b2f",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-11-88-15-crop.png",
+      "enlarged": "grid-11-88-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-11-88-25.png",
+      "sha256": "29132823a904e228bfe0efefa802fd06fd5f18a763b9195e02ff855c3b6cedb0",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-11-88-25-crop.png",
+      "enlarged": "grid-11-88-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-11-93-15.png",
+      "sha256": "543e3d30c27a2427a9224e0cc6c3e590d0ae670a8bd8cfa23ac394ffe6909430",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-11-93-15-crop.png",
+      "enlarged": "grid-11-93-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-11-93-25.png",
+      "sha256": "abede21560d9126a19272b2cf4746f5de95b29866169147dc9389fd678db8f09",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-11-93-25-crop.png",
+      "enlarged": "grid-11-93-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-13-88-15.png",
+      "sha256": "c91e6dbe872948c31ebcbb462b559c353b5fb0b6c24e5cb50c9d4ddbba205fbd",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-13-88-15-crop.png",
+      "enlarged": "grid-13-88-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-13-88-25.png",
+      "sha256": "b3e71440998149c9f4d24a4675cdb5db1a7927640baee5dcfbca9490fff976c6",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-13-88-25-crop.png",
+      "enlarged": "grid-13-88-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-13-93-15.png",
+      "sha256": "f778b1fc535ed2655d3247a5b71d545037d1b1d860f7a4ea602a0d4802f79784",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-13-93-15-crop.png",
+      "enlarged": "grid-13-93-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-13-93-25.png",
+      "sha256": "48ef4d8a3b6c72efd5207bbe8f92dbafe2e6816d10236f7f3715e082e38fb799",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-13-93-25-crop.png",
+      "enlarged": "grid-13-93-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-9-88-15.png",
+      "sha256": "4a595d28a76377e3ada2ff4f5e92d9a61c29b1a448531ef32452e4e0a5b9254b",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-9-88-15-crop.png",
+      "enlarged": "grid-9-88-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-9-88-25.png",
+      "sha256": "a0423eca5e0e5d944c4ee80fbffd4dc67472379d63b7c306314fb6c564a7e71b",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-9-88-25-crop.png",
+      "enlarged": "grid-9-88-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-9-93-15.png",
+      "sha256": "dd629a100b4c98602a629c82950fd7f8015f4d0aca58b90373346b47ca47e46d",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-9-93-15-crop.png",
+      "enlarged": "grid-9-93-15-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "grid-9-93-25.png",
+      "sha256": "e42aa05bffd2c0f8bd8715acf795b2b87b1cffcd73bd743abda25ce7a20980dc",
+      "cropPixels": [
+        40,
+        94,
+        315,
+        174
+      ],
+      "crop": "grid-9-93-25-crop.png",
+      "enlarged": "grid-9-93-25-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Schutz fuer Fahrrad und Hausrat",
+          "actual": "nicht ausgegeben"
+        },
+        {
+          "expected": "Leistung: Wartung der Heizungsanlage",
+          "actual": "nicht ausgegeben"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung",
+      "needsReview": true
+    },
+    {
+      "file": "tilted-9-right.png",
+      "sha256": "3676f6caf7f63531adccde7e19ed82627cb5ddb935eb64561181d19c6b2f19c8",
+      "cropPixels": [
+        40,
+        210,
+        155,
+        245
+      ],
+      "crop": "tilted-9-right-crop.png",
+      "enlarged": "tilted-9-right-crop-3x.png",
+      "missingFields": [
+        {
+          "expected": "Beitrag: 82,47 EUR",
+          "actual": "Beitrag: 82.47 EUR"
+        }
+      ],
+      "fullOCR": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82.47 EUR",
+      "needsReview": true
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import tempfile
 import uuid
 
@@ -18,6 +19,8 @@ def main():
     parser.add_argument('fixtures', type=lambda value: Path(value).resolve(),
                         help='Synthetic PDFs from PDFVectorTextOCRTests only')
     args = parser.parse_args()
+    cache_source = Path(__file__).resolve().parents[2] / 'Sources/VauldyCore/LocalOCRPageCache.swift'
+    configuration_prefix = re.search(r'static let configuration = "(ocr-[^"]+-)"', cache_source.read_text())[1]
     expected = [
         ['Beitrag: 49,99 EUR', 'Beginn: 27.01.2026', 'Versicherungsart: Hausrat'],
         ['Rechnungsbetrag: 82,47 EUR', 'Zahlbar bis: 19.08.2027', 'Leistung: Wartung'],
@@ -41,7 +44,7 @@ def main():
                 body = document['ocrText'].split('\n', 1)[1]
                 assert layout['version'] == 1 and layout['page'] == 1 and layout['sourceHash'] == original_hash
                 assert layout['textHash'] == hashlib.sha256(body.encode()).hexdigest()
-                assert layout['geometry']['configuration'].startswith('ocr-v14-consistent-line-review-')
+                assert layout['geometry']['configuration'].startswith(configuration_prefix)
                 assert layout['geometry']['coordinateSpace'] == 'pdfCropBottomLeft'
                 assert len(layout['geometry']['lines']) >= 4
                 assert hashlib.sha256(file.read_bytes()).hexdigest() == original_hash

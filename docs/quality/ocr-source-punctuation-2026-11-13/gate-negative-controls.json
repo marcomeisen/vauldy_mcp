@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "rejectedMutations": [
+    "priorCorrectField",
+    "decimalRepair",
+    "inventedText",
+    "priorPDFUnit",
+    "originalBytes"
+  ]
+}

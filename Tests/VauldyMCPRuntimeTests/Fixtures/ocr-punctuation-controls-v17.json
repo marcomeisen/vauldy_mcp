@@ -1,0 +1,1230 @@
+{
+  "inputHashes": {
+    "source-13-0.png": "24cba275660eea8284436efd59488ab1e4a6c382c706a84875494080848ed4b4",
+    "source-13-1.png": "6c7f7ab99ba3d17e0219868f5a179de795de9974a4f2b01c279519129cca95a7",
+    "source-13-2.png": "df64037b6641ad80f8aeb65251e7ddb907cc6d5ffc98c1d43bd5ea3ddc6b1332",
+    "source-13-3.png": "0bfdc177564acb23cc66c0cc2b2106e74969bcfdd99391427191dddfc4ee7e50",
+    "source-9-0.png": "52a3ded894aadff4ba230025c8cafacdda1bdeba5faf8d26d12b3a54315413a5",
+    "source-9-1.png": "2c8439bbbea865a5ae40bd98ede64332b525bb6dd3dad9d0dae4e0f2f1a2463e",
+    "source-9-2.png": "99336e457fcf74c1ac8f0ee28592373c4a3fe8922f11ef7ad2c34f18b80b7702",
+    "source-9-3.png": "a506f9f5d35a8dadd083d0d79484c51052b523ce7816305e389ab1a66102ccda"
+  },
+  "pages": {
+    "source-13-0.png": {
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "geometry": {
+        "rotationDegrees": 0,
+        "coordinateSpace": "uprightImageBottomLeft",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "blocks": [
+          {
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.0477731372300728,
+                0.49708390202309105
+              ],
+              [
+                0.38296915690104166,
+                0.392254330883429
+              ]
+            ]
+          }
+        ],
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "lines": [
+          {
+            "confidence": 1,
+            "location": 0,
+            "bounds": [
+              [
+                0.0477731372300728,
+                0.7744362769840754
+              ],
+              [
+                0.38296915690104166,
+                0.11490195592244468
+              ]
+            ],
+            "method": "vision",
+            "length": 27
+          },
+          {
+            "confidence": 1,
+            "location": 28,
+            "bounds": [
+              [
+                0.05090592538409446,
+                0.6840623656040843
+              ],
+              [
+                0.36962469191778274,
+                0.09001849492390956
+              ]
+            ],
+            "method": "vision",
+            "length": 49
+          },
+          {
+            "confidence": 1,
+            "location": 78,
+            "bounds": [
+              [
+                0.05363359837781763,
+                0.5921263754932748
+              ],
+              [
+                0.2285055433000837,
+                0.0641512473424275
+              ]
+            ],
+            "method": "vision",
+            "length": 29
+          },
+          {
+            "confidence": 1,
+            "location": 108,
+            "bounds": [
+              [
+                0.06033911436787207,
+                0.49708390202309105
+              ],
+              [
+                0.14096017565046037,
+                0.05795816183090219
+              ]
+            ],
+            "method": "vision",
+            "length": 18
+          }
+        ]
+      },
+      "info": {
+        "method": "vision",
+        "page": 1,
+        "confidence": 1,
+        "elapsedMilliseconds": 65573,
+        "needsReview": false,
+        "metrics": {
+          "cacheHit": false,
+          "recognitionMilliseconds": 65533,
+          "renderedPixels": 403200,
+          "recognitionRegions": 1,
+          "lineReview": {
+            "confirmedUncertainLines": 0,
+            "repairedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "normalizedCrops": 0,
+            "shortTextRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "conflictingReadings": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "unavailableRetries": 0,
+            "lowConfidenceRegions": 0,
+            "budgetLimitedLines": 0
+          },
+          "coverageMilliseconds": 36,
+          "renderMilliseconds": 3,
+          "cacheMilliseconds": 0,
+          "inspectionMilliseconds": 0
+        }
+      }
+    },
+    "source-13-1.png": {
+      "info": {
+        "elapsedMilliseconds": 536,
+        "page": 1,
+        "method": "vision",
+        "confidence": 1,
+        "metrics": {
+          "cacheHit": false,
+          "recognitionMilliseconds": 524,
+          "renderedPixels": 403200,
+          "recognitionRegions": 1,
+          "lineReview": {
+            "confirmedUncertainLines": 0,
+            "repairedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "normalizedCrops": 0,
+            "shortTextRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "conflictingReadings": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "unavailableRetries": 0,
+            "lowConfidenceRegions": 0,
+            "budgetLimitedLines": 0
+          },
+          "coverageMilliseconds": 4,
+          "renderMilliseconds": 7,
+          "cacheMilliseconds": 0,
+          "inspectionMilliseconds": 0
+        },
+        "needsReview": false
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17,29 EUR",
+      "geometry": {
+        "coordinateSpace": "uprightImageBottomLeft",
+        "lines": [
+          {
+            "confidence": 1,
+            "location": 0,
+            "bounds": [
+              [
+                0.0477731372300728,
+                0.7744362769840754
+              ],
+              [
+                0.38296915690104166,
+                0.11490195592244468
+              ]
+            ],
+            "method": "vision",
+            "length": 27
+          },
+          {
+            "confidence": 1,
+            "location": 28,
+            "bounds": [
+              [
+                0.050914366319339266,
+                0.6835466833811712
+              ],
+              [
+                0.36959620884486605,
+                0.09132117033004761
+              ]
+            ],
+            "method": "vision",
+            "length": 49
+          },
+          {
+            "confidence": 1,
+            "location": 78,
+            "bounds": [
+              [
+                0.05363359837781763,
+                0.5921263754932748
+              ],
+              [
+                0.2285055433000837,
+                0.0641512473424275
+              ]
+            ],
+            "method": "vision",
+            "length": 29
+          },
+          {
+            "confidence": 1,
+            "location": 108,
+            "bounds": [
+              [
+                0.06013136057171529,
+                0.4962068973614364
+              ],
+              [
+                0.14126437050955637,
+                0.061350572109222457
+              ]
+            ],
+            "method": "vision",
+            "length": 18
+          }
+        ],
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "coveredCharacters": 26,
+              "detectedCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "rotationDegrees": 0,
+        "blocks": [
+          {
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.0477731372300728,
+                0.4962068973614364
+              ],
+              [
+                0.38296915690104166,
+                0.3931313355450836
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "source-13-2.png": {
+      "info": {
+        "needsReview": false,
+        "metrics": {
+          "cacheHit": false,
+          "recognitionMilliseconds": 554,
+          "renderedPixels": 403200,
+          "recognitionRegions": 1,
+          "lineReview": {
+            "confirmedUncertainLines": 0,
+            "repairedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "normalizedCrops": 0,
+            "shortTextRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "conflictingReadings": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "unavailableRetries": 0,
+            "lowConfidenceRegions": 0,
+            "budgetLimitedLines": 0
+          },
+          "coverageMilliseconds": 6,
+          "renderMilliseconds": 2,
+          "cacheMilliseconds": 0,
+          "inspectionMilliseconds": 0
+        },
+        "method": "vision",
+        "confidence": 1,
+        "page": 1,
+        "elapsedMilliseconds": 563
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: -39.51 EUR",
+      "geometry": {
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "length": 27,
+            "confidence": 1,
+            "location": 0,
+            "bounds": [
+              [
+                0.047955192672039376,
+                0.7744607856700764
+              ],
+              [
+                0.38278710501534596,
+                0.11487744649251297
+              ]
+            ],
+            "method": "vision"
+          },
+          {
+            "length": 49,
+            "confidence": 1,
+            "location": 28,
+            "bounds": [
+              [
+                0.05085969733305228,
+                0.684062366868506
+              ],
+              [
+                0.369670904250372,
+                0.09112111727396655
+              ]
+            ],
+            "method": "vision"
+          },
+          {
+            "length": 29,
+            "confidence": 1,
+            "location": 78,
+            "bounds": [
+              [
+                0.05363359837781763,
+                0.5921263754932748
+              ],
+              [
+                0.2285055433000837,
+                0.0641512473424275
+              ]
+            ],
+            "method": "vision"
+          },
+          {
+            "length": 17,
+            "confidence": 1,
+            "location": 108,
+            "bounds": [
+              [
+                0.06043452290147616,
+                0.4979954815060579
+              ],
+              [
+                0.15050492967878068,
+                0.05939370393753052
+              ]
+            ],
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.047955192672039376,
+                0.4979954815060579
+              ],
+              [
+                0.38278710501534596,
+                0.39134275065653146
+              ]
+            ]
+          }
+        ],
+        "coordinateSpace": "uprightImageBottomLeft",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        }
+      }
+    },
+    "source-13-3.png": {
+      "info": {
+        "method": "vision",
+        "elapsedMilliseconds": 374,
+        "page": 1,
+        "confidence": 1,
+        "needsReview": false,
+        "metrics": {
+          "cacheHit": false,
+          "recognitionMilliseconds": 365,
+          "renderedPixels": 403200,
+          "recognitionRegions": 1,
+          "lineReview": {
+            "confirmedUncertainLines": 0,
+            "repairedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "normalizedCrops": 0,
+            "shortTextRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "conflictingReadings": 0,
+            "unconfirmedLines": 0,
+            "unavailableRetries": 0,
+            "uncertainLines": 0,
+            "lowConfidenceRegions": 0,
+            "budgetLimitedLines": 0
+          },
+          "coverageMilliseconds": 5,
+          "renderMilliseconds": 4,
+          "cacheMilliseconds": 0,
+          "inspectionMilliseconds": 0
+        }
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234,56 EUR",
+      "geometry": {
+        "lines": [
+          {
+            "length": 27,
+            "method": "vision",
+            "confidence": 1,
+            "location": 0,
+            "bounds": [
+              [
+                0.047955192672039376,
+                0.7744607856700764
+              ],
+              [
+                0.38278710501534596,
+                0.11487744649251297
+              ]
+            ]
+          },
+          {
+            "length": 49,
+            "method": "vision",
+            "confidence": 1,
+            "location": 28,
+            "bounds": [
+              [
+                0.05090592538409446,
+                0.6840623656040843
+              ],
+              [
+                0.36962469191778274,
+                0.09001849492390956
+              ]
+            ]
+          },
+          {
+            "length": 29,
+            "method": "vision",
+            "confidence": 1,
+            "location": 78,
+            "bounds": [
+              [
+                0.05363359837781763,
+                0.5921263754932748
+              ],
+              [
+                0.2285055433000837,
+                0.0641512473424275
+              ]
+            ]
+          },
+          {
+            "length": 19,
+            "method": "vision",
+            "confidence": 1,
+            "location": 108,
+            "bounds": [
+              [
+                0.06031015286115012,
+                0.49812389363768617
+              ],
+              [
+                0.16699620201474144,
+                0.06068584124247234
+              ]
+            ]
+          }
+        ],
+        "blocks": [
+          {
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.047955192672039376,
+                0.49812389363768617
+              ],
+              [
+                0.38278710501534596,
+                0.39121433852490317
+              ]
+            ]
+          }
+        ],
+        "coordinateSpace": "uprightImageBottomLeft",
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ]
+        },
+        "rotationDegrees": 0
+      }
+    },
+    "source-9-0.png": {
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "info": {
+        "metrics": {
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "lineReview": {
+            "shortTextRegions": 0,
+            "uncertainLines": 3,
+            "confirmedUncertainLines": 2,
+            "conflictingReadings": 0,
+            "unconfirmedLines": 1,
+            "repairedLines": 0,
+            "normalizedCrops": 6,
+            "lowConfidenceRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 2,
+            "unavailableRetries": 1
+          },
+          "renderMilliseconds": 4,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 2936,
+          "targetedRetries": 3,
+          "recoveredLines": 0,
+          "renderedPixels": 403200,
+          "cacheHit": false,
+          "cacheMilliseconds": 0
+        },
+        "page": 1,
+        "needsReview": true,
+        "method": "vision",
+        "elapsedMilliseconds": 2945,
+        "confidence": 1
+      },
+      "geometry": {
+        "rotationDegrees": 0,
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ]
+            }
+          ]
+        },
+        "blocks": [
+          {
+            "lineIndices": [
+              0
+            ],
+            "bounds": [
+              [
+                0.04792732699826366,
+                0.7743249715171804
+              ],
+              [
+                0.3826295761835008,
+                0.11577691237131749
+              ]
+            ]
+          },
+          {
+            "lineIndices": [
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.5024712638446929
+              ],
+              [
+                0.25179870386635833,
+                0.24703393777355664
+              ]
+            ]
+          }
+        ],
+        "lines": [
+          {
+            "location": 0,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.04792732699826366,
+                0.7743249715171804
+              ],
+              [
+                0.3826295761835008,
+                0.11577691237131749
+              ]
+            ],
+            "length": 27,
+            "method": "vision"
+          },
+          {
+            "location": 28,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.6922437026253848
+              ],
+              [
+                0.25179870386635833,
+                0.0572614989928647
+              ]
+            ],
+            "length": 49,
+            "method": "vision"
+          },
+          {
+            "location": 78,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.05816348038356553,
+                0.5948539552708598
+              ],
+              [
+                0.15398509201447527,
+                0.04740228268210045
+              ]
+            ],
+            "length": 29,
+            "method": "vision"
+          },
+          {
+            "location": 108,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.060837440425705006,
+                0.5024712638446929
+              ],
+              [
+                0.09967159089587983,
+                0.04261494477589922
+              ]
+            ],
+            "length": 18,
+            "method": "vision"
+          }
+        ],
+        "coordinateSpace": "uprightImageBottomLeft",
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)"
+      }
+    },
+    "source-9-1.png": {
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17.29 EUR",
+      "geometry": {
+        "lines": [
+          {
+            "confidence": 1,
+            "method": "vision",
+            "location": 0,
+            "length": 27,
+            "bounds": [
+              [
+                0.04792732699826366,
+                0.7743249715171804
+              ],
+              [
+                0.3826295761835008,
+                0.11577691237131749
+              ]
+            ]
+          },
+          {
+            "confidence": 1,
+            "method": "vision",
+            "location": 28,
+            "length": 49,
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.6922437026253848
+              ],
+              [
+                0.25179870386635833,
+                0.0572614989928647
+              ]
+            ]
+          },
+          {
+            "confidence": 1,
+            "method": "vision",
+            "location": 78,
+            "length": 29,
+            "bounds": [
+              [
+                0.05816348038356553,
+                0.5948539552708598
+              ],
+              [
+                0.15398509201447527,
+                0.04740228268210045
+              ]
+            ]
+          },
+          {
+            "confidence": 1,
+            "method": "vision",
+            "location": 108,
+            "length": 18,
+            "bounds": [
+              [
+                0.06090312387616318,
+                0.5024712641930702
+              ],
+              [
+                0.09960590544201078,
+                0.04123563369115191
+              ]
+            ]
+          }
+        ],
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "blocks": [
+          {
+            "lineIndices": [
+              0
+            ],
+            "bounds": [
+              [
+                0.04792732699826366,
+                0.7743249715171804
+              ],
+              [
+                0.3826295761835008,
+                0.11577691237131749
+              ]
+            ]
+          },
+          {
+            "lineIndices": [
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.5024712641930702
+              ],
+              [
+                0.25179870386635833,
+                0.24703393742517932
+              ]
+            ]
+          }
+        ],
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "coveredCharacters": 26
+            }
+          ]
+        }
+      },
+      "info": {
+        "method": "vision",
+        "elapsedMilliseconds": 2719,
+        "page": 1,
+        "needsReview": true,
+        "confidence": 1,
+        "metrics": {
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 7,
+          "lineReview": {
+            "shortTextRegions": 0,
+            "uncertainLines": 3,
+            "confirmedUncertainLines": 2,
+            "conflictingReadings": 1,
+            "unconfirmedLines": 1,
+            "repairedLines": 0,
+            "normalizedCrops": 6,
+            "lowConfidenceRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 2,
+            "unavailableRetries": 0
+          },
+          "renderMilliseconds": 4,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 2708,
+          "targetedRetries": 3,
+          "recoveredLines": 0,
+          "renderedPixels": 403200,
+          "cacheHit": false,
+          "cacheMilliseconds": 0
+        }
+      }
+    },
+    "source-9-2.png": {
+      "geometry": {
+        "coverage": {
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ]
+            }
+          ],
+          "status": "checked"
+        },
+        "rotationDegrees": 0,
+        "blocks": [
+          {
+            "lineIndices": [
+              0
+            ],
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ]
+          },
+          {
+            "lineIndices": [
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.5037289666105408
+              ],
+              [
+                0.25179870386635833,
+                0.24577623500770873
+              ]
+            ]
+          }
+        ],
+        "coordinateSpace": "uprightImageBottomLeft",
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "lines": [
+          {
+            "length": 27,
+            "method": "vision",
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ],
+            "confidence": 1,
+            "location": 0
+          },
+          {
+            "length": 49,
+            "method": "vision",
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.6922437026253848
+              ],
+              [
+                0.25179870386635833,
+                0.0572614989928647
+              ]
+            ],
+            "confidence": 1,
+            "location": 28
+          },
+          {
+            "length": 29,
+            "method": "vision",
+            "bounds": [
+              [
+                0.05787527104169983,
+                0.5943295732971169
+              ],
+              [
+                0.1545484027937642,
+                0.04849154899800667
+              ]
+            ],
+            "confidence": 1,
+            "location": 78
+          },
+          {
+            "length": 16,
+            "method": "vision",
+            "bounds": [
+              [
+                0.06094978118512295,
+                0.5037289666105408
+              ],
+              [
+                0.10437536693754648,
+                0.040546842416127604
+              ]
+            ],
+            "confidence": 1,
+            "location": 108
+          }
+        ]
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 39.51 EUR",
+      "info": {
+        "confidence": 1,
+        "metrics": {
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 4,
+          "lineReview": {
+            "shortTextRegions": 0,
+            "uncertainLines": 3,
+            "confirmedUncertainLines": 2,
+            "conflictingReadings": 1,
+            "unconfirmedLines": 1,
+            "repairedLines": 0,
+            "normalizedCrops": 5,
+            "lowConfidenceRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 2,
+            "unavailableRetries": 0
+          },
+          "renderMilliseconds": 5,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 524,
+          "targetedRetries": 3,
+          "recoveredLines": 0,
+          "renderedPixels": 403200,
+          "cacheHit": false,
+          "cacheMilliseconds": 0
+        },
+        "page": 1,
+        "method": "vision",
+        "elapsedMilliseconds": 534,
+        "needsReview": true
+      }
+    },
+    "source-9-3.png": {
+      "geometry": {
+        "coordinateSpace": "uprightImageBottomLeft",
+        "lines": [
+          {
+            "length": 27,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ],
+            "location": 0,
+            "method": "vision"
+          },
+          {
+            "length": 49,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.6922437026253848
+              ],
+              [
+                0.25179870386635833,
+                0.0572614989928647
+              ]
+            ],
+            "location": 28,
+            "method": "vision"
+          },
+          {
+            "length": 29,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.05787527104169983,
+                0.5943295732971169
+              ],
+              [
+                0.1545484027937642,
+                0.04849154899800667
+              ]
+            ],
+            "location": 78,
+            "method": "vision"
+          },
+          {
+            "length": 19,
+            "confidence": 1,
+            "bounds": [
+              [
+                0.06103391252454694,
+                0.5044422821056322
+              ],
+              [
+                0.11603667849586123,
+                0.04085603356361389
+              ]
+            ],
+            "location": 108,
+            "method": "vision"
+          }
+        ],
+        "configuration": "ocr-v17-numeric-cell-evidence-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "coveredCharacters": 26,
+              "detectedCharacters": 26,
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ]
+            }
+          ]
+        },
+        "rotationDegrees": 0,
+        "blocks": [
+          {
+            "lineIndices": [
+              0
+            ],
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ]
+          },
+          {
+            "lineIndices": [
+              1,
+              2,
+              3
+            ],
+            "bounds": [
+              [
+                0.05444279948526132,
+                0.5044422821056322
+              ],
+              [
+                0.25179870386635833,
+                0.24506291951261727
+              ]
+            ]
+          }
+        ]
+      },
+      "info": {
+        "elapsedMilliseconds": 498,
+        "page": 1,
+        "method": "vision",
+        "confidence": 1,
+        "metrics": {
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "lineReview": {
+            "shortTextRegions": 0,
+            "uncertainLines": 3,
+            "confirmedUncertainLines": 2,
+            "conflictingReadings": 1,
+            "unconfirmedLines": 1,
+            "repairedLines": 0,
+            "normalizedCrops": 5,
+            "lowConfidenceRegions": 0,
+            "ambiguousIdentifiers": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 2,
+            "unavailableRetries": 0
+          },
+          "renderMilliseconds": 3,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 489,
+          "targetedRetries": 3,
+          "recoveredLines": 0,
+          "renderedPixels": 403200,
+          "cacheHit": false,
+          "cacheMilliseconds": 0
+        },
+        "needsReview": true
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234.56 EUR"
+    }
+  }
+}

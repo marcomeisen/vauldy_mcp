@@ -36,7 +36,8 @@ enum OCRLineRecovery {
     }
 
     static func decide(original: String, confidence: Float, alternatives: [String],
-                       retry: String, retryConfidence: Float, identifier: Bool, smallPrint: Bool = false) -> Decision {
+                       retry: String, retryConfidence: Float, identifier: Bool, smallPrint: Bool = false,
+                       allowSmallGlyphRepair: Bool = false) -> Decision {
         let first = tokens(original), second = tokens(retry)
         guard !second.isEmpty else { return .keep }
         if identifier {
@@ -51,11 +52,25 @@ enum OCRLineRecovery {
         for token in first {
             guard let position = remaining.firstIndex(of: token) else {
                 // Require support from the first pass for a conflicting word.
-                return stronger && second.count >= first.count && alternatives.contains(retry) ? .replace : .review
+                let supportedAlternative = stronger && second.count >= first.count && alternatives.contains(retry)
+                // A tiny glyph can be wrong even at native confidence 1. The
+                // caller must confirm this candidate on a second context crop.
+                let smallGlyphRepair = allowSmallGlyphRepair && smallPrint && retryConfidence >= 0.95 && singleLetterRepair(first, second)
+                return supportedAlternative || smallGlyphRepair ? .replace : .review
             }
             remaining = remaining[remaining.index(after: position)...]
         }
         return .replace
+    }
+
+    private static func singleLetterRepair(_ first: [String], _ second: [String]) -> Bool {
+        guard first.count == second.count else { return false }
+        let changed = zip(first, second).filter { $0 != $1 }
+        guard changed.count == 1, let pair = changed.first,
+              pair.0.count >= 6, pair.0.allSatisfy(\.isLetter), pair.1.allSatisfy(\.isLetter) else { return false }
+        let a = Array(pair.0), b = Array(pair.1)
+        guard a.count == b.count else { return false }
+        return zip(a, b).filter { $0 != $1 }.count == 1
     }
 
     /// A contextual crop may also contain neighbours. Select only a single

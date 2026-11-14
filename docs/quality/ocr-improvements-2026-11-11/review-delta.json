@@ -1,0 +1,217 @@
+{
+  "before": 13,
+  "after": 17,
+  "changedTextPages": 1,
+  "cases": [
+    {
+      "file": "clean.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "tilted-9-right.png",
+      "beforeReview": false,
+      "afterReview": true,
+      "textChanged": true
+    },
+    {
+      "file": "payroll.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-9-88-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "date.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Courier-Oblique-14.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-11-93-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "ambiguous.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-85-Fahrrad.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "tilted-12-left.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "tilted-12-right.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-92-fuer.png",
+      "beforeReview": false,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "grid-9-88-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "grid-11-93-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "grid-9-93-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Times-Italic-11.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-85-fuer.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-11-88-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "tilted-9-left.png",
+      "beforeReview": false,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "grid-11-88-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-92-Fahrrad.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-13-88-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Helvetica-Oblique-14.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-13-93-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Times-Italic-14.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "dense.png",
+      "beforeReview": false,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Helvetica-Oblique-11.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "invoice.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-9-93-15.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "grid-13-93-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-78-fuer.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "mixed-78-Fahrrad.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "grid-13-88-25.png",
+      "beforeReview": true,
+      "afterReview": true,
+      "textChanged": false
+    },
+    {
+      "file": "italic-Courier-Oblique-11.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    },
+    {
+      "file": "faint-words.png",
+      "beforeReview": false,
+      "afterReview": false,
+      "textChanged": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "before": 53,
+  "after": 53,
+  "fresh": 53,
+  "images": 35,
+  "expectedFields": 79,
+  "unchangedTexts": 35,
+  "lostCorrectFields": 0,
+  "lostLiteralEvidence": 0,
+  "hashesVerified": true
+}

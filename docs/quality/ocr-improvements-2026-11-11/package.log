@@ -1,0 +1,11 @@
+Another instance of SwiftPM (PID: 25544) is already running using '/private/tmp/vauldy-ocr-improvement-20261111/source/.build', waiting until that process has finished execution...warning: /Users/marcomeisen/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/marcomeisen/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+Cannot verify vauldy-mcp-setup: [Errno 2] No such file or directory: '/private/tmp/vauldy-ocr-improvement-20261111/source/.build/out/Products/Release/vauldy-mcp-setup'
+Traceback (most recent call last):
+  File "/private/tmp/vauldy-ocr-improvement-20261111/source/scripts/mcp/run_ui.py", line 36, in <module>
+    main()
+  File "/private/tmp/vauldy-ocr-improvement-20261111/source/scripts/mcp/run_ui.py", line 25, in main
+    subprocess.run(command, check=True)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vauldy-ocr-improvement-20261111/source/scripts/mcp/package.py', '--skip-build']' returned non-zero exit status 1.

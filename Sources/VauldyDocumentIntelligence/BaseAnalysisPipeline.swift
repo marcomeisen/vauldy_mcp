@@ -44,11 +44,7 @@ public enum BaseAnalysisPipeline {
             if card.kind == .unknown { card.issues.append("DOCUMENT_TYPE_UNRESOLVED") }
             if card.overview == nil { card.issues.append("OVERVIEW_UNAVAILABLE") }
             if card.subject == nil { card.issues.append("SUBJECT_UNRESOLVED") }
-            let subject = card.subject?.value
-            var parts = [card.issuer?.value, subject].compactMap { $0 }
-            if subject?.localizedCaseInsensitiveContains(card.kind.title) != true { parts.append(card.kind.title) }
-            if let year = card.titleYear?.value, !parts.joined(separator: " ").contains(year) { parts.append(year) }
-            card.title = parts.joined(separator: " ")
+            card.title = DocumentTitlePolicy.title(for: card)
             card.issues = Array(Set(card.issues)).sorted()
             return card
         }
@@ -77,7 +73,15 @@ public enum BaseAnalysisPipeline {
             return field.value == field.quote.split(whereSeparator: \.isWhitespace).joined(separator: " ")
                 && LocalRuleBasedDocumentAnalyzer.isOverview(field.value)
         case .subject:
-            return field.quote.contains(field.value) && !field.value.isEmpty
+            guard DocumentTitlePolicy.isTitlePhrase(field.value) else { return false }
+            switch field.origin {
+            case .explicitLabel:
+                return LocalRuleBasedDocumentAnalyzer.labelValue(in: field.quote, labels: ["Betreff", "Gegenstand", "Leistung"]) == field.value
+            case .documentHeading:
+                return LocalRuleBasedDocumentAnalyzer.headingKind(field.quote) != nil && field.quote.contains(field.value)
+            case .extractive:
+                return false
+            }
         }
     }
 }

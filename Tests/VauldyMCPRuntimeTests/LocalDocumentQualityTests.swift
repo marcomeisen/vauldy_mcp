@@ -8,6 +8,27 @@ import VauldyMCPRuntime
 
 @Suite("Concrete local quality reasons and source locations")
 struct LocalDocumentQualityTests {
+    @Test func repairedReadingsRemainVisibleAndBoundToTheSource() throws {
+        let text = "Leistung: Zahnriemenwechsel am Aggregat"
+        let prior = "Leistung: Zahnriemerwechsel am Aggregat"
+        var d = document(text: text)
+        var page = LocalOCRPage(info: .init(page: 1, method: .vision, confidence: 1), text: text)
+        page.geometry = .vision(texts: [text], bounds: [CGRect(x: 0.1, y: 0.5, width: 0.8, height: 0.1)], confidences: [1])
+        page.geometry?.configuration = LocalOCRPageCache.configuration
+        page.geometry?.lines[0].priorReadings = [prior]
+        let hash = try #require(d.localImport?.contentHash)
+        d.localImport?.pages[0].layout = try #require(LocalOCRPageLayout(sourceHash: hash, page: page))
+        let roundtrip = try JSONDecoder().decode(VaultDocument.self, from: JSONEncoder().encode(d))
+        let review = try #require(LocalDocumentReview(roundtrip))
+        #expect(review.pages[0].revisions.first?.previous == [prior])
+        #expect(review.pages[0].revisions.first?.current == text && review.pages[0].needsReview)
+        #expect(review.quality.issues.contains { $0.title == "Lesung geändert" && $0.focus?.page == 1 })
+        d.ocrText = "--- Seite 1 ---\nUngebundener neuer Text"
+        #expect(try #require(LocalDocumentReview(d)).pages[0].revisions.isEmpty)
+        page.geometry?.lines[0].priorReadings = Array(repeating: prior, count: 5)
+        #expect(LocalOCRPageLayout(sourceHash: hash, page: page) == nil)
+    }
+
     private struct ReportOCR: LocalDocumentOCR {
         func recognize(file: URL, progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalOCRResult {
             .init(pages: [.init(info: .init(page: 1, method: .embeddedText), text: "Unbekannte Unterlage\nDies ist eine synthetische Beschreibung ohne belegte Dokumentart.")])
@@ -67,7 +88,7 @@ struct LocalDocumentQualityTests {
         #expect(d.baseAnalysisStatus == "completed")
         let q = try #require(LocalDocumentReview(d)).quality
         #expect(q.reviewCount == 0)
-        #expect(q.headline == "Automatische Grundprüfung ohne Befund")
+        #expect(q.headline == "Textprüfung: keine automatischen Prüfhinweise")
         #expect(q.issues.contains { !$0.requiresReview && $0.title == "Aussteller nicht belegt" })
         #expect(LocalDocumentQuality.manualReviewLabel.contains("nicht dokumentiert"))
         #expect(LocalDocumentQuality.tableLabel.contains("Keine separate"))
@@ -84,6 +105,29 @@ struct LocalDocumentQualityTests {
         #expect(q.issues.contains { $0.category == .classification && $0.title == "Dokumentart unklar" && $0.focus?.page == 1 })
         #expect(q.issues.contains { $0.title == "Dokumentdatum: widersprüchliche Angaben" })
         #expect(!q.issues.contains { $0.category == .text })
+        #expect(q.reviewCount == 0 && q.textIssues.isEmpty)
+        #expect(!q.basisIssues.isEmpty)
+        #expect(q.basisIssues.contains { $0.requiresReview })
+    }
+
+    @Test func missingOrFailedAnalysisDoesNotCreateTextWarnings() throws {
+        var d = document()
+        for analysis in [nil, DocumentBaseAnalysis.failed(pages: [1]),
+                         DocumentBaseAnalysis(status: .unavailable, analyzedPages: [1], documents: [])] {
+            d.baseAnalysis = analysis
+            let quality = try #require(LocalDocumentReview(d)).quality
+            #expect(quality.reviewCount == 0)
+            #expect(quality.textIssues.isEmpty && !quality.basisIssues.isEmpty)
+        }
+    }
+
+    @Test func realOCRWarningRemainsVisibleAlongsideOptionalMetadata() throws {
+        var d = document()
+        d.localImport?.pages[0].needsReview = true
+        let quality = try #require(LocalDocumentReview(d)).quality
+        #expect(quality.reviewCount == 1)
+        #expect(quality.textIssues.first?.category == .text)
+        #expect(!quality.basisIssues.isEmpty)
     }
 
     @Test func aggregateLineWarningsNeverInventAnExactLocation() throws {

@@ -1,0 +1,26 @@
+[
+  {
+    "test": "punctuation-v17",
+    "exitCode": 0
+  },
+  {
+    "test": "word-and-punctuation-v14",
+    "exitCode": 0
+  },
+  {
+    "test": "raster",
+    "exitCode": 0
+  },
+  {
+    "test": "line",
+    "exitCode": 0
+  },
+  {
+    "test": "import",
+    "exitCode": 0
+  },
+  {
+    "test": "original-reference",
+    "exitCode": 0
+  }
+]

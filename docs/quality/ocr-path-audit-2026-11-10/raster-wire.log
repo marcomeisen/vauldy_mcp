@@ -1,0 +1,1 @@
+{"passed": true, "syntheticPDFs": 3, "exactStoredFields": 12, "cases": [{"name": "raster-pdf", "state": "completed", "review": false}, {"name": "raster-other-values", "state": "completed", "review": false}, {"name": "raster-light", "state": "partial", "review": true}], "grants": true, "privacy": true, "physicalPage": 1, "cacheAndFreshRetry": true, "revocation": true}

@@ -1,0 +1,20 @@
+{"file":"faint-first-0.7.png","readings":[[{"confidence":0.30000001192092896,"text":"Schutz fuer Fahned und Haustal"}]]}
+{"file":"faint-first-1.4.png","readings":[[{"confidence":0.5,"text":"Schitz fuer Fahred und Haustal"}]]}
+{"file":"faint-first-2.png","readings":[[{"confidence":0.5,"text":"Schutz fuer Fanred uni Haustat"}]]}
+{"file":"faint-first-3.png","readings":[[{"confidence":0.30000001192092896,"text":"Schut fuer Fanre umi Hlausrel"}]]}
+{"file":"faint-second-0.7.png","readings":[[{"confidence":0.5,"text":"Laisting Wortung der Heizungsenlage"}]]}
+{"file":"faint-second-1.4.png","readings":[[{"confidence":0.5,"text":"Leistuing Wortung der Heizungsenlage"}]]}
+{"file":"faint-second-2.png","readings":[[{"confidence":0.5,"text":"Leisiumg Wartung der Heizungsonlage"}]]}
+{"file":"faint-second-3.png","readings":[[{"confidence":0.30000001192092896,"text":"Leigiung Wartung der Heizungaonlege"}]]}
+{"file":"policy-0.7.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"policy-1.4.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"policy-2.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"policy-3.png","readings":[[{"confidence":0.5,"text":"Policennummer: I000-171"}]]}
+{"file":"policy-raw-0.7.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"policy-raw-1.4.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"policy-raw-2.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"policy-raw-3.png","readings":[[{"confidence":1,"text":"Policennummer: IO00-171"}]]}
+{"file":"policy-spaced-0.7.png","readings":[[{"confidence":0.5,"text":"Policennummer: | 0 0 0 - 17 1"}]]}
+{"file":"policy-spaced-1.4.png","readings":[[{"confidence":0.5,"text":"Policennummer: | O 0 O - 1 7 1"}]]}
+{"file":"policy-spaced-2.png","readings":[[{"confidence":0.5,"text":"Policennummer: | O 0"}],[{"confidence":0.30000001192092896,"text":"ー"}],[{"confidence":0.30000001192092896,"text":"171"}]]}
+{"file":"policy-spaced-3.png","readings":[[{"confidence":1,"text":"Policennummer:"}]]}

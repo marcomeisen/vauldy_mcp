@@ -1,0 +1,999 @@
+[0/1] Planning build
+Test Suite 'All tests' started at 2026-11-13 12:34:23.822.
+Test Suite 'All tests' passed at 2026-11-13 12:34:23.825.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite "Document-wide local base analysis" started.
+◇ Test allAnnotatedDomainsAndHoldoutsMeetTheirIndependentExpectations() started.
+✔ Test allAnnotatedDomainsAndHoldoutsMeetTheirIndependentExpectations() passed after 0.151 seconds.
+◇ Test importReloadAndExplicitReanalysisUseTheSameAcceptancePath() started.
+✔ Test importReloadAndExplicitReanalysisUseTheSameAcceptancePath() passed after 1.439 seconds.
+◇ Test sourceChangesInvalidateStoredAnalysisAndManualMetadataSurvives() started.
+✔ Test sourceChangesInvalidateStoredAnalysisAndManualMetadataSurvives() passed after 0.049 seconds.
+◇ Test analysisFailurePreservesSuccessfulOCRWithoutPretendingSuccess() started.
+✔ Test analysisFailurePreservesSuccessfulOCRWithoutPretendingSuccess() passed after 0.031 seconds.
+◇ Test wrappedOrdinalsAndAmountContinuationsRemainInTheLiteralOverview() started.
+✔ Test wrappedOrdinalsAndAmountContinuationsRemainInTheLiteralOverview() passed after 0.007 seconds.
+◇ Test proposedForeignPageAndWrongRolesCannotBecomeAcceptedFacts() started.
+✔ Test proposedForeignPageAndWrongRolesCannotBecomeAcceptedFacts() passed after 0.001 seconds.
+✔ Suite "Document-wide local base analysis" passed after 1.680 seconds.
+◇ Suite "Base analysis through original import and MCP" started.
+◇ Test annotatedPDFOriginalsPersistCorrectRolesAcrossDocumentDomains() started.
+✔ Test annotatedPDFOriginalsPersistCorrectRolesAcrossDocumentDomains() passed after 2.084 seconds.
+◇ Test rasterOriginalsUseNativeOCRBeforeTheSameAnalysisPipeline() started.
+✔ Test rasterOriginalsUseNativeOCRBeforeTheSameAnalysisPipeline() passed after 56.263 seconds.
+◇ Test metadataIsProtectedPaginatedAndRevocableWithoutMutatingTheStore() started.
+✔ Test metadataIsProtectedPaginatedAndRevocableWithoutMutatingTheStore() passed after 0.267 seconds.
+◇ Test metadataSharesContentPrivacyMappingAndCannotExposeRecipientOrIdentifiers() started.
+✔ Test metadataSharesContentPrivacyMappingAndCannotExposeRecipientOrIdentifiers() passed after 0.146 seconds.
+◇ Test warningCodesCannotCarryArbitrarySourceText() started.
+✔ Test warningCodesCannotCarryArbitrarySourceText() passed after 0.001 seconds.
+✔ Suite "Base analysis through original import and MCP" passed after 58.761 seconds.
+◇ Suite "Explicit OCR refinement preserves existing literal evidence" started.
+◇ Test changedNumbersRemovedLinesAndDuplicateLossRetainThePreviousPage() started.
+✔ Test changedNumbersRemovedLinesAndDuplicateLossRetainThePreviousPage() passed after 0.001 seconds.
+◇ Test refinementUsesNormalOriginalValidationAndAtomicImportCommit() started.
+✔ Test refinementUsesNormalOriginalValidationAndAtomicImportCommit() passed after 0.067 seconds.
+✔ Suite "Explicit OCR refinement preserves existing literal evidence" passed after 0.067 seconds.
+◇ Suite "Complete identifier protection" started.
+◇ Test overlappingLabelCannotLeaveAnUnprotectedPostalAddress() started.
+✔ Test overlappingLabelCannotLeaveAnUnprotectedPostalAddress() passed after 0.005 seconds.
+◇ Test shortNumericNamesCannotRewriteReplacementBookkeeping() started.
+✔ Test shortNumericNamesCannotRewriteReplacementBookkeeping() passed after 0.010 seconds.
+◇ Test currencyCodesRemainUsefulButExplicitPersonalValuesStayProtected() started.
+✔ Test currencyCodesRemainUsefulButExplicitPersonalValuesStayProtected() passed after 0.004 seconds.
+◇ Test unknownOutgoingIdentifiersStillFailClosed() started.
+✔ Test unknownOutgoingIdentifiersStillFailClosed() passed after 0.001 seconds.
+✔ Suite "Complete identifier protection" passed after 0.021 seconds.
+◇ Suite "Guided inventory reconciliation and renewed grants" started.
+◇ Test previewClassifiesFilesWithoutWritesAndReportsUnavailableFolders() started.
+✔ Test previewClassifiesFilesWithoutWritesAndReportsUnavailableFolders() passed after 0.086 seconds.
+◇ Test stalePreviewAndChangedSourceDoNotImportUnreviewedBytes() started.
+✔ Test stalePreviewAndChangedSourceDoNotImportUnreviewedBytes() passed after 0.026 seconds.
+◇ Test qualityKeepsSourceCoverageAndAnalysisSeparateAndRetainsMissingRecords() started.
+✔ Test qualityKeepsSourceCoverageAndAnalysisSeparateAndRetainsMissingRecords() passed after 0.130 seconds.
+◇ Test reviewDocumentsRequireSeparateAcknowledgment() started.
+✔ Test reviewDocumentsRequireSeparateAcknowledgment() passed after 0.048 seconds.
+◇ Test reportRejectsSnapshotChangesDuringOriginalVerification() started.
+✔ Test reportRejectsSnapshotChangesDuringOriginalVerification() passed after 0.039 seconds.
+◇ Test renewalPreservesIdentityAndInvalidatesOldHandlesAndCursors() started.
+✔ Test renewalPreservesIdentityAndInvalidatesOldHandlesAndCursors() passed after 0.163 seconds.
+◇ Test pausedAndEmptyGrantsRemainPaused(empty:) started.
+◇ Test case passing 1 argument empty → true to pausedAndEmptyGrantsRemainPaused(empty:) started.
+◇ Test case passing 1 argument empty → false to pausedAndEmptyGrantsRemainPaused(empty:) started.
+✔ Test pausedAndEmptyGrantsRemainPaused(empty:) with 2 test cases passed after 0.087 seconds.
+◇ Test failedCredentialWriteCannotExpandRelayAndCanBeReconfirmed() started.
+✔ Test failedCredentialWriteCannotExpandRelayAndCanBeReconfirmed() passed after 0.087 seconds.
+◇ Test renewalRejectsStaleRevisionForeignProfileAndChangedSnapshot() started.
+✔ Test renewalRejectsStaleRevisionForeignProfileAndChangedSnapshot() passed after 0.045 seconds.
+◇ Test explicitWorkerImportDoesNotResumeUnselectedWatchedFolders() started.
+✔ Test explicitWorkerImportDoesNotResumeUnselectedWatchedFolders() passed after 55.286 seconds.
+◇ Test managerRequiresExplicitDisclosureAndReviewConsent() started.
+✔ Test managerRequiresExplicitDisclosureAndReviewConsent() passed after 0.141 seconds.
+◇ Test sameRevisionProfileTamperingCannotChangeFrozenConsent() started.
+✔ Test sameRevisionProfileTamperingCannotChangeFrozenConsent() passed after 0.043 seconds.
+◇ Test renewedFolderAuthorityRetainsIdentityTextAndGrantsAfterFullHashMatch() started.
+✔ Test renewedFolderAuthorityRetainsIdentityTextAndGrantsAfterFullHashMatch() passed after 0.070 seconds.
+◇ Test staleNativeAttestationsAndInvalidBorrowedCapabilitiesFailClosed() started.
+✔ Test staleNativeAttestationsAndInvalidBorrowedCapabilitiesFailClosed() passed after 0.062 seconds.
+◇ Test borrowedAuthorityCannotBeSubstitutedAcrossDocuments() started.
+✔ Test borrowedAuthorityCannotBeSubstitutedAcrossDocuments() passed after 0.088 seconds.
+◇ Test explicitSourceStatePublicationMakesChatCoverageHonestWithoutChangingTextOrGrant() started.
+✔ Test explicitSourceStatePublicationMakesChatCoverageHonestWithoutChangingTextOrGrant() passed after 0.073 seconds.
+◇ Test olderAgentStatusIsReadableWithoutClaimingUpdateCapability() started.
+✔ Test olderAgentStatusIsReadableWithoutClaimingUpdateCapability() passed after 0.001 seconds.
+◇ Test fragmentedLargeSelectionsRemainBoundedAndDecodeCompletely() started.
+✔ Test fragmentedLargeSelectionsRemainBoundedAndDecodeCompletely() passed after 0.009 seconds.
+✔ Suite "Guided inventory reconciliation and renewed grants" passed after 56.494 seconds.
+◇ Suite "Consistent document decisions" started.
+◇ Test unavailableGrantedDocumentsSurviveReviewAndCanBeDeselectedAndRestored() started.
+✔ Test unavailableGrantedDocumentsSurviveReviewAndCanBeDeselectedAndRestored() passed after 0.141 seconds.
+◇ Test localDecisionsPersistPerRecipientAndOriginalContentWithoutChangingGrants() started.
+✔ Test localDecisionsPersistPerRecipientAndOriginalContentWithoutChangingGrants() passed after 0.043 seconds.
+◇ Test keepLocalSurvivesReopeningAndDoesNotHideOtherRecipients() started.
+✔ Test keepLocalSurvivesReopeningAndDoesNotHideOtherRecipients() passed after 0.070 seconds.
+◇ Test failedRefreshRetainsDraftSelection() started.
+✔ Test failedRefreshRetainsDraftSelection() passed after 0.075 seconds.
+◇ Test confirmedRemovalBecomesAnExplicitLocalDecision() started.
+✔ Test confirmedRemovalBecomesAnExplicitLocalDecision() passed after 0.106 seconds.
+◇ Test legacyArchiveUsesCommonReviewWithoutInventingOriginalVerification() started.
+✔ Test legacyArchiveUsesCommonReviewWithoutInventingOriginalVerification() passed after 0.002 seconds.
+✔ Suite "Consistent document decisions" passed after 0.439 seconds.
+◇ Suite "Concrete local quality reasons and source locations" started.
+◇ Test repairedReadingsRemainVisibleAndBoundToTheSource() started.
+✔ Test repairedReadingsRemainVisibleAndBoundToTheSource() passed after 0.001 seconds.
+◇ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() started.
+✔ Test inventoryReportBindsConcreteReasonsWithoutChangingGrantOrStartingWorker() passed after 0.042 seconds.
+◇ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() started.
+✔ Test unreadableIsNotAMissingOriginalPageAndBlankCountsAsProcessed() passed after 0.001 seconds.
+◇ Test completedAnalysisDoesNotProveManualOrTableValidation() started.
+✔ Test completedAnalysisDoesNotProveManualOrTableValidation() passed after 0.006 seconds.
+◇ Test unknownKindAndFieldConflictAreIndependentOfOCR() started.
+✔ Test unknownKindAndFieldConflictAreIndependentOfOCR() passed after 0.005 seconds.
+◇ Test aggregateLineWarningsNeverInventAnExactLocation() started.
+✔ Test aggregateLineWarningsNeverInventAnExactLocation() passed after 0.001 seconds.
+◇ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() started.
+✔ Test geometryAndQuoteStayBoundToPhysicalSourceAndUTF16() passed after 0.001 seconds.
+◇ Test previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewHighlightFollowsPDFRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewHighlightFollowsPDFRotation(rotation:) started.
+✔ Test previewHighlightFollowsPDFRotation(rotation:) with 4 test cases passed after 0.001 seconds.
+✔ Suite "Concrete local quality reasons and source locations" passed after 0.055 seconds.
+◇ Suite "Local OCR quality review" started.
+◇ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 0 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 90 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 180 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+◇ Test case passing 1 argument rotation → 270 to previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) started.
+✔ Test previewPixelsMatchSourceGeometryAfterScalingAndRotation(rotation:) with 4 test cases passed after 0.260 seconds.
+◇ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() started.
+✔ Test selectsFirstAffectedPhysicalPageAndRejectsAmbiguousText() passed after 0.001 seconds.
+◇ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() started.
+✔ Test rendersVerifiedPhysicalPageWithoutChangingSnapshot() passed after 0.156 seconds.
+✔ Suite "Local OCR quality review" passed after 0.417 seconds.
+◇ Suite "Standalone import and native OCR" started.
+◇ Test realMixedPDFIsImportedReloadedAndOnlyDisclosedAfterGrant() started.
+✔ Test realMixedPDFIsImportedReloadedAndOnlyDisclosedAfterGrant() passed after 0.364 seconds.
+◇ Test scannedPDFAndPNGUseRealVisionWithoutApp() started.
+✔ Test scannedPDFAndPNGUseRealVisionWithoutApp() passed after 0.516 seconds.
+◇ Test duplicateDoesNotRerunOCRAndRetainsIdentity() started.
+✔ Test duplicateDoesNotRerunOCRAndRetainsIdentity() passed after 0.030 seconds.
+◇ Test partialPagesRemainVisibleAndRetryUsesRetainedOriginal() started.
+✔ Test partialPagesRemainVisibleAndRetryUsesRetainedOriginal() passed after 0.047 seconds.
+◇ Test corruptPDFKeepsOriginalAndCanBeReportedAfterRestart() started.
+CoreGraphics PDF has logged an error. Set environment variable "CG_PDF_VERBOSE" to learn more.
+✔ Test corruptPDFKeepsOriginalAndCanBeReportedAfterRestart() passed after 0.049 seconds.
+◇ Test noTextIsNotCalledASuccessfulAnalysis() started.
+✔ Test noTextIsNotCalledASuccessfulAnalysis() passed after 0.021 seconds.
+◇ Test damagedSnapshotAndForeignArchiveAreNeverOverwritten() started.
+✔ Test damagedSnapshotAndForeignArchiveAreNeverOverwritten() passed after 0.027 seconds.
+◇ Test independentStoreInstancesMergeStagedImportsWithoutLostUpdates() started.
+✔ Test independentStoreInstancesMergeStagedImportsWithoutLostUpdates() passed after 0.020 seconds.
+◇ Test crashRecoveryAndOldAttemptCannotCommitOverNewerState() started.
+✔ Test crashRecoveryAndOldAttemptCannotCommitOverNewerState() passed after 0.042 seconds.
+◇ Test cancellationKeepsWorkerLeaseUntilNativeWorkActuallyFinishes() started.
+✔ Test cancellationKeepsWorkerLeaseUntilNativeWorkActuallyFinishes() passed after 0.038 seconds.
+◇ Test changedOriginalAndOversizedInputAreRejected() started.
+✔ Test changedOriginalAndOversizedInputAreRejected() passed after 0.094 seconds.
+◇ Test pageMarkersFromSourceCannotForgePhysicalAttribution() started.
+✔ Test pageMarkersFromSourceCannotForgePhysicalAttribution() passed after 0.023 seconds.
+✔ Suite "Standalone import and native OCR" passed after 1.278 seconds.
+◇ Suite "German alternative OCR evidence comparison" started.
+➜ Test realGermanCandidateCannotOverwritePriorEvidence() skipped: "Requires an explicitly prepared isolated German local OCR corpus run"
+✔ Suite "German alternative OCR evidence comparison" passed after 0.001 seconds.
+◇ Suite "Local OCR optimizations" started.
+◇ Test formTextUsesEmbeddedTextAndRasterFooterRemainsCovered() started.
+✔ Test formTextUsesEmbeddedTextAndRasterFooterRemainsCovered() passed after 0.169 seconds.
+◇ Test pageCheckpointReusesOnlyUnchangedSuccessfulPages() started.
+✔ Test pageCheckpointReusesOnlyUnchangedSuccessfulPages() passed after 0.281 seconds.
+◇ Test weakAndCorruptCacheEntriesCannotBecomeComplete() started.
+✔ Test weakAndCorruptCacheEntriesCannotBecomeComplete() passed after 0.003 seconds.
+◇ Test narrowReceiptRegionsCoverEveryPointWithoutUnboundedImages() started.
+✔ Test narrowReceiptRegionsCoverEveryPointWithoutUnboundedImages() passed after 0.001 seconds.
+◇ Test longReceiptImageRetainsTopMiddleAndBottomOnOnePhysicalPage() started.
+✔ Test longReceiptImageRetainsTopMiddleAndBottomOnOnePhysicalPage() passed after 0.233 seconds.
+◇ Test indexRebuildsOnlyChangedDocumentsAndDropsRemovedOnes() started.
+✔ Test indexRebuildsOnlyChangedDocumentsAndDropsRemovedOnes() passed after 0.001 seconds.
+◇ Test preparedPrivacyIsReusedButInvalidatedByContentAndGrant() started.
+✔ Test preparedPrivacyIsReusedButInvalidatedByContentAndGrant() passed after 0.037 seconds.
+✔ Suite "Local OCR optimizations" passed after 0.726 seconds.
+◇ Suite "Referenced folder originals and verified migration" started.
+◇ Test referenceSurvivesReloadWithoutCopyAndOriginalRemainsUnchanged() started.
+✔ Test referenceSurvivesReloadWithoutCopyAndOriginalRemainsUnchanged() passed after 0.029 seconds.
+◇ Test missingAndChangedSourcesAreVisibleWithoutLosingStoredText() started.
+✔ Test missingAndChangedSourcesAreVisibleWithoutLosingStoredText() passed after 0.044 seconds.
+◇ Test sourceMutationDuringOCRCannotCommitNewText() started.
+✔ Test sourceMutationDuringOCRCannotCommitNewText() passed after 0.028 seconds.
+◇ Test changedFolderVersionHasNewIdentityAndOldTextIsHistorical() started.
+✔ Test changedFolderVersionHasNewIdentityAndOldTextIsHistorical() passed after 0.052 seconds.
+◇ Test migrationRemovesOnlyVerifiedCopyAndBothSnapshotsUseReference() started.
+✔ Test migrationRemovesOnlyVerifiedCopyAndBothSnapshotsUseReference() passed after 0.054 seconds.
+◇ Test sourceChangedAfterPreviewRetainsCopyAndBacking() started.
+✔ Test sourceChangedAfterPreviewRetainsCopyAndBacking() passed after 0.035 seconds.
+◇ Test missingSourceCorruptCopySymlinksAndChangedRecordCannotRemoveCopy() started.
+✔ Test missingSourceCorruptCopySymlinksAndChangedRecordCannotRemoveCopy() passed after 0.054 seconds.
+◇ Test activeOCRBlocksMigrationAndRecoveryCanRemoveLeftoverVerifiedCopy() started.
+✔ Test activeOCRBlocksMigrationAndRecoveryCanRemoveLeftoverVerifiedCopy() passed after 0.089 seconds.
+◇ Test referenceMetadataNeverCrossesMCPBoundary() started.
+✔ Test referenceMetadataNeverCrossesMCPBoundary() passed after 0.064 seconds.
+✔ Suite "Referenced folder originals and verified migration" passed after 0.453 seconds.
+◇ Suite "Standalone watched folders" started.
+◇ Test multipleFoldersPersistAndConcurrentChangesAreRetained() started.
+✔ Test multipleFoldersPersistAndConcurrentChangesAreRetained() passed after 0.036 seconds.
+◇ Test oneTimeFolderBatchCountsNestedAndOverlappingSelectionsOnce() started.
+✔ Test oneTimeFolderBatchCountsNestedAndOverlappingSelectionsOnce() passed after 0.028 seconds.
+◇ Test rejectsVaultOverlapMissingFoldersAndDamagedConfiguration() started.
+✔ Test rejectsVaultOverlapMissingFoldersAndDamagedConfiguration() passed after 0.016 seconds.
+◇ Test stableFilesRecursionChangesAndSymlinks() started.
+✔ Test stableFilesRecursionChangesAndSymlinks() passed after 0.040 seconds.
+◇ Test unavailableFolderDoesNotPreventOtherFolderAndFailedSubmitRetries() started.
+✔ Test unavailableFolderDoesNotPreventOtherFolderAndFailedSubmitRetries() passed after 0.019 seconds.
+◇ Test workerWatchesPastIdleDeduplicatesAndStopsWithoutDeletingImports() started.
+✔ Test workerWatchesPastIdleDeduplicatesAndStopsWithoutDeletingImports() passed after 4.728 seconds.
+✔ Suite "Standalone watched folders" passed after 4.871 seconds.
+◇ Suite "Local worker lifecycle" started.
+◇ Test idleWorkerStopsAndDoesNotLoseCompletedJob() started.
+✔ Test idleWorkerStopsAndDoesNotLoseCompletedJob() passed after 2.365 seconds.
+◇ Test capacityFailureKeepsLegacyJobCodeAndReachesClient() started.
+✔ Test capacityFailureKeepsLegacyJobCodeAndReachesClient() passed after 0.355 seconds.
+◇ Test queuedDocumentsUseOneWorkerAndRemainSeparate() started.
+✔ Test queuedDocumentsUseOneWorkerAndRemainSeparate() passed after 0.539 seconds.
+◇ Test sequentialFreshBatchKeepsOneWorkerAndPreservesPriorEvidence() started.
+✔ Test sequentialFreshBatchKeepsOneWorkerAndPreservesPriorEvidence() passed after 1.164 seconds.
+◇ Test queuedCancellationPersistsWithoutInterruptingAnotherNativeLease() started.
+✔ Test queuedCancellationPersistsWithoutInterruptingAnotherNativeLease() passed after 0.531 seconds.
+◇ Test clientCancellationJoinsNativeWorkBeforeWorkerAcceptsNextJob() started.
+✔ Test clientCancellationJoinsNativeWorkBeforeWorkerAcceptsNextJob() passed after 0.679 seconds.
+✔ Suite "Local worker lifecycle" passed after 5.636 seconds.
+◇ Suite "Local MCP audit log" started.
+◇ Test typedRecordsArePrivateAndCorrelateRequests() started.
+✔ Test typedRecordsArePrivateAndCorrelateRequests() passed after 0.013 seconds.
+◇ Test boundedRotationPreservesVerifiableRetainedHistory() started.
+✔ Test boundedRotationPreservesVerifiableRetainedHistory() passed after 0.243 seconds.
+◇ Test emptyCurrentFileContinuesTheArchivedChain() started.
+✔ Test emptyCurrentFileContinuesTheArchivedChain() passed after 0.008 seconds.
+◇ Test modifiedAndIncompleteRecordsAreDetectedWithoutRepair() started.
+✔ Test modifiedAndIncompleteRecordsAreDetectedWithoutRepair() passed after 0.008 seconds.
+◇ Test concurrentWritersKeepEveryRecordAndSequence() started.
+✔ Test concurrentWritersKeepEveryRecordAndSequence() passed after 0.074 seconds.
+◇ Test symlinkCannotRedirectAnAuditWrite() started.
+✔ Test symlinkCannotRedirectAnAuditWrite() passed after 0.004 seconds.
+◇ Test verifiedTailIsReusedUntilAnotherWriterOrRotationChangesIt() started.
+✔ Test verifiedTailIsReusedUntilAnotherWriterOrRotationChangesIt() passed after 0.214 seconds.
+◇ Test sameLengthAuditTamperingWithRestoredMtimeCannotReuseTheCache() started.
+✔ Test sameLengthAuditTamperingWithRestoredMtimeCannotReuseTheCache() passed after 0.006 seconds.
+◇ Test deletionOrArchivedDamageCannotResetAWarmVerifiedChain() started.
+✔ Test deletionOrArchivedDamageCannotResetAWarmVerifiedChain() passed after 0.105 seconds.
+◇ Test revocationPersistsEvenIfLoggingIsBlocked() started.
+✔ Test revocationPersistsEvenIfLoggingIsBlocked() passed after 0.006 seconds.
+✔ Suite "Local MCP audit log" passed after 0.686 seconds.
+◇ Suite "R4 build identity and honest local diagnosis" started.
+◇ Test executableIdentityIsRealAndVersionKeepsProductSeparate() started.
+✔ Test executableIdentityIsRealAndVersionKeepsProductSeparate() passed after 0.001 seconds.
+◇ Test universalAndMalformedMachOHeadersAreBounded() started.
+✔ Test universalAndMalformedMachOHeadersAreBounded() passed after 0.001 seconds.
+◇ Test sameVersionOldBuildAndUnknownLegacyProcessNeedRestart() started.
+✔ Test sameVersionOldBuildAndUnknownLegacyProcessNeedRestart() passed after 0.001 seconds.
+◇ Test paginatedNineToolsAndLegacySixAreDistinguishedWithoutDocuments() started.
+✔ Test paginatedNineToolsAndLegacySixAreDistinguishedWithoutDocuments() passed after 1.119 seconds.
+◇ Test malformedDiscoveryAndProtocolHaveSpecificDiagnosis() started.
+✔ Test malformedDiscoveryAndProtocolHaveSpecificDiagnosis() passed after 4.175 seconds.
+✔ Suite "R4 build identity and honest local diagnosis" passed after 5.296 seconds.
+◇ Suite "Desktop client registration" started.
+◇ Test unregisterOnlyRemovesItsOwnClaudeEntryAndIsIdempotent() started.
+✔ Test unregisterOnlyRemovesItsOwnClaudeEntryAndIsIdempotent() passed after 0.061 seconds.
+◇ Test unregisterKeepsAnotherConnectionsClientEntry() started.
+✔ Test unregisterKeepsAnotherConnectionsClientEntry() passed after 0.041 seconds.
+◇ Test chatGPTUnregisterPreservesBytesOutsideItsTable(suffix:) started.
+◇ Test case passing 1 argument suffix → "
+[features]
+# Preserve this too
+" to chatGPTUnregisterPreservesBytesOutsideItsTable(suffix:) started.
+◇ Test case passing 1 argument suffix → "
+# Foreign array comment
+[[unrelated_array]]
+label = "keep"
+
+[features]
+" to chatGPTUnregisterPreservesBytesOutsideItsTable(suffix:) started.
+✔ Test chatGPTUnregisterPreservesBytesOutsideItsTable(suffix:) with 2 test cases passed after 1.451 seconds.
+◇ Test claudePreservesSettingsBacksUpAndIsIdempotent() started.
+✔ Test claudePreservesSettingsBacksUpAndIsIdempotent() passed after 0.039 seconds.
+◇ Test claudeRejectsInvalidOrConflictingConfig(text:) started.
+◇ Test case passing 1 argument text → "{broken" to claudeRejectsInvalidOrConflictingConfig(text:) started.
+◇ Test case passing 1 argument text → "[]" to claudeRejectsInvalidOrConflictingConfig(text:) started.
+◇ Test case passing 1 argument text → "{"mcpServers":[]}" to claudeRejectsInvalidOrConflictingConfig(text:) started.
+◇ Test case passing 1 argument text → "{"mcpServers":{"vauldy":{"command":"another"}}}" to claudeRejectsInvalidOrConflictingConfig(text:) started.
+✔ Test claudeRejectsInvalidOrConflictingConfig(text:) with 4 test cases passed after 0.076 seconds.
+◇ Test missingConfigIsCreatedAndRevokedProfileCannotRegister() started.
+✔ Test missingConfigIsCreatedAndRevokedProfileCannotRegister() passed after 0.026 seconds.
+◇ Test symbolicLinkIsNeverReplacedOrFollowed() started.
+✔ Test symbolicLinkIsNeverReplacedOrFollowed() passed after 0.017 seconds.
+◇ Test chatGPTUsesRealClientParserAndPreservesOriginalBytes() started.
+✔ Test chatGPTUsesRealClientParserAndPreservesOriginalBytes() passed after 0.465 seconds.
+◇ Test chatGPTRejectsInvalidTOMLWithoutWriting() started.
+✔ Test chatGPTRejectsInvalidTOMLWithoutWriting() passed after 0.145 seconds.
+✔ Suite "Desktop client registration" passed after 2.325 seconds.
+◇ Suite "Connection removal" started.
+◇ Test removalRevokesExistingRuntimePreservesVaultAndOtherConnections() started.
+✔ Test removalRevokesExistingRuntimePreservesVaultAndOtherConnections() passed after 0.056 seconds.
+◇ Test linkedHistoryCannotBeMistakenForCompletedRemoval() started.
+✔ Test linkedHistoryCannotBeMistakenForCompletedRemoval() passed after 0.017 seconds.
+◇ Test staleRemovalCannotDeleteAChangedGrant() started.
+✔ Test staleRemovalCannotDeleteAChangedGrant() passed after 0.018 seconds.
+◇ Test aConnectionDirectoryContainingItsVaultCannotBeMoved() started.
+✔ Test aConnectionDirectoryContainingItsVaultCannotBeMoved() passed after 0.015 seconds.
+✔ Suite "Connection removal" passed after 0.109 seconds.
+◇ Suite "Authorized stable document inventory" started.
+◇ Test globallySortedBeforePaginationAndUnknownLast(sqlite:) started.
+◇ Test case passing 1 argument sqlite → false to globallySortedBeforePaginationAndUnknownLast(sqlite:) started.
+◇ Test case passing 1 argument sqlite → true to globallySortedBeforePaginationAndUnknownLast(sqlite:) started.
+✔ Test globallySortedBeforePaginationAndUnknownLast(sqlite:) with 2 test cases passed after 0.057 seconds.
+◇ Test identitySurvivesRestartGrantRevisionAndSourceChangesButNeverAuthorizesRead() started.
+✔ Test identitySurvivesRestartGrantRevisionAndSourceChangesButNeverAuthorizesRead() passed after 0.016 seconds.
+◇ Test duplicateOriginalKeepsIDImportDateAndHashAndDifferentBytesKeepPriorRecord() started.
+✔ Test duplicateOriginalKeepsIDImportDateAndHashAndDifferentBytesKeepPriorRecord() passed after 0.020 seconds.
+◇ Test twentyThousandRowsStayOnSmallSQLiteProjections() started.
+✔ Test twentyThousandRowsStayOnSmallSQLiteProjections() passed after 6.217 seconds.
+✔ Suite "Authorized stable document inventory" passed after 6.311 seconds.
+◇ Suite "MCP literal field roles and evidence" started.
+◇ Test amountsKeepTheirRolesAndLateDisagreementIsNotHidden() started.
+✔ Test amountsKeepTheirRolesAndLateDisagreementIsNotHidden() passed after 0.001 seconds.
+◇ Test nextLineKeepsExactPhysicalQuoteAndReportsUnexaminedContinuation() started.
+✔ Test nextLineKeepsExactPhysicalQuoteAndReportsUnexaminedContinuation() passed after 0.001 seconds.
+◇ Test mentionsAmbiguousRolesAndOtherLabelsAreNotFieldAuthority() started.
+✔ Test mentionsAmbiguousRolesAndOtherLabelsAreNotFieldAuthority() passed after 0.001 seconds.
+◇ Test malformedPagesAndOversizedEvidenceAreNeverPresentedAsLocatedFacts() started.
+✔ Test malformedPagesAndOversizedEvidenceAreNeverPresentedAsLocatedFacts() passed after 0.001 seconds.
+◇ Test distinctEvidenceIsBoundedInsteadOfSilentlyDroppingLateConflicts() started.
+✔ Test distinctEvidenceIsBoundedInsteadOfSilentlyDroppingLateConflicts() passed after 0.004 seconds.
+✔ Suite "MCP literal field roles and evidence" passed after 0.005 seconds.
+◇ Suite "Local MCP installation" started.
+◇ Test installationIsPrivateExplicitAndRevocable() started.
+✔ Test installationIsPrivateExplicitAndRevocable() passed after 0.022 seconds.
+◇ Test enabledProfileRequiresExplicitDisclosureAndDocumentSelection() started.
+✔ Test enabledProfileRequiresExplicitDisclosureAndDocumentSelection() passed after 0.001 seconds.
+✔ Suite "Local MCP installation" passed after 0.022 seconds.
+◇ Suite "MCP access and software management" started.
+◇ Test updatesPreserveExactPausedGrantsAndClientConfiguration() started.
+✔ Test updatesPreserveExactPausedGrantsAndClientConfiguration() passed after 0.026 seconds.
+◇ Test invalidUpdateCompanionLeavesInstalledServerAndManifestUntouched() started.
+✔ Test invalidUpdateCompanionLeavesInstalledServerAndManifestUntouched() passed after 0.016 seconds.
+◇ Test selectionPreservesPauseAndExpansionRequiresFreshConsent() started.
+✔ Test selectionPreservesPauseAndExpansionRequiresFreshConsent() passed after 0.033 seconds.
+◇ Test staleSelectionCannotUndoPauseFromAnotherWindow() started.
+✔ Test staleSelectionCannotUndoPauseFromAnotherWindow() passed after 0.026 seconds.
+◇ Test firstExplicitSelectionCanConsentWithoutResumingDraft() started.
+✔ Test firstExplicitSelectionCanConsentWithoutResumingDraft() passed after 0.022 seconds.
+◇ Test missingOrChangedManagementBundleRequiresSoftwareUpdate() started.
+✔ Test missingOrChangedManagementBundleRequiresSoftwareUpdate() passed after 0.027 seconds.
+◇ Test legacyProfilesAndPausedClientBindingsRemainReadableWithoutWrites() started.
+✔ Test legacyProfilesAndPausedClientBindingsRemainReadableWithoutWrites() passed after 0.032 seconds.
+◇ Test diagnosticsNeverImplyARealChatbotConnection() started.
+✔ Test diagnosticsNeverImplyARealChatbotConnection() passed after 0.023 seconds.
+◇ Test oldOrUnattributedServersAndPausedAccessAreReportedSeparately() started.
+✔ Test oldOrUnattributedServersAndPausedAccessAreReportedSeparately() passed after 0.015 seconds.
+◇ Test menuNavigationIsTypedOneShotAndDoesNotChangeGrants() started.
+✔ Test menuNavigationIsTypedOneShotAndDoesNotChangeGrants() passed after 0.018 seconds.
+✔ Suite "MCP access and software management" passed after 0.242 seconds.
+◇ Suite "MCP targeted source passages" started.
+◇ Test longDocumentReturnsOnlyRelevantPhysicalPagesInOneResponse() started.
+✔ Test longDocumentReturnsOnlyRelevantPhysicalPagesInOneResponse() passed after 0.090 seconds.
+◇ Test passagesAreLiteralSeparateWindowsAndUseWholeContextPrivacy() started.
+✔ Test passagesAreLiteralSeparateWindowsAndUseWholeContextPrivacy() passed after 0.049 seconds.
+◇ Test passageCursorBindsQueryDocumentProfileAndSource() started.
+✔ Test passageCursorBindsQueryDocumentProfileAndSource() passed after 0.045 seconds.
+◇ Test changedSourceRejectsOldPassageCursorAndEmptySelectionIsExplicit() started.
+✔ Test changedSourceRejectsOldPassageCursorAndEmptySelectionIsExplicit() passed after 0.029 seconds.
+✔ Suite "MCP targeted source passages" passed after 0.216 seconds.
+◇ Suite "MCP privacy and permission boundary" started.
+◇ Test defaultDeniesContentAndDoesNotCountPrivateDocuments() started.
+✔ Test defaultDeniesContentAndDoesNotCountPrivateDocuments() passed after 0.007 seconds.
+◇ Test onlyExplicitGrantsAreSearchable() started.
+✔ Test onlyExplicitGrantsAreSearchable() passed after 0.005 seconds.
+◇ Test serializedSearchAndReadProtectAllChannels() started.
+✔ Test serializedSearchAndReadProtectAllChannels() passed after 0.019 seconds.
+◇ Test labeledNameOnLaterPageProtectsEarlierMention() started.
+✔ Test labeledNameOnLaterPageProtectsEarlierMention() passed after 0.018 seconds.
+◇ Test revokeInvalidatesExistingProcessAndHandles() started.
+✔ Test revokeInvalidatesExistingProcessAndHandles() passed after 0.023 seconds.
+◇ Test revokedDuringLoadingCannotReturnAResult() started.
+✔ Test revokedDuringLoadingCannotReturnAResult() passed after 0.017 seconds.
+◇ Test documentChangesInvalidatePagingAndSessionHandlesCannotBeReused() started.
+✔ Test documentChangesInvalidatePagingAndSessionHandlesCannotBeReused() passed after 0.023 seconds.
+◇ Test outgoingResponseRejectsAChangedSourceOrGrant() started.
+✔ Test outgoingResponseRejectsAChangedSourceOrGrant() passed after 0.035 seconds.
+◇ Test invalidOrAmbiguousPageMarkersPreserveTextWithoutInventingCitations() started.
+✔ Test invalidOrAmbiguousPageMarkersPreserveTextWithoutInventingCitations() passed after 0.057 seconds.
+◇ Test pagedTextHasNoSilentTruncationOrBrokenPlaceholders() started.
+✔ Test pagedTextHasNoSilentTruncationOrBrokenPlaceholders() passed after 0.206 seconds.
+◇ Test missingPagesRemainExplicitAndUnmarkedPrefixIsPreserved() started.
+✔ Test missingPagesRemainExplicitAndUnmarkedPrefixIsPreserved() passed after 0.020 seconds.
+◇ Test badProfileAndSourceFailClosedWithoutLeakingDetails() started.
+✔ Test badProfileAndSourceFailClosedWithoutLeakingDetails() passed after 0.008 seconds.
+◇ Test invalidArgumentsAndOversizeSourcesFailExplicitly() started.
+✔ Test invalidArgumentsAndOversizeSourcesFailExplicitly() passed after 0.221 seconds.
+◇ Test completeListingAndReadingSurviveOverlappingIdentifierContexts() started.
+✔ Test completeListingAndReadingSurviveOverlappingIdentifierContexts() passed after 0.026 seconds.
+◇ Test originalsAndArchiveBytesAreNeverModified() started.
+✔ Test originalsAndArchiveBytesAreNeverModified() passed after 0.016 seconds.
+✔ Suite "MCP privacy and permission boundary" passed after 0.709 seconds.
+◇ Suite "MCP menu process presence" started.
+◇ Test aggregatesLiveServersAndIgnoresStaleMarkers() started.
+✔ Test aggregatesLiveServersAndIgnoresStaleMarkers() passed after 0.004 seconds.
+◇ Test onlyOneMenuPerRootAndIndependentInstallations() started.
+✔ Test onlyOneMenuPerRootAndIndependentInstallations() passed after 0.003 seconds.
+◇ Test refusesSymlinksAndDamagedMarkersWithoutOverwriting() started.
+✔ Test refusesSymlinksAndDamagedMarkersWithoutOverwriting() passed after 0.005 seconds.
+◇ Test derivesInstalledAndCustomRootsWithoutUsingDefaultHome() started.
+✔ Test derivesInstalledAndCustomRootsWithoutUsingDefaultHome() passed after 0.001 seconds.
+◇ Test customProfileParentKeepsItsPermissions() started.
+✔ Test customProfileParentKeepsItsPermissions() passed after 0.001 seconds.
+◇ Test installsAndUpdatesCompanionWithoutChangingGrants() started.
+✔ Test installsAndUpdatesCompanionWithoutChangingGrants() passed after 0.044 seconds.
+✔ Suite "MCP menu process presence" passed after 0.060 seconds.
+◇ Suite "MCP exhaustive retrieval and source coverage" started.
+◇ Test completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+◇ Test case passing 1 argument count → 0 to completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+◇ Test case passing 1 argument count → 1 to completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+◇ Test case passing 1 argument count → 25 to completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+◇ Test case passing 1 argument count → 26 to completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+◇ Test case passing 1 argument count → 1001 to completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) started.
+✔ Test completeSetsHaveNoDuplicatesAndEarlyHandlesRemainReadable(count:) with 5 test cases passed after 2.033 seconds.
+◇ Test lvmTextListFindsGenericScanAndExcludesSubstringNoise() started.
+✔ Test lvmTextListFindsGenericScanAndExcludesSubstringNoise() passed after 0.055 seconds.
+◇ Test excerptIncludesLateMatchAfterWholeContextProtection() started.
+✔ Test excerptIncludesLateMatchAfterWholeContextProtection() passed after 0.035 seconds.
+◇ Test coverageCountsOnlyGrantedRecordsAndEmptyResultsRemainQualified() started.
+✔ Test coverageCountsOnlyGrantedRecordsAndEmptyResultsRemainQualified() passed after 0.019 seconds.
+◇ Test maskedNameQuerySelectsItsOwnEvidenceInsteadOfAnotherPerson() started.
+✔ Test maskedNameQuerySelectsItsOwnEvidenceInsteadOfAnotherPerson() passed after 0.041 seconds.
+◇ Test localReviewAndMissingPhysicalPagesNeverClaimCompleteProcessing() started.
+✔ Test localReviewAndMissingPhysicalPagesNeverClaimCompleteProcessing() passed after 0.009 seconds.
+◇ Test cursorsBindFilterSnapshotProfileAndProcess() started.
+✔ Test cursorsBindFilterSnapshotProfileAndProcess() passed after 0.019 seconds.
+◇ Test listCannotDiscloseAfterRevocationDuringSnapshotLoad() started.
+✔ Test listCannotDiscloseAfterRevocationDuringSnapshotLoad() passed after 0.008 seconds.
+◇ Test topicOverviewRechecksGrantAfterPreparingEvidence() started.
+✔ Test topicOverviewRechecksGrantAfterPreparingEvidence() passed after 0.007 seconds.
+◇ Test fieldExtractionRechecksGrantAfterPreparingEvidence() started.
+✔ Test fieldExtractionRechecksGrantAfterPreparingEvidence() passed after 0.009 seconds.
+◇ Test contractComparisonRechecksGrantBeforeReleasingEvidence() started.
+✔ Test contractComparisonRechecksGrantBeforeReleasingEvidence() passed after 0.012 seconds.
+◇ Test deadlineOverviewRechecksGrantBeforeReleasingEvidence() started.
+✔ Test deadlineOverviewRechecksGrantBeforeReleasingEvidence() passed after 0.008 seconds.
+✔ Suite "MCP exhaustive retrieval and source coverage" passed after 2.262 seconds.
+◇ Suite "MCP scaling, candidate retrieval and cache authority" started.
+◇ Test compactEnumerationOfTwoThousandDocumentsSkipsPrivacyButKeepsReadAuthority() started.
+✔ Test compactEnumerationOfTwoThousandDocumentsSkipsPrivacyButKeepsReadAuthority() passed after 0.480 seconds.
+◇ Test genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) started.
+◇ Test case passing 1 argument example → ("versicher polic pension", "Krankenversicherung", "Police") to genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) started.
+◇ Test case passing 1 argument example → ("rechn kostenvoranschlag", "Handwerkerrechnung", "Kostenvoranschlag") to genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) started.
+◇ Test case passing 1 argument example → ("einkommen lohnsteuer", "Einkommensteuerbescheid", "Lohnsteuerbescheinigung") to genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) started.
+◇ Test case passing 1 argument example → ("befund rezept", "Arztbefund", "Privatrezept") to genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) started.
+✔ Test genericOrCandidatesKeepExactDefaultAndBindEveryCursor(example:) with 4 test cases passed after 0.081 seconds.
+◇ Test sqliteTokenPilotPreservesTextMatchingAndRevocation() started.
+✔ Test sqliteTokenPilotPreservesTextMatchingAndRevocation() passed after 0.026 seconds.
+◇ Test sqliteTokenUpdateCommitsOnlyChangedRowsAndRollsBackFailedReconcile() started.
+✔ Test sqliteTokenUpdateCommitsOnlyChangedRowsAndRollsBackFailedReconcile() passed after 0.001 seconds.
+◇ Test persistentSQLiteReusesUpdatesRebuildsAndPurgesItsPrivateCache() started.
+✔ Test persistentSQLiteReusesUpdatesRebuildsAndPurgesItsPrivateCache() passed after 0.085 seconds.
+◇ Test compactProjectionPreservesCoverageAndStopsWhenTheSourceOrGrantChanges() started.
+✔ Test compactProjectionPreservesCoverageAndStopsWhenTheSourceOrGrantChanges() passed after 0.015 seconds.
+◇ Test managedRevocationRetiresAnActiveBuildBeforeItCanPublish(removeConnection:) started.
+◇ Test case passing 1 argument removeConnection → false to managedRevocationRetiresAnActiveBuildBeforeItCanPublish(removeConnection:) started.
+◇ Test case passing 1 argument removeConnection → true to managedRevocationRetiresAnActiveBuildBeforeItCanPublish(removeConnection:) started.
+✔ Test managedRevocationRetiresAnActiveBuildBeforeItCanPublish(removeConnection:) with 2 test cases passed after 0.053 seconds.
+◇ Test sameSizeEditWithRestoredModificationDateInvalidatesSnapshotCursorAndHandle() started.
+✔ Test sameSizeEditWithRestoredModificationDateInvalidatesSnapshotCursorAndHandle() passed after 0.014 seconds.
+◇ Test sourceReplacementInvalidatesListAndCorruptionCannotUseCachedContent() started.
+✔ Test sourceReplacementInvalidatesListAndCorruptionCannotUseCachedContent() passed after 0.009 seconds.
+◇ Test sourceChangesAtFinalPermissionCheckSuppressTheResponse() started.
+✔ Test sourceChangesAtFinalPermissionCheckSuppressTheResponse() passed after 0.012 seconds.
+✔ Suite "MCP scaling, candidate retrieval and cache authority" passed after 0.781 seconds.
+◇ Suite "Provider-independent OAuth connections" started.
+◇ Test localConsentPKCEAndPersistentAuthorization(provider:) started.
+◇ Test case passing 1 argument provider → .chatgpt to localConsentPKCEAndPersistentAuthorization(provider:) started.
+◇ Test case passing 1 argument provider → .claude to localConsentPKCEAndPersistentAuthorization(provider:) started.
+✔ Test localConsentPKCEAndPersistentAuthorization(provider:) with 2 test cases passed after 0.042 seconds.
+◇ Test wrongResourceRedirectClientAndScopeCannotBorrowConsent() started.
+✔ Test wrongResourceRedirectClientAndScopeCannotBorrowConsent() passed after 0.027 seconds.
+◇ Test consumedCodeRevokesItsIssuedGrantOnReplay() started.
+✔ Test consumedCodeRevokesItsIssuedGrantOnReplay() passed after 0.026 seconds.
+◇ Test refreshRotationReuseAndIndependentProviderRevocation() started.
+✔ Test refreshRotationReuseAndIndependentProviderRevocation() passed after 0.051 seconds.
+◇ Test profileRevisionPauseRemovalAndExpiryInvalidateTokens() started.
+✔ Test profileRevisionPauseRemovalAndExpiryInvalidateTokens() passed after 0.065 seconds.
+◇ Test denialExpiredRequestAndStaleSelectionNeverIssueCode() started.
+✔ Test denialExpiredRequestAndStaleSelectionNeverIssueCode() passed after 0.022 seconds.
+◇ Test registrationsRejectForeignAndMixedProviderRedirects() started.
+✔ Test registrationsRejectForeignAndMixedProviderRedirects() passed after 0.011 seconds.
+◇ Test webMetadataAndRegistrationRequireNoKeyAndNoRemoteApprovalExists() started.
+✔ Test webMetadataAndRegistrationRequireNoKeyAndNoRemoteApprovalExists() passed after 0.008 seconds.
+◇ Test publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "valid" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "opaque-path" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "wrong-id" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "foreign-redirect" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "wrong-provider" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "private-client" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+◇ Test case passing 1 argument variant → "oversize" to publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) started.
+✔ Test publishedClientMetadataIsVerifiedBeforeAnyConsent(variant:) with 7 test cases passed after 0.071 seconds.
+◇ Test changingAnIssuedProfilesSelectionNeverExpandsOAuthAccess() started.
+✔ Test changingAnIssuedProfilesSelectionNeverExpandsOAuthAccess() passed after 0.021 seconds.
+◇ Test operatorAddressAndOwnershipRemainExplicitAndImmutable() started.
+✔ Test operatorAddressAndOwnershipRemainExplicitAndImmutable() passed after 0.005 seconds.
+◇ Test pendingConsentIsBoundedWithoutTouchingGrantsOrVault() started.
+✔ Test pendingConsentIsBoundedWithoutTouchingGrantsOrVault() passed after 0.647 seconds.
+◇ Test malformedOrLinkedStateFailsClosedAndCannotOverwriteForeignFiles() started.
+✔ Test malformedOrLinkedStateFailsClosedAndCannotOverwriteForeignFiles() passed after 0.016 seconds.
+✔ Suite "Provider-independent OAuth connections" passed after 1.018 seconds.
+◇ Suite "Local text blocks and visual coverage" started.
+◇ Test columnsAndDistantParagraphsKeepSeparateBlocks() started.
+✔ Test columnsAndDistantParagraphsKeepSeparateBlocks() passed after 0.001 seconds.
+◇ Test blockBoundsCannotHideAnUnrecognizedLine() started.
+✔ Test blockBoundsCannotHideAnUnrecognizedLine() passed after 0.001 seconds.
+◇ Test limitsAndLegacyMetadataStayExplicit() started.
+✔ Test limitsAndLegacyMetadataStayExplicit() passed after 0.001 seconds.
+◇ Test visibleVectorBodyMissingFromEmbeddedTextIsFlagged(sample:) started.
+◇ Test case passing 1 argument sample → 0 to visibleVectorBodyMissingFromEmbeddedTextIsFlagged(sample:) started.
+OCR-COVERAGE sample=0 prior-review=false review=true regions=4 gaps=3 ms=29
+◇ Test case passing 1 argument sample → 1 to visibleVectorBodyMissingFromEmbeddedTextIsFlagged(sample:) started.
+OCR-COVERAGE sample=1 prior-review=false review=true regions=4 gaps=3 ms=28
+✔ Test visibleVectorBodyMissingFromEmbeddedTextIsFlagged(sample:) with 2 test cases passed after 0.082 seconds.
+◇ Test rectanglesAndChartBarsDoNotCreateTextGapWarnings() started.
+✔ Test rectanglesAndChartBarsDoNotCreateTextGapWarnings() passed after 0.031 seconds.
+◇ Test reviewExplainsTheGapAndDoesNotCacheAnIncompletePage() started.
+✔ Test reviewExplainsTheGapAndDoesNotCacheAnIncompletePage() passed after 0.513 seconds.
+◇ Test oldLineOnlyCheckpointIsNotAVisualCoverageResult() started.
+✔ Test oldLineOnlyCheckpointIsNotAVisualCoverageResult() passed after 0.213 seconds.
+◇ Test corruptBlockReferencesAndCoverageCountsCannotBind() started.
+✔ Test corruptBlockReferencesAndCoverageCountsCannotBind() passed after 0.001 seconds.
+✔ Suite "Local text blocks and visual coverage" passed after 0.842 seconds.
+◇ Suite "Consistent uncertain line assessment" started.
+◇ Test failedRetryPathsAlwaysKeepTheSameSourceUncertainty() started.
+✔ Test failedRetryPathsAlwaysKeepTheSameSourceUncertainty() passed after 0.001 seconds.
+◇ Test budgetAndAmbiguousCodesCannotClearUncertainty() started.
+✔ Test budgetAndAmbiguousCodesCannotClearUncertainty() passed after 0.001 seconds.
+◇ Test clearSmallIdentifiersDoNotStarveAnUncertainWordLine() started.
+✔ Test clearSmallIdentifiersDoNotStarveAnUncertainWordLine() passed after 0.001 seconds.
+◇ Test fragmentsNeedOneLineGeometryAndStillCannotChangeNumbers() started.
+✔ Test fragmentsNeedOneLineGeometryAndStillCannotChangeNumbers() passed after 0.001 seconds.
+◇ Test localReviewExplainsPendingLinesAndEvidenceFallback() started.
+✔ Test localReviewExplainsPendingLinesAndEvidenceFallback() passed after 0.001 seconds.
+◇ Test contrastKeepsGreyLevelsAndRefusesFlatOrOversizedPatches() started.
+✔ Test contrastKeepsGreyLevelsAndRefusesFlatOrOversizedPatches() passed after 0.001 seconds.
+◇ Test difficultNativeLinesKeepExactValuesAndRepeatReviewReasons() started.
+LINE-V14 clean exact=3/3/3 review=false/false retry=0 repaired=0 reasons=[]
+LINE-V14 faint-words exact=2/2/2 review=false/false retry=1 repaired=0 reasons=[]
+LINE-V14 invoice exact=2/2/2 review=false/false retry=2 repaired=0 reasons=[]
+LINE-V14 payroll exact=2/2/2 review=false/false retry=2 repaired=0 reasons=[]
+LINE-V14 date exact=2/2/2 review=false/false retry=2 repaired=0 reasons=[]
+LINE-V14 ambiguous exact=1/2/2 review=true/true retry=2 repaired=0 reasons=["unconfirmedLine", "ambiguousIdentifier", "conflictingReadings", "lowPageConfidence"]
+LINE-V14 dense exact=6/6/6 review=false/true retry=4 repaired=0 reasons=["unconfirmedLine", "retryBudgetExhausted"]
+✔ Test difficultNativeLinesKeepExactValuesAndRepeatReviewReasons() passed after 8.178 seconds.
+◇ Test nativeHarderLineGrid() started.
+HARD-LINE grid-9-88-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-9-88-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-9-93-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-9-93-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-11-88-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-11-88-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-11-93-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-11-93-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-13-88-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-13-88-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-13-93-15 exact=0/0/2 repaired=0 normalized=2 review=true/true
+HARD-LINE grid-13-93-25 exact=0/0/2 repaired=0 normalized=2 review=true/true
+✔ Test nativeHarderLineGrid() passed after 5.210 seconds.
+◇ Test faintWordsWithinOtherwiseDarkLines() started.
+MIXED-LINE mixed-78-fuer exact=2/2/2 repaired=0 review=false/false
+MIXED-LINE mixed-78-Fahrrad exact=2/2/2 repaired=0 review=false/false
+MIXED-LINE mixed-85-fuer exact=2/2/2 repaired=0 review=false/false
+MIXED-LINE mixed-85-Fahrrad exact=2/2/2 repaired=0 review=false/false
+MIXED-LINE mixed-92-fuer exact=2/2/2 repaired=0 review=false/true
+MIXED-LINE mixed-92-Fahrrad exact=2/2/2 repaired=0 review=false/false
+✔ Test faintWordsWithinOtherwiseDarkLines() passed after 3.412 seconds.
+◇ Test nativeItalicWordLines() started.
+ITALIC-LINE italic-Times-Italic-11 exact=2/2/2 repaired=0 review=false/false
+ITALIC-LINE italic-Times-Italic-14 exact=2/2/2 repaired=0 review=false/false
+ITALIC-LINE italic-Courier-Oblique-11 exact=2/2/2 repaired=0 review=false/false
+ITALIC-LINE italic-Courier-Oblique-14 exact=2/2/2 repaired=0 review=false/false
+ITALIC-LINE italic-Helvetica-Oblique-11 exact=2/2/2 repaired=0 review=false/false
+ITALIC-LINE italic-Helvetica-Oblique-14 exact=2/2/2 repaired=0 review=false/false
+✔ Test nativeItalicWordLines() passed after 3.351 seconds.
+◇ Test tiltedNoisyWordLines() started.
+TILTED-LINE tilted-9-left exact=3/3/3 repaired=0 review=false/true
+TILTED-LINE tilted-9-right exact=1/3/3 repaired=1 review=true/true
+TILTED-LINE tilted-12-left exact=3/3/3 repaired=0 review=false/false
+TILTED-LINE tilted-12-right exact=3/3/3 repaired=0 review=false/false
+✔ Test tiltedNoisyWordLines() passed after 2.600 seconds.
+✔ Suite "Consistent uncertain line assessment" passed after 22.754 seconds.
+◇ Suite "Bounded dense OCR coverage" started.
+◇ Test batchesKeepLateGapsAndExactTotalsWithoutExpandingStoredGeometry() started.
+✔ Test batchesKeepLateGapsAndExactTotalsWithoutExpandingStoredGeometry() passed after 0.001 seconds.
+◇ Test denseNativePageRecoversFiveFieldsBeyondTheFormerCoverageCutoff() started.
+DENSE-PAGE before=0/5 after=5/5 regions=147 retries=3
+✔ Test denseNativePageRecoversFiveFieldsBeyondTheFormerCoverageCutoff() passed after 0.431 seconds.
+✔ Suite "Bounded dense OCR coverage" passed after 0.432 seconds.
+◇ Suite "Measured small tilted lines" started.
+◇ Test rectificationPreservesSourceCoordinatesAndPixelBudget() started.
+✔ Test rectificationPreservesSourceCoordinatesAndPixelBudget() passed after 0.001 seconds.
+◇ Test unsafeTransformsAndStraightLinesDoNotEnterRectification() started.
+✔ Test unsafeTransformsAndStraightLinesDoNotEnterRectification() passed after 0.001 seconds.
+◇ Test smallGlyphRepairCannotChangeNumbersIdentifiersOrSeveralLetters() started.
+✔ Test smallGlyphRepairCannotChangeNumbersIdentifiersOrSeveralLetters() passed after 0.001 seconds.
+✔ Suite "Measured small tilted lines" passed after 0.001 seconds.
+◇ Suite "Faint raster recovery on frozen v14 corpus" started.
+◇ Test fixedCorpusMeasuresCandidateWithoutLosingAnyPriorField() started.
+FAINT15 ambiguous.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 clean.png exact=3/3/3 proposals=0 attempts=0 added=0
+FAINT15 date.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 dense.png exact=6/6/6 proposals=0 attempts=0 added=0
+FAINT15 faint-words.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 grid-11-88-15.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-11-88-25.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-11-93-15.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-11-93-25.png exact=0/0/2 proposals=0 attempts=0 added=0
+FAINT15 grid-13-88-15.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-13-88-25.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-13-93-15.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-13-93-25.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-9-88-15.png exact=0/0/2 proposals=2 attempts=2 added=0
+FAINT15 grid-9-88-25.png exact=0/0/2 proposals=1 attempts=1 added=0
+FAINT15 grid-9-93-15.png exact=0/0/2 proposals=1 attempts=1 added=0
+FAINT15 grid-9-93-25.png exact=0/0/2 proposals=0 attempts=0 added=0
+FAINT15 invoice.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Courier-Oblique-11.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Courier-Oblique-14.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Helvetica-Oblique-11.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Helvetica-Oblique-14.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Times-Italic-11.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 italic-Times-Italic-14.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-78-Fahrrad.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-78-fuer.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-85-Fahrrad.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-85-fuer.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-92-Fahrrad.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 mixed-92-fuer.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 payroll.png exact=2/2/2 proposals=0 attempts=0 added=0
+FAINT15 tilted-12-left.png exact=3/3/3 proposals=0 attempts=0 added=0
+FAINT15 tilted-12-right.png exact=3/3/3 proposals=0 attempts=0 added=0
+FAINT15 tilted-9-left.png exact=3/3/3 proposals=0 attempts=0 added=0
+FAINT15 tilted-9-right.png exact=3/3/3 proposals=0 attempts=0 added=0
+FROZEN79 before=55 after=55 expected=79
+✔ Test fixedCorpusMeasuresCandidateWithoutLosingAnyPriorField() passed after 16.661 seconds.
+◇ Test noisyBlankControlsDoNotCreateDocumentText() started.
+✔ Test noisyBlankControlsDoNotCreateDocumentText() passed after 0.746 seconds.
+◇ Test faintProposalsAndEnhancementStayBounded() started.
+✔ Test faintProposalsAndEnhancementStayBounded() passed after 0.018 seconds.
+✔ Suite "Faint raster recovery on frozen v14 corpus" passed after 17.426 seconds.
+◇ Suite "Source-bound identifiers, table values and units" started.
+◇ Test frozenPDFsRepairEveryReportedExampleWithoutLosingPriorFieldsOrEvidence() started.
+✔ Test frozenPDFsRepairEveryReportedExampleWithoutLosingPriorFieldsOrEvidence() passed after 5.587 seconds.
+◇ Test validValuesAndDigitChangesCannotBeOverwritten() started.
+✔ Test validValuesAndDigitChangesCannotBeOverwritten() passed after 0.001 seconds.
+◇ Test typographyRestoresOnlyReadDigitsAndRequiresRaisedGlyphAndDescender() started.
+✔ Test typographyRestoresOnlyReadDigitsAndRequiresRaisedGlyphAndDescender() passed after 0.009 seconds.
+◇ Test emptyOrUnruledImagesDoNotBecomeTablesAndCancellationPropagates() started.
+✔ Test emptyOrUnruledImagesDoNotBecomeTablesAndCancellationPropagates() passed after 0.002 seconds.
+◇ Test differentSourceExponentsAndEmptyCellsAreNotGuessed() started.
+✔ Test differentSourceExponentsAndEmptyCellsAreNotGuessed() passed after 0.754 seconds.
+✔ Suite "Source-bound identifiers, table values and units" passed after 6.354 seconds.
+◇ Suite "Source-bound OCR line geometry" started.
+◇ Test legacyPagesDecodeAndBindingsRejectStaleOrInvalidGeometry() started.
+✔ Test legacyPagesDecodeAndBindingsRejectStaleOrInvalidGeometry() passed after 0.001 seconds.
+◇ Test pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 0 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 90 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 180 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → false, rotation → 270 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 0 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 90 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 180 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+◇ Test case passing 2 arguments raster → true, rotation → 270 to pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) started.
+✔ Test pdfCoordinatesSurviveCropRotationAndRasterization(raster:rotation:) with 8 test cases passed after 0.598 seconds.
+◇ Test imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+◇ Test case passing 1 argument height → 900 to imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+◇ Test case passing 1 argument height → 3600 to imageCoordinatesSurviveWhiteMarginsAndTiles(height:) started.
+✔ Test imageCoordinatesSurviveWhiteMarginsAndTiles(height:) with 2 test cases passed after 0.286 seconds.
+◇ Test storedLayoutIsSourceBoundAndHiddenWhenTextOrOriginalChanges() started.
+✔ Test storedLayoutIsSourceBoundAndHiddenWhenTextOrOriginalChanges() passed after 0.252 seconds.
+◇ Test hybridPageCombinesEmbeddedAndRasterLineOffsets() started.
+✔ Test hybridPageCombinesEmbeddedAndRasterLineOffsets() passed after 0.138 seconds.
+◇ Test tallPDFRegionsKeepPhysicalPageCoordinates() started.
+✔ Test tallPDFRegionsKeepPhysicalPageCoordinates() passed after 0.414 seconds.
+◇ Test rewrittenSourcePageMarkersCannotKeepOldOffsets() started.
+✔ Test rewrittenSourcePageMarkersCannotKeepOldOffsets() passed after 0.061 seconds.
+✔ Suite "Source-bound OCR line geometry" passed after 1.753 seconds.
+◇ Suite "Conservative line context selection" started.
+◇ Test neighbouringLinesDoNotDiscardTheUniqueTarget() started.
+✔ Test neighbouringLinesDoNotDiscardTheUniqueTarget() passed after 0.001 seconds.
+✔ Suite "Conservative line context selection" passed after 0.001 seconds.
+◇ Suite "Marked OCR region recovery" started.
+◇ Test agreementGeometryAndExistingValuesGateEveryAddition() started.
+✔ Test agreementGeometryAndExistingValuesGateEveryAddition() passed after 0.001 seconds.
+◇ Test missingFieldsAreAddedWithoutChangingExistingEvidence(sample:) started.
+◇ Test case passing 1 argument sample → 0 to missingFieldsAreAddedWithoutChangingExistingEvidence(sample:) started.
+OCR-REGION sample=0 exact=0/3/3 preserved=true retries=1 recovered=3 ms=199
+◇ Test case passing 1 argument sample → 1 to missingFieldsAreAddedWithoutChangingExistingEvidence(sample:) started.
+OCR-REGION sample=1 exact=0/3/3 preserved=true retries=1 recovered=3 ms=209
+✔ Test missingFieldsAreAddedWithoutChangingExistingEvidence(sample:) with 2 test cases passed after 0.545 seconds.
+◇ Test conflictingNumericValueRemainsUnchangedAndVisibleForReview() started.
+✔ Test conflictingNumericValueRemainsUnchangedAndVisibleForReview() passed after 0.228 seconds.
+◇ Test neighbouringGapsShareTheOriginalFourCropBudget() started.
+✔ Test neighbouringGapsShareTheOriginalFourCropBudget() passed after 1.120 seconds.
+◇ Test completeTextTriggersNoAdditionalRegionalOCR() started.
+✔ Test completeTextTriggersNoAdditionalRegionalOCR() passed after 0.061 seconds.
+✔ Suite "Marked OCR region recovery" passed after 1.957 seconds.
+◇ Suite "Source-bound numeric punctuation and raised metre units" started.
+◇ Test frozenPDFsKeepEveryPriorFieldAndCellAndRepairNumericSpelling() started.
+✔ Test frozenPDFsKeepEveryPriorFieldAndCellAndRepairNumericSpelling() passed after 13.402 seconds.
+◇ Test onlyMalformedSeparatorsAndEquivalentMoneyPresentationMayChange() started.
+✔ Test onlyMalformedSeparatorsAndEquivalentMoneyPresentationMayChange() passed after 0.001 seconds.
+◇ Test sourceExponentsAreReadAndBaselineDigitsAreNotRaised() started.
+✔ Test sourceExponentsAreReadAndBaselineDigitsAreNotRaised() passed after 0.402 seconds.
+◇ Test whitespacePresentationRetainsUncertaintyAndCannotSmuggleNumericChanges() started.
+✔ Test whitespacePresentationRetainsUncertaintyAndCannotSmuggleNumericChanges() passed after 0.001 seconds.
+✔ Suite "Source-bound numeric punctuation and raised metre units" passed after 13.805 seconds.
+◇ Suite "Frozen OCR improvement and zero prior-field loss" started.
+◇ Test unchangedCorpusGainsFieldsWithoutLosingCorrectReadingsOrHistory() started.
+QUALITY-V15 before=52 after=55 fresh=55 unmarked-errors=0
+✔ Test unchangedCorpusGainsFieldsWithoutLosingCorrectReadingsOrHistory() passed after 13.405 seconds.
+◇ Test numericPolicyIdentifierRemainsNumeric() started.
+✔ Test numericPolicyIdentifierRemainsNumeric() passed after 0.712 seconds.
+◇ Test aRepairCannotHideChangedNumbersOrAnUnrelatedPosition() started.
+✔ Test aRepairCannotHideChangedNumbersOrAnUnrelatedPosition() passed after 0.001 seconds.
+✔ Suite "Frozen OCR improvement and zero prior-field loss" passed after 14.118 seconds.
+◇ Suite "Small marked OCR regions" started.
+◇ Test cropWorkRemainsBoundedAndNormalTextIsUnchanged() started.
+✔ Test cropWorkRemainsBoundedAndNormalTextIsUnchanged() passed after 0.001 seconds.
+◇ Test detectedSmallVectorLabelsAreRecoveredExactly() started.
+SMALL-REGION size=6.0 before=3/3 after=3/3 pixels=151060
+✔ Test detectedSmallVectorLabelsAreRecoveredExactly() passed after 0.549 seconds.
+◇ Test tinyTextMustNowMeetAllThreeExactFields(size:) started.
+◇ Test case passing 1 argument size → 4.0 to tinyTextMustNowMeetAllThreeExactFields(size:) started.
+SMALL-REGION size=4.0 before=0/3 after=3/3 pixels=166770
+◇ Test case passing 1 argument size → 5.0 to tinyTextMustNowMeetAllThreeExactFields(size:) started.
+SMALL-REGION size=5.0 before=2/3 after=3/3 pixels=162768
+✔ Test tinyTextMustNowMeetAllThreeExactFields(size:) with 2 test cases passed after 0.807 seconds.
+✔ Suite "Small marked OCR regions" passed after 1.358 seconds.
+◇ Suite "Tiny text import and chat evidence" started.
+◇ Test normalImportsExposeBeforeAndAfterWithoutEditingStoredOCR() started.
+✔ Test normalImportsExposeBeforeAndAfterWithoutEditingStoredOCR() passed after 0.871 seconds.
+◇ Test previousCompletedCheckpointCannotHideTinyText() started.
+✔ Test previousCompletedCheckpointCannotHideTinyText() passed after 0.294 seconds.
+◇ Test smallSourceRerenderKeepsNonzeroCropCoordinates() started.
+✔ Test smallSourceRerenderKeepsNonzeroCropCoordinates() passed after 0.281 seconds.
+◇ Test tinyConflictingAmountIsFlaggedAndNeverOverwritesExistingEvidence() started.
+✔ Test tinyConflictingAmountIsFlaggedAndNeverOverwritesExistingEvidence() passed after 0.290 seconds.
+◇ Test proposalScanIsCancellableAndSolidRulesAreNotTextEvidence() started.
+✔ Test proposalScanIsCancellableAndSolidRulesAreNotTextEvidence() passed after 0.001 seconds.
+✔ Suite "Tiny text import and chat evidence" passed after 1.738 seconds.
+◇ Suite "Source-confirmed decimal punctuation" started.
+◇ Test onlyOneDecimalGlyphMayChangeAndEvidenceIsRequired() started.
+✔ Test onlyOneDecimalGlyphMayChangeAndEvidenceIsRequired() passed after 0.001 seconds.
+◇ Test genuineDotsCommasSignsAndOtherAmountsRemainUnchanged() started.
+✔ Test genuineDotsCommasSignsAndOtherAmountsRemainUnchanged() passed after 2.750 seconds.
+✔ Suite "Source-confirmed decimal punctuation" passed after 2.751 seconds.
+◇ Suite "Targeted native OCR retry" started.
+◇ Test unusablePDFGlyphMapFallsBackToVisibleText() started.
+✔ Test unusablePDFGlyphMapFallsBackToVisibleText() passed after 0.241 seconds.
+◇ Test conflictingValuesAreNeverPromotedByConfidence() started.
+✔ Test conflictingValuesAreNeverPromotedByConfidence() passed after 0.001 seconds.
+◇ Test incompleteWordsCanBeRecoveredWithoutLosingExistingContent() started.
+✔ Test incompleteWordsCanBeRecoveredWithoutLosingExistingContent() passed after 0.001 seconds.
+◇ Test priorPageMetricsStillDecode() started.
+✔ Test priorPageMetricsStillDecode() passed after 0.001 seconds.
+◇ Test pdfScalePreservesCropRotationEdgesAndPixelBudget() started.
+✔ Test pdfScalePreservesCropRotationEdgesAndPixelBudget() passed after 0.014 seconds.
+◇ Test correctedRasterIgnoresOldCheckpointAndReusesOnlyNewSuccessfulPage() started.
+✔ Test correctedRasterIgnoresOldCheckpointAndReusesOnlyNewSuccessfulPage() passed after 0.433 seconds.
+◇ Test nativeComparisonOnDifficultScans() started.
+OCR-AB clean-control exact=4/4/4 retry=0 scale-retry=0 recovered=0 review=false/false recognition-ms=63/60
+OCR-ERRORS clean-control chars=0/0/109 words=0/0/10 pixels=554400/554400 elapsed-ms=68/65
+OCR-AB small-print exact=4/4/4 retry=0 scale-retry=0 recovered=0 review=false/false recognition-ms=184/164
+OCR-ERRORS small-print chars=0/0/109 words=0/0/10 pixels=554400/554400 elapsed-ms=196/176
+OCR-AB faint-copy exact=4/4/4 retry=0 scale-retry=0 recovered=0 review=false/false recognition-ms=52/54
+OCR-ERRORS faint-copy chars=0/0/109 words=0/0/10 pixels=554400/554400 elapsed-ms=58/60
+OCR-AB skewed-scan exact=4/4/4 retry=0 scale-retry=0 recovered=0 review=false/false recognition-ms=50/50
+OCR-ERRORS skewed-scan chars=0/0/109 words=0/0/10 pixels=554400/554400 elapsed-ms=56/56
+OCR-AB raster-pdf exact=0/4/4 retry=1 scale-retry=1 recovered=0 review=true/false recognition-ms=373/488
+OCR-ERRORS raster-pdf chars=10/0/109 words=5/0/10 pixels=1247400/1801800 elapsed-ms=379/496
+OCR-AB ambiguous-identifier exact=3/3/4 retry=1 scale-retry=0 recovered=0 review=true/true recognition-ms=128/137
+OCR-ERRORS ambiguous-identifier chars=3/3/109 words=1/1/10 pixels=554400/554400 elapsed-ms=134/143
+OCR-AB dense-amounts exact=4/4/4 retry=0 scale-retry=0 recovered=0 review=false/false recognition-ms=49/50
+OCR-ERRORS dense-amounts chars=0/0/112 words=0/0/12 pixels=554400/554400 elapsed-ms=62/61
+OCR-AB raster-other-values exact=4/4/4 retry=0 scale-retry=1 recovered=0 review=true/false recognition-ms=424/271
+OCR-ERRORS raster-other-values chars=0/0/109 words=0/0/10 pixels=1247400/1801800 elapsed-ms=431/277
+OCR-AB raster-light exact=0/4/4 retry=4 scale-retry=1 recovered=0 review=true/true recognition-ms=310/606
+OCR-ERRORS raster-light chars=8/3/109 words=4/2/10 pixels=1247400/1801800 elapsed-ms=318/614
+✔ Test nativeComparisonOnDifficultScans() passed after 3.911 seconds.
+✔ Suite "Targeted native OCR retry" passed after 4.601 seconds.
+◇ Suite "OCR white margin preservation" started.
+◇ Test sparsePageKeepsEveryMarkAndPadding() started.
+✔ Test sparsePageKeepsEveryMarkAndPadding() passed after 0.001 seconds.
+◇ Test nearWhiteColorAndIsolatedFooterCannotBeDiscarded() started.
+✔ Test nearWhiteColorAndIsolatedFooterCannotBeDiscarded() passed after 0.001 seconds.
+◇ Test contentAtAllEdgesKeepsTheWholePage() started.
+✔ Test contentAtAllEdgesKeepsTheWholePage() passed after 0.001 seconds.
+◇ Test blankAndOutOfBudgetInputsRemainUnmodified() started.
+✔ Test blankAndOutOfBudgetInputsRemainUnmodified() passed after 0.001 seconds.
+◇ Test oldConfigurationCannotReturnACompletedButIncompleteCheckpoint() started.
+✔ Test oldConfigurationCannotReturnACompletedButIncompleteCheckpoint() passed after 0.006 seconds.
+✔ Suite "OCR white margin preservation" passed after 0.009 seconds.
+◇ Suite "PDF vector text coverage" started.
+◇ Test vectorBodyIsRecoveredInsteadOfCertifyingOnlyTheHeader(sample:) started.
+◇ Test case passing 1 argument sample → 0 to vectorBodyIsRecoveredInsteadOfCertifyingOnlyTheHeader(sample:) started.
+OCR-VECTOR sample=0 exact=0/3/3 previous-ms=0 current-ms=113
+◇ Test case passing 1 argument sample → 1 to vectorBodyIsRecoveredInsteadOfCertifyingOnlyTheHeader(sample:) started.
+OCR-VECTOR sample=1 exact=0/3/3 previous-ms=0 current-ms=115
+✔ Test vectorBodyIsRecoveredInsteadOfCertifyingOnlyTheHeader(sample:) with 2 test cases passed after 0.254 seconds.
+◇ Test nestedFormUsesItsOwnFontResources() started.
+✔ Test nestedFormUsesItsOwnFontResources() passed after 0.133 seconds.
+◇ Test unusedVectorFontKeepsTheEmbeddedTextFastPath() started.
+✔ Test unusedVectorFontKeepsTheEmbeddedTextFastPath() passed after 0.036 seconds.
+◇ Test oldHeaderOnlyCheckpointCannotHideTheBody() started.
+✔ Test oldHeaderOnlyCheckpointCannotHideTheBody() passed after 0.128 seconds.
+✔ Suite "PDF vector text coverage" passed after 0.552 seconds.
+◇ Suite "Product question native originals" started.
+◇ Test importRealSyntheticOriginalsWithoutPrepopulatedBusinessFields() started.
+✔ Test importRealSyntheticOriginalsWithoutPrepopulatedBusinessFields() passed after 2.277 seconds.
+✔ Suite "Product question native originals" passed after 2.277 seconds.
+◇ Suite "Keyless ChatGPT relay" started.
+◇ Test realLocalTransportPreservesHandlesPrivacyAndRevocation() started.
+✔ Test realLocalTransportPreservesHandlesPrivacyAndRevocation() passed after 0.533 seconds.
+◇ Test deviceAuthenticationNeverUsesURLOrLoggedCustomHeaders() started.
+✔ Test deviceAuthenticationNeverUsesURLOrLoggedCustomHeaders() passed after 0.002 seconds.
+◇ Test nativeUIStateNeverDisclosesCredentialMaterial() started.
+✔ Test nativeUIStateNeverDisclosesCredentialMaterial() passed after 0.001 seconds.
+◇ Test webCryptoEnvelopeIsReadableByNativeCryptoKit() started.
+✔ Test webCryptoEnvelopeIsReadableByNativeCryptoKit() passed after 0.002 seconds.
+◇ Test encryptionBindsDirectionRequestAndDevice() started.
+✔ Test encryptionBindsDirectionRequestAndDevice() passed after 0.003 seconds.
+◇ Test pairingDoesNotAuthorizeChangedPausedRemovedOrUnconfirmedProfile() started.
+✔ Test pairingDoesNotAuthorizeChangedPausedRemovedOrUnconfirmedProfile() passed after 0.009 seconds.
+◇ Test incomingJobRejectsInvalidMethodExpiredAndWrongEnvelope() started.
+✔ Test incomingJobRejectsInvalidMethodExpiredAndWrongEnvelope() passed after 0.002 seconds.
+◇ Test serviceLeasePreventsDuplicateAgentAndRefusesLinkedState() started.
+✔ Test serviceLeasePreventsDuplicateAgentAndRefusesLinkedState() passed after 0.002 seconds.
+✔ Suite "Keyless ChatGPT relay" passed after 0.556 seconds.
+◇ Suite "Explicit keychain authorization" started.
+◇ Test onlyExplicitAuthorizationCanOpenSystemUI() started.
+✔ Test onlyExplicitAuthorizationCanOpenSystemUI() passed after 0.001 seconds.
+◇ Test denialReadsOnceAndPreservesSavedConnection(operation:) started.
+◇ Test case passing 1 argument operation → .status to denialReadsOnceAndPreservesSavedConnection(operation:) started.
+◇ Test case passing 1 argument operation → .begin to denialReadsOnceAndPreservesSavedConnection(operation:) started.
+◇ Test case passing 1 argument operation → .start to denialReadsOnceAndPreservesSavedConnection(operation:) started.
+◇ Test case passing 1 argument operation → .authorize to denialReadsOnceAndPreservesSavedConnection(operation:) started.
+✔ Test denialReadsOnceAndPreservesSavedConnection(operation:) with 4 test cases passed after 0.001 seconds.
+◇ Test authorizationVerifiesFreshNoninteractiveAccess(backgroundAllowed:) started.
+◇ Test case passing 1 argument backgroundAllowed → true to authorizationVerifiesFreshNoninteractiveAccess(backgroundAllowed:) started.
+◇ Test case passing 1 argument backgroundAllowed → false to authorizationVerifiesFreshNoninteractiveAccess(backgroundAllowed:) started.
+✔ Test authorizationVerifiesFreshNoninteractiveAccess(backgroundAllowed:) with 2 test cases passed after 0.001 seconds.
+◇ Test automaticRefreshStopsAfterDenialErrorOrWhileBusy() started.
+✔ Test automaticRefreshStopsAfterDenialErrorOrWhileBusy() passed after 0.001 seconds.
+◇ Test cancellationTerminatesAuthorizationHelper() started.
+✔ Test cancellationTerminatesAuthorizationHelper() passed after 0.204 seconds.
+✔ Suite "Explicit keychain authorization" passed after 0.205 seconds.
+◇ Suite "R3 explicit SQLite record store pilot" started.
+◇ Test legacyImportPointUpdatesRestartBackupAndRestore() started.
+✔ Test legacyImportPointUpdatesRestartBackupAndRestore() passed after 0.266 seconds.
+◇ Test malformedOrDuplicateImportRollsBackVisitedRecords() started.
+✔ Test malformedOrDuplicateImportRollsBackVisitedRecords() passed after 0.028 seconds.
+◇ Test processCrashRollsBackUncommittedRecordMutation() started.
+✔ Test processCrashRollsBackUncommittedRecordMutation() passed after 0.175 seconds.
+➜ Test largeSyntheticStorageComparison() skipped.
+◇ Test refusesExistingCreationAndSymlinkOrPublicDirectory() started.
+✔ Test refusesExistingCreationAndSymlinkOrPublicDirectory() passed after 0.034 seconds.
+✔ Suite "R3 explicit SQLite record store pilot" passed after 0.506 seconds.
+◇ Suite "R3b local SQLite integration" started.
+◇ Test rankProjectionPreservesWeightedScoresOrderAndUncoveredRows() started.
+✔ Test rankProjectionPreservesWeightedScoresOrderAndUncoveredRows() passed after 0.031 seconds.
+◇ Test vocabularyMatchesScanForASCIIAndOCRAliases() started.
+✔ Test vocabularyMatchesScanForASCIIAndOCRAliases() passed after 0.001 seconds.
+◇ Test indexedRetrievalKeepsScanSemanticsAndSourceEvidence() started.
+✔ Test indexedRetrievalKeepsScanSemanticsAndSourceEvidence() passed after 0.112 seconds.
+◇ Test compactProjectionMatchesLegacyCoverageAndKeepsHandlesBound() started.
+✔ Test compactProjectionMatchesLegacyCoverageAndKeepsHandlesBound() passed after 0.059 seconds.
+◇ Test nativeImportDuplicateRestartAndReadOnlyMCP() started.
+✔ Test nativeImportDuplicateRestartAndReadOnlyMCP() passed after 0.346 seconds.
+◇ Test generationInvalidatesCacheHandlesCursorAndFinalResponse(features:) started.
+◇ Test case passing 1 argument features → MCPIndexFeatures(rawValue: 0) to generationInvalidatesCacheHandlesCursorAndFinalResponse(features:) started.
+◇ Test case passing 1 argument features → MCPIndexFeatures(rawValue: 4) to generationInvalidatesCacheHandlesCursorAndFinalResponse(features:) started.
+◇ Test case passing 1 argument features → MCPIndexFeatures(rawValue: 8) to generationInvalidatesCacheHandlesCursorAndFinalResponse(features:) started.
+✔ Test generationInvalidatesCacheHandlesCursorAndFinalResponse(features:) with 3 test cases passed after 0.281 seconds.
+◇ Test workerRecoveryAndStaleOCRCannotOverwriteCommittedState() started.
+✔ Test workerRecoveryAndStaleOCRCannotOverwriteCommittedState() passed after 0.286 seconds.
+◇ Test targetedReadsDoNotDecodeUngrantedPayloadAndRejectSelectedCorruption() started.
+✔ Test targetedReadsDoNotDecodeUngrantedPayloadAndRejectSelectedCorruption() passed after 0.038 seconds.
+◇ Test walCommitChangesAuthorityEvenWhenMainFileStatDoesNotChange() started.
+✔ Test walCommitChangesAuthorityEvenWhenMainFileStatDoesNotChange() passed after 0.061 seconds.
+✔ Suite "R3b local SQLite integration" passed after 1.219 seconds.
+◇ Suite "Explicit primary SQLite activation" started.
+◇ Test logicalGrantAndCacheFollowSQLiteWithoutJSONFallbackOrScopeExpansion() started.
+✔ Test logicalGrantAndCacheFollowSQLiteWithoutJSONFallbackOrScopeExpansion() passed after 0.163 seconds.
+◇ Test failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+◇ Test case passing 1 argument phase → "prepared" to failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+◇ Test case passing 1 argument phase → "marker-published" to failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) started.
+✔ Test failureRollsBackUnderLocksWithoutLosingJSONOrOriginals(phase:) with 2 test cases passed after 0.292 seconds.
+◇ Test reconstructedCrashStateBlocksReadersAndRecoversLosslessly() started.
+✔ Test reconstructedCrashStateBlocksReadersAndRecoversLosslessly() passed after 0.137 seconds.
+◇ Test recoveryNeverDiscardsUnexpectedLaterSQLWrites() started.
+✔ Test recoveryNeverDiscardsUnexpectedLaterSQLWrites() passed after 0.139 seconds.
+◇ Test stalePreviewAndModifiedPreparedCopyCannotBeActivated() started.
+✔ Test stalePreviewAndModifiedPreparedCopyCannotBeActivated() passed after 0.108 seconds.
+◇ Test markerAloneNeverFallsBackToAnOldJSONSnapshot() started.
+✔ Test markerAloneNeverFallsBackToAnOldJSONSnapshot() passed after 0.091 seconds.
+✔ Suite "Explicit primary SQLite activation" passed after 0.933 seconds.
+◇ Suite "Source-bound search normalization" started.
+◇ Test splitWordsAndInvisibleSeparatorsKeepLiteralSourceRanges() started.
+✔ Test splitWordsAndInvisibleSeparatorsKeepLiteralSourceRanges() passed after 0.001 seconds.
+◇ Test genuineHyphensIdentifiersNumbersParagraphsAndPagesAreNotJoined() started.
+✔ Test genuineHyphensIdentifiersNumbersParagraphsAndPagesAreNotJoined() passed after 0.001 seconds.
+◇ Test aliasesPreserveOldTokensAndMatchQueriesSymmetrically() started.
+✔ Test aliasesPreserveOldTokensAndMatchQueriesSymmetrically() passed after 0.001 seconds.
+◇ Test sourceWindowsKeepLatePhysicalPagesAndPrivacyTokensIntact() started.
+✔ Test sourceWindowsKeepLatePhysicalPagesAndPrivacyTokensIntact() passed after 0.003 seconds.
+◇ Test previousSQLiteSemanticsAreRejectedAndCurrentIndexReopens() started.
+✔ Test previousSQLiteSemanticsAreRejectedAndCurrentIndexReopens() passed after 0.008 seconds.
+✔ Suite "Source-bound search normalization" passed after 0.014 seconds.
+◇ Suite "Existing documents do not require another import" started.
+◇ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "needsReview" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "failed" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "stale" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "unavailable" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+◇ Test case passing 1 argument status → "pending" to analysisFlagsAloneDoNotRequestAnotherOCR(status:) started.
+✔ Test analysisFlagsAloneDoNotRequestAnotherOCR(status:) with 5 test cases passed after 0.001 seconds.
+◇ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .partial to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .failed to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .interrupted to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+◇ Test case passing 1 argument state → .cancelled to unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) started.
+✔ Test unfinishedOCRRetainsStoredTextAndGuidesToInspection(state:) with 4 test cases passed after 0.001 seconds.
+◇ Test absentTextAndPendingJobsStayDistinct() started.
+✔ Test absentTextAndPendingJobsStayDistinct() passed after 0.001 seconds.
+◇ Test originalAccessIssuesAreNotOCRInstructions() started.
+✔ Test originalAccessIssuesAreNotOCRInstructions() passed after 0.001 seconds.
+◇ Test pageReviewAndLegacyDocumentsArePreserved() started.
+✔ Test pageReviewAndLegacyDocumentsArePreserved() passed after 0.001 seconds.
+◇ Test storedButUnfinishedOutcomesAreNotFailedImports() started.
+✔ Test storedButUnfinishedOutcomesAreNotFailedImports() passed after 0.001 seconds.
+✔ Suite "Existing documents do not require another import" passed after 0.001 seconds.
+◇ Suite "Document import date and time" started.
+◇ Test germanTimestampHasDateTimeAndLocalTimezone() started.
+✔ Test germanTimestampHasDateTimeAndLocalTimezone() passed after 0.003 seconds.
+◇ Test legacyMissingTimestampIsNotInvented() started.
+✔ Test legacyMissingTimestampIsNotInvented() passed after 0.001 seconds.
+◇ Test displayDoesNotReplaceImportDateWithProcessingDate() started.
+✔ Test displayDoesNotReplaceImportDateWithProcessingDate() passed after 0.001 seconds.
+✔ Suite "Document import date and time" passed after 0.004 seconds.
+◇ Suite "R3 JSON storage boundaries" started.
+◇ Test streamingReaderPreservesEscapesUnicodeNestedModelsAndChunkEdges() started.
+✔ Test streamingReaderPreservesEscapesUnicodeNestedModelsAndChunkEdges() passed after 0.082 seconds.
+◇ Test scopedCacheBudgetAndSelectionChangeKeepAuthority() started.
+✔ Test scopedCacheBudgetAndSelectionChangeKeepAuthority() passed after 0.005 seconds.
+◇ Test uncachedFullSelectionNeverSurvivesGrantOrSourceChange() started.
+✔ Test uncachedFullSelectionNeverSurvivesGrantOrSourceChange() passed after 0.005 seconds.
+◇ Test oversizedFileHasExplicitErrorWithoutAllocation() started.
+✔ Test oversizedFileHasExplicitErrorWithoutAllocation() passed after 0.258 seconds.
+◇ Test twentyThousandAndOneRecordsWithOneGrantRemainReadableAndRevocable() started.
+✔ Test twentyThousandAndOneRecordsWithOneGrantRemainReadableAndRevocable() passed after 0.315 seconds.
+◇ Test snapshotBytePreflightPreservesBackupAndDoesNotCopyOriginal() started.
+✔ Test snapshotBytePreflightPreservesBackupAndDoesNotCopyOriginal() passed after 2.723 seconds.
+◇ Test importCountPreflightPreservesSnapshotBackupAndOriginals() started.
+✔ Test importCountPreflightPreservesSnapshotBackupAndOriginals() passed after 0.460 seconds.
+✔ Suite "R3 JSON storage boundaries" passed after 3.851 seconds.
+◇ Suite "R3c explicit storage migration and restore" started.
+◇ Test backupMigrationRestoreAndCurrentSQLiteRollbackPreserveAllRecords() started.
+✔ Test backupMigrationRestoreAndCurrentSQLiteRollbackPreserveAllRecords() passed after 0.188 seconds.
+◇ Test stalePreviewCapacityExistingTargetAndActiveWorkerRefuseBeforeCopy() started.
+✔ Test stalePreviewCapacityExistingTargetAndActiveWorkerRefuseBeforeCopy() passed after 0.028 seconds.
+◇ Test unknownFieldsCorruptOriginalAndCorruptBackupAreNeverSilentlyAccepted() started.
+✔ Test unknownFieldsCorruptOriginalAndCorruptBackupAreNeverSilentlyAccepted() passed after 0.085 seconds.
+◇ Test pendingJobsAndIncompleteTransfersCannotBecomeLiveStores() started.
+✔ Test pendingJobsAndIncompleteTransfersCannotBecomeLiveStores() passed after 0.040 seconds.
+◇ Test walBackupIsStandaloneAndUnknownSQLitePayloadCannotLoseFields() started.
+✔ Test walBackupIsStandalwarning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+oneAndUnknownSQLitePayloadCannotLoseFields() passed after 0.151 seconds.
+✔ Suite "R3c explicit storage migration and restore" passed after 0.494 seconds.
+◇ Suite "Vauldy MCP Runtime" started.
+◇ Test "Suche priorisiert belegte Titel- und Seitentreffer" started.
+✔ Test "Suche priorisiert belegte Titel- und Seitentreffer" passed after 0.001 seconds.
+◇ Test "Nicht fertig analysierte Dokumente bleiben unsichtbar" started.
+✔ Test "Nicht fertig analysierte Dokumente bleiben unsichtbar" passed after 0.001 seconds.
+◇ Test "Private Antwort nennt Betrag und Referenz ohne vollständigen OCR-Text" started.
+✔ Test "Private Antwort nennt Betrag und Referenz ohne vollständigen OCR-Text" passed after 0.001 seconds.
+◇ Test "Status verrät keine Speicherpfade" started.
+✔ Test "Status verrät keine Speicherpfade" passed after 0.001 seconds.
+◇ Test "Snapshot-Leser versteht das bestehende Vauldy-Format" started.
+✔ Test "Snapshot-Leser versteht das bestehende Vauldy-Format" passed after 0.002 seconds.
+◇ Test "Suchergebnis verwendet ein transportstabiles ISO-8601-Datum" started.
+✔ Test "Suchergebnis verwendet ein transportstabiles ISO-8601-Datum" passed after 0.001 seconds.
+✔ Suite "Vauldy MCP Runtime" passed after 0.004 seconds.
+✔ Test run with 346 tests in 57 suites passed after 251.488 seconds.

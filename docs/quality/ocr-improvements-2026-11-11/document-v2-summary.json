@@ -1,0 +1,9 @@
+{
+  "fields": 130,
+  "expectedFields": 133,
+  "correctPositionCells": 257,
+  "expectedCells": 345,
+  "exactTables": 3,
+  "totalTables": 19,
+  "blankFalsePositives": 0
+}

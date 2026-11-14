@@ -8,6 +8,15 @@ public struct LocalOCRLine: Codable, Equatable, Sendable {
     public var bounds: CGRect
     public var confidence: Double?
     public var method: LocalOCRMethod
+    /// Earlier literal readings retained locally when two contextual reads
+    /// support a constrained word repair. They are not additional source facts.
+    public var priorReadings: [String]? = nil
+    /// Set only by the paired, unrectified source-reading path. This local
+    /// evidence distinguishes a measured punctuation repair from formatting.
+    public enum SourceRepair: String, Codable, Sendable { case decimalSeparator }
+    public var sourceRepair: SourceRepair? = nil
+    /// Optional, so earlier readers can decode the layout and its prior readings.
+    var policyIdentifierRepair: Bool? = nil
 }
 
 public struct LocalOCRGeometry: Codable, Equatable, Sendable {
@@ -124,6 +133,21 @@ public struct LocalOCRPageLayout: Codable, Equatable, Sendable {
         let count = units.count
         return geometry.lines.allSatisfy { line in
             let box = line.bounds
+            if let prior = line.priorReadings {
+                guard prior.count <= 4, Set(prior).count == prior.count,
+                      prior.allSatisfy({ !$0.isEmpty && $0.utf16.count <= 4096 }) else { return false }
+            }
+            if line.sourceRepair == .decimalSeparator || line.policyIdentifierRepair == true {
+                guard line.method == .vision, (line.confidence ?? 0) >= 0.95,
+                      line.location >= 0, line.location <= count, line.length > 0, line.length <= count - line.location,
+                      let range = Range(NSRange(location: line.location, length: line.length), in: text)
+                else { return false }
+                let current = String(text[range])
+                if line.sourceRepair == .decimalSeparator,
+                   line.priorReadings?.contains(where: { OCRDecimalSourceRepair.permits($0, current) }) != true { return false }
+                if line.policyIdentifierRepair == true,
+                   line.priorReadings?.contains(where: { OCRPolicyIdentifierRepair.permits($0, current) }) != true { return false }
+            }
             return line.location >= 0 && line.location <= count && line.length > 0 && line.length <= count - line.location
                 && !(0xDC00...0xDFFF).contains(units[line.location])
                 && (line.location + line.length == count || !(0xDC00...0xDFFF).contains(units[line.location + line.length]))

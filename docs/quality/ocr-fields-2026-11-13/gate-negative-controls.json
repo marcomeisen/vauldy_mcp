@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "rejectedMutations": [
+    "correctField",
+    "rowValue",
+    "existingUnit",
+    "unitExponent"
+  ]
+}

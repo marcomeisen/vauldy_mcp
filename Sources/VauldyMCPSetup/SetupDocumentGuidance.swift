@@ -30,7 +30,7 @@ struct SetupDocumentGuidance {
         case "unavailable": analysisReason = "Es ist keine auswertbare Basisanalyse verfügbar."
         default: analysisReason = "Es liegt noch keine belegte Basisanalyse vor."
         }
-        analysisExplanation = analysisReason + " Fehlende Basisangaben allein erfordern weder einen neuen Import noch eine erneute Texterkennung. Prüfe die benötigte Angabe im Original oder über eine konkrete Chatfrage."
+        analysisExplanation = analysisReason + " Fehlende Basisangaben allein erfordern weder einen neuen Import noch eine erneute Texterkennung. Sie sind optionale Orientierung und keine Bewertung der Texterkennung. Nutze bei Bedarf die Belegstellen oder eine konkrete Chatfrage."
 
         if metadata?.originalState == .changed {
             textStatus = "Original verändert · gespeicherter Text ist historisch"

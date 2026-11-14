@@ -1,0 +1,28 @@
+{
+  "unchangedSourcePixels": true,
+  "contrastAdjusted": false,
+  "examples": [
+    {
+      "pageID": "doc-002-p02",
+      "cropPixels": [
+        117,
+        753,
+        1535,
+        1093
+      ],
+      "pngSourceSHA256": "faca1894044bf7a185475b8fb188da8c858e1e0474f223643636c03ecdc498d7",
+      "pdfSHA256": "317e79cb30f4a98e63c7af9a5a9749fe2f9e7d17763fe9d60e08300b92d907b7"
+    },
+    {
+      "pageID": "doc-005-p02",
+      "cropPixels": [
+        117,
+        849,
+        1535,
+        1188
+      ],
+      "pngSourceSHA256": "cd6b7ae9cb3168967b7808ba030893a55b0133efc47c9e872d1cc96cff50f643",
+      "pdfSHA256": "2937d60dceb39a81736893394123d4dc98a4f18f676e737b740088b04b630ec8"
+    }
+  ]
+}

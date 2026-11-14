@@ -44,6 +44,24 @@ struct MCPPrivacyBoundaryTests {
         }
     }
 
+    @Test(arguments: ["Policennummer", "Policen-Nr.", "Versicherungsscheinnummer", "Versicherungsschein-Nr."])
+    func policyIdentifiersStayProtectedAcrossSearchTextAndMetadata(_ label: String) async throws {
+        var document = sample()
+        document.title = "Versicherung IO0O-171"
+        document.ocrText = "--- Seite 1 ---\nVersicherung\n\(label): IO0O-171\nBeitrag: 81,19 EUR"
+        try await fixture(document) { f in
+            let search = try await f.runtime.search(query: "Versicherung")
+            let handle = try #require(search.hits.first?.document)
+            let list = try await f.runtime.list()
+            let read = try await f.runtime.read(document: handle)
+            let metadata = try await f.runtime.readMetadata(document: handle)
+            for output in [try encoded(search), try encoded(list), try encoded(read), try encoded(metadata)] {
+                #expect(!output.contains("IO0O-171"))
+            }
+            #expect(try encoded(read).contains("81,19 EUR"))
+        }
+    }
+
     @Test func labeledNameOnLaterPageProtectsEarlierMention() async throws {
         var document = sample()
         document.ocrText = "--- Seite 1 ---\nRechnung für Erika Musterfrau. 49,99 EUR.\n--- Seite 2 ---\nName: Erika Musterfrau\n"

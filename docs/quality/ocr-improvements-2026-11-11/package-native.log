@@ -1,0 +1,13 @@
+warning: /Users/marcomeisen/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/marcomeisen/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+swift-driver version: 1.168.6 /var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app/Contents/Resources/vauldy-mcp: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app/Contents/Resources/vauldy-local: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app/Contents/Resources/vauldy-mcp-http: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app/Contents/Resources/vauldy-relay: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app/Contents/Resources/Vauldy MCP Status.app: replacing existing signature
+/var/folders/jm/g1jk_46x6gz9gpmvnwrg087r0000gn/T/vauldy-mcp-package-1yuxvf7p/Vauldy MCP Einrichtung.app: replacing existing signature
+/private/tmp/vauldy-ocr-improvement-20261111/source/dist/mcp/Vauldy MCP Einrichtung.app
+/private/tmp/vauldy-ocr-improvement-20261111/source/dist/mcp/Vauldy-MCP-macOS.zip
+Signing: local ad-hoc, not notarized
+/private/tmp/vauldy-ocr-improvement-20261111/source/dist/mcp/Vauldy MCP Einrichtung.app

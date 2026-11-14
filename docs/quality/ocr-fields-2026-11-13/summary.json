@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-13",
+  "passed": true,
+  "swiftTests": 113,
+  "swiftSuites": 25,
+  "sourceAndTestFilesVerified": 187,
+  "pdf": {
+    "passed": true,
+    "corpusDocuments": 15,
+    "corpusPages": 31,
+    "manifestSHA256": "e8d6d5a7bb874081381eacdd541b686acb0643d1249bd36cc4785fb5ace947c0",
+    "beforeFields": 132,
+    "afterFields": 133,
+    "expectedFields": 133,
+    "beforeTableText": 311,
+    "afterTableText": 316,
+    "expectedTableText": 345,
+    "reportedExamplesCorrect": 7,
+    "lostPriorCorrectFields": 0,
+    "lostPriorCorrectTableText": 0,
+    "lostCorrectWordOccurrences": 0,
+    "lostLiteralEvidence": 0,
+    "blankControlsWithoutInventedText": 3,
+    "changedPages": [
+      "doc-001-p02",
+      "doc-004-p03",
+      "doc-009-p02"
+    ]
+  },
+  "faint": {
+    "passed": true,
+    "images": 35,
+    "fields": 79,
+    "before": 53,
+    "after": 53,
+    "fresh": 53,
+    "lostCorrectFields": 0,
+    "lostLiteralEvidence": 0,
+    "unchangedPageTexts": 35,
+    "originalHashesVerified": true
+  },
+  "worker": {
+    "passed": true,
+    "frozenPDFs": 3,
+    "pages": 7,
+    "freshRetriesPerPDF": 2,
+    "targetedCases": 7,
+    "priorCorrectFieldsPreserved": true,
+    "priorReadingsPersisted": true,
+    "originalIdentityAndGrantPreserved": true,
+    "sanitizedMCP": true,
+    "revocation": true
+  },
+  "priorWordRepair": {
+    "passed": true,
+    "realBaselineWorker": true,
+    "freshRetries": 2,
+    "correctedWord": true,
+    "priorReadingPersisted": true,
+    "unchangedNumber": true,
+    "originalAndIdentityPreserved": true,
+    "grantsPreserved": true,
+    "localHistoryNotExposed": true,
+    "reviewVisible": true,
+    "revocation": true
+  },
+  "raster": {
+    "passed": true,
+    "syntheticPDFs": 3,
+    "exactStoredFields": 12,
+    "cases": [
+      {
+        "name": "raster-pdf",
+        "state": "completed",
+        "review": false
+      },
+      {
+        "name": "raster-other-values",
+        "state": "completed",
+        "review": false
+      },
+      {
+        "name": "raster-light",
+        "state": "partial",
+        "review": true
+      }
+    ],
+    "grants": true,
+    "privacy": true,
+    "physicalPage": 1,
+    "cacheAndFreshRetry": true,
+    "revocation": true
+  },
+  "lines": {
+    "passed": true,
+    "syntheticImages": 3,
+    "nativeExactFields": 6,
+    "protectedVerifiedExcerpts": 5,
+    "contractIdentifierRedacted": true,
+    "ambiguousIdentifierRemainsReview": true,
+    "persistedReasons": true,
+    "sameWorker": true,
+    "freshRetryPreservesEvidence": true,
+    "repeatReasonsStable": true,
+    "originalAndGrantUnchanged": true,
+    "sourcePage": 1,
+    "diagnosticsRemainLocal": true,
+    "revocations": 3
+  },
+  "importAndOriginalReferenceTestsPassed": true,
+  "reviewPagesBefore": 10,
+  "reviewPagesAfter": 13,
+  "sourceConfiguration": "ocr-v16-source-cell-context-Version 27.2 (Build 26B123)",
+  "releaseRegressionRun": false,
+  "productionInstalled": false,
+  "binaries": {
+    "v15-local": "8112f5c89a0ed77f5c99ae06c986996d4cd067faa2970f99df70778ec0795fd2",
+    "v16-local": "3295ef3473b1c959d8bd7adf4757fa87250205e9d7eac8677143c7bf42743b6a",
+    "v16-mcp": "7cbb0da55a25f8de91d26df095ee0153b62de18314a7ed320c3d41e6bfd2d50b"
+  },
+  "optionalSkippedTests": [
+    "realGermanCandidateCannotOverwritePriorEvidence"
+  ]
+}

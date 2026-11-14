@@ -144,7 +144,7 @@ struct OCRTargetedRetryTests {
         try Scan(name: "raster-pdf", fields: fields, size: 13, gray: 0.72, angle: 0.03, asPDF: true).write(to: file)
         let original = try Data(contentsOf: file)
         let prior = try LocalOCRPageCache(root: cacheRoot, file: file,
-            configuration: "ocr-v13-dense-and-line-recovery-" + ProcessInfo.processInfo.operatingSystemVersionString)
+            configuration: "ocr-v18-source-punctuation-" + ProcessInfo.processInfo.operatingSystemVersionString)
         try prior.save(.init(info: .init(page: 1, method: .vision), text: "OBSOLETE CHECKPOINT"))
         let engine = NativeLocalDocumentOCR(cacheRoot: cacheRoot)
         let first = try await read(engine, file), repeated = try await read(engine, file)

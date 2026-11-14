@@ -109,7 +109,7 @@ struct InventoryWorkflowView: View {
                         Button("Originalzugriff wiederherstellen") { model.step = 0 }
                     }
                     if model.usesLocalStore, let quality = model.qualityByID[row.id] {
-                        DisclosureGroup("Prüfhinweise ansehen") {
+                        DisclosureGroup("Textprüfung und optionale Basisangaben") {
                             SetupDocumentQualityView(quality: quality) { focus in inspection = .init(id: row.id, focus: focus) }
                         }
                     }
@@ -156,7 +156,7 @@ struct InventoryWorkflowView: View {
             if !model.profile.enabled && !model.isNewConnection { Text("Der Dokumentzugriff ist pausiert. Die neue Auswahl wird für später gespeichert.").foregroundStyle(.orange) }
             if model.selected.isEmpty { Text("Du entfernst alle Dokumente aus der Freigabe. Dadurch wird der Dokumentzugriff pausiert.").foregroundStyle(.orange) }
             if model.reviewCount > 0 {
-                Toggle("Ich erlaube die Nutzung der ausgewählten Dokumente mit Prüfhinweisen (\(model.reviewCount)) unter den angegebenen Einschränkungen.", isOn: $model.acknowledgedReview)
+                Toggle("Ich erlaube die Nutzung der ausgewählten Dokumente mit Hinweisen zu Text, Original oder optionalen Basisangaben (\(model.reviewCount)) unter den angegebenen Einschränkungen.", isOn: $model.acknowledgedReview)
             }
             Toggle("Ich erlaube diesem Empfänger den Zugriff auf die angezeigte Dokumentauswahl.", isOn: $model.acknowledged)
             HStack {
@@ -190,6 +190,7 @@ struct InventoryWorkflowView: View {
         if !row.eligible { return "Noch nicht für den Chat nutzbar" }
         if model.profile.allowedDocumentIDs.contains(row.id) { return "Bereits freigegeben" }
         if model.isKeptLocal(row.id) { return "Nur lokal behalten" }
-        return row.ready ? "Text eingelesen · Freigabe ausstehend" : "Lesbar mit Prüfhinweisen · Freigabe ausstehend"
+        if row.processing == "source-ready" { return "Text eingelesen · Freigabe ausstehend" }
+        return "Text mit Prüfhinweisen · Freigabe ausstehend"
     }
 }

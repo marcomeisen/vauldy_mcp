@@ -7,7 +7,7 @@ struct SetupDocumentAnalysisView: View {
     let document: VaultDocument
     var openEvidence: ((BaseEvidenceField) -> Void)? = nil
     var body: some View {
-        DisclosureGroup("Übersicht und Basisangaben") {
+        DisclosureGroup("Automatische Basisangaben (optional)") {
             VStack(alignment: .leading, spacing: 12) {
                 if let analysis = document.currentBaseAnalysis, !analysis.documents.isEmpty {
                     ForEach(Array(analysis.documents.enumerated()), id: \.offset) { _, card in
@@ -29,7 +29,7 @@ struct SetupDocumentAnalysisView: View {
                                 .font(.caption).foregroundStyle(.secondary)
                         }
                     }
-                    Text("Lokal aus dem erfassten Text abgeleitet. Bitte Angaben am Original prüfen.")
+                    Text(LocalDocumentQuality.basisExplanation)
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
                     Text(SetupDocumentGuidance(document).analysisExplanation)

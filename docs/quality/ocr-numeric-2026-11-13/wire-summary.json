@@ -1,0 +1,22 @@
+[
+  {
+    "test": "raster_ocr_quality_smoke_test",
+    "exitCode": 0
+  },
+  {
+    "test": "line_ocr_smoke_test",
+    "exitCode": 0
+  },
+  {
+    "test": "import_smoke_test",
+    "exitCode": 0
+  },
+  {
+    "test": "original_reference_smoke_test",
+    "exitCode": 0
+  },
+  {
+    "test": "ocr_repair_smoke_test",
+    "exitCode": 0
+  }
+]

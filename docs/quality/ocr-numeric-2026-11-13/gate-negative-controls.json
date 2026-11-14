@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "rejectedMutations": [
+    "priorField",
+    "separator",
+    "exponent",
+    "format"
+  ]
+}

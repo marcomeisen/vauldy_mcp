@@ -6,6 +6,144 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Titel, optionale Basisangaben und OCR-Integration 0.14.3 · 14.11.2026
+
+- [x] Satzfragmente als automatische Titel abweisen; echte Überschriften und belegte
+  Aussteller bevorzugen, Unsicherheit neutral benennen. Originaldateiname, generierter
+  Titel und manuelle Überschreibung getrennt speichern. Titelpflege ohne Reimport/OCR;
+  bestehende Analyse, Belegzeilen und Freigaben bleiben erhalten.
+- [x] Optionale Basisangaben neutral und getrennt von Text-/Originalhinweisen anzeigen.
+  Fehlende Basisangaben erhöhen die Textprüfzahl nicht. Bestehende Freigaberegeln bleiben
+  erhalten; die Bestätigung benennt Text, Original und optionale Basisangaben ausdrücklich.
+- [x] Vorhandene OCR-Änderungen für Zeilen, Felder, Tabellen, Einheiten, Zahlen und
+  Policenkennungen geprüft und integriert. Kein Anbieterwechsel und keine Solltext-Ersetzung.
+- [x] 363 Swift-Tests in 58 Suiten bestanden, zwei optionale Tests übersprungen.
+  Zusätzliche Privacy-Regressionsfälle schützen Policen-/Versicherungsscheinnummern
+  in Suche, Liste, Text und Metadaten. Zehn Prüfungen der Qualitätsgates bestanden.
+- [x] Elf Prüfungen am entpackten finalen Paket bestanden: Titelpflege, MCP, Import,
+  Originalverweise, Raster/Zeilen/Vektoren, v18-Policennachlese, v16-Zahlen-/Tabellennachlese
+  (7 PDFs, 18 Seiten, zweimal frisch), Softwareupdate/Rollback und Werkzeugparität.
+- [x] Native Oberfläche mit zwei synthetischen Fällen geprüft: OCR-Hinweis bleibt sichtbar,
+  fehlende Basisangaben ohne OCR-Hinweis bleiben neutral. 204 Build-Eingaben bytegleich
+  zum Repository verifiziert. Frisches Paket 0.14.3, Apple Silicon ab macOS 14, lokal Ad-hoc
+  signiert; keine Developer-ID-/Notarisierungsabnahme.
+- [ ] 24 sehr blasse Feldvorkommen im 79-Felder-Bilderkorpus bleiben offen. Aktuell 55/79,
+  keine Verluste zuvor richtiger Felder, keine unmarkierten Fehler; frühere Belege erhalten.
+  Titel bleiben textbasierte Heuristiken; unklare kurze OCR-Überschriften benötigen
+  gegebenenfalls eine bewusste manuelle Überschreibung.
+
+[Aktuelle Nachweise](quality/release-0.14.3-2026-11-14/summary.json).
+Die älteren Zahlen in den folgenden Abschnitten dokumentieren frühere Iterationen.
+Nächster Schritt: die zurückgestellten blassen OCR-Fälle separat mit unveränderten Originalen
+prüfen; eine vollständige Abnahme auf einem frischen Offline-Mac ist weiterhin offen.
+
+## Policennummer und Installationspaket 0.14.2 · 13.11.2026
+
+- [x] Die Policennummer im eingefrorenen Testbild wird als `IO0O-171` gelesen.
+  Apple Vision bestätigt die einzelnen Zeichen in zwei vergrößerten Ausschnitten.
+  Die Korrektur verlangt zusätzlich unterscheidbare Zeichenbreiten auf derselben
+  Zeile. Die gedruckte numerische Gegenprobe `1000-171` bleibt korrekt.
+- [x] 35 unveränderte Bilder mit 55/79 korrekten Feldern (vorher 54/79).
+  Alle 31 PDF-Seitentexte bleiben identisch. 133/133 Dokumentfelder und
+  345/345 Tabelleninhalte bleiben erhalten.
+- [x] Frühere Lesung und Prüfstatus bleiben lokal erhalten. Der MCP-Schutz
+  erfasst Policennummern und Versicherungsscheinnummern in der Textausgabe.
+  Cachekennung `ocr-v19-policy-identifier-`.
+- [x] Swift meldet 346 Tests in 57 Suiten ohne Fehler, davon zwei optionale
+  Tests übersprungen. Alle 48 Stufen der Release-Regression bestanden.
+  Signaturprüfung nach dem Entpacken und isoliertes Update 0.14.1 → 0.14.2 bestanden.
+- [ ] Die 24 blassen Textzeilen bleiben auf Wunsch zurückgestellt.
+
+Das lokal Ad-hoc-signierte [Installationspaket](../dist/mcp/vauldy-0.14.2-20261113/Vauldy.zip)
+ist für Apple Silicon ab macOS 14 gebaut. Der
+[Prüfnachweis](quality/ocr-policy-2026-11-13/summary.json) enthält den Korpusvergleich
+und die Prüfsumme des ZIPs.
+
+## OCR Bildrestfehler · Teilabschluss · 13.11.2026
+
+- [x] Dezimalkomma im unveränderten `tilted-9-right.png` durch zwei übereinstimmende
+  native Lesungen unverzerrter Originalausschnitte korrigiert. Interner Quellenbeleg,
+  bisherige Lesung und Review-Zustand bleiben erhalten; keine Locale-Ersetzung.
+- [x] Bilderkorpus 53/79 → 54/79: nur ein Seitentext verändert, alle bisherigen
+  richtigen Felder und wörtlichen Belege erhalten, auch bei frischer Nachlese.
+- [x] Unveränderte 15 PDFs / 31 Seiten weiterhin 133/133 Felder und 345/345
+  Tabelleninhalte. Sämtliche PDF-Texte wortgleich zu v17; Originalhashes geprüft.
+- [x] Fünf absichtlich eingebrachte Verluste/Verfälschungen vom Qualitätsgate
+  abgewiesen. Zusätzliche Punkt-/Komma-/Vorzeichenkontrollen gegen den echten
+  unveränderten v17-Build geprüft und separat als Regression eingefroren.
+- [x] Cachekennung `ocr-v18-source-punctuation-`; unveränderte native
+  Konfidenzgrenze und Arbeitsbudgets. Keine Produktivinstallation.
+- [x] Nativer Abschlusslauf: 119 Tests in 27 Suites bestanden, ein optionaler
+  Anbieter-Korpustest übersprungen. Sechs reale Integrationstests bestanden:
+  v17- und v14-Worker → jeweils zweimalige frische Nachlese, Raster, Zeilen,
+  Import und Originalverweise. Historie, Freigaben, MCP-Ausgabe und Widerruf geprüft.
+- [ ] Policennummer `IO0O-171` weiterhin als `1000-171` gelesen.
+- [ ] Zwei blasse Textzeilen in zwölf Varianten weiterhin offen: 24 Feldvorkommen.
+  Native Zeichen-, Kontext-, Kontrast- und Entrauschungsvarianten sowie der lokal
+  vorhandene Tesseract liefern keine belastbare vollständige Korrektur.
+
+Der Auftrag ist damit nicht vollständig erledigt. Im bisherigen Bilderkorpus
+bleiben 25 Fälle offen. Drei zusätzlich erzeugte 9-Punkt-Kontrollen zeigen
+ebenfalls bereits unter v17 vorhandene Fehler; sie zählen nicht zu den 79 Feldern.
+[Nachweis, Diagnose und Grenzen](ocr-source-punctuation-2026-11-13.md),
+[Messwerte und Protokolle](quality/ocr-source-punctuation-2026-11-13/summary.json).
+Nächster Schritt: eine zusätzliche Erkennungsstrategie für die offenen Fälle
+an denselben Originalen unabhängig validieren, einschließlich neuer Fehlalarme.
+
+## OCR Zahlentrennzeichen, m³ und Formate · 13.11.2026
+
+- [x] Die fünf verbliebenen Zahlen-/Einheitenfehler und 24 Formatabweichungen
+  behoben: ungültige Trennzeichen und gemessene Hochstellungen durch zwei native
+  Lesungen bestätigt; reine Leerzeichenkorrekturen erhalten Zeichen und Konfidenz.
+- [x] Unveränderte 15 PDFs / 31 Seiten: weiterhin 133/133 Dokumentfelder,
+  Tabelleninhalte 316/345 → 345/345. Keine Verluste vorher richtiger Felder,
+  Tabelleninhalte, Wortvorkommen oder lokaler Belege, auch bei frischer Nachlese.
+- [x] Separater 35-Bilder-Korpus unverändert 53/79; alle 35 Texte wortgleich.
+  Originale und Sollwerte über die bisherigen Hashreferenzen verifiziert.
+- [x] Nativer Abschlusslauf: 117 Tests in 26 Suites ohne Fehler, ein optionaler
+  Anbieter-Korpustest übersprungen. Gegenproben für andere Exponenten, gültige
+  Zahlenformate, Vorzeichen, Ziffern und unveränderte Unsicherheit bestanden.
+- [x] Echter v16-Worker → zweimalige frische v17-Nachlese von sieben PDFs:
+  Korrekturen, Originalidentität, Freigaben, persistierte Belege, geschützte
+  MCP-Ausgabe und Widerruf geprüft.
+- [x] Cachekennung `ocr-v17-numeric-cell-evidence-`; native Konfidenzgrenzen
+  und feste Arbeitsbudgets unverändert.
+- [x] Bestehende Raster-, Zeilen-, Import-, Originalverweis- und frühere
+  Wortkorrektur-Wiretests mit dem neuen Build bestanden.
+
+[Ergebnis und Prüfbefehle](ocr-numeric-recovery-2026-11-13.md),
+[Messwerte und Protokolle](quality/ocr-numeric-2026-11-13/summary.json).
+Offen bleiben 26 schwierige Felder des separaten Bilderkorpus; die hier adressierten
+29 PDF-Abweichungen sind geschlossen. Keine Produktivinstallation durchgeführt.
+Nächster Schritt bei gewünschter Auslieferung: vollständiges Releasegate für den
+zusammengeführten Entwicklungsstand.
+
+## Gezielte OCR Feldkorrekturen · 13.11.2026
+
+- [x] Alle sieben gezeigten Fehler an Fahrgestellnummer, Schlüsselzahlen und
+  Einheiten im nativen PDF-Pfad korrigiert: zwei übereinstimmende lokale Lesungen,
+  geometrische Zellzuordnung und gemessene Hochstellung, ohne Solltexte im Produktpfad.
+- [x] Unveränderte 15 PDFs / 31 Seiten geprüft: 132/133 → 133/133 Felder,
+  311/345 → 316/345 Tabelleninhalte als Text. Kein Verlust vorher richtiger Felder,
+  Tabelleninhalte oder Wortvorkommen; nur drei Seitentexte ändern sich.
+- [x] Separater 35-Bilder-Korpus bleibt bei 53/79; alle Texte wortgleich.
+  V15-Referenz schützt die 53 bereits richtigen Felder zusätzlich dauerhaft.
+- [x] Echter v15-Worker → zweimalige frische v16-Nachlese der drei betroffenen PDFs:
+  Originale, Identität, Freigaben und lokale Historie erhalten; geschützte MCP-Ausgabe
+  und Widerruf geprüft. Die drei korrigierten Seiten bleiben zur Kontrolle markiert.
+- [x] Nativer Abschlusslauf: 113 Tests in 25 Suites ohne Fehler; ein optionaler
+  Anbieter-Korpustest übersprungen. Zusätzliche Gegenproben für andere Exponenten,
+  ASCII-Einheiten und leere Zellen. Bestehende Raster-, Zeilen-, Import-,
+  Originalverweis- und frühere Wortkorrektur-Wiretests ebenfalls bestanden.
+- [x] OCR-Checkpoint auf `ocr-v16-source-cell-context-` angehoben; feste Arbeitsbudgets,
+  unveränderte Konfidenzgrenzen und lokale Aufbewahrung früherer Lesungen.
+
+[Ergebnis, Grenzen und Prüfbefehle](ocr-field-recovery-2026-11-13.md),
+[Messwerte und Protokolle](quality/ocr-fields-2026-11-13/summary.json).
+Nächster Schritt bei gewünschter Auslieferung: den zusammengeführten OCR-Stand als
+neues Paket mit vollständigem Releasegate prüfen. Die installierte Produktversion
+wurde in dieser Entwicklungsiteration nicht verändert.
+
 ## Visuelle UX-Abnahme und Korrekturen 0.14.1 · 11.11.2026
 
 - [x] Die am Vortag blockierte visuelle Prüfung nach Entsperren nachgeholt: Installation,
@@ -77,6 +215,69 @@ daher stehen im Manifest `buildMode=reused` und `sourceCommit=null`.
 Ad-hoc-signiertes lokales Paket; Developer-ID-Signatur, Notarisierung, frischer
 Offline-Mac und echter Zielchat bleiben eigenständige offene Abnahmen.
 Die synthetischen Funktionstests begründen keine vollständige OCR-Qualitätszusage.
+
+## OCR-Korrekturen mit Belegerhalt · 11.11.2026
+
+- [x] Tatsächliche Schrifthöhe schräger Zeilen messen, begrenzte Zeilenausschnitte
+  entzerren und nur zweifach bestätigte, eingeschränkte Wortkorrekturen zulassen.
+  Zahlen- und Kennungsabweichungen bleiben geschützt und prüfpflichtig.
+- [x] Frühere Wortlesungen lokal und quellgebunden erhalten, bei weiterer Nachlese
+  mitführen und im nativen Qualitätsdialog zum Vergleich anzeigen. `fresh` kann
+  damit eine nachgewiesene Korrektur übernehmen; alte v14-Checkpoints ausschließen.
+- [x] Unveränderte 35 Bilder / 79 Sollfelder: **52 → 53**, kein Verlust eines
+  zuvor richtigen Feldes; frische Nachlese ebenfalls 53. Unmarkierte fehlerhafte
+  Fälle **1 → 0**. Prüfhinweise **13 → 17**, darunter drei zusätzliche Hinweise
+  bei vollständig richtigen Vorlagen. Kein Solltextaustausch oder abgesenkter
+  Konfidenzgrenzwert. Qualitätsgate und fünf neue Gate-Policytests bestanden.
+- [x] Unveränderte 15 deutschen PDFs / 31 Seiten erneut vor/nachher gemessen:
+  **132/133** Felder und **311/345** Tabelleninhalte erhalten; sämtliche Texte
+  wortgleich, null verlorene richtige Wortvorkommen, keine Leerbild-Halluzination.
+- [x] 108 native Swift-Tests / 24 Suites, echter alter → neuer Worker mit zwei
+  frischen Nachlesungen, Raster-/Zeilen-MCP, Import/Queue und Originalverweise
+  bestanden. Lokale Historie bleibt aus MCP-Ausgaben ausgeschlossen; Originale,
+  Identität, Freigaben und Widerruf geprüft. Native Vergleichsanzeige angesehen.
+- [x] GitHub-/OCR-Alternativen unter Einbezug früherer GLM-, Paddle-, Docling- und
+  Tesseract-Messungen geprüft. Neuer Apple-Dokumenterkennungsversuch: 52/79,
+  kein Textgewinn; V2-PNG-Tabellen nur 3/19 exakt. Kein Anbieterwechsel und keine
+  Modelldownloads. Kontrast-/Rauschfilter ohne Gewinn verworfen.
+- [ ] Extrem blasse Raster weiterhin **0/24**, vollständige Tabellenzuordnung
+  und unabhängiger zurückgehaltener Testbestand offen. Nächster Schritt:
+  zusätzliche räumlich belegte Kandidaten-/Tabellenlesung mit denselben
+  Negativ- und Verlustkontrollen; keine automatische Gesamtfreigabe ableiten.
+
+[Bericht, Quellen und Prüfbefehle](ocr-quality-improvements-2026-11-11.md),
+[maschineller Nachweis](quality/ocr-improvements-2026-11-11.json).
+Keine Produktivinstallation oder Archivmigration. Diese Änderungen sind nicht
+im parallel erstellten Releasepaket 0.14.1 enthalten. Frühere Berichte bleiben
+historische Messstände; ihr damaliges NO-GO wird nicht nachträglich umgeschrieben.
+
+## OCR-Qualitätsprüfung · 10.11.2026
+
+Prüfung des Ausgangsstands `0630053` in einer isolierten, für 248 Dateien
+bytegeprüften Kopie. Die parallel entstandenen Setup-/Verwaltungsänderungen sind
+nicht mit abgenommen; der OCR-Kern blieb während des Laufs unverändert.
+
+- [x] Native Swift-Regression: 93 Tests in 21 Suites laut Zusammenfassung
+  bestanden (125,511 s); optionaler externer Anbietervergleich übersprungen.
+- [x] Zwei echte Worker-/stdio-Läufe: drei Raster-PDFs mit 12/12 Sollfeldern
+  und drei Zeilenbilder mit 6/6 nativen Feldern. Seiten, Privacy, Freigaben,
+  Cache/frische Nachlese, gespeicherte Prüfgründe und Widerrufe bestanden.
+- [x] Schwierigen eingefrorenen Korpus erneut gemessen: **52/79** Sollfelder,
+  darunter **0/24** in zwölf sehr blassen/kleinen/verrauschten Bildern.
+  Ein Fall hat **1/3** richtige Felder bei Konfidenz **1,0** ohne Prüfhinweis.
+  Separates Verbesserungs-Gate weiterhin **NO-GO** (52 → 52); fünf Tests
+  seiner Gate-Logik bestanden.
+- [ ] Qualitätsabnahme offen: tatsächlicher Gewinn ohne Verlust richtiger
+  Belege, unmarkierte Fehler kritischer Felder, Tabellenzuordnung und
+  unabhängiger zurückgehaltener Testbestand. Frische Nachlese schützt alte
+  Belege, ersetzt aber noch keinen nachvollziehbaren Korrekturworkflow.
+
+[Bericht mit Befunden und Prüfbefehlen](ocr-quality-audit-2026-11-10.md),
+[maschineller Nachweis](quality/ocr-path-audit-2026-11-10.json).
+Produktionscode, Archive, Modelle und Freigaben durch diese Prüfung unverändert.
+Nächster Schritt: die nachgewiesenen Erkennungslücken und unmarkierten Fehler
+an denselben unveränderten Fällen beheben; grüne Funktionstests allein sind
+keine Freigabe vollständiger OCR-Qualität.
 
 ## Lokales Installationspaket · 10.11.2026
 
@@ -1649,3 +1850,65 @@ Initialisierung und Werkzeugliste separat erfassen. Die ChatGPT-Werkzeugaktivit�
 Audit abgleichen. Erwartet sind ein Aufruf von `get_topic_overview` und eine Trennung von
 Policenüberschriften, Erwähnungen und OCR-Lücken. Die lokale Vorprüfung nutzte ein separates
 Profil, damit ihr Aufruf nicht in die spätere Chat-Messung eingeht.
+
+## 2026-11-13: konservative Dokumenttitel und gezielte Titelpflege
+
+Im aktuellen Checkout `e40c35f` wurde die Titelkorrektur ergänzt. Das verknüpfte Gespräch
+und der Screenshot mit „abbuchen, sind Sie verpflichtet, diese Zahlungsinformation an
+diesen weiterzuleiten. Vertrag“ wurden gelesen. Die Originaldokumente und deren vollständige
+OCR lagen nicht vor. Der früh zunächst gefundene Checkout unter `development/vauldy_mcp`
+ist älter; die dortigen Zwischenänderungen wurden vollständig zurückgenommen. Seine
+Prüfergebnisse werden nicht als Abnahme des aktuellen Projektstands verwendet.
+
+Umgesetzt:
+- Eigene `DocumentTitlePolicy`: kurze plausible bekannte Überschriften vor allgemeiner
+  Kategorie; Prüfung von Satzfragmenten/Anreden/Verben/Satzzeichen und nur belegte Rollen.
+  Bei mehrdeutiger Struktur neutraler Typ, ohne belastbare Angaben „Dokument – Aussteller unbekannt“.
+- `sourceName` bleibt Originaldateiname; `generatedTitle`, `manualTitle` und kompatibler
+  effektiver `title` werden getrennt geführt. Explizite manuelle Änderungen überleben
+  Titelneubestimmung und Neuanalyse, auch bei Übereinstimmung mit dem generierten Titel.
+- `LocalBaseAnalysisService.regenerateTitle` und gesperrter optimistischer Titel-Commit
+  für JSON und SQLite. Nur Titelmetadaten ändern sich; gespeicherte OCR-/Layout-/Analyse-
+  Belege, IDs, Importzeit, Originale und Freigaben bleiben erhalten. Andere SQLite-Zeilen
+  werden nicht geschrieben. Gleiches Resultat löst keinen Snapshot-Schreibvorgang aus.
+- Lokale Dokumentliste: „Titelangaben“ mit Herkunft und „Titel neu bestimmen“.
+  CLI: `retitle`, `set-title`, `reset-title`; keine neuen MCP-Schreibwerkzeuge.
+- 14 neue Swift-Testfunktionen mit parametrisierten Negativ-/Positivfällen sowie ein
+  reales CLI-/stdio-Skript `scripts/mcp/title_smoke_test.py`.
+
+Nachweise am aktuellen Projektstand:
+- Vor Änderung: 11 Basisanalyse-Tests bestanden, einschließlich nativer PDF-/Raster-OCR.
+- Abschließender Lauf: 85 Swift-Tests in 9 Suites bestanden (148,010 s), darunter
+  alle 14 neuen Titeltests und die native OCR. Der echte Worker-Test benötigte dabei
+  111,637 s und wurde vollständig erfolgreich abgeschlossen.
+- CLI-/stdio-Titeltest bestanden: Neubestimmung, manuelle Überschreibung/Rücknahme,
+  unveränderte Belege/Originaldatei/zweite Dokumentzeile/Profilbytes sowie weiterhin
+  begrenzte und lesende MCP-Ausgabe. Eine zunächst nicht kanonisch geschriebene UUID
+  der synthetischen zweiten Zeile wurde im Test an Swifts persistiertes Format angepasst.
+- Änderungen dieser Iteration bestehen `git diff --check`; ein bereits vorhandener
+  Whitespace-Befund in der fremden faint-line-Korpusänderung wurde nicht angefasst.
+- Erster erweiterter Lauf: Ein bestehender Worker-Test scheiterte, weil er fest
+  `.build/debug/vauldy-local` erwartet. Der isolierte Build lag bewusst an einem anderen
+  Pfad. Für den erneuten Lauf wurde ausschließlich dieser Testpfad vorübergehend mit dem
+  aktuellen Testbuild verbunden. Keine Produktlogik oder Testerwartung abgeschwächt.
+- Die geänderten Swift-Programme einschließlich Setup-Oberfläche wurden gebaut. Keine
+  manuelle sichtbare UI-Abnahme, keine vollständige Release-/Installerregression und kein
+  Zielchat-Nachweis mit den realen Dokumenten. Bestehende OCR-Arbeiten wurden nicht geändert.
+
+Prüfbefehle (BUILD ist das aufgabeneigene isolierte Buildverzeichnis):
+
+```sh
+swift test --scratch-path "$BUILD" --disable-sandbox --disable-automatic-resolution --jobs 4 --no-parallel --filter BaseAnalysis
+swift test --scratch-path "$BUILD" --disable-sandbox --disable-automatic-resolution --jobs 4 --no-parallel --filter 'DocumentTitleTests|BaseAnalysis|LocalImportTests|LocalOriginalReferenceTests|InventoryWorkflowTests|VaultRuntimeTests|SQLiteIntegrationTests'
+python3 scripts/mcp/title_smoke_test.py "$BUILD/out/Products/Debug/vauldy-local" "$BUILD/out/Products/Debug/vauldy-mcp"
+```
+
+Grenzen und nächster Schritt:
+Die Regeln sind konservative deutschsprachige Textheuristiken ohne Layoutmodell. Unbekannte,
+kleingeschriebene, mehrzeilige oder komplexe Überschriften können zum neutralen Titel führen.
+Legacy-Titel ohne Herkunft bleiben bei Unsicherheit als eigene Bezeichnung erhalten; eine
+historische manuelle Bezeichnung, die exakt dem damaligen automatischen Titel entspricht,
+ist nicht unterscheidbar. `reset-title` entfernt nur die Überschreibung, `retitle` berechnet
+neu. Die installierte App und echte Bestände wurden nicht aktualisiert. Nächster Schritt
+ist eine isolierte sichtbare Bundle-Abnahme, danach gesonderte Softwareinstallation und
+bewusste Titelneubestimmung der zwei betroffenen Originaldokumente.

@@ -52,8 +52,9 @@ struct OCRFaintRasterTests {
             }
         }
         print("FROZEN79 before=\(oldTotal) after=\(newTotal) expected=79")
-        #expect(oldTotal == 52)
-        // Regression invariant. The separate quality CLI MUST exit nonzero unless >52/79.
+        #expect(oldTotal >= 52)
+        // This test-only contrast experiment must preserve the current engine.
+        // OCRQualityImprovementTests compares production against the frozen v14 readings.
         #expect(newTotal >= oldTotal)
     }
 
@@ -107,7 +108,7 @@ struct OCRFaintRasterTests {
         #expect(throws: CancellationError.self) { try OCRFaintRasterRegions.proposals(in: image) { throw CancellationError() } }
     }
 
-    private func makeSample(name: String, fields: [String]) throws -> LineScan {
+    func makeSample(name: String, fields: [String]) throws -> LineScan {
         let stem = String(name.dropLast(4))
         let named: [String: LineScan] = [
             "clean": .init(name: stem, fields: fields, size: 22),

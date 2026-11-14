@@ -23,6 +23,11 @@ public struct LocalOCRMetrics: Codable, Equatable, Sendable {
     public var targetedRetries: Int?
     public var recoveredLines: Int?
     public var lineReview: LocalOCRLineReview?
+    public var fieldRetries: Int?
+    public var fieldRetryPixels: Int?
+    public var fieldRepairs: Int?
+    public var numericFormatRepairs: Int?
+    public var recoveredTableRows: Int?
     public init() {}
     mutating func mergeCoverage(_ other: Self?) {
         if let value = other?.coverageMilliseconds { coverageMilliseconds = (coverageMilliseconds ?? 0) + value }

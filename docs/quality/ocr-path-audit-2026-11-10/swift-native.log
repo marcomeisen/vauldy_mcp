@@ -1,0 +1,19 @@
+[0/1] Planning build
+Building for production...
+[0/21] /private/tmp/vauldy-ocr-audit-20261110/source/.build/arm64-apple-macosx/release/VauldyMCPPackageTests.derived/runner.swift
+[1/73] Write sources
+[4/73] Copying PrivacyInfo.xcprivacy
+[5/73] Write sources
+[9/73] Copying product-questions.json
+[9/73] Copying relay-webcrypto-vector.json
+[11/73] Copying overview-corpus.json
+[11/73] Copying faint-line-corpus.json
+[13/73] Write sources
+error: precompiled file '/private/tmp/vauldy-ocr-audit-20261110/source/.build/arm64-apple-macosx/release/ModuleCache/1U82ZAH46YVR3/_Builtin_stdbool-2OQWMRBVRD4OJ.pcm' was compiled with module cache path '/private/tmp/vauldy-installer-20261110.veKh4N/source/.build/arm64-apple-macosx/release/ModuleCache/1U82ZAH46YVR3', but the path is currently '/private/tmp/vauldy-ocr-audit-20261110/source/.build/arm64-apple-macosx/release/ModuleCache/1U82ZAH46YVR3'
+1 error generated.
+[39/73] Compiling _AtomicsShims.c
+[39/73] Compiling CNIOWindows shim.c
+[39/73] Compiling CSystem shims.c
+[39/73] Write swift-version--58304C5D6DBC2206.txt
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+error: fatalError

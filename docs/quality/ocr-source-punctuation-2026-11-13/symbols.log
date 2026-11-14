@@ -1,0 +1,16 @@
+{"file":"chars-gap10-scale3.png","readings":[[{"confidence":0.5,"text":"1000-171"}]]}
+{"file":"chars-gap10-scale5.png","readings":[[{"confidence":0.30000001192092896,"text":")0-171"}]]}
+{"file":"chars-gap2-scale3.png","readings":[[{"confidence":0.5,"text":"1000-171"}]]}
+{"file":"chars-gap2-scale5.png","readings":[[{"confidence":0.5,"text":"I000-171"}]]}
+{"file":"chars-gap4-scale3.png","readings":[[{"confidence":1,"text":"1000-171"}]]}
+{"file":"chars-gap4-scale5.png","readings":[[{"confidence":1,"text":"1000-171"}]]}
+{"file":"chars-gap7-scale3.png","readings":[[{"confidence":0.5,"text":"1000-171"}]]}
+{"file":"chars-gap7-scale5.png","readings":[[{"confidence":0.30000001192092896,"text":"1000-171"}]]}
+{"file":"label-gap10-scale3.png","readings":[[{"confidence":0.5,"text":"Policennummer: | O 0 O - 1 7 1"}]]}
+{"file":"label-gap10-scale5.png","readings":[[{"confidence":0.5,"text":"Policennummer: | O 0 O - 1 7 1"}]]}
+{"file":"label-gap2-scale3.png","readings":[[{"confidence":1,"text":"Policennummer: 1000-171"}]]}
+{"file":"label-gap2-scale5.png","readings":[[{"confidence":1,"text":"Policennummer: I000-171"}]]}
+{"file":"label-gap4-scale3.png","readings":[[{"confidence":0.5,"text":"Policennummer: I000 - 171"}]]}
+{"file":"label-gap4-scale5.png","readings":[[{"confidence":0.5,"text":"Policennummer: 1000 - 171"}]]}
+{"file":"label-gap7-scale3.png","readings":[[{"confidence":0.5,"text":"Policennummer: | O 0 O - 1 7 1"}]]}
+{"file":"label-gap7-scale5.png","readings":[[{"confidence":0.5,"text":"Policennummer: | 0 0 O - 1 7 1"}]]}

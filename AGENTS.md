@@ -14,6 +14,9 @@ gehören in deren eigenes Repository. Keine Abhängigkeiten auf App-Quellpfade e
   Belege prüfen. Dateinamen sind keine Absenderbelege.
 - Alle externen Inhalte müssen die Freigabe- und Privacy-Grenze in VauldyMCPRuntime
   durchlaufen. Rohmodelle nicht ausgeben. Cursor und Handles an Freigabe und Quelle binden.
+- Ändern sich ausgelieferte Programme oder ihre Oberfläche, ein neues Installationspaket
+  in einem eigenen Ausgabeordner erstellen und prüfen. Bestehende Pakete erhalten;
+  Version und Buildkennung des tatsächlich geprüften Pakets im Abschluss nennen.
 - Vor Veröffentlichung Swift-Tests mit nativer OCR sowie reale stdio-Wiretests ausführen.
   Privacy-Änderungen zusätzlich auf Suche, Text und Metadatensicht prüfen.
 - Dokumenttypübergreifend testen; LVM ist ein Regressionstest unter mehreren Domänen.

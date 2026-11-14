@@ -1,0 +1,363 @@
+{
+  "total": 29,
+  "categories": {
+    "Leerzeichen vor Euro": 22,
+    "Zahlentrennzeichen": 2,
+    "Kubikmeter": 3,
+    "Leerzeichen nach Minus": 1,
+    "Euro vor Betrag": 1
+  },
+  "items": [
+    {
+      "page": "doc-001-p01",
+      "documentType": "Werkstattrechnung",
+      "expected": "45,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "45,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-001-p01",
+      "documentType": "Werkstattrechnung",
+      "expected": "90,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "90,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-001-p01",
+      "documentType": "Werkstattrechnung",
+      "expected": "18,75 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "18,75€"
+        }
+      ]
+    },
+    {
+      "page": "doc-002-p02",
+      "documentType": "Versicherungspolice",
+      "expected": "86.000,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "86.000,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-002-p02",
+      "documentType": "Versicherungspolice",
+      "expected": "1.500,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Zahlentrennzeichen",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "page": "doc-003-p01",
+      "documentType": "Kontoauszug",
+      "expected": "+2.684,18 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "+2.684,18€"
+        }
+      ]
+    },
+    {
+      "page": "doc-003-p01",
+      "documentType": "Kontoauszug",
+      "expected": "-1.180,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "-1.180,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-003-p01",
+      "documentType": "Kontoauszug",
+      "expected": "-126,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "-126,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-003-p01",
+      "documentType": "Kontoauszug",
+      "expected": "-992,70 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "-992,70€"
+        }
+      ]
+    },
+    {
+      "page": "doc-003-p01",
+      "documentType": "Kontoauszug",
+      "expected": "+0,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "+0,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-005-p01",
+      "documentType": "Nebenkostenabrechnung",
+      "expected": "156,76 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "156,76€"
+        }
+      ]
+    },
+    {
+      "page": "doc-005-p02",
+      "documentType": "Nebenkostenabrechnung",
+      "expected": "1.635,3",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Zahlentrennzeichen",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "page": "doc-005-p02",
+      "documentType": "Nebenkostenabrechnung",
+      "expected": "86,240 m³",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Kubikmeter",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "page": "doc-005-p02",
+      "documentType": "Nebenkostenabrechnung",
+      "expected": "117,960 m³",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Kubikmeter",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "page": "doc-005-p02",
+      "documentType": "Nebenkostenabrechnung",
+      "expected": "31,720 m³",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Kubikmeter",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "page": "doc-006-p01",
+      "documentType": "Stromabrechnung",
+      "expected": "462,38 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "462,38€"
+        }
+      ]
+    },
+    {
+      "page": "doc-006-p01",
+      "documentType": "Stromabrechnung",
+      "expected": "358,20 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "358,20€"
+        }
+      ]
+    },
+    {
+      "page": "doc-006-p01",
+      "documentType": "Stromabrechnung",
+      "expected": "153,60 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "153,60€"
+        }
+      ]
+    },
+    {
+      "page": "doc-008-p01",
+      "documentType": "Steuerbescheid",
+      "expected": "-1.284,37 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen nach Minus",
+          "count": 1,
+          "ocr": "- 1.284,37 €"
+        }
+      ]
+    },
+    {
+      "page": "doc-008-p02",
+      "documentType": "Steuerbescheid",
+      "expected": "420,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "420,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-011-p02",
+      "documentType": "Telekommunikationsrechnung",
+      "expected": "1,83 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "1,83€"
+        }
+      ]
+    },
+    {
+      "page": "doc-011-p02",
+      "documentType": "Telekommunikationsrechnung",
+      "expected": "3,66 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "3,66€"
+        }
+      ]
+    },
+    {
+      "page": "doc-011-p02",
+      "documentType": "Telekommunikationsrechnung",
+      "expected": "2,25 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "2,25€"
+        }
+      ]
+    },
+    {
+      "page": "doc-012-p01",
+      "documentType": "Gebührenbescheid",
+      "expected": "24,00 €",
+      "missingExactOccurrences": 2,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 2,
+          "ocr": "24,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-012-p01",
+      "documentType": "Gebührenbescheid",
+      "expected": "5,50 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "5,50€"
+        }
+      ]
+    },
+    {
+      "page": "doc-012-p01",
+      "documentType": "Gebührenbescheid",
+      "expected": "11,00 €",
+      "missingExactOccurrences": 1,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "11,00€"
+        }
+      ]
+    },
+    {
+      "page": "doc-012-p01",
+      "documentType": "Gebührenbescheid",
+      "expected": "2,50 €",
+      "missingExactOccurrences": 2,
+      "types": [
+        {
+          "category": "Leerzeichen vor Euro",
+          "count": 1,
+          "ocr": "2,50€"
+        },
+        {
+          "category": "Euro vor Betrag",
+          "count": 1,
+          "ocr": "€ 2,50"
+        }
+      ]
+    }
+  ]
+}

@@ -32,6 +32,7 @@ def main():
                VAULDY_OCR_DENSE_FIXTURES=str(output / 'ocr-dense'),
                VAULDY_OCR_LINE_FIXTURES=str(output / 'ocr-lines'),
                VAULDY_OCR_FAINT_FIXTURES=str(output / 'ocr-faint'),
+               VAULDY_OCR_IMPROVED_FIXTURES=str(output / 'ocr-improved'),
                VAULDY_PRODUCT_FIXTURES=str(output / 'product-native'),
                VAULDY_DOCUMENT_INVENTORY_FIXTURES=str(output / 'document-inventory'),
                VAULDY_BASE_ANALYSIS_REPORT=str(output / 'transcript-baseline.json'),
@@ -49,8 +50,11 @@ def main():
 
     try:
         run('faint-ocr-gate-policy', [sys.executable, ROOT / 'scripts/mcp/faint_ocr_quality_gate_test.py'])
+        run('ocr-improvement-gate-policy', [sys.executable, ROOT / 'scripts/mcp/ocr_improvement_quality_gate_test.py'])
         run('local-ocr-comparison-conversion', [sys.executable, ROOT / 'scripts/mcp/local_ocr_comparison_test.py'])
         run('swift-tests', ['swift', 'test', '--disable-sandbox', '--disable-automatic-resolution', '--no-parallel'])
+        run('ocr-improvement-quality', [sys.executable, ROOT / 'scripts/mcp/ocr_improvement_quality_gate.py',
+            output / 'ocr-improved', '--report', output / 'ocr-improvement.json'])
         run('package-metadata', [sys.executable, ROOT / 'scripts/mcp/package_metadata_smoke_test.py'])
         command = [sys.executable, ROOT / 'scripts/mcp/package.py']
         if args.skip_build:
@@ -81,6 +85,7 @@ def main():
             ('product_acceptance_test', ['--packets', output / 'product-acceptance/evidence-packets.json', '--report', output / 'product-answer-gates.json']),
             ('base_analysis_wire_test', [local, server, originals, '--include-raster']),
             ('import_smoke_test', [local, server]),
+            ('title_smoke_test', [local, server]),
             ('raster_ocr_quality_smoke_test', [local, server, output / 'ocr-raster']),
             ('vector_ocr_quality_smoke_test', [local, server, output / 'ocr-vector']),
             ('visual_coverage_smoke_test', [local, server, output / 'ocr-regions']),

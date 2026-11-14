@@ -1,0 +1,373 @@
+{
+  "date": "2026-11-10",
+  "baseCommit": "0630053",
+  "branch": "main",
+  "reviewScope": "Frozen workspace snapshot before concurrent setup/management edits; production OCR unchanged",
+  "verifiedFiles": 248,
+  "verifiedCoreFiles": 38,
+  "dependenciesPinned": 7,
+  "concurrentChangedFilesExcluded": [
+    "Sources/VauldyMCPRuntime/MCPInventoryQuality.swift",
+    "Sources/VauldyMCPSetup/InventoryWorkflowModel.swift",
+    "Sources/VauldyMCPSetup/InventoryWorkflowView.swift",
+    "Sources/VauldyMCPSetup/SetupDetailViews.swift",
+    "Sources/VauldyMCPSetup/SetupModel+Management.swift",
+    "Sources/VauldyMCPSetup/SetupModel+Originals.swift",
+    "Sources/VauldyMCPSetup/SetupModel.swift",
+    "Sources/VauldyMCPSetup/SetupRelayView.swift",
+    "Sources/VauldyMCPSetup/SetupView.swift",
+    "Sources/VauldyMCPSetup/SetupWizardView.swift",
+    "Sources/VauldyRelay/RelayUIControl.swift"
+  ],
+  "swift": {
+    "reportedTests": 93,
+    "suites": 21,
+    "seconds": 125.511,
+    "passed": true,
+    "optionalExternalProviderTestSkipped": true,
+    "cleanBuildSeconds": 120.69
+  },
+  "rasterNative": {
+    "cases": 9,
+    "exactFields": 35,
+    "expectedFields": 36,
+    "incorrectIdentifierMarked": true
+  },
+  "frozenCorpus": {
+    "images": 35,
+    "exact": 52,
+    "expected": 79,
+    "unmarkedIncorrect": [
+      {
+        "file": "tilted-9-right.png",
+        "exact": 1,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      }
+    ],
+    "cases": [
+      {
+        "file": "ambiguous.png",
+        "exact": 1,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.6666666666666666
+      },
+      {
+        "file": "clean.png",
+        "exact": 3,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "date.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "dense.png",
+        "exact": 6,
+        "expected": 6,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "faint-words.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "grid-11-88-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-11-88-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-11-93-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-11-93-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-13-88-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-13-88-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-13-93-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-13-93-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-9-88-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-9-88-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-9-93-15.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "grid-9-93-25.png",
+        "exact": 0,
+        "expected": 2,
+        "review": true,
+        "confidence": 0.5
+      },
+      {
+        "file": "invoice.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Courier-Oblique-11.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Courier-Oblique-14.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Helvetica-Oblique-11.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Helvetica-Oblique-14.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Times-Italic-11.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "italic-Times-Italic-14.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-78-Fahrrad.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-78-fuer.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-85-Fahrrad.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-85-fuer.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-92-Fahrrad.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "mixed-92-fuer.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "payroll.png",
+        "exact": 2,
+        "expected": 2,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "tilted-12-left.png",
+        "exact": 3,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "tilted-12-right.png",
+        "exact": 3,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "tilted-9-left.png",
+        "exact": 3,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      },
+      {
+        "file": "tilted-9-right.png",
+        "exact": 1,
+        "expected": 3,
+        "review": false,
+        "confidence": 1
+      }
+    ]
+  },
+  "improvementGate": {
+    "corpusImages": 35,
+    "expectedFields": 79,
+    "before": 52,
+    "after": 52,
+    "gainedFields": 0,
+    "lostFields": 0,
+    "unexpectedAdditions": 0,
+    "evidencePreserved": true,
+    "requiredAfterMinimum": 53,
+    "qualityGate": "NO-GO",
+    "candidateEnabled": false
+  },
+  "gatePolicyUnitTests": {
+    "tests": 5,
+    "passed": true
+  },
+  "wire": {
+    "raster": {
+      "passed": true,
+      "syntheticPDFs": 3,
+      "exactStoredFields": 12,
+      "cases": [
+        {
+          "name": "raster-pdf",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-other-values",
+          "state": "completed",
+          "review": false
+        },
+        {
+          "name": "raster-light",
+          "state": "partial",
+          "review": true
+        }
+      ],
+      "grants": true,
+      "privacy": true,
+      "physicalPage": 1,
+      "cacheAndFreshRetry": true,
+      "revocation": true
+    },
+    "lines": {
+      "passed": true,
+      "syntheticImages": 3,
+      "nativeExactFields": 6,
+      "protectedVerifiedExcerpts": 5,
+      "contractIdentifierRedacted": true,
+      "ambiguousIdentifierRemainsReview": true,
+      "persistedReasons": true,
+      "sameWorker": true,
+      "freshRetryPreservesEvidence": true,
+      "repeatReasonsStable": true,
+      "originalAndGrantUnchanged": true,
+      "sourcePage": 1,
+      "diagnosticsRemainLocal": true,
+      "revocations": 3
+    }
+  },
+  "artifacts": {
+    "source-proof.json": "b9a650d8e7d2233940b71a199871eae852f0d07b5beb80888a2183d971b4c69a",
+    "current-corpus.json": "1555ec3da692b639ed0a71d81795ab68535a9596ee187eadce94299dcf8d78d5",
+    "faint-gate.json": "c85147e0742ff265953806456a6df69c538f47b148d3f5b4b0c682d49617c5e9",
+    "swift-tests.log": "48d4f5dee2cb10115ff25d4d7505845592ac70701d33ffa041d13b015194ff6c",
+    "swift-native.log": "8e1c1e75ce08a672cc93a9c3ae29f99deb1b435e3a6c6691788a670a27f4bdb2",
+    "swift-native-clean.log": "75e6bb715a84574fb120a02e26e02c6c41758b2bf5366617ad48751a010622a7",
+    "raster-wire.log": "2357cf63c7122e677fb5bbf6d8db6f82858812507ab85109a3e289fd03b35db7",
+    "line-wire.log": "6552a093b36a9a85b098866351456179d7a3e424d3c23c70c92cc2e9f540bf62"
+  },
+  "productionChanged": false,
+  "completeReleaseRegression": false,
+  "historicalV2Rerun": false,
+  "conclusion": "NO-GO for comprehensive OCR quality acceptance; technical regression passed"
+}

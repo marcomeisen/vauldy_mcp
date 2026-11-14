@@ -72,7 +72,11 @@ public struct VaultDeadline: Codable, Equatable, Sendable {
 
 public struct VaultDocument: Codable, Equatable, Sendable {
     public let id: UUID
-    public var title: String
+    /// Effective display title; direct edits are manual overrides.
+    public var title: String { didSet { manualTitle = title } }
+    public private(set) var generatedTitle: String?
+    public private(set) var manualTitle: String?
+    /// Original filename, never changed by title generation or manual overrides.
     public var sourceName: String
     public let importedAt: Date
     public var category: String
@@ -121,6 +125,27 @@ public struct VaultDocument: Codable, Equatable, Sendable {
         self.pageCount = pageCount
     }
 
+    mutating func setGeneratedTitle(_ value: String) {
+        var preserved = manualTitle
+        if generatedTitle == nil && preserved == nil {
+            // Legacy snapshots had only title. Preserve ambiguous custom text;
+            // exact filename/previous generated values can safely be replaced.
+            let filename = URL(fileURLWithPath: sourceName).deletingPathExtension().lastPathComponent
+            if title != filename && title != baseAnalysis?.displayTitle { preserved = title }
+        }
+        generatedTitle = value
+        title = preserved ?? value
+        manualTitle = preserved
+    }
+
+    public mutating func setManualTitle(_ value: String?) {
+        let cleaned = value?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let override = cleaned.flatMap { $0.isEmpty ? nil : $0 }
+        if generatedTitle == nil { generatedTitle = DocumentTitlePolicy.fallback }
+        title = override ?? generatedTitle ?? DocumentTitlePolicy.fallback
+        manualTitle = override
+    }
+
     public var isSearchable: Bool {
         status == "indexed" || status == "partiallyAnalyzed" || status == "ocrComplete"
     }
@@ -128,6 +153,8 @@ public struct VaultDocument: Codable, Equatable, Sendable {
     private enum CodingKeys: String, CodingKey {
         case id
         case title
+        case generatedTitle
+        case manualTitle
         case sourceName
         case importedAt
         case category
@@ -149,6 +176,8 @@ public struct VaultDocument: Codable, Equatable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
         title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Ohne Titel"
+        generatedTitle = try container.decodeIfPresent(String.self, forKey: .generatedTitle)
+        manualTitle = try container.decodeIfPresent(String.self, forKey: .manualTitle)
         sourceName = try container.decodeIfPresent(String.self, forKey: .sourceName) ?? ""
         importedAt = try container.decodeIfPresent(Date.self, forKey: .importedAt) ?? .distantPast
         category = try container.decodeIfPresent(String.self, forKey: .category) ?? "other"

@@ -1,0 +1,5221 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "0630053",
+  "inputHashes": {
+    "ambiguous.png": "74089948ddb448c3a9bc87c463ab12548ee97056492dc641ad2eb5b38c9075c8",
+    "clean.png": "e42b2bf54984151d663fed1086824967ca10de30a24903a887193ce8037ac43d",
+    "date.png": "46fde2bdefcc83e622db3d858476185998f97f490817a485ad9c584add921c28",
+    "dense.png": "e37ad6d2e1e97c8f5199cc40233effe5ec51114cadd506b6e22c1962d5ca4560",
+    "faint-words.png": "165f59b436cdab58adea06f614c1ce69b3169239296fa2a43ddc86f566091fa8",
+    "grid-11-88-15.png": "1c2b4463c7dc48b35d31c4f7ca7f3827c2153595d54b8eb890f2ca730f2e1b2f",
+    "grid-11-88-25.png": "29132823a904e228bfe0efefa802fd06fd5f18a763b9195e02ff855c3b6cedb0",
+    "grid-11-93-15.png": "543e3d30c27a2427a9224e0cc6c3e590d0ae670a8bd8cfa23ac394ffe6909430",
+    "grid-11-93-25.png": "abede21560d9126a19272b2cf4746f5de95b29866169147dc9389fd678db8f09",
+    "grid-13-88-15.png": "c91e6dbe872948c31ebcbb462b559c353b5fb0b6c24e5cb50c9d4ddbba205fbd",
+    "grid-13-88-25.png": "b3e71440998149c9f4d24a4675cdb5db1a7927640baee5dcfbca9490fff976c6",
+    "grid-13-93-15.png": "f778b1fc535ed2655d3247a5b71d545037d1b1d860f7a4ea602a0d4802f79784",
+    "grid-13-93-25.png": "48ef4d8a3b6c72efd5207bbe8f92dbafe2e6816d10236f7f3715e082e38fb799",
+    "grid-9-88-15.png": "4a595d28a76377e3ada2ff4f5e92d9a61c29b1a448531ef32452e4e0a5b9254b",
+    "grid-9-88-25.png": "a0423eca5e0e5d944c4ee80fbffd4dc67472379d63b7c306314fb6c564a7e71b",
+    "grid-9-93-15.png": "dd629a100b4c98602a629c82950fd7f8015f4d0aca58b90373346b47ca47e46d",
+    "grid-9-93-25.png": "e42aa05bffd2c0f8bd8715acf795b2b87b1cffcd73bd743abda25ce7a20980dc",
+    "invoice.png": "def715c03b29d3d7e41a573163d228eb2c3e415dd83167d351802414cdb3a5bb",
+    "italic-Courier-Oblique-11.png": "d948f3393cb853daf13c25da3a46cfe2feb6c01ec1ae1cac7ee6e1ce5d725302",
+    "italic-Courier-Oblique-14.png": "784413940810520ff5930976936caf794d284fb27519a7232184f7a66eb5cc37",
+    "italic-Helvetica-Oblique-11.png": "361da7afa29d0deb5e0662d8e7f96a87dd7f67c6a36d0af4fa5d52c52c335ed4",
+    "italic-Helvetica-Oblique-14.png": "1ddfecddd54e7c6d70d9cb1ec6e12a03b0fedbe724a2fb365e34b70f5749f606",
+    "italic-Times-Italic-11.png": "a56c0fc8ee65cbe19941589f97f2d6ea277ad0c67deec58e9a3574abed788eb9",
+    "italic-Times-Italic-14.png": "4109702f2142a8d818c487709ed539d600dcb037ae9cb505d35ae34494dea5eb",
+    "mixed-78-Fahrrad.png": "e0cfdd2082f4abfb73a60de62dbabe28f8b302394ecf094bc2975329ab341d79",
+    "mixed-78-fuer.png": "76fd73c9e2df00cbf84c5d0ed11f158b677ed90fa65aae8d3ee57e0ee94bc988",
+    "mixed-85-Fahrrad.png": "4224ebff606fdfba98c0288339786d9a3f23b1052a14274fa87c4ff08c906d51",
+    "mixed-85-fuer.png": "088e4ba22b2eae07e051f45e1912d823c31e5156f151f20aa8bc6bc43cb59f2c",
+    "mixed-92-Fahrrad.png": "2b96f12d6628e76cfb24c5621ea24e10d3ffaceb2a290e5bab4312444c1b7bc3",
+    "mixed-92-fuer.png": "07d6726195a291ce009a6e4a6691daf095d05a9692d1e3c34f81a1066e525f99",
+    "payroll.png": "742c78cb5bce64ae69450d8b39957ebedefd811d6bf836f500b7832dad81fa36",
+    "tilted-12-left.png": "c1e0c9f32ef86b22a40aaec3c57d37531686be0b5f11e1a2fb58bdb92a93f485",
+    "tilted-12-right.png": "3a8943578607854564ed4e0b9f2e176e3c7a359fdafdf819e4be04b06532d68e",
+    "tilted-9-left.png": "0a9b80e07266e28f553ce9d9bb695d2643a470a65a461d5d4cfe227bb7afded1",
+    "tilted-9-right.png": "3676f6caf7f63531adccde7e19ed82627cb5ddb935eb64561181d19c6b2f19c8"
+  },
+  "pages": {
+    "clean.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666666
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333348
+                ]
+              ]
+            },
+            {
+              "detectedCharacters": 23,
+              "coveredCharacters": 23,
+              "bounds": [
+                [
+                  0.06547619047619048,
+                  0.75
+                ],
+                [
+                  0.3380952380952381,
+                  0.043749999999999956
+                ]
+              ]
+            },
+            {
+              "detectedCharacters": 17,
+              "coveredCharacters": 17,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.65625
+                ],
+                [
+                  0.22380952380952385,
+                  0.043749999999999956
+                ]
+              ]
+            },
+            {
+              "detectedCharacters": 23,
+              "coveredCharacters": 23,
+              "bounds": [
+                [
+                  0.06547619047619048,
+                  0.5625
+                ],
+                [
+                  0.3023809523809525,
+                  0.043749999999999956
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 1,
+            "length": 27,
+            "bounds": [
+              [
+                0.06290332209176483,
+                0.8356778296804428
+              ],
+              [
+                0.38257485590061224,
+                0.06880035802074103
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          },
+          {
+            "confidence": 1,
+            "length": 25,
+            "bounds": [
+              [
+                0.06306022397010834,
+                0.7488451087144886
+              ],
+              [
+                0.3465966386554622,
+                0.05387228260869559
+              ]
+            ],
+            "method": "vision",
+            "location": 28
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06271998006547425,
+                0.6455275514476309
+              ],
+              [
+                0.23333967208862305,
+                0.06730610482070754
+              ]
+            ],
+            "method": "vision",
+            "location": 54
+          },
+          {
+            "confidence": 1,
+            "length": 25,
+            "bounds": [
+              [
+                0.0630602239576361,
+                0.5582201087206592
+              ],
+              [
+                0.3109873949579832,
+                0.05801630434782612
+              ]
+            ],
+            "method": "vision",
+            "location": 73
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06271998006547425,
+                0.5582201087206592
+              ],
+              [
+                0.38275819792690285,
+                0.34625807898052463
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 56,
+        "needsReview": false,
+        "confidence": 1,
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 53,
+          "recognitionRegions": 1
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung\nVertragsnummer: VX-739245\nBeitrag: 82,47 EUR\nVersicherungsart: Hausrat"
+    },
+    "tilted-9-right.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.05376258449187706,
+                0.6895402752806716
+              ],
+              [
+                0.25433416820707777,
+                0.06357975800832105
+              ]
+            ],
+            "location": 28,
+            "length": 49,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.05626341500383963,
+                0.5933685100730479
+              ],
+              [
+                0.2137994675409226,
+                0.060458262761433956
+              ]
+            ],
+            "location": 78,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06082101956309049,
+                0.5024712652477146
+              ],
+              [
+                0.09968801225934709,
+                0.04295976956685399
+              ]
+            ],
+            "location": 118,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.047955200489098966,
+                0.7744607854997134
+              ],
+              [
+                0.3826050167992001,
+                0.11485293706258148
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.05376258449187706,
+                0.5024712652477146
+              ],
+              [
+                0.25433416820707777,
+                0.2506487680412781
+              ]
+            ],
+            "lineIndices": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 90,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 85,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Zahnriemerwechsel am Aggregat\nBeitrag: 82.47 EUR"
+    },
+    "payroll.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06412142991287471,
+                0.8373269999953237
+              ],
+              [
+                0.3788938249860491,
+                0.057116901874542214
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571407191448,
+                0.7541666666964286
+              ],
+              [
+                0.2142857142857143,
+                0.029166666666666563
+              ]
+            ],
+            "location": 28,
+            "length": 26,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.0641460101378237,
+                0.6563249600334682
+              ],
+              [
+                0.23603092375255766,
+                0.035978297392527114
+              ]
+            ],
+            "location": 55,
+            "length": 25,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06412142991287471,
+                0.8373269999953237
+              ],
+              [
+                0.3788938249860491,
+                0.057116901874542214
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571407191448,
+                0.7541666666964286
+              ],
+              [
+                0.2142857142857143,
+                0.029166666666666563
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.0641460101378237,
+                0.6563249600334682
+              ],
+              [
+                0.23603092375255766,
+                0.035978297392527114
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 150,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 145,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nArbeitgeber: Musterbetrieb\nAbrechnung: November 2026"
+    },
+    "grid-9-88-25.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 214,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 210,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "date.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 1,
+            "length": 27,
+            "bounds": [
+              [
+                0.06412142991287471,
+                0.8373269999953237
+              ],
+              [
+                0.3788938249860491,
+                0.057116901874542214
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06666666654563491,
+                0.7541666666909722
+              ],
+              [
+                0.14523809523809525,
+                0.029166666666666674
+              ]
+            ],
+            "method": "vision",
+            "location": 28
+          },
+          {
+            "confidence": 1,
+            "length": 28,
+            "bounds": [
+              [
+                0.06411372788569232,
+                0.6564626200527148
+              ],
+              [
+                0.24086716061546692,
+                0.038583226998647024
+              ]
+            ],
+            "method": "vision",
+            "location": 47
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06412142991287471,
+                0.8373269999953237
+              ],
+              [
+                0.3788938249860491,
+                0.057116901874542214
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654563491,
+                0.7541666666909722
+              ],
+              [
+                0.14523809523809525,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06411372788569232,
+                0.6564626200527148
+              ],
+              [
+                0.24086716061546692,
+                0.038583226998647024
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 123,
+        "needsReview": false,
+        "confidence": 1,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 3,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 118,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung\nBeginn: 19.08.2027\nSchutz fuer das Wohngebaeude"
+    },
+    "italic-Courier-Oblique-14.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.8355402029879266
+              ],
+              [
+                0.3790217808314732,
+                0.06004645824432375
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571412018141,
+                0.7500000000158731
+              ],
+              [
+                0.3952380952380952,
+                0.033333333333333215
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06641478156050928,
+                0.6546316108443105
+              ],
+              [
+                0.18381131490071617,
+                0.03789357741673782
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.8355402029879266
+              ],
+              [
+                0.3790217808314732,
+                0.06004645824432375
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571412018141,
+                0.7500000000158731
+              ],
+              [
+                0.3952380952380952,
+                0.033333333333333215
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06641478156050928,
+                0.6546316108443105
+              ],
+              [
+                0.18381131490071617,
+                0.03789357741673782
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06547970912502932,
+                  0.754352310231023
+                ],
+                [
+                  0.3892786769880366,
+                  0.026712046204620532
+                ]
+              ],
+              "detectedCharacters": 33,
+              "coveredCharacters": 33
+            },
+            {
+              "bounds": [
+                [
+                  0.06629964238659891,
+                  0.660602310231023
+                ],
+                [
+                  0.17889610389610391,
+                  0.026712046204620532
+                ]
+              ],
+              "detectedCharacters": 14,
+              "coveredCharacters": 14
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 271,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 153621,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 7,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 262,
+          "smallTextDetectionRegions": 2,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "grid-11-93-25.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 231,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 227,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "ambiguous.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            },
+            {
+              "detectedCharacters": 14,
+              "coveredCharacters": 14,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 0.5,
+            "length": 27,
+            "bounds": [
+              [
+                0.06407464841603504,
+                0.8356940078403999
+              ],
+              [
+                0.38141348702566963,
+                0.06548453569412238
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          },
+          {
+            "confidence": 0.5,
+            "length": 23,
+            "bounds": [
+              [
+                0.06428571414220483,
+                0.7500000000256849
+              ],
+              [
+                0.21428571428571427,
+                0.03749999999999998
+              ]
+            ],
+            "method": "vision",
+            "location": 28
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06428571415674603,
+                0.6541666667048611
+              ],
+              [
+                0.15952380952380954,
+                0.04583333333333339
+              ]
+            ],
+            "method": "vision",
+            "location": 52
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06407464841603504,
+                0.8356940078403999
+              ],
+              [
+                0.38141348702566963,
+                0.06548453569412238
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571414220483,
+                0.6541666667048611
+              ],
+              [
+                0.21428571428571427,
+                0.13333333332082375
+              ]
+            ],
+            "lineIndices": [
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 285,
+        "needsReview": true,
+        "confidence": 0.6666666666666666,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 3,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 2,
+            "uncertainLines": 2,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 1,
+            "unavailableRetries": 0,
+            "normalizedCrops": 3,
+            "conflictingReadings": 1,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 280,
+          "recognitionRegions": 1,
+          "targetedRetries": 2
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung\nPolicennummer: 1000-171\nBeitrag: 81,19 EUR"
+    },
+    "mixed-85-Fahrrad.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.8355402029879266
+              ],
+              [
+                0.3790217808314732,
+                0.06004645824432375
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571383825944,
+                0.7500000000646552
+              ],
+              [
+                0.26428571428571423,
+                0.03749999999999998
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.7500000000646552
+              ],
+              [
+                0.3790217808314732,
+                0.14558666116759522
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.06629464285714286,
+                  0.7592409240924093
+                ],
+                [
+                  0.08962053571428573,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 9,
+              "coveredCharacters": 9
+            },
+            {
+              "bounds": [
+                [
+                  0.22862997658079623,
+                  0.7592409240924093
+                ],
+                [
+                  0.09631147540983606,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 10,
+              "coveredCharacters": 10
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 88,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 6,
+          "smallTextDetectionRegions": 2,
+          "smallTextDetectionPixels": 59893,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 79,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "tilted-12-left.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.08128406945066984,
+                0.8434611672224575
+              ],
+              [
+                0.38042773292178195,
+                0.11180438200632725
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.07751971843805452,
+                0.7636622724438136
+              ],
+              [
+                0.3380688258579799,
+                0.07827823956807456
+              ]
+            ],
+            "location": 28,
+            "length": 49,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.0725931255201248,
+                0.6758625416526334
+              ],
+              [
+                0.28097361610049293,
+                0.07260872522989903
+              ]
+            ],
+            "location": 78,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.07009852048514922,
+                0.6035632186768156
+              ],
+              [
+                0.1284893308367048,
+                0.051954023043314645
+              ]
+            ],
+            "location": 118,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.07009852048514922,
+                0.6035632186768156
+              ],
+              [
+                0.3916132818873026,
+                0.3517023305519691
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.08452380952380953,
+                  0.8500000000000001
+                ],
+                [
+                  0.3738095238095238,
+                  0.09999999999999987
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 98,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 93,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "tilted-12-right.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.04777312688190725,
+                0.7744362768137124
+              ],
+              [
+                0.38278710501534596,
+                0.11487744649251308
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.050975332247829505,
+                0.6829692531637872
+              ],
+              [
+                0.34095862252371656,
+                0.08709917068481443
+              ]
+            ],
+            "location": 28,
+            "length": 49,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.05350861134199975,
+                0.5918034557140852
+              ],
+              [
+                0.2860205877394903,
+                0.07436088720957434
+              ]
+            ],
+            "location": 78,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06037815102303991,
+                0.4971323516356311
+              ],
+              [
+                0.13147059849330356,
+                0.0550735314687093
+              ]
+            ],
+            "location": 118,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.04777312688190725,
+                0.4971323516356311
+              ],
+              [
+                0.38278710501534596,
+                0.3921813716705944
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.05119047619047619,
+                  0.7833333333333333
+                ],
+                [
+                  0.3738095238095238,
+                  0.09166666666666667
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 88,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 84,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "mixed-92-fuer.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415125046,
+                0.8375000000194844
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416774889,
+                0.7541666666799243
+              ],
+              [
+                0.26428571428571435,
+                0.029166666666666674
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415125046,
+                0.8375000000194844
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416774889,
+                0.7541666666799243
+              ],
+              [
+                0.26428571428571435,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.7604166666666666
+                ],
+                [
+                  0.053571428571428575,
+                  0.022916666666666696
+                ]
+              ],
+              "detectedCharacters": 4,
+              "coveredCharacters": 4
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.1619530932030932,
+                  0.7592409240924093
+                ],
+                [
+                  0.1629985754985755,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 16,
+              "coveredCharacters": 16
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 153,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 47268,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 4,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 146,
+          "smallTextDetectionRegions": 1,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "grid-9-88-15.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 209,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 204,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "grid-11-93-15.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 196,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 192,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "grid-9-93-25.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 205,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 201,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "italic-Times-Italic-11.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06403100975788144,
+                0.8354997594052348
+              ],
+              [
+                0.3814578828357515,
+                0.06580610672632858
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.0642857127380953,
+                0.75416666703125
+              ],
+              [
+                0.23333333333333334,
+                0.029166666666666674
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714295,
+                0.6541666667028985
+              ],
+              [
+                0.11428571428571427,
+                0.03333333333333344
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06403100975788144,
+                0.8354997594052348
+              ],
+              [
+                0.3814578828357515,
+                0.06580610672632858
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.0642857127380953,
+                0.75416666703125
+              ],
+              [
+                0.23333333333333334,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714295,
+                0.6541666667028985
+              ],
+              [
+                0.11428571428571427,
+                0.03333333333333344
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06547619047619048,
+                  0.75625
+                ],
+                [
+                  0.22857142857142854,
+                  0.02083333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06547619047619048,
+                  0.6625000000000001
+                ],
+                [
+                  0.10476190476190476,
+                  0.02083333333333326
+                ]
+              ],
+              "detectedCharacters": 16,
+              "coveredCharacters": 16
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 149,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "smallTextDetectionPixels": 94527,
+          "recognitionRegions": 1,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "inspectionMilliseconds": 0,
+          "recoveredLines": 0,
+          "renderMilliseconds": 2,
+          "renderedPixels": 403200,
+          "cacheMilliseconds": 0,
+          "recognitionMilliseconds": 142,
+          "smallTextDetectionRegions": 2,
+          "cacheHit": false,
+          "coverageMilliseconds": 5,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "mixed-85-fuer.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415125046,
+                0.8375000000194844
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654761906,
+                0.7541666666799243
+              ],
+              [
+                0.261904761904762,
+                0.029166666666666674
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415125046,
+                0.8375000000194844
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654761906,
+                0.7541666666799243
+              ],
+              [
+                0.261904761904762,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.7604166666666666
+                ],
+                [
+                  0.053571428571428575,
+                  0.022916666666666696
+                ]
+              ],
+              "detectedCharacters": 4,
+              "coveredCharacters": 4
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.1619530932030932,
+                  0.7592409240924093
+                ],
+                [
+                  0.1629985754985755,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 16,
+              "coveredCharacters": 16
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 169,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 47268,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 161,
+          "smallTextDetectionRegions": 1,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "grid-11-88-25.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 0.5,
+            "length": 27,
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 223,
+        "needsReview": true,
+        "confidence": 0.5,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 3,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 218,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "tilted-9-left.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.08118738761126358,
+                0.840790410289354
+              ],
+              [
+                0.380549803234282,
+                0.1155901432037354
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.07762755413201664,
+                0.7774231457792132
+              ],
+              [
+                0.25439158848353793,
+                0.06037795941034951
+              ]
+            ],
+            "location": 28,
+            "length": 49,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.0705166430406209,
+                0.6871666248442557
+              ],
+              [
+                0.21597666059221543,
+                0.05617610216140745
+              ]
+            ],
+            "location": 78,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06806239788278935,
+                0.6108333312051637
+              ],
+              [
+                0.09937603360130672,
+                0.040517242749532056
+              ]
+            ],
+            "location": 118,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.08118738761126358,
+                0.840790410289354
+              ],
+              [
+                0.380549803234282,
+                0.1155901432037354
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06806239788278935,
+                0.6108333312051637
+              ],
+              [
+                0.2639567447327652,
+                0.22696777398439905
+              ]
+            ],
+            "lineIndices": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.08452380952380953,
+                  0.8500000000000001
+                ],
+                [
+                  0.3738095238095238,
+                  0.09999999999999987
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 94,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 3,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 88,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "grid-11-88-15.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 0.5,
+            "length": 27,
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 216,
+        "needsReview": true,
+        "confidence": 0.5,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 211,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "mixed-92-Fahrrad.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.0666666623809525,
+                0.7541666672222223
+              ],
+              [
+                0.2619047619047619,
+                0.03333333233992253
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.7541666672222223
+              ],
+              [
+                0.37857142857142856,
+                0.1374999994729531
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.06629464285714286,
+                  0.7592409240924093
+                ],
+                [
+                  0.08962053571428573,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 9,
+              "coveredCharacters": 9
+            },
+            {
+              "bounds": [
+                [
+                  0.22862997658079623,
+                  0.7592409240924093
+                ],
+                [
+                  0.09631147540983606,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 10,
+              "coveredCharacters": 10
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 152,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 59893,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 144,
+          "smallTextDetectionRegions": 2,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "grid-13-88-15.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 211,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 206,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "italic-Helvetica-Oblique-14.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06403099930523126,
+                0.8354993590297122
+              ],
+              [
+                0.3814727783203125,
+                0.06429521640141811
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06190476156504063,
+                0.7458333333841463
+              ],
+              [
+                0.3309523809523809,
+                0.04166666666666674
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416666666,
+                0.6541666666979167
+              ],
+              [
+                0.1476190476190476,
+                0.03750000000000009
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06190476156504063,
+                0.6541666666979167
+              ],
+              [
+                0.3835990160605032,
+                0.2456279087332136
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1,
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.14285714285714285,
+                  0.029166666666666674
+                ]
+              ],
+              "detectedCharacters": 12,
+              "coveredCharacters": 12
+            },
+            {
+              "bounds": [
+                [
+                  0.06641073905290272,
+                  0.7541666666666667
+                ],
+                [
+                  0.3212337362129317,
+                  0.028776041666666696
+                ]
+              ],
+              "detectedCharacters": 30,
+              "coveredCharacters": 30
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 148,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "smallTextDetectionRegions": 1,
+          "smallTextDetectionPixels": 69216,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 141,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "grid-13-93-15.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 211,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 207,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "italic-Times-Italic-14.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06407464841603504,
+                0.8356940078403999
+              ],
+              [
+                0.38141348702566963,
+                0.06548453569412238
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06190476171209276,
+                0.7458333333580044
+              ],
+              [
+                0.2976190476190476,
+                0.03749999999999998
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761934523815,
+                0.6541666671354167
+              ],
+              [
+                0.14047619047619048,
+                0.03749999999999998
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06407464841603504,
+                0.8356940078403999
+              ],
+              [
+                0.38141348702566963,
+                0.06548453569412238
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06190476171209276,
+                0.6541666671354167
+              ],
+              [
+                0.2976190476190476,
+                0.12916666622258766
+              ]
+            ],
+            "lineIndices": [
+              1,
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06549005113041335,
+                  0.7543523102310231
+                ],
+                [
+                  0.2904484691677447,
+                  0.025268151815181494
+                ]
+              ],
+              "detectedCharacters": 28,
+              "coveredCharacters": 28
+            },
+            {
+              "bounds": [
+                [
+                  0.06550048590864918,
+                  0.6606023102310231
+                ],
+                [
+                  0.13324526239067055,
+                  0.025268151815181494
+                ]
+              ],
+              "detectedCharacters": 17,
+              "coveredCharacters": 17
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 89,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 7,
+          "smallTextDetectionRegions": 2,
+          "smallTextDetectionPixels": 117665,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 0,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 79,
+          "recognitionRegions": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "dense.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 1,
+            "length": 27,
+            "bounds": [
+              [
+                0.06412242184613366,
+                0.8373281883109878
+              ],
+              [
+                0.3788917904808408,
+                0.057096572717030836
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          },
+          {
+            "confidence": 1,
+            "length": 29,
+            "bounds": [
+              [
+                0.0666666665352505,
+                0.8041666666856061
+              ],
+              [
+                0.20238095238095238,
+                0.029166666666666674
+              ]
+            ],
+            "method": "vision",
+            "location": 28
+          },
+          {
+            "confidence": 1,
+            "length": 28,
+            "bounds": [
+              [
+                0.06409738810616078,
+                0.7605184723282087
+              ],
+              [
+                0.22416218348911832,
+                0.03465155561765043
+              ]
+            ],
+            "method": "vision",
+            "location": 58
+          },
+          {
+            "confidence": 1,
+            "length": 31,
+            "bounds": [
+              [
+                0.06428571415375788,
+                0.7208333333509036
+              ],
+              [
+                0.21904761904761905,
+                0.029166666666666674
+              ]
+            ],
+            "method": "vision",
+            "location": 87
+          },
+          {
+            "confidence": 1,
+            "length": 25,
+            "bounds": [
+              [
+                0.06666666654761906,
+                0.6791666666838235
+              ],
+              [
+                0.20238095238095238,
+                0.029166666666666674
+              ]
+            ],
+            "method": "vision",
+            "location": 119
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06428571416879252,
+                0.6375000000260416
+              ],
+              [
+                0.13571428571428573,
+                0.029166666666666785
+              ]
+            ],
+            "method": "vision",
+            "location": 145
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06428571416666667,
+                0.5958333333593749
+              ],
+              [
+                0.1380952380952381,
+                0.029166666666666674
+              ]
+            ],
+            "method": "vision",
+            "location": 164
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06412242184613366,
+                0.8373281883109878
+              ],
+              [
+                0.3788917904808408,
+                0.057096572717030836
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.0666666665352505,
+                0.8041666666856061
+              ],
+              [
+                0.20238095238095238,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06409738810616078,
+                0.5958333333593749
+              ],
+              [
+                0.22416218348911832,
+                0.19933669458648418
+              ]
+            ],
+            "lineIndices": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 333,
+        "needsReview": false,
+        "confidence": 1,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 3,
+          "renderMilliseconds": 3,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 4,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 327,
+          "recognitionRegions": 1,
+          "targetedRetries": 4
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung\nHinweis: Wartung erforderlich\nSchutz fuer das Wohngebaeude\nLeistung: Inspektion der Anlage\nAbrechnung: November 2026\nBeitrag: 49,99 EUR\nBeginn: 19.08.2027"
+    },
+    "italic-Helvetica-Oblique-11.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06405169279101584,
+                0.8356778922936521
+              ],
+              [
+                0.38143844604492183,
+                0.06551149288813263
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06190476136591478,
+                0.7458333334320175
+              ],
+              [
+                0.2619047619047619,
+                0.03749999999999998
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761788143844,
+                0.6541666667006802
+              ],
+              [
+                0.11904761904761905,
+                0.033333333333333326
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06405169279101584,
+                0.8356778922936521
+              ],
+              [
+                0.38143844604492183,
+                0.06551149288813263
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06190476136591478,
+                0.7458333334320175
+              ],
+              [
+                0.2619047619047619,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761788143844,
+                0.6541666667006802
+              ],
+              [
+                0.11904761904761905,
+                0.033333333333333326
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.7541666666666667
+                ],
+                [
+                  0.2523809523809524,
+                  0.022916666666666585
+                ]
+              ],
+              "detectedCharacters": 22,
+              "coveredCharacters": 22
+            },
+            {
+              "bounds": [
+                [
+                  0.06626984126984127,
+                  0.6604166666666667
+                ],
+                [
+                  0.1126984126984127,
+                  0.022916666666666585
+                ]
+              ],
+              "detectedCharacters": 14,
+              "coveredCharacters": 14
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 141,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 108018,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 6,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 133,
+          "smallTextDetectionRegions": 2,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "invoice.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06412142840961156,
+                0.837327201786353
+              ],
+              [
+                0.37887729463123143,
+                0.057116699218749956
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.064285714125,
+                0.754166666703125
+              ],
+              [
+                0.2714285714285714,
+                0.029166666666666563
+              ]
+            ],
+            "location": 28,
+            "length": 36,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654633896,
+                0.6583333333490142
+              ],
+              [
+                0.2238095238095238,
+                0.029166666666666785
+              ]
+            ],
+            "location": 65,
+            "length": 26,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06412142840961156,
+                0.837327201786353
+              ],
+              [
+                0.37887729463123143,
+                0.057116699218749956
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.064285714125,
+                0.754166666703125
+              ],
+              [
+                0.2714285714285714,
+                0.029166666666666563
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654633896,
+                0.6583333333490142
+              ],
+              [
+                0.2238095238095238,
+                0.029166666666666785
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 220,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 215,
+          "recognitionRegions": 1,
+          "targetedRetries": 2
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Wartung der Heizungsanlage\nRechnungsnummer: RX-739245"
+    },
+    "grid-9-93-15.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571408687946,
+                0.837500000028812
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408687946,
+                0.837500000028812
+              ],
+              [
+                0.3785714285714286,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 221,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 217,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "grid-13-93-25.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 213,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 209,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "mixed-78-fuer.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654761906,
+                0.7541666666799243
+              ],
+              [
+                0.261904761904762,
+                0.029166666666666674
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06666666654761906,
+                0.7541666666799243
+              ],
+              [
+                0.261904761904762,
+                0.029166666666666674
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.7604166666666666
+                ],
+                [
+                  0.053571428571428575,
+                  0.022916666666666696
+                ]
+              ],
+              "detectedCharacters": 4,
+              "coveredCharacters": 4
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.1619530932030932,
+                  0.7592409240924093
+                ],
+                [
+                  0.1629985754985755,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 16,
+              "coveredCharacters": 16
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 171,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 47268,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 4,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 165,
+          "smallTextDetectionRegions": 1,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "mixed-78-Fahrrad.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.8355402029879266
+              ],
+              [
+                0.3790217808314732,
+                0.06004645824432375
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06666666488095242,
+                0.7541666670833334
+              ],
+              [
+                0.261904761904762,
+                0.033333333333333326
+              ]
+            ],
+            "location": 28,
+            "length": 31,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "location": 60,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06407769461625795,
+                0.8355402029879266
+              ],
+              [
+                0.3790217808314732,
+                0.06004645824432375
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06666666488095242,
+                0.7541666670833334
+              ],
+              [
+                0.261904761904762,
+                0.033333333333333326
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.061904761785714274,
+                0.6541666666955128
+              ],
+              [
+                0.1595238095238095,
+                0.03749999999999998
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.6604166666666667
+                ],
+                [
+                  0.1523809523809524,
+                  0.029166666666666785
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            },
+            {
+              "bounds": [
+                [
+                  0.06629464285714286,
+                  0.7592409240924093
+                ],
+                [
+                  0.08962053571428573,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 9,
+              "coveredCharacters": 9
+            },
+            {
+              "bounds": [
+                [
+                  0.22862997658079623,
+                  0.7592409240924093
+                ],
+                [
+                  0.09631147540983606,
+                  0.024546204620462087
+                ]
+              ],
+              "detectedCharacters": 10,
+              "coveredCharacters": 10
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 155,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 59893,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 5,
+          "targetedRetries": 1,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 148,
+          "smallTextDetectionRegions": 2,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 82,47 EUR"
+    },
+    "grid-13-88-25.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 0.5,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571408897245,
+                0.8375000000285088
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666585
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 0.5,
+        "elapsedMilliseconds": 213,
+        "needsReview": true,
+        "method": "vision",
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 1,
+            "uncertainLines": 1,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 1,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 208,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung"
+    },
+    "italic-Courier-Oblique-11.png": {
+      "geometry": {
+        "lines": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "location": 0,
+            "length": 27,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416854142,
+                0.7541666666765092
+              ],
+              [
+                0.3119047619047619,
+                0.02499999999999991
+              ]
+            ],
+            "location": 28,
+            "length": 39,
+            "confidence": 1,
+            "method": "vision"
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416666666,
+                0.6583333333541667
+              ],
+              [
+                0.1476190476190476,
+                0.025000000000000022
+              ]
+            ],
+            "location": 68,
+            "length": 18,
+            "confidence": 1,
+            "method": "vision"
+          }
+        ],
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "lineIndices": [
+              0
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416854142,
+                0.7541666666765092
+              ],
+              [
+                0.3119047619047619,
+                0.02499999999999991
+              ]
+            ],
+            "lineIndices": [
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416666666,
+                0.6583333333541667
+              ],
+              [
+                0.1476190476190476,
+                0.025000000000000022
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ],
+        "rotationDegrees": 0,
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "coverage": {
+          "regions": [
+            {
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ],
+              "detectedCharacters": 26,
+              "coveredCharacters": 26
+            },
+            {
+              "bounds": [
+                [
+                  0.06547619047619048,
+                  0.75625
+                ],
+                [
+                  0.3059523809523809,
+                  0.020138888888888817
+                ]
+              ],
+              "detectedCharacters": 32,
+              "coveredCharacters": 32
+            },
+            {
+              "bounds": [
+                [
+                  0.06587301587301587,
+                  0.6625
+                ],
+                [
+                  0.14126984126984127,
+                  0.02083333333333337
+                ]
+              ],
+              "detectedCharacters": 15,
+              "coveredCharacters": 15
+            }
+          ],
+          "status": "checked"
+        },
+        "coordinateSpace": "uprightImageBottomLeft"
+      },
+      "info": {
+        "confidence": 1,
+        "elapsedMilliseconds": 898257,
+        "needsReview": false,
+        "method": "vision",
+        "metrics": {
+          "cacheHit": false,
+          "smallTextDetectionPixels": 124740,
+          "recoveredLines": 0,
+          "inspectionMilliseconds": 0,
+          "coverageMilliseconds": 6,
+          "targetedRetries": 2,
+          "cacheMilliseconds": 0,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 2,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderMilliseconds": 2,
+          "recognitionRegions": 1,
+          "recognitionMilliseconds": 1107,
+          "smallTextDetectionRegions": 2,
+          "renderedPixels": 403200
+        },
+        "page": 1
+      },
+      "text": "Synthetische Zeilenpruefung\nLeistung: Zahnriemenwechsel am Aggregat\nBeitrag: 82,47 EUR"
+    },
+    "faint-words.png": {
+      "geometry": {
+        "coverage": {
+          "status": "checked",
+          "regions": [
+            {
+              "detectedCharacters": 26,
+              "coveredCharacters": 26,
+              "bounds": [
+                [
+                  0.06666666666666667,
+                  0.8416666666666667
+                ],
+                [
+                  0.3738095238095238,
+                  0.05208333333333337
+                ]
+              ]
+            }
+          ]
+        },
+        "coordinateSpace": "uprightImageBottomLeft",
+        "rotationDegrees": 0,
+        "lines": [
+          {
+            "confidence": 1,
+            "length": 27,
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.8375000000196255
+              ],
+              [
+                0.37857142857142856,
+                0.054166666666666696
+              ]
+            ],
+            "method": "vision",
+            "location": 0
+          },
+          {
+            "confidence": 1,
+            "length": 31,
+            "bounds": [
+              [
+                0.06428571417199716,
+                0.7541666666915423
+              ],
+              [
+                0.28095238095238095,
+                0.033333333333333326
+              ]
+            ],
+            "method": "vision",
+            "location": 28
+          },
+          {
+            "confidence": 1,
+            "length": 18,
+            "bounds": [
+              [
+                0.06428571416494135,
+                0.6541666666938406
+              ],
+              [
+                0.16666666666666669,
+                0.03749999999999987
+              ]
+            ],
+            "method": "vision",
+            "location": 60
+          }
+        ],
+        "configuration": "ocr-v14-consistent-line-review-Version 27.2 (Build 26B123)",
+        "blocks": [
+          {
+            "bounds": [
+              [
+                0.06428571415027605,
+                0.7541666666915423
+              ],
+              [
+                0.37857142857142856,
+                0.13749999999474993
+              ]
+            ],
+            "lineIndices": [
+              0,
+              1
+            ]
+          },
+          {
+            "bounds": [
+              [
+                0.06428571416494135,
+                0.6541666666938406
+              ],
+              [
+                0.16666666666666669,
+                0.03749999999999987
+              ]
+            ],
+            "lineIndices": [
+              2
+            ]
+          }
+        ]
+      },
+      "info": {
+        "page": 1,
+        "elapsedMilliseconds": 161,
+        "needsReview": false,
+        "confidence": 1,
+        "metrics": {
+          "recoveredLines": 0,
+          "cacheHit": false,
+          "inspectionMilliseconds": 0,
+          "cacheMilliseconds": 0,
+          "coverageMilliseconds": 2,
+          "renderMilliseconds": 2,
+          "lineReview": {
+            "repairedLines": 0,
+            "confirmedUncertainLines": 0,
+            "unconfirmedLines": 0,
+            "uncertainLines": 0,
+            "budgetLimitedLines": 0,
+            "confirmedUnchangedLines": 0,
+            "ambiguousIdentifiers": 0,
+            "unavailableRetries": 0,
+            "normalizedCrops": 1,
+            "conflictingReadings": 0,
+            "lowConfidenceRegions": 0,
+            "shortTextRegions": 0
+          },
+          "renderedPixels": 403200,
+          "recognitionMilliseconds": 157,
+          "recognitionRegions": 1,
+          "targetedRetries": 1
+        },
+        "method": "vision"
+      },
+      "text": "Synthetische Zeilenpruefung\nSchutz fuer Fahrrad und Hausrat\nBeitrag: 49,99 EUR"
+    }
+  }
+}

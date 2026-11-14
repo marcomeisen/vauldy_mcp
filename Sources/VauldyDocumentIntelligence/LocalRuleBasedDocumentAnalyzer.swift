@@ -123,7 +123,7 @@ public struct LocalRuleBasedDocumentAnalyzer: DocumentBaseAnalyzing {
     }
 
     static func headingKind(_ line: String) -> BaseDocumentKind? {
-        guard line.count <= 180, labelValue(in: line, labels: issuerLabels + recipientLabels + dateLabels + ["Betreff", "Gegenstand"]) == nil else { return nil }
+        guard DocumentTitlePolicy.isTitlePhrase(line.trimmingCharacters(in: .whitespaces)), labelValue(in: line, labels: issuerLabels + recipientLabels + dateLabels + ["Betreff", "Gegenstand"]) == nil else { return nil }
         let value = fold(line.trimmingCharacters(in: .whitespaces))
         let rules: [(BaseDocumentKind, [String])] = [
             (.utilityStatement, ["nebenkostenabrechnung", "betriebskostenabrechnung"]),
@@ -139,7 +139,7 @@ public struct LocalRuleBasedDocumentAnalyzer: DocumentBaseAnalyzing {
             (.insuranceNotice, ["versicherungsschein", "versicherungsnachtrag", "beitragsrechnung", "versicherungsmitteilung"]),
             (.receipt, ["kassenbeleg", "kassenbon"]),
             (.invoice, ["rechnung", "beispielrechnung"]),
-            (.contract, ["vertrag", "vertragsanderung"]),
+            (.contract, ["vertrag", "vertragsanderung", "mietvertrag", "arbeitsvertrag", "kaufvertrag"]),
             (.correspondence, ["mitteilung", "anschreiben"])
         ]
         for (kind, words) in rules where words.contains(where: { word in

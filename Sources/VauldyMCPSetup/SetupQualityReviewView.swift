@@ -215,6 +215,18 @@ struct SetupQualityReviewView: View {
                 }
                 Text(verbatim: text).textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                if !page.revisions.isEmpty {
+                    DisclosureGroup("Frühere Lesungen vergleichen") {
+                        ForEach(page.revisions) { revision in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Früher").font(.caption.weight(.semibold))
+                                ForEach(revision.previous, id: \.self) { Text(verbatim: $0).textSelection(.enabled) }
+                                Text("Aktuell – am Original prüfen").font(.caption.weight(.semibold))
+                                Text(verbatim: revision.current).textSelection(.enabled)
+                            }.padding(.vertical, 4)
+                        }
+                    }.accessibilityIdentifier("review-prior-readings")
+                }
             } else {
                 Text("Kein lesbarer Seitentext vorhanden.").foregroundStyle(.secondary)
             }

@@ -1,0 +1,1 @@
+PASS: real MCP initialize/list/call; both response channels; allowlist; pseudonymization; revocation; read-only archive.

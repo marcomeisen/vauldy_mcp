@@ -11,6 +11,20 @@ package struct LocalDocumentReview: Sendable {
         package let info: LocalOCRPageInfo?
         package let layout: LocalOCRPageLayout?
 
+        package struct Revision: Identifiable, Sendable {
+            package let id: Int
+            package let previous: [String]
+            package let current: String
+        }
+        package var revisions: [Revision] {
+            guard let text, let layout else { return [] }
+            return layout.geometry.lines.compactMap { line in
+                guard let prior = line.priorReadings, !prior.isEmpty,
+                      let range = Range(NSRange(location: line.location, length: line.length), in: text) else { return nil }
+                return Revision(id: line.location, previous: prior, current: String(text[range]))
+            }
+        }
+
         package func focus(quote: String) -> LocalDocumentQuality.Focus {
             guard let text, !quote.isEmpty, let range = text.range(of: quote) else { return .init(page: id) }
             let selected = NSRange(range, in: text)
@@ -34,7 +48,7 @@ package struct LocalDocumentReview: Sendable {
         }
 
         package var needsReview: Bool {
-            info?.needsReview == true || info?.metrics?.lineReview?.needsReview == true
+            !revisions.isEmpty || info?.needsReview == true || info?.metrics?.lineReview?.needsReview == true
                 || info?.method == .unreadable || text == nil && info?.method != .blank
         }
         package var reason: String {
@@ -42,6 +56,9 @@ package struct LocalDocumentReview: Sendable {
             if info?.method == .blank { return "Die Seite wurde als leer erkannt." }
             if text == nil { return "Dieser Seite ist kein gespeicherter Text eindeutig zugeordnet." }
             var reasons: [String] = []
+            if !revisions.isEmpty {
+                reasons.append("Lesungen oder Schreibweisen wurden präzisiert. Frühere Lesungen sind zum Vergleich erhalten; prüfe die Änderung am Original.")
+            }
             if info?.metrics?.evidencePreservedFallback == true {
                 reasons.append("Die bisherige belegte Seite wurde erhalten, weil der neue Lauf Text verändert oder verloren hätte.")
             }

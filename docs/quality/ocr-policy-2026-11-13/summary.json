@@ -1,0 +1,347 @@
+{
+  "version": "0.14.2",
+  "nativeTestsReported": 346,
+  "nativeSuites": 57,
+  "optionalSwiftTestsSkipped": 2,
+  "regression": {
+    "allPassed": true,
+    "stages": [
+      {
+        "name": "faint-ocr-gate-policy",
+        "passed": true
+      },
+      {
+        "name": "ocr-improvement-gate-policy",
+        "passed": true
+      },
+      {
+        "name": "local-ocr-comparison-conversion",
+        "passed": true
+      },
+      {
+        "name": "swift-tests",
+        "passed": true
+      },
+      {
+        "name": "ocr-improvement-quality",
+        "passed": true
+      },
+      {
+        "name": "package-metadata",
+        "passed": true
+      },
+      {
+        "name": "package",
+        "passed": true
+      },
+      {
+        "name": "relay-worker-tests",
+        "passed": true
+      },
+      {
+        "name": "extract-final-zip",
+        "passed": true
+      },
+      {
+        "name": "verify-final-signature",
+        "passed": true
+      },
+      {
+        "name": "relay-tool-parity",
+        "passed": true
+      },
+      {
+        "name": "smoke_test",
+        "passed": true
+      },
+      {
+        "name": "index_recovery_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "research_agent_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "topic_overview_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "search_normalization_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "storage_boundary_benchmark",
+        "passed": true
+      },
+      {
+        "name": "storage_import_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "sqlite_integration_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "storage_migration_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "field_extraction_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "contract_comparison_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "deadline_overview_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "document_inventory_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "product_acceptance",
+        "passed": true
+      },
+      {
+        "name": "product_answer_check",
+        "passed": true
+      },
+      {
+        "name": "product_acceptance_test",
+        "passed": true
+      },
+      {
+        "name": "base_analysis_wire_test",
+        "passed": true
+      },
+      {
+        "name": "import_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "raster_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "vector_ocr_quality_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "visual_coverage_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "dense_ocr_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "line_ocr_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "small_text_chat_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "audit_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "client_install_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "management_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "software_update_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "status_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "watch_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "setup_startup_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "original_reference_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "oauth_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "scalability_benchmark",
+        "passed": true
+      },
+      {
+        "name": "tunnel_launcher_smoke_test",
+        "passed": true
+      },
+      {
+        "name": "benchmark_ocr",
+        "passed": true
+      },
+      {
+        "name": "retrieval_benchmark",
+        "passed": true
+      }
+    ]
+  },
+  "policyRepaired": true,
+  "source": {
+    "architectures": [
+      "arm64"
+    ],
+    "buildMode": "reused",
+    "documentStorage": "json-or-sqlite",
+    "manifestVersion": 1,
+    "minimumMacOS": "14.0",
+    "packageLockSHA256": "8bf982080fd53dce82960cf25590844d54fbdd129b78057d7e61bc83aaaf8e1a",
+    "productVersion": "0.14.2",
+    "products": {
+      "vauldy-local": "Resources/vauldy-local",
+      "vauldy-mcp": "Resources/vauldy-mcp",
+      "vauldy-mcp-http": "Resources/vauldy-mcp-http",
+      "vauldy-mcp-setup": "MacOS/vauldy-mcp-setup",
+      "vauldy-mcp-status": "Resources/Vauldy MCP Status.app/Contents/MacOS/vauldy-mcp-status",
+      "vauldy-relay": "Resources/vauldy-relay"
+    },
+    "serverBuildID": "macho.42ad7b7511c23f9d816e239eed827189",
+    "softwareCompatibilityEpoch": 2,
+    "sourceCommit": null,
+    "swift": "Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)\nTarget: arm64-apple-macosx27.2.0",
+    "tools": [
+      "compare_contract_versions",
+      "extract_document_fields",
+      "get_deadline_overview",
+      "get_document_inventory",
+      "get_topic_overview",
+      "get_vault_status",
+      "list_documents",
+      "read_document",
+      "search_documents"
+    ],
+    "xcode": "Xcode 27.2\nBuild version 27B52"
+  },
+  "corpus": {
+    "imageCount": 35,
+    "exactBefore": 54,
+    "exactAfter": 55,
+    "expected": 79,
+    "changedImageTexts": [
+      "ambiguous.png"
+    ],
+    "lostCorrectFields": 0,
+    "remaining": [
+      {
+        "file": "grid-9-88-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-11-93-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-9-88-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-11-93-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-9-93-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-11-88-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-11-88-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-13-88-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-13-93-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-9-93-15.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-13-93-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      },
+      {
+        "file": "grid-13-88-25.png",
+        "fields": [
+          "Schutz fuer Fahrrad und Hausrat",
+          "Leistung: Wartung der Heizungsanlage"
+        ]
+      }
+    ],
+    "pdfCount": 15,
+    "unchangedPDFPages": 31,
+    "exactPDFFields": 133,
+    "exactTableFields": 345
+  },
+  "package": {
+    "path": "/Users/marcomeisen/Documents/ChatGPT/Vauldy/vauldy_mcp/dist/mcp/vauldy-0.14.2-20261113/Vauldy.zip",
+    "sha256": "611acf04c6fd6155690e72f630f08526907fc1d45265c1d710609bc526265eae",
+    "bytes": 18403875,
+    "signing": "ad-hoc",
+    "notarized": false
+  },
+  "pendingFaintFields": 24
+}

@@ -1,0 +1,5881 @@
+{
+  "schemaVersion": 2,
+  "seed": 20261108,
+  "synthetic": true,
+  "dpi": 200,
+  "scope": "12 German document types; source-defined truth frozen before OCR; not a statistical sample of customer archives",
+  "normalization": "NFC, HTML entities, remove presentation Markdown/HTML, collapse whitespace; preserve case, accents, punctuation and numeric formatting",
+  "fonts": {
+    "sans": {
+      "path": "/System/Library/Fonts/Supplemental/Arial.ttf",
+      "sha256": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9"
+    },
+    "bold": {
+      "path": "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+      "sha256": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0"
+    },
+    "serif": {
+      "path": "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+      "sha256": "f3b4ffff71c2a0c7227d37497683b2498fb2d0a4e8beae26f022e3ccfcaabfa3"
+    },
+    "mono": {
+      "path": "/System/Library/Fonts/Supplemental/Courier New.ttf",
+      "sha256": "c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247"
+    }
+  },
+  "documents": [
+    {
+      "id": "doc-001",
+      "kind": "Werkstattrechnung",
+      "issuer": "Kühn & Söhne Fahrzeugtechnik GmbH",
+      "pdf": "pdf/doc-001.pdf",
+      "pageIDs": [
+        "doc-001-p01",
+        "doc-001-p02"
+      ],
+      "sha256": "a09fdaa1c621439a6bdd51acc2d7450bdcc1b5e3f354f00da6b8ec8a09e29148"
+    },
+    {
+      "id": "doc-002",
+      "kind": "Versicherungspolice",
+      "issuer": "Nordstern Muster-Versicherung AG",
+      "pdf": "pdf/doc-002.pdf",
+      "pageIDs": [
+        "doc-002-p01",
+        "doc-002-p02",
+        "doc-002-p03"
+      ],
+      "sha256": "317e79cb30f4a98e63c7af9a5a9749fe2f9e7d17763fe9d60e08300b92d907b7"
+    },
+    {
+      "id": "doc-003",
+      "kind": "Kontoauszug",
+      "issuer": "Musterbank Prüfstadt eG",
+      "pdf": "pdf/doc-003.pdf",
+      "pageIDs": [
+        "doc-003-p01",
+        "doc-003-p02"
+      ],
+      "sha256": "0b37e323e88bf12bae37564ca491dfdd6a3cea14c097de1d73290dccec1ed6db"
+    },
+    {
+      "id": "doc-004",
+      "kind": "Mietvertrag",
+      "issuer": "Wohnraum Musterhof Verwaltung GmbH",
+      "pdf": "pdf/doc-004.pdf",
+      "pageIDs": [
+        "doc-004-p01",
+        "doc-004-p02",
+        "doc-004-p03"
+      ],
+      "sha256": "1f88f2a9056280dbc626c6f6ea536fd93b17d329e2f1a2ef1f27ddac39e7bfc9"
+    },
+    {
+      "id": "doc-005",
+      "kind": "Nebenkostenabrechnung",
+      "issuer": "Hausverwaltung Berg & Brüder OHG",
+      "pdf": "pdf/doc-005.pdf",
+      "pageIDs": [
+        "doc-005-p01",
+        "doc-005-p02",
+        "doc-005-p03"
+      ],
+      "sha256": "2937d60dceb39a81736893394123d4dc98a4f18f676e737b740088b04b630ec8"
+    },
+    {
+      "id": "doc-006",
+      "kind": "Stromabrechnung",
+      "issuer": "Stadtwerke Grünau Testversorgung GmbH",
+      "pdf": "pdf/doc-006.pdf",
+      "pageIDs": [
+        "doc-006-p01",
+        "doc-006-p02"
+      ],
+      "sha256": "e0b4f1b96d1292ebf5560c09fae2921667b610b7ed610771bf56a35b3142c0ac"
+    },
+    {
+      "id": "doc-007",
+      "kind": "Lohnabrechnung",
+      "issuer": "Prüfwerk Maschinenbau GmbH",
+      "pdf": "pdf/doc-007.pdf",
+      "pageIDs": [
+        "doc-007-p01",
+        "doc-007-p02"
+      ],
+      "sha256": "8a2a480285887e632d8224db28b3bca3fb9dae72cc5d2d1dbd69c38173492697"
+    },
+    {
+      "id": "doc-008",
+      "kind": "Steuerbescheid",
+      "issuer": "Finanzamt Musterstadt - Teststelle",
+      "pdf": "pdf/doc-008.pdf",
+      "pageIDs": [
+        "doc-008-p01",
+        "doc-008-p02",
+        "doc-008-p03"
+      ],
+      "sha256": "75f3000ce26b4d3de2e4979de9832c363864c1bd112611fdac34774af028eb96"
+    },
+    {
+      "id": "doc-009",
+      "kind": "Arztbefund",
+      "issuer": "Praxisgemeinschaft Dr. Prüf & Kolleginnen",
+      "pdf": "pdf/doc-009.pdf",
+      "pageIDs": [
+        "doc-009-p01",
+        "doc-009-p02"
+      ],
+      "sha256": "f2a67919401ca955fd1528d04c5b79a7c04eed3e089717e3953dba69604b9180"
+    },
+    {
+      "id": "doc-010",
+      "kind": "Schulzeugnis",
+      "issuer": "Gesamtschule Am Mühlenberg - Testschule",
+      "pdf": "pdf/doc-010.pdf",
+      "pageIDs": [
+        "doc-010-p01",
+        "doc-010-p02"
+      ],
+      "sha256": "3426d1ac93ca35a078baf65de8665f9ba81ef6ec517c8be51da81de5e6115320"
+    },
+    {
+      "id": "doc-011",
+      "kind": "Telekommunikationsrechnung",
+      "issuer": "Funknetz Musterkommunikation GmbH",
+      "pdf": "pdf/doc-011.pdf",
+      "pageIDs": [
+        "doc-011-p01",
+        "doc-011-p02"
+      ],
+      "sha256": "578e701ca6616e8957db7695b0bff04d34037a740d305ba0b2f53fdb7c4be70c"
+    },
+    {
+      "id": "doc-012",
+      "kind": "Gebührenbescheid",
+      "issuer": "Stadt Prüfhausen - Bürgerdienste",
+      "pdf": "pdf/doc-012.pdf",
+      "pageIDs": [
+        "doc-012-p01",
+        "doc-012-p02"
+      ],
+      "sha256": "30725f0076f3102a5ca52c82154b96237758a4b21c355dba001b844149993a2b"
+    },
+    {
+      "id": "control-01",
+      "kind": "Leerbildkontrolle",
+      "issuer": null,
+      "pdf": "pdf/control-01.pdf",
+      "sha256": "736e98bfcdc2618c4d148d8d56302f24d91c7a631c5cb00398a977ccbd050066",
+      "pageIDs": [
+        "control-01-p01"
+      ]
+    },
+    {
+      "id": "control-02",
+      "kind": "Leerbildkontrolle",
+      "issuer": null,
+      "pdf": "pdf/control-02.pdf",
+      "sha256": "b50d5a18bf5eca0fb6d3ac21848958818c4f4ca2c3d8bdcb049774b554baeb7e",
+      "pageIDs": [
+        "control-02-p01"
+      ]
+    },
+    {
+      "id": "control-03",
+      "kind": "Leerbildkontrolle",
+      "issuer": null,
+      "pdf": "pdf/control-03.pdf",
+      "sha256": "d0110becc6ccca29a5d37571c1b4bec5d1fadae4e86ca95996cd48180310560e",
+      "pageIDs": [
+        "control-03-p01"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "id": "doc-001-p01",
+      "documentID": "doc-001",
+      "physicalPage": 1,
+      "kind": "Werkstattrechnung",
+      "image": "pages/doc-001-p01.png",
+      "sha256": "c8d834e3f6b41963ffe1d9d7a5c5faf3c88f26ef783599bd34d2afa294f9fa85",
+      "pixelSHA256": "4dda8dc857fb484884113ad3b99a8d25a0ff4735c7c9be5a127dc74c32da5d73",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Kühn & Söhne Fahrzeugtechnik GmbH\nRechnung für Wartung und Reparatur\nRechnungsnummer: WS-2026-08417\nRechnungsdatum: 06.11.2026\nEmpfänger: Jörg Müller\nKennzeichen: PR-Ö 482\nFälliger Betrag: 183,56 €\nSehr geehrter Herr Müller, wir berechnen die vereinbarten Arbeiten an Ihrem Fahrzeug. Die Inspektion wurde am 04.11.2026 durchgeführt. Die Bremsanlage wurde geprüft und die Flüssigkeit vollständig erneuert. Alle eingebauten Teile entsprechen der dokumentierten Freigabe.\nPos.\nLeistung\nMenge\nEinzelpreis\nGesamt\n01\nInspektion gemäß Wartungsplan\n2 Std.\n45,00 €\n90,00 €\n02\nÖlfilter für Prüfstandfahrzeug\n1 Stück\n18,75 €\n18,75 €\n03\nBremsflüssigkeit erneuern\n1 Satz\n45,50 €\n45,50 €\nNettobetrag\n154,25 €\nUmsatzsteuer 19 %\n29,31 €\nBruttobetrag\n183,56 €\nBitte überweisen Sie den Rechnungsbetrag bis zum 20.11.2026 unter Angabe der Rechnungsnummer. Ein bereits erteilter Kostenvoranschlag wird durch diese Rechnung abgeschlossen. Bei Rückfragen nennen Sie bitte zusätzlich das Kennzeichen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-001-p01-f01",
+          "label": "Rechnungsnummer",
+          "value": "WS-2026-08417",
+          "text": "Rechnungsnummer: WS-2026-08417"
+        },
+        {
+          "id": "doc-001-p01-f02",
+          "label": "Rechnungsdatum",
+          "value": "06.11.2026",
+          "text": "Rechnungsdatum: 06.11.2026"
+        },
+        {
+          "id": "doc-001-p01-f03",
+          "label": "Empfänger",
+          "value": "Jörg Müller",
+          "text": "Empfänger: Jörg Müller"
+        },
+        {
+          "id": "doc-001-p01-f04",
+          "label": "Kennzeichen",
+          "value": "PR-Ö 482",
+          "text": "Kennzeichen: PR-Ö 482"
+        },
+        {
+          "id": "doc-001-p01-f05",
+          "label": "Fälliger Betrag",
+          "value": "183,56 €",
+          "text": "Fälliger Betrag: 183,56 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-001-p01-table",
+          "rows": 7,
+          "cols": 5,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Pos.",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Leistung",
+              "bbox": [
+                0.1364231958070152,
+                0.3493330482604615,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Menge",
+              "bbox": [
+                0.5420138422255073,
+                0.3493330482604615,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Einzelpreis",
+              "bbox": [
+                0.6518613089638489,
+                0.3493330482604615,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 4,
+              "text": "Gesamt",
+              "bbox": [
+                0.7870581911033463,
+                0.3493330482604615,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "01",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "Inspektion gemäß Wartungsplan",
+              "bbox": [
+                0.1364231958070152,
+                0.3766525318034422,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "2 Std.",
+              "bbox": [
+                0.5420138422255073,
+                0.3766525318034422,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "45,00 €",
+              "bbox": [
+                0.6518613089638489,
+                0.3766525318034422,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "text": "90,00 €",
+              "bbox": [
+                0.7870581911033463,
+                0.3766525318034422,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "02",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "Ölfilter für Prüfstandfahrzeug",
+              "bbox": [
+                0.1364231958070152,
+                0.4039720153464229,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "1 Stück",
+              "bbox": [
+                0.5420138422255073,
+                0.4039720153464229,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "18,75 €",
+              "bbox": [
+                0.6518613089638489,
+                0.4039720153464229,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 4,
+              "text": "18,75 €",
+              "bbox": [
+                0.7870581911033463,
+                0.4039720153464229,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "03",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "Bremsflüssigkeit erneuern",
+              "bbox": [
+                0.1364231958070152,
+                0.43129149888940355,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "1 Satz",
+              "bbox": [
+                0.5420138422255073,
+                0.43129149888940355,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "45,50 €",
+              "bbox": [
+                0.6518613089638489,
+                0.43129149888940355,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 4,
+              "text": "45,50 €",
+              "bbox": [
+                0.7870581911033463,
+                0.43129149888940355,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "Nettobetrag",
+              "bbox": [
+                0.1364231958070152,
+                0.45861098243238424,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "",
+              "bbox": [
+                0.5420138422255073,
+                0.45861098243238424,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "text": "",
+              "bbox": [
+                0.6518613089638489,
+                0.45861098243238424,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 4,
+              "text": "154,25 €",
+              "bbox": [
+                0.7870581911033463,
+                0.45861098243238424,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "",
+              "bbox": [
+                0.07727455987098508,
+                0.48593046597536493,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "Umsatzsteuer 19 %",
+              "bbox": [
+                0.1364231958070152,
+                0.48593046597536493,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "",
+              "bbox": [
+                0.5420138422255073,
+                0.48593046597536493,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 3,
+              "text": "",
+              "bbox": [
+                0.6518613089638489,
+                0.48593046597536493,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 4,
+              "text": "29,31 €",
+              "bbox": [
+                0.7870581911033463,
+                0.48593046597536493,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 0,
+              "text": "",
+              "bbox": [
+                0.07727455987098508,
+                0.5132499495183456,
+                0.059148635936030106,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "text": "Bruttobetrag",
+              "bbox": [
+                0.1364231958070152,
+                0.5132499495183456,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 2,
+              "text": "",
+              "bbox": [
+                0.5420138422255073,
+                0.5132499495183456,
+                0.10984746673834163,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 3,
+              "text": "",
+              "bbox": [
+                0.6518613089638489,
+                0.5132499495183456,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 4,
+              "text": "183,56 €",
+              "bbox": [
+                0.7870581911033463,
+                0.5132499495183456,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.19123638480086472
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-001-p02",
+      "documentID": "doc-001",
+      "physicalPage": 2,
+      "kind": "Werkstattrechnung",
+      "image": "pages/doc-001-p02.png",
+      "sha256": "6382ce54337583a790d1002a4727066fa22992700e6aea1d3dda7bc5bcf026c7",
+      "pixelSHA256": "88c6650f119adfb0a782f4bb225d24d90ab93e4ecacb3eef9c0950fa80c40254",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": -0.7
+      },
+      "text": "Kühn & Söhne Fahrzeugtechnik GmbH\nArbeitsnachweis und Gewährleistung\nAuftragsnummer: AU-48392\nFahrgestellnummer: TESTWVWZZZ26K08417\nKilometerstand: 84.219 km\nÜbergabedatum: 05.11.2026\nAnsprechpartnerin: Anke Groß\nDie ausgebauten Teile wurden dem Auftraggeber zur Einsicht bereitgehalten. Es wurden keine zusätzlichen Arbeiten außerhalb des bestätigten Umfangs ausgeführt. Eine spätere Hauptuntersuchung ist nicht Bestandteil dieses Auftrags.\nPrüfpunkt\nErgebnis\nAusgeführt durch\nBeleuchtung\nohne Befund\nA. Groß\nReifendruck\nangepasst auf 2,4 bar\nM. Weiß\nProbefahrt\n12,8 km durchgeführt\nA. Groß\nFehlerspeicher\nkeine neuen Einträge\nM. Weiß\nDie Hinweise zur Nachkontrolle betreffen ausschließlich den im Auftrag genannten Prüfumfang. Bitte prüfen Sie den Flüssigkeitsstand nach ungefähr zweihundert Kilometern erneut. Bei ungewöhnlichen Geräuschen wenden Sie sich an die Werkstatt. Dieser Nachweis ersetzt keine eigenständige Fahrzeugprüfung.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-001-p02-f01",
+          "label": "Auftragsnummer",
+          "value": "AU-48392",
+          "text": "Auftragsnummer: AU-48392"
+        },
+        {
+          "id": "doc-001-p02-f02",
+          "label": "Fahrgestellnummer",
+          "value": "TESTWVWZZZ26K08417",
+          "text": "Fahrgestellnummer: TESTWVWZZZ26K08417"
+        },
+        {
+          "id": "doc-001-p02-f03",
+          "label": "Kilometerstand",
+          "value": "84.219 km",
+          "text": "Kilometerstand: 84.219 km"
+        },
+        {
+          "id": "doc-001-p02-f04",
+          "label": "Übergabedatum",
+          "value": "05.11.2026",
+          "text": "Übergabedatum: 05.11.2026"
+        },
+        {
+          "id": "doc-001-p02-f05",
+          "label": "Ansprechpartnerin",
+          "value": "Anke Groß",
+          "text": "Ansprechpartnerin: Anke Groß"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-001-p02-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Prüfpunkt",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Ergebnis",
+              "bbox": [
+                0.3476683241499799,
+                0.3493330482604615,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Ausgeführt durch",
+              "bbox": [
+                0.7110099448998791,
+                0.3493330482604615,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Beleuchtung",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "ohne Befund",
+              "bbox": [
+                0.3476683241499799,
+                0.3766525318034422,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "A. Groß",
+              "bbox": [
+                0.7110099448998791,
+                0.3766525318034422,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Reifendruck",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "angepasst auf 2,4 bar",
+              "bbox": [
+                0.3476683241499799,
+                0.4039720153464229,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "M. Weiß",
+              "bbox": [
+                0.7110099448998791,
+                0.4039720153464229,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Probefahrt",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "12,8 km durchgeführt",
+              "bbox": [
+                0.3476683241499799,
+                0.43129149888940355,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "A. Groß",
+              "bbox": [
+                0.7110099448998791,
+                0.43129149888940355,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Fehlerspeicher",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "keine neuen Einträge",
+              "bbox": [
+                0.3476683241499799,
+                0.45861098243238424,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "M. Weiß",
+              "bbox": [
+                0.7110099448998791,
+                0.45861098243238424,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-002-p01",
+      "documentID": "doc-002",
+      "physicalPage": 1,
+      "kind": "Versicherungspolice",
+      "image": "pages/doc-002-p01.png",
+      "sha256": "d851f245f14d58ec99b7b82437232415bc25d2b07606f430acda636683436c2f",
+      "pixelSHA256": "45c39d01e2cfcc18ea6199b23c2f26bc12427492697db33ffc77c3f4a1725d44",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": -0.7
+      },
+      "text": "Nordstern Muster-Versicherung AG\nVersicherungsschein Hausrat\nVersicherungsnummer: HR-71-608294\nVersicherungsnehmerin: Özlem Schäfer\nVersicherungsort: Große Mühlenstraße 18, 12345 Prüfstadt\nVersicherungsbeginn: 01.01.2027\nMonatsbeitrag: 28,63 €\nVersichert ist der private Hausrat der bezeichneten Wohnung. Die Wohnfläche beträgt 86 Quadratmeter. Versicherungsschutz besteht gegen die in der Leistungsübersicht genannten Gefahren. Der Vertrag gilt für den im Versicherungsschein ausdrücklich bezeichneten Versicherungsort.\nBaustein\nVersicherungssumme\nSelbstbeteiligung\nHausrat Grundschutz\n86.000,00 €\n150,00 €\nFahrraddiebstahl\n4.300,00 €\n0,00 €\nGlasbruch\n3.000,00 €\n100,00 €\nElementarschäden\n86.000,00 €\n500,00 €\nDer Beitrag wird monatlich zum dritten Werktag eingezogen. Eine frühere Beitragsangabe im Antrag ist durch die hier genannte Bestätigung ersetzt. Bitte prüfen Sie Anschrift und Leistungsumfang. Veränderungen der Nutzung sind dem Versicherer mitzuteilen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+      "fields": [
+        {
+          "id": "doc-002-p01-f01",
+          "label": "Versicherungsnummer",
+          "value": "HR-71-608294",
+          "text": "Versicherungsnummer: HR-71-608294"
+        },
+        {
+          "id": "doc-002-p01-f02",
+          "label": "Versicherungsnehmerin",
+          "value": "Özlem Schäfer",
+          "text": "Versicherungsnehmerin: Özlem Schäfer"
+        },
+        {
+          "id": "doc-002-p01-f03",
+          "label": "Versicherungsort",
+          "value": "Große Mühlenstraße 18, 12345 Prüfstadt",
+          "text": "Versicherungsort: Große Mühlenstraße 18, 12345 Prüfstadt"
+        },
+        {
+          "id": "doc-002-p01-f04",
+          "label": "Versicherungsbeginn",
+          "value": "01.01.2027",
+          "text": "Versicherungsbeginn: 01.01.2027"
+        },
+        {
+          "id": "doc-002-p01-f05",
+          "label": "Monatsbeitrag",
+          "value": "28,63 €",
+          "text": "Monatsbeitrag: 28,63 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-002-p01-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Baustein",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Versicherungssumme",
+              "bbox": [
+                0.4659655960220401,
+                0.3493330482604615,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Selbstbeteiligung",
+              "bbox": [
+                0.7194597500335976,
+                0.3493330482604615,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Hausrat Grundschutz",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "86.000,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.3766525318034422,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "150,00 €",
+              "bbox": [
+                0.7194597500335976,
+                0.3766525318034422,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Fahrraddiebstahl",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "4.300,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.4039720153464229,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "0,00 €",
+              "bbox": [
+                0.7194597500335976,
+                0.4039720153464229,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Glasbruch",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "3.000,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.43129149888940355,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "100,00 €",
+              "bbox": [
+                0.7194597500335976,
+                0.43129149888940355,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Elementarschäden",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "86.000,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.45861098243238424,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "500,00 €",
+              "bbox": [
+                0.7194597500335976,
+                0.45861098243238424,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-002-p02",
+      "documentID": "doc-002",
+      "physicalPage": 2,
+      "kind": "Versicherungspolice",
+      "image": "pages/doc-002-p02.png",
+      "sha256": "faca1894044bf7a185475b8fb188da8c858e1e0474f223643636c03ecdc498d7",
+      "pixelSHA256": "87f14f32d0d4f2d52bb8eb6e7a6ef937b52c3ee724235a01a66a6af3d54c51b4",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Nordstern Muster-Versicherung AG\nLeistungsübersicht und Ausschlüsse\nTarif: Komfort Plus 2027\nVertragsablauf: 31.12.2027\nKündigungsfrist: 3 Monate zum Ablauf\nFahrradschutz: auch außerhalb verschlossener Räume\nDer Versicherungsschutz umfasst Leitungswasser, Sturm, Hagel und die ausdrücklich eingeschlossenen Zusatzbausteine. Für Fahrräder gilt die vereinbarte Sicherungspflicht. Ein Zahlenschloss allein erfüllt diese Pflicht nicht. Schmuck ist innerhalb der ausgewiesenen Entschädigungsgrenzen versichert.\nRisiko\nEinschluss\nGrenze je Schaden\nÜberspannung\nja\n10.000,00 €\nGrobe Fahrlässigkeit\nja\n86.000,00 €\nBargeld im Schrank\nbegrenzt\n1.500,00 €\nBeruflich genutzte Geräte\nbegrenzt\n5.000,00 €\nNicht versichert sind Schäden durch gewöhnlichen Verschleiß oder bewusst herbeigeführte Beschädigungen. Eine vorübergehende Abwesenheit von mehr als sechzig Tagen ist anzuzeigen. Diese Übersicht erläutert den Vertrag; die im Versicherungsschein bezeichneten Bedingungen bleiben maßgeblich.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+      "fields": [
+        {
+          "id": "doc-002-p02-f01",
+          "label": "Tarif",
+          "value": "Komfort Plus 2027",
+          "text": "Tarif: Komfort Plus 2027"
+        },
+        {
+          "id": "doc-002-p02-f02",
+          "label": "Vertragsablauf",
+          "value": "31.12.2027",
+          "text": "Vertragsablauf: 31.12.2027"
+        },
+        {
+          "id": "doc-002-p02-f03",
+          "label": "Kündigungsfrist",
+          "value": "3 Monate zum Ablauf",
+          "text": "Kündigungsfrist: 3 Monate zum Ablauf"
+        },
+        {
+          "id": "doc-002-p02-f04",
+          "label": "Fahrradschutz",
+          "value": "auch außerhalb verschlossener Räume",
+          "text": "Fahrradschutz: auch außerhalb verschlossener Räume"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-002-p02-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Risiko",
+              "bbox": [
+                0.07727455987098508,
+                0.3264975234294267,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Einschluss",
+              "bbox": [
+                0.4659655960220401,
+                0.3264975234294267,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Grenze je Schaden",
+              "bbox": [
+                0.6518613089638489,
+                0.3264975234294267,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Überspannung",
+              "bbox": [
+                0.07727455987098508,
+                0.3538170069724073,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "ja",
+              "bbox": [
+                0.4659655960220401,
+                0.3538170069724073,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "10.000,00 €",
+              "bbox": [
+                0.6518613089638489,
+                0.3538170069724073,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Grobe Fahrlässigkeit",
+              "bbox": [
+                0.07727455987098508,
+                0.381136490515388,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "ja",
+              "bbox": [
+                0.4659655960220401,
+                0.381136490515388,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "86.000,00 €",
+              "bbox": [
+                0.6518613089638489,
+                0.381136490515388,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Bargeld im Schrank",
+              "bbox": [
+                0.07727455987098508,
+                0.4084559740583687,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "begrenzt",
+              "bbox": [
+                0.4659655960220401,
+                0.4084559740583687,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "1.500,00 €",
+              "bbox": [
+                0.6518613089638489,
+                0.4084559740583687,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Beruflich genutzte Geräte",
+              "bbox": [
+                0.07727455987098508,
+                0.43577545760134934,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "begrenzt",
+              "bbox": [
+                0.4659655960220401,
+                0.43577545760134934,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "5.000,00 €",
+              "bbox": [
+                0.6518613089638489,
+                0.43577545760134934,
+                0.2703937642789948,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3264975234294267,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-002-p03",
+      "documentID": "doc-002",
+      "physicalPage": 3,
+      "kind": "Versicherungspolice",
+      "image": "pages/doc-002-p03.png",
+      "sha256": "7a595e7c72a489470ed57681bcd49186d8af567915d502f08c62d7d048e4a8d5",
+      "pixelSHA256": "989ac9741e634f354cf877dcdb141ad44f57a687d9781ac6aab2fd5e0dbfa9c4",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Nordstern Muster-Versicherung AG\nNachtrag zur Beitragsberechnung\nNachtragsnummer: NT-2026-1183\nWirksam ab: 01.02.2027\nBisheriger Monatsbeitrag: 28,63 €\nNeuer Monatsbeitrag: 30,14 €\nÄnderungsgrund: zusätzlicher Fahrradeinschluss\nAuf Ihren Wunsch wird die besondere Fahrradabsicherung erweitert. Die übrigen Vereinbarungen bleiben bestehen. Der neue Beitrag gilt erst ab dem bezeichneten Wirksamkeitsdatum. Für Januar wird weiterhin der bisherige Beitrag berechnet.\nDieser Nachtrag gehört zum Versicherungsschein. Bitte bewahren Sie beide Dokumente gemeinsam auf. Die abweichenden Beträge stehen für unterschiedliche Zeiträume und sind kein Rechenfehler. Eine Änderung der Wohnfläche wurde nicht beantragt.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+      "fields": [
+        {
+          "id": "doc-002-p03-f01",
+          "label": "Nachtragsnummer",
+          "value": "NT-2026-1183",
+          "text": "Nachtragsnummer: NT-2026-1183"
+        },
+        {
+          "id": "doc-002-p03-f02",
+          "label": "Wirksam ab",
+          "value": "01.02.2027",
+          "text": "Wirksam ab: 01.02.2027"
+        },
+        {
+          "id": "doc-002-p03-f03",
+          "label": "Bisheriger Monatsbeitrag",
+          "value": "28,63 €",
+          "text": "Bisheriger Monatsbeitrag: 28,63 €"
+        },
+        {
+          "id": "doc-002-p03-f04",
+          "label": "Neuer Monatsbeitrag",
+          "value": "30,14 €",
+          "text": "Neuer Monatsbeitrag: 30,14 €"
+        },
+        {
+          "id": "doc-002-p03-f05",
+          "label": "Änderungsgrund",
+          "value": "zusätzlicher Fahrradeinschluss",
+          "text": "Änderungsgrund: zusätzlicher Fahrradeinschluss"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-003-p01",
+      "documentID": "doc-003",
+      "physicalPage": 1,
+      "kind": "Kontoauszug",
+      "image": "pages/doc-003-p01.png",
+      "sha256": "346de310781e7b537714d1419f38de2f0b44f6c0eb48fc70c837f260929067f4",
+      "pixelSHA256": "8bef45df6588169c306e5fde7187b9493da775ea82d05f82606da365a5bef489",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Musterbank Prüfstadt eG\nKontoauszug November 2026\nAuszugsnummer: 11/2026-0048\nKontoinhaber: Björn Weiß\nKontokennung: TEST-KONTO-638510\nAnfangssaldo: 2.184,33 €\nEndsaldo: 2.569,81 €\nDie nachfolgenden Buchungen betreffen den Zeitraum vom 01.11.2026 bis zum 06.11.2026. Belastungen sind mit einem Minuszeichen ausgewiesen. Wertstellung und Buchungstag können voneinander abweichen. Alle Kontokennungen dieses Belegs sind künstliche Testwerte.\nBuchung\nWertstellung\nVerwendungszweck\nBetrag\n02.11.2026\n02.11.2026\nGehalt Musterbetrieb\n+2.684,18 €\n03.11.2026\n03.11.2026\nMiete Große Straße\n-1.180,00 €\n03.11.2026\n04.11.2026\nStadtwerke Abschlag\n-126,00 €\n05.11.2026\n05.11.2026\nÜberweisung an J. Kühn\n-992,70 €\n06.11.2026\n06.11.2026\nZinsgutschrift\n+0,00 €\nBitte prüfen Sie die Umsätze und bewahren Sie diesen Auszug zusammen mit den zugehörigen Zahlungsbelegen auf. Die Darstellung einer Zahlung bestätigt nicht den Inhalt eines zugrunde liegenden Vertrags.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-003-p01-f01",
+          "label": "Auszugsnummer",
+          "value": "11/2026-0048",
+          "text": "Auszugsnummer: 11/2026-0048"
+        },
+        {
+          "id": "doc-003-p01-f02",
+          "label": "Kontoinhaber",
+          "value": "Björn Weiß",
+          "text": "Kontoinhaber: Björn Weiß"
+        },
+        {
+          "id": "doc-003-p01-f03",
+          "label": "Kontokennung",
+          "value": "TEST-KONTO-638510",
+          "text": "Kontokennung: TEST-KONTO-638510"
+        },
+        {
+          "id": "doc-003-p01-f04",
+          "label": "Anfangssaldo",
+          "value": "2.184,33 €",
+          "text": "Anfangssaldo: 2.184,33 €"
+        },
+        {
+          "id": "doc-003-p01-f05",
+          "label": "Endsaldo",
+          "value": "2.569,81 €",
+          "text": "Endsaldo: 2.569,81 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-003-p01-table",
+          "rows": 6,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Buchung",
+              "bbox": [
+                0.07727455987098508,
+                0.335946501324401,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Wertstellung",
+              "bbox": [
+                0.22937105227791962,
+                0.335946501324401,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Verwendungszweck",
+              "bbox": [
+                0.38146754468485417,
+                0.335946501324401,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Betrag",
+              "bbox": [
+                0.7448091654347534,
+                0.335946501324401,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "02.11.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.3632659848673817,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "02.11.2026",
+              "bbox": [
+                0.22937105227791962,
+                0.3632659848673817,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "Gehalt Musterbetrieb",
+              "bbox": [
+                0.38146754468485417,
+                0.3632659848673817,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "+2.684,18 €",
+              "bbox": [
+                0.7448091654347534,
+                0.3632659848673817,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "03.11.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.3905854684103624,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "03.11.2026",
+              "bbox": [
+                0.22937105227791962,
+                0.3905854684103624,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "Miete Große Straße",
+              "bbox": [
+                0.38146754468485417,
+                0.3905854684103624,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "-1.180,00 €",
+              "bbox": [
+                0.7448091654347534,
+                0.3905854684103624,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "03.11.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.41790495195334304,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "04.11.2026",
+              "bbox": [
+                0.22937105227791962,
+                0.41790495195334304,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "Stadtwerke Abschlag",
+              "bbox": [
+                0.38146754468485417,
+                0.41790495195334304,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "-126,00 €",
+              "bbox": [
+                0.7448091654347534,
+                0.41790495195334304,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "05.11.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.44522443549632373,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "05.11.2026",
+              "bbox": [
+                0.22937105227791962,
+                0.44522443549632373,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "Überweisung an J. Kühn",
+              "bbox": [
+                0.38146754468485417,
+                0.44522443549632373,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "text": "-992,70 €",
+              "bbox": [
+                0.7448091654347534,
+                0.44522443549632373,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "06.11.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.4725439190393044,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "06.11.2026",
+              "bbox": [
+                0.22937105227791962,
+                0.4725439190393044,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "Zinsgutschrift",
+              "bbox": [
+                0.38146754468485417,
+                0.4725439190393044,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 3,
+              "text": "+0,00 €",
+              "bbox": [
+                0.7448091654347534,
+                0.4725439190393044,
+                0.1774459078080903,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.335946501324401,
+            0.8449805133718586,
+            0.16391690125788405
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-003-p02",
+      "documentID": "doc-003",
+      "physicalPage": 2,
+      "kind": "Kontoauszug",
+      "image": "pages/doc-003-p02.png",
+      "sha256": "79b7b4ff9eedeebafc1fc4422dda9a8dc4c016f0b0a0cbb3d6f10677074dfe7a",
+      "pixelSHA256": "b611d01677c4eb2a1d6fb380c0a575fb85f5013ab193cd3d35fb81d9e18be003",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Musterbank Prüfstadt eG\nEntgeltübersicht und Kontoinformation\nAbrechnungsmonat: November 2026\nKontoführungsentgelt: 6,90 €\nErstatteter Betrag: 6,90 €\nReklamationskennzeichen: RK-269714\nDas zunächst vorgemerkte Kontoführungsentgelt wurde aufgrund einer Aktionsvereinbarung vollständig erstattet. Die beiden gleich hohen Beträge dürfen deshalb nicht als zwei Belastungen zusammengefasst werden. Diese Entgeltübersicht verändert den auf Seite eins genannten Endsaldo nicht.\nFür Nachfragen nutzen Sie bitte das Reklamationskennzeichen. Antworten auf allgemeine Anfragen sind keine Bestätigung einzelner Zahlungsaufträge. Die angebotenen Kommunikationswege setzen die zuvor vereinbarte Identitätsprüfung voraus.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-003-p02-f01",
+          "label": "Abrechnungsmonat",
+          "value": "November 2026",
+          "text": "Abrechnungsmonat: November 2026"
+        },
+        {
+          "id": "doc-003-p02-f02",
+          "label": "Kontoführungsentgelt",
+          "value": "6,90 €",
+          "text": "Kontoführungsentgelt: 6,90 €"
+        },
+        {
+          "id": "doc-003-p02-f03",
+          "label": "Erstatteter Betrag",
+          "value": "6,90 €",
+          "text": "Erstatteter Betrag: 6,90 €"
+        },
+        {
+          "id": "doc-003-p02-f04",
+          "label": "Reklamationskennzeichen",
+          "value": "RK-269714",
+          "text": "Reklamationskennzeichen: RK-269714"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-004-p01",
+      "documentID": "doc-004",
+      "physicalPage": 1,
+      "kind": "Mietvertrag",
+      "image": "pages/doc-004-p01.png",
+      "sha256": "482ad8b54cbf5b096b74ee0e30184ea8c15608f18ddd438f5f5661ea42f04c17",
+      "pixelSHA256": "c1c95c9d62f0b0a046d32c7b02ac488b1a0b6060ff45d21c10866729de683d7b",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Wohnraum Musterhof Verwaltung GmbH\nWohnraummietvertrag\nVertragsnummer: MV-2026-0318\nVermieterin: Wohnraum Musterhof Verwaltung GmbH\nMieter: René König\nMietobjekt: Ahornweg 7, Wohnung 3 links\nMietbeginn: 01.12.2026\nVermietet werden drei Zimmer, Küche, Bad und ein zugeordneter Kellerraum. Die angegebene Wohnfläche von 74,5 Quadratmetern dient der Beschreibung des Objekts. Die Wohnung wird ausschließlich zu Wohnzwecken überlassen. Eine gewerbliche Nutzung bedarf einer gesonderten Vereinbarung.\nMonatliche Zahlung\nBetrag\nFälligkeit\nNettokaltmiete\n815,00 €\n3. Werktag\nBetriebskostenvorauszahlung\n142,00 €\n3. Werktag\nHeizkostenvorauszahlung\n98,00 €\n3. Werktag\nGesamtzahlung\n1.055,00 €\n3. Werktag\nZum Übergabetermin wird ein gemeinsames Protokoll erstellt. Darin werden Zählerstände, Schlüsselanzahl und erkennbare Mängel dokumentiert. Das Protokoll ist eine Anlage dieses Vertrags und wird von beiden Parteien aufbewahrt.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+      "fields": [
+        {
+          "id": "doc-004-p01-f01",
+          "label": "Vertragsnummer",
+          "value": "MV-2026-0318",
+          "text": "Vertragsnummer: MV-2026-0318"
+        },
+        {
+          "id": "doc-004-p01-f02",
+          "label": "Vermieterin",
+          "value": "Wohnraum Musterhof Verwaltung GmbH",
+          "text": "Vermieterin: Wohnraum Musterhof Verwaltung GmbH"
+        },
+        {
+          "id": "doc-004-p01-f03",
+          "label": "Mieter",
+          "value": "René König",
+          "text": "Mieter: René König"
+        },
+        {
+          "id": "doc-004-p01-f04",
+          "label": "Mietobjekt",
+          "value": "Ahornweg 7, Wohnung 3 links",
+          "text": "Mietobjekt: Ahornweg 7, Wohnung 3 links"
+        },
+        {
+          "id": "doc-004-p01-f05",
+          "label": "Mietbeginn",
+          "value": "01.12.2026",
+          "text": "Mietbeginn: 01.12.2026"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-004-p01-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Monatliche Zahlung",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.4393898669533665,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Betrag",
+              "bbox": [
+                0.5166644268243515,
+                0.3493330482604615,
+                0.19434551807552752,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Fälligkeit",
+              "bbox": [
+                0.7110099448998791,
+                0.3493330482604615,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Nettokaltmiete",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.4393898669533665,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "815,00 €",
+              "bbox": [
+                0.5166644268243515,
+                0.3766525318034422,
+                0.19434551807552752,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "3. Werktag",
+              "bbox": [
+                0.7110099448998791,
+                0.3766525318034422,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Betriebskostenvorauszahlung",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.4393898669533665,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "142,00 €",
+              "bbox": [
+                0.5166644268243515,
+                0.4039720153464229,
+                0.19434551807552752,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "3. Werktag",
+              "bbox": [
+                0.7110099448998791,
+                0.4039720153464229,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Heizkostenvorauszahlung",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.4393898669533665,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "98,00 €",
+              "bbox": [
+                0.5166644268243515,
+                0.43129149888940355,
+                0.19434551807552752,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "3. Werktag",
+              "bbox": [
+                0.7110099448998791,
+                0.43129149888940355,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Gesamtzahlung",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.4393898669533665,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "1.055,00 €",
+              "bbox": [
+                0.5166644268243515,
+                0.45861098243238424,
+                0.19434551807552752,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "3. Werktag",
+              "bbox": [
+                0.7110099448998791,
+                0.45861098243238424,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-004-p02",
+      "documentID": "doc-004",
+      "physicalPage": 2,
+      "kind": "Mietvertrag",
+      "image": "pages/doc-004-p02.png",
+      "sha256": "a49e5932976a1a8907c07ffebb8c6995756a20515b3b563759615c8a29c05da5",
+      "pixelSHA256": "602d124dcecfc8108e2e72318b01d745648a394ff5ee02e71d0e94a257839c44",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": 0.8
+      },
+      "text": "Wohnraum Musterhof Verwaltung GmbH\nKaution, Anpassung und Nebenabreden\nMietsicherheit: 2.445,00 €\nErste Kautionsrate: 815,00 €\nStaffelbeginn: 01.12.2027\nNeue Nettokaltmiete: 839,00 €\nVertragsart: unbefristeter Mietvertrag\nDie Mietsicherheit kann in drei gleichen Teilbeträgen geleistet werden. Die erste Rate ist zu Beginn des Mietverhältnisses fällig. Die vereinbarte Staffel betrifft ausschließlich die Nettokaltmiete. Vorauszahlungen für Betriebs- und Heizkosten werden dadurch nicht automatisch geändert.\nDie Parteien haben keine zusätzliche mündliche Vereinbarung über eine kürzere Vertragslaufzeit getroffen. Das Recht zur Kündigung richtet sich nach den vereinbarten Vertragsbedingungen. Eine frühere unverbindliche Reservierung ist mit Unterzeichnung dieses Vertrags erledigt.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+      "fields": [
+        {
+          "id": "doc-004-p02-f01",
+          "label": "Mietsicherheit",
+          "value": "2.445,00 €",
+          "text": "Mietsicherheit: 2.445,00 €"
+        },
+        {
+          "id": "doc-004-p02-f02",
+          "label": "Erste Kautionsrate",
+          "value": "815,00 €",
+          "text": "Erste Kautionsrate: 815,00 €"
+        },
+        {
+          "id": "doc-004-p02-f03",
+          "label": "Staffelbeginn",
+          "value": "01.12.2027",
+          "text": "Staffelbeginn: 01.12.2027"
+        },
+        {
+          "id": "doc-004-p02-f04",
+          "label": "Neue Nettokaltmiete",
+          "value": "839,00 €",
+          "text": "Neue Nettokaltmiete: 839,00 €"
+        },
+        {
+          "id": "doc-004-p02-f05",
+          "label": "Vertragsart",
+          "value": "unbefristeter Mietvertrag",
+          "text": "Vertragsart: unbefristeter Mietvertrag"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-004-p03",
+      "documentID": "doc-004",
+      "physicalPage": 3,
+      "kind": "Mietvertrag",
+      "image": "pages/doc-004-p03.png",
+      "sha256": "39be71951413a456a9ac8773689db95e79453a5d16395c9341780aaf6be1cc44",
+      "pixelSHA256": "a842a2034090cf8c54ab2238295544b33ae984696faeaa4d7fb4e55e13cdf3e7",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Wohnraum Musterhof Verwaltung GmbH\nÜbergabeprotokoll als Vertragsanlage\nÜbergabedatum: 30.11.2026\nStromzähler: Z-8846102\nStromzählerstand: 18.492 kWh\nÜbergebene Schlüssel: 6 Stück\nFestgestellter Mangel: Kratzer an der Küchentür\nDie Wohnung wurde gemeinsam besichtigt. Der bezeichnete Kratzer ist bei Einzug bereits vorhanden und wird im Protokoll festgehalten. Weitere sichtbare Schäden wurden nicht festgestellt. Die Erfassung eines Mangels stellt keine Aussage über seine technische Ursache dar.\nSchlüsselart\nAnzahl\nBemerkung\nHaustür\n2\nbeide übergeben\nWohnung\n3\nbeide Schließzylinder\nKeller\n1\ngekennzeichnet\nBriefkasten\n0\nNachlieferung vereinbart\nDie Hausordnung wurde ausgehändigt. Der Mieter bestätigt den Empfang der aufgeführten Schlüssel. Ein fehlender Briefkastenschlüssel soll innerhalb von sieben Tagen nachgereicht werden. Die Anlage umfasst diese eine Protokollseite.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+      "fields": [
+        {
+          "id": "doc-004-p03-f01",
+          "label": "Übergabedatum",
+          "value": "30.11.2026",
+          "text": "Übergabedatum: 30.11.2026"
+        },
+        {
+          "id": "doc-004-p03-f02",
+          "label": "Stromzähler",
+          "value": "Z-8846102",
+          "text": "Stromzähler: Z-8846102"
+        },
+        {
+          "id": "doc-004-p03-f03",
+          "label": "Stromzählerstand",
+          "value": "18.492 kWh",
+          "text": "Stromzählerstand: 18.492 kWh"
+        },
+        {
+          "id": "doc-004-p03-f04",
+          "label": "Übergebene Schlüssel",
+          "value": "6 Stück",
+          "text": "Übergebene Schlüssel: 6 Stück"
+        },
+        {
+          "id": "doc-004-p03-f05",
+          "label": "Festgestellter Mangel",
+          "value": "Kratzer an der Küchentür",
+          "text": "Festgestellter Mangel: Kratzer an der Küchentür"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-004-p03-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Schlüsselart",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.2957431796801505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Anzahl",
+              "bbox": [
+                0.3730177395511356,
+                0.3493330482604615,
+                0.1267470770057788,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Bemerkung",
+              "bbox": [
+                0.4997648165569144,
+                0.3493330482604615,
+                0.4224902566859293,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Haustür",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.2957431796801505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "2",
+              "bbox": [
+                0.3730177395511356,
+                0.3766525318034422,
+                0.1267470770057788,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "beide übergeben",
+              "bbox": [
+                0.4997648165569144,
+                0.3766525318034422,
+                0.4224902566859293,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Wohnung",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.2957431796801505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "3",
+              "bbox": [
+                0.3730177395511356,
+                0.4039720153464229,
+                0.1267470770057788,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "beide Schließzylinder",
+              "bbox": [
+                0.4997648165569144,
+                0.4039720153464229,
+                0.4224902566859293,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Keller",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.2957431796801505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "1",
+              "bbox": [
+                0.3730177395511356,
+                0.43129149888940355,
+                0.1267470770057788,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "gekennzeichnet",
+              "bbox": [
+                0.4997648165569144,
+                0.43129149888940355,
+                0.4224902566859293,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Briefkasten",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.2957431796801505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "0",
+              "bbox": [
+                0.3730177395511356,
+                0.45861098243238424,
+                0.1267470770057788,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "Nachlieferung vereinbart",
+              "bbox": [
+                0.4997648165569144,
+                0.45861098243238424,
+                0.4224902566859293,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-005-p01",
+      "documentID": "doc-005",
+      "physicalPage": 1,
+      "kind": "Nebenkostenabrechnung",
+      "image": "pages/doc-005-p01.png",
+      "sha256": "144f0b3dd54f908198c31994cb175952fd6f5ccfc1320ab29d085f2a1cea67ff",
+      "pixelSHA256": "e911a938845fe3688f2ec62cc04054a20e6c622a3e0ba3183b34573d11af6a8b",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": 0.8
+      },
+      "text": "Hausverwaltung Berg & Brüder OHG\nBetriebskostenabrechnung 2025\nAbrechnungszeitraum: 01.01.2025 bis 31.12.2025\nAusstellungsdatum: 08.10.2026\nNutzerin: Gülcan Özdemir\nWohnungskennung: WE-12-045\nNachzahlung: 218,47 €\nDie Abrechnung bezieht sich auf das abgeschlossene Kalenderjahr 2025. Das Ausstellungsdatum liegt im Folgejahr. Die Wohnung wurde im gesamten Abrechnungszeitraum genutzt. Ihr Anteil wird nach den in der Tabelle benannten Schlüsseln ermittelt.\nKostenart\nGesamtkosten\nIhr Anteil\nWasserversorgung\n3.849,26 €\n284,83 €\nMüllabfuhr\n2.118,40 €\n156,76 €\nGebäudereinigung\n4.726,15 €\n349,73 €\nVersicherung Gebäude\n3.904,80 €\n288,95 €\nHausbeleuchtung\n862,40 €\n63,81 €\nGrundsteuer\n2.702,70 €\n200,00 €\nDie ausgewiesenen Vorauszahlungen wurden vollständig berücksichtigt. Belege können nach Terminvereinbarung eingesehen werden. Eine Anpassung künftiger Vorauszahlungen wird auf der letzten Seite gesondert erläutert.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+      "fields": [
+        {
+          "id": "doc-005-p01-f01",
+          "label": "Abrechnungszeitraum",
+          "value": "01.01.2025 bis 31.12.2025",
+          "text": "Abrechnungszeitraum: 01.01.2025 bis 31.12.2025"
+        },
+        {
+          "id": "doc-005-p01-f02",
+          "label": "Ausstellungsdatum",
+          "value": "08.10.2026",
+          "text": "Ausstellungsdatum: 08.10.2026"
+        },
+        {
+          "id": "doc-005-p01-f03",
+          "label": "Nutzerin",
+          "value": "Gülcan Özdemir",
+          "text": "Nutzerin: Gülcan Özdemir"
+        },
+        {
+          "id": "doc-005-p01-f04",
+          "label": "Wohnungskennung",
+          "value": "WE-12-045",
+          "text": "Wohnungskennung: WE-12-045"
+        },
+        {
+          "id": "doc-005-p01-f05",
+          "label": "Nachzahlung",
+          "value": "218,47 €",
+          "text": "Nachzahlung: 218,47 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-005-p01-table",
+          "rows": 7,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Kostenart",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Gesamtkosten",
+              "bbox": [
+                0.48286520628947727,
+                0.3493330482604615,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Ihr Anteil",
+              "bbox": [
+                0.7025601397661605,
+                0.3493330482604615,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Wasserversorgung",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "3.849,26 €",
+              "bbox": [
+                0.48286520628947727,
+                0.3766525318034422,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "284,83 €",
+              "bbox": [
+                0.7025601397661605,
+                0.3766525318034422,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Müllabfuhr",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "2.118,40 €",
+              "bbox": [
+                0.48286520628947727,
+                0.4039720153464229,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "156,76 €",
+              "bbox": [
+                0.7025601397661605,
+                0.4039720153464229,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Gebäudereinigung",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "4.726,15 €",
+              "bbox": [
+                0.48286520628947727,
+                0.43129149888940355,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "349,73 €",
+              "bbox": [
+                0.7025601397661605,
+                0.43129149888940355,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Versicherung Gebäude",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "3.904,80 €",
+              "bbox": [
+                0.48286520628947727,
+                0.45861098243238424,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "288,95 €",
+              "bbox": [
+                0.7025601397661605,
+                0.45861098243238424,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "Hausbeleuchtung",
+              "bbox": [
+                0.07727455987098508,
+                0.48593046597536493,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "862,40 €",
+              "bbox": [
+                0.48286520628947727,
+                0.48593046597536493,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "63,81 €",
+              "bbox": [
+                0.7025601397661605,
+                0.48593046597536493,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 0,
+              "text": "Grundsteuer",
+              "bbox": [
+                0.07727455987098508,
+                0.5132499495183456,
+                0.40559064641849213,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "text": "2.702,70 €",
+              "bbox": [
+                0.48286520628947727,
+                0.5132499495183456,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 2,
+              "text": "200,00 €",
+              "bbox": [
+                0.7025601397661605,
+                0.5132499495183456,
+                0.21969493347668326,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.19123638480086472
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-005-p02",
+      "documentID": "doc-005",
+      "physicalPage": 2,
+      "kind": "Nebenkostenabrechnung",
+      "image": "pages/doc-005-p02.png",
+      "sha256": "cd6b7ae9cb3168967b7808ba030893a55b0133efc47c9e872d1cc96cff50f643",
+      "pixelSHA256": "9a54e46752f771b7a24a12c60d0a8ba971c58842994c1d9315502343cd39982f",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Hausverwaltung Berg & Brüder OHG\nHeizung und Warmwasser\nHeizungszähler: HK-507381\nAblesedatum: 31.12.2025\nVerbrauchseinheiten: 4.382,6 Einheiten\nHeizkostenanteil: 892,39 €\nWarmwasseranteil: 238,00 €\nDie Heizkosten werden nach einem Grundkostenanteil und einem Verbrauchskostenanteil verteilt. Für Warmwasser wird die gemessene Entnahmemenge zugrunde gelegt. Die hier genannten Verbrauchseinheiten sind keine Kilowattstunden und dürfen nicht unmittelbar in einen Stromverbrauch umgerechnet werden.\nGerät\nAlter Stand\nNeuer Stand\nDifferenz\nHeizkörper Küche\n512,8\n1.483,9\n971,1\nHeizkörper Wohnraum\n834,2\n2.610,4\n1.776,2\nHeizkörper Schlafzimmer\n201,7\n1.837,0\n1.635,3\nWarmwasserzähler\n86,240 m³\n117,960 m³\n31,720 m³\nDie Ablesewerte wurden elektronisch übernommen. Ein Gerätewechsel im Oktober ist in der gesonderten Aufstellung berücksichtigt. Der alte und der neue Zählerstand sind verschiedenen Geräten zugeordnet.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+      "fields": [
+        {
+          "id": "doc-005-p02-f01",
+          "label": "Heizungszähler",
+          "value": "HK-507381",
+          "text": "Heizungszähler: HK-507381"
+        },
+        {
+          "id": "doc-005-p02-f02",
+          "label": "Ablesedatum",
+          "value": "31.12.2025",
+          "text": "Ablesedatum: 31.12.2025"
+        },
+        {
+          "id": "doc-005-p02-f03",
+          "label": "Verbrauchseinheiten",
+          "value": "4.382,6 Einheiten",
+          "text": "Verbrauchseinheiten: 4.382,6 Einheiten"
+        },
+        {
+          "id": "doc-005-p02-f04",
+          "label": "Heizkostenanteil",
+          "value": "892,39 €",
+          "text": "Heizkostenanteil: 892,39 €"
+        },
+        {
+          "id": "doc-005-p02-f05",
+          "label": "Warmwasseranteil",
+          "value": "238,00 €",
+          "text": "Warmwasseranteil: 238,00 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-005-p02-table",
+          "rows": 5,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Gerät",
+              "bbox": [
+                0.07727455987098508,
+                0.36741735856228247,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Alter Stand",
+              "bbox": [
+                0.4152667652197286,
+                0.36741735856228247,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Neuer Stand",
+              "bbox": [
+                0.5842628678941003,
+                0.36741735856228247,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Differenz",
+              "bbox": [
+                0.753258970568472,
+                0.36741735856228247,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Heizkörper Küche",
+              "bbox": [
+                0.07727455987098508,
+                0.39473684210526316,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "512,8",
+              "bbox": [
+                0.4152667652197286,
+                0.39473684210526316,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "1.483,9",
+              "bbox": [
+                0.5842628678941003,
+                0.39473684210526316,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "971,1",
+              "bbox": [
+                0.753258970568472,
+                0.39473684210526316,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Heizkörper Wohnraum",
+              "bbox": [
+                0.07727455987098508,
+                0.4220563256482438,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "834,2",
+              "bbox": [
+                0.4152667652197286,
+                0.4220563256482438,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "2.610,4",
+              "bbox": [
+                0.5842628678941003,
+                0.4220563256482438,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "1.776,2",
+              "bbox": [
+                0.753258970568472,
+                0.4220563256482438,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Heizkörper Schlafzimmer",
+              "bbox": [
+                0.07727455987098508,
+                0.4493758091912245,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "201,7",
+              "bbox": [
+                0.4152667652197286,
+                0.4493758091912245,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "1.837,0",
+              "bbox": [
+                0.5842628678941003,
+                0.4493758091912245,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "1.635,3",
+              "bbox": [
+                0.753258970568472,
+                0.4493758091912245,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Warmwasserzähler",
+              "bbox": [
+                0.07727455987098508,
+                0.4766952927342052,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "86,240 m³",
+              "bbox": [
+                0.4152667652197286,
+                0.4766952927342052,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "117,960 m³",
+              "bbox": [
+                0.5842628678941003,
+                0.4766952927342052,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "text": "31,720 m³",
+              "bbox": [
+                0.753258970568472,
+                0.4766952927342052,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.36741735856228247,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-005-p03",
+      "documentID": "doc-005",
+      "physicalPage": 3,
+      "kind": "Nebenkostenabrechnung",
+      "image": "pages/doc-005-p03.png",
+      "sha256": "dc3eb7f09db8a0563e93162c90f9cc197d4b3a71a5286bc6e523b44eaf7ea6ce",
+      "pixelSHA256": "992aa2fbfbc8e90653067ecae5b997d4b545550f7b770efe80a1bb6711962422",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Hausverwaltung Berg & Brüder OHG\nAbrechnungsergebnis und Vorauszahlung\nKosten gesamt: 2.474,47 €\nVorauszahlungen gesamt: 2.256,00 €\nZahlbar bis: 15.11.2026\nNeue Vorauszahlung: 206,00 € monatlich\nNeue Vorauszahlung ab: 01.12.2026\nAus den abgerechneten Kosten und den bereits geleisteten Vorauszahlungen ergibt sich die auf Seite eins genannte Nachzahlung. Die erhöhte Vorauszahlung beginnt erst im Dezember. Die Nachzahlung wird nicht zusätzlich auf die monatliche Vorauszahlung aufgeschlagen.\nBitte geben Sie bei Überweisungen die Wohnungskennung an. Einwendungen zu einzelnen Positionen können mit Bezeichnung der Kostenart und des betreffenden Zeitraums eingereicht werden. Eine fehlende Anlage ist der Verwaltung zeitnah mitzuteilen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+      "fields": [
+        {
+          "id": "doc-005-p03-f01",
+          "label": "Kosten gesamt",
+          "value": "2.474,47 €",
+          "text": "Kosten gesamt: 2.474,47 €"
+        },
+        {
+          "id": "doc-005-p03-f02",
+          "label": "Vorauszahlungen gesamt",
+          "value": "2.256,00 €",
+          "text": "Vorauszahlungen gesamt: 2.256,00 €"
+        },
+        {
+          "id": "doc-005-p03-f03",
+          "label": "Zahlbar bis",
+          "value": "15.11.2026",
+          "text": "Zahlbar bis: 15.11.2026"
+        },
+        {
+          "id": "doc-005-p03-f04",
+          "label": "Neue Vorauszahlung",
+          "value": "206,00 € monatlich",
+          "text": "Neue Vorauszahlung: 206,00 € monatlich"
+        },
+        {
+          "id": "doc-005-p03-f05",
+          "label": "Neue Vorauszahlung ab",
+          "value": "01.12.2026",
+          "text": "Neue Vorauszahlung ab: 01.12.2026"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-006-p01",
+      "documentID": "doc-006",
+      "physicalPage": 1,
+      "kind": "Stromabrechnung",
+      "image": "pages/doc-006-p01.png",
+      "sha256": "4fc34d81ffc606c9ab628c24c78f3ed6b5f1a06dffcdee0f669cc3c8b1cc4a4f",
+      "pixelSHA256": "2bac827c16f60d903ed5f6c4f81c431a53146e53e13be524c29aabda1d687378",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Stadtwerke Grünau Testversorgung GmbH\nJahresabrechnung Strom\nKundennummer: K-4901738\nRechnungsnummer: ST-2026-66291\nAbrechnungszeitraum: 01.10.2025 bis 30.09.2026\nVerbrauch: 2.684 kWh\nGuthaben: 74,82 €\nDie Jahresabrechnung beruht auf den übermittelten Zählerständen. Der Verbrauch verteilt sich auf zwei Preisabschnitte. Das Guthaben wird mit der nächsten fälligen Zahlung verrechnet, sofern keine abweichende Auszahlung vereinbart wurde.\nPreisabschnitt\nMenge\nArbeitspreis\nKosten\n01.10.2025 bis 31.03.2026\n1.482 kWh\n31,20 ct/kWh\n462,38 €\n01.04.2026 bis 30.09.2026\n1.202 kWh\n29,80 ct/kWh\n358,20 €\nGrundpreis für zwölf Monate\n12 Monate\n12,80 €/Monat\n153,60 €\nGezahlte Abschläge\n1.049,00 €\nDer auf der Folgeseite genannte Abschlag gilt für den neuen Zeitraum. Er ist weder der Rechnungsbetrag noch der durchschnittliche monatliche Verbrauch. Bitte halten Sie bei Nachfragen die Kundennummer bereit.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-006-p01-f01",
+          "label": "Kundennummer",
+          "value": "K-4901738",
+          "text": "Kundennummer: K-4901738"
+        },
+        {
+          "id": "doc-006-p01-f02",
+          "label": "Rechnungsnummer",
+          "value": "ST-2026-66291",
+          "text": "Rechnungsnummer: ST-2026-66291"
+        },
+        {
+          "id": "doc-006-p01-f03",
+          "label": "Abrechnungszeitraum",
+          "value": "01.10.2025 bis 30.09.2026",
+          "text": "Abrechnungszeitraum: 01.10.2025 bis 30.09.2026"
+        },
+        {
+          "id": "doc-006-p01-f04",
+          "label": "Verbrauch",
+          "value": "2.684 kWh",
+          "text": "Verbrauch: 2.684 kWh"
+        },
+        {
+          "id": "doc-006-p01-f05",
+          "label": "Guthaben",
+          "value": "74,82 €",
+          "text": "Guthaben: 74,82 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-006-p01-table",
+          "rows": 5,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Preisabschnitt",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Menge",
+              "bbox": [
+                0.44061618062088426,
+                0.3493330482604615,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Arbeitspreis",
+              "bbox": [
+                0.6011624781615373,
+                0.3493330482604615,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Kosten",
+              "bbox": [
+                0.7701585808359092,
+                0.3493330482604615,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "01.10.2025 bis 31.03.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "1.482 kWh",
+              "bbox": [
+                0.44061618062088426,
+                0.3766525318034422,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "31,20 ct/kWh",
+              "bbox": [
+                0.6011624781615373,
+                0.3766525318034422,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "462,38 €",
+              "bbox": [
+                0.7701585808359092,
+                0.3766525318034422,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "01.04.2026 bis 30.09.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "1.202 kWh",
+              "bbox": [
+                0.44061618062088426,
+                0.4039720153464229,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "29,80 ct/kWh",
+              "bbox": [
+                0.6011624781615373,
+                0.4039720153464229,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "358,20 €",
+              "bbox": [
+                0.7701585808359092,
+                0.4039720153464229,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Grundpreis für zwölf Monate",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "12 Monate",
+              "bbox": [
+                0.44061618062088426,
+                0.43129149888940355,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "12,80 €/Monat",
+              "bbox": [
+                0.6011624781615373,
+                0.43129149888940355,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "153,60 €",
+              "bbox": [
+                0.7701585808359092,
+                0.43129149888940355,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Gezahlte Abschläge",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.36334162074989923,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "",
+              "bbox": [
+                0.44061618062088426,
+                0.45861098243238424,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "",
+              "bbox": [
+                0.6011624781615373,
+                0.45861098243238424,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "text": "1.049,00 €",
+              "bbox": [
+                0.7701585808359092,
+                0.45861098243238424,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-006-p02",
+      "documentID": "doc-006",
+      "physicalPage": 2,
+      "kind": "Stromabrechnung",
+      "image": "pages/doc-006-p02.png",
+      "sha256": "d5a9119452b7245efbbd730bbfab1091e0227c937a763367ac31778ad2be0ac8",
+      "pixelSHA256": "e2e8e34f3895b773ddb7a7042b690ff7e904d28be6936f62f517177a569e2c3c",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Stadtwerke Grünau Testversorgung GmbH\nZählerdaten und neuer Abschlagsplan\nZählernummer: 1TEST00389147\nAnfangsstand: 24.183 kWh\nEndstand: 26.867 kWh\nNeuer Abschlag: 83,00 €\nErster Abschlag: 05.11.2026\nDer neue Abschlag berücksichtigt den bisherigen Jahresverbrauch und die bekannten Preise des Folgezeitraums. Eine tatsächliche Verbrauchsänderung kann zu einer späteren Anpassung führen. Die Zählernummer bezeichnet das Messgerät und ist nicht mit der Kundennummer identisch.\nDie Ablesung erfolgte am letzten Tag des Abrechnungszeitraums. Der dokumentierte Stand wurde plausibilisiert. Eine Schätzung war nicht erforderlich. Bitte melden Sie einen bevorstehenden Umzug rechtzeitig mit Datum und neuem Zählerstand.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-006-p02-f01",
+          "label": "Zählernummer",
+          "value": "1TEST00389147",
+          "text": "Zählernummer: 1TEST00389147"
+        },
+        {
+          "id": "doc-006-p02-f02",
+          "label": "Anfangsstand",
+          "value": "24.183 kWh",
+          "text": "Anfangsstand: 24.183 kWh"
+        },
+        {
+          "id": "doc-006-p02-f03",
+          "label": "Endstand",
+          "value": "26.867 kWh",
+          "text": "Endstand: 26.867 kWh"
+        },
+        {
+          "id": "doc-006-p02-f04",
+          "label": "Neuer Abschlag",
+          "value": "83,00 €",
+          "text": "Neuer Abschlag: 83,00 €"
+        },
+        {
+          "id": "doc-006-p02-f05",
+          "label": "Erster Abschlag",
+          "value": "05.11.2026",
+          "text": "Erster Abschlag: 05.11.2026"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-007-p01",
+      "documentID": "doc-007",
+      "physicalPage": 1,
+      "kind": "Lohnabrechnung",
+      "image": "pages/doc-007-p01.png",
+      "sha256": "62cfe7ea92493d9ecfece099ed24ecd9688e60c3db2d18aab657bec6c7dbd063",
+      "pixelSHA256": "e9d81e16fd77c5da7304fd371f3076b8465b8c19be497d75119f9f247047ee72",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Prüfwerk Maschinenbau GmbH\nEntgeltabrechnung Oktober 2026\nPersonalnummer: P-004791\nArbeitnehmerin: Sörenja Großmann\nAbrechnungsmonat: Oktober 2026\nGesamtbrutto: 4.186,40 €\nNettoauszahlung: 2.684,18 €\nDiese Abrechnung enthält laufende Bezüge sowie eine einmalige Schichtzulage. Die Werte dienen ausschließlich dem synthetischen OCR-Test. Die hier verwendeten Abzüge stellen keine Berechnung für eine tatsächliche Person dar.\nBezug oder Abzug\nKennung\nBetrag\nGrundentgelt\nL-100\n3.950,00 €\nSchichtzulage\nL-215\n236,40 €\nLohnsteuer\nA-410\n612,74 €\nSozialversicherung\nA-520\n889,48 €\nAuszahlung\nN-900\n2.684,18 €\nBitte unterscheiden Sie zwischen Gesamtbrutto, steuerpflichtigem Brutto und Auszahlung. Die Arbeitgeberanteile gehören nicht zu den Abzügen vom Nettobetrag. Rückfragen richten Sie mit der Personalnummer an die Entgeltabrechnung.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-007-p01-f01",
+          "label": "Personalnummer",
+          "value": "P-004791",
+          "text": "Personalnummer: P-004791"
+        },
+        {
+          "id": "doc-007-p01-f02",
+          "label": "Arbeitnehmerin",
+          "value": "Sörenja Großmann",
+          "text": "Arbeitnehmerin: Sörenja Großmann"
+        },
+        {
+          "id": "doc-007-p01-f03",
+          "label": "Abrechnungsmonat",
+          "value": "Oktober 2026",
+          "text": "Abrechnungsmonat: Oktober 2026"
+        },
+        {
+          "id": "doc-007-p01-f04",
+          "label": "Gesamtbrutto",
+          "value": "4.186,40 €",
+          "text": "Gesamtbrutto: 4.186,40 €"
+        },
+        {
+          "id": "doc-007-p01-f05",
+          "label": "Nettoauszahlung",
+          "value": "2.684,18 €",
+          "text": "Nettoauszahlung: 2.684,18 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-007-p01-table",
+          "rows": 6,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Bezug oder Abzug",
+              "bbox": [
+                0.07727455987098508,
+                0.3178621910225802,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Kennung",
+              "bbox": [
+                0.5251142319580703,
+                0.3178621910225802,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Betrag",
+              "bbox": [
+                0.694110334632442,
+                0.3178621910225802,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Grundentgelt",
+              "bbox": [
+                0.07727455987098508,
+                0.34518167456556087,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "L-100",
+              "bbox": [
+                0.5251142319580703,
+                0.34518167456556087,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "3.950,00 €",
+              "bbox": [
+                0.694110334632442,
+                0.34518167456556087,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Schichtzulage",
+              "bbox": [
+                0.07727455987098508,
+                0.3725011581085415,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "L-215",
+              "bbox": [
+                0.5251142319580703,
+                0.3725011581085415,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "236,40 €",
+              "bbox": [
+                0.694110334632442,
+                0.3725011581085415,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Lohnsteuer",
+              "bbox": [
+                0.07727455987098508,
+                0.3998206416515222,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "A-410",
+              "bbox": [
+                0.5251142319580703,
+                0.3998206416515222,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "612,74 €",
+              "bbox": [
+                0.694110334632442,
+                0.3998206416515222,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Sozialversicherung",
+              "bbox": [
+                0.07727455987098508,
+                0.4271401251945029,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "A-520",
+              "bbox": [
+                0.5251142319580703,
+                0.4271401251945029,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "889,48 €",
+              "bbox": [
+                0.694110334632442,
+                0.4271401251945029,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "Auszahlung",
+              "bbox": [
+                0.07727455987098508,
+                0.45445960873748353,
+                0.44783967208708514,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "N-900",
+              "bbox": [
+                0.5251142319580703,
+                0.45445960873748353,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "2.684,18 €",
+              "bbox": [
+                0.694110334632442,
+                0.45445960873748353,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3178621910225802,
+            0.8449805133718586,
+            0.16391690125788405
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-007-p02",
+      "documentID": "doc-007",
+      "physicalPage": 2,
+      "kind": "Lohnabrechnung",
+      "image": "pages/doc-007-p02.png",
+      "sha256": "2d1cc008471d63707e322defdb50815a26f4357ffbf1f8d65e5a20c25fa3f7fd",
+      "pixelSHA256": "dd4b74736b627320214987f1b61d1027dc5a6bf27d314b16fdb2b0fb252a5972",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": -0.7
+      },
+      "text": "Prüfwerk Maschinenbau GmbH\nArbeitszeitkonto und Bescheinigung\nBescheinigungsnummer: BZ-2026-1928\nEintrittsdatum: 15.03.2021\nBeschäftigungsumfang: 38,5 Stunden pro Woche\nResturlaub: 8,5 Tage\nZeitguthaben: 12,75 Stunden\nDas Arbeitszeitkonto wird unabhängig von der Entgeltabrechnung geführt. Nicht jede Zeitbuchung löst eine zusätzliche Auszahlung aus. Der ausgewiesene Resturlaub bezieht sich auf den Stand am Ende des Abrechnungsmonats.\nDie Bescheinigung wurde auf Wunsch der Arbeitnehmerin erstellt. Sie bestätigt das Beschäftigungsverhältnis zu den angegebenen Bedingungen. Eine Zusage über künftige Sonderzahlungen ist damit nicht verbunden.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-007-p02-f01",
+          "label": "Bescheinigungsnummer",
+          "value": "BZ-2026-1928",
+          "text": "Bescheinigungsnummer: BZ-2026-1928"
+        },
+        {
+          "id": "doc-007-p02-f02",
+          "label": "Eintrittsdatum",
+          "value": "15.03.2021",
+          "text": "Eintrittsdatum: 15.03.2021"
+        },
+        {
+          "id": "doc-007-p02-f03",
+          "label": "Beschäftigungsumfang",
+          "value": "38,5 Stunden pro Woche",
+          "text": "Beschäftigungsumfang: 38,5 Stunden pro Woche"
+        },
+        {
+          "id": "doc-007-p02-f04",
+          "label": "Resturlaub",
+          "value": "8,5 Tage",
+          "text": "Resturlaub: 8,5 Tage"
+        },
+        {
+          "id": "doc-007-p02-f05",
+          "label": "Zeitguthaben",
+          "value": "12,75 Stunden",
+          "text": "Zeitguthaben: 12,75 Stunden"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-008-p01",
+      "documentID": "doc-008",
+      "physicalPage": 1,
+      "kind": "Steuerbescheid",
+      "image": "pages/doc-008-p01.png",
+      "sha256": "57dba21b2e173a0f38cbbc7067649b2455f529d52893a51fbe2bcdac0b3e7059",
+      "pixelSHA256": "3538fa4abaaa87004c82877408009ef73dbb1fe9d49feabe0b94e65b03450bb1",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": -0.7
+      },
+      "text": "Finanzamt Musterstadt - Teststelle\nBescheid über Einkommensteuer 2025\nSteuernummer: TEST-19/482/73016\nBescheiddatum: 21.09.2026\nVeranlagungsjahr: 2025\nSteuerpflichtiger: André Jäger\nErstattungsbetrag: 1.284,37 €\nDie Festsetzung betrifft das Veranlagungsjahr 2025. Das Datum des Bescheids liegt im folgenden Kalenderjahr. Die Berechnungsgrundlagen und bereits berücksichtigten Zahlungen sind auf den nachfolgenden Seiten erläutert. Dieser Beleg ist ausschließlich ein künstliches Testdokument.\nSteuerart\nFestgesetzt\nAngerechnet\nSaldo\nEinkommensteuer\n7.412,00 €\n8.696,37 €\n-1.284,37 €\nSolidaritätszuschlag\n0,00 €\n0,00 €\n0,00 €\nKirchensteuer\n0,00 €\n0,00 €\n0,00 €\nDie Erstattung wird nach der dokumentierten Zahlungsverrechnung ausgeführt. Ein früher genannter Vorauszahlungsbetrag ist kein zusätzlicher Erstattungsbetrag. Bitte prüfen Sie die Zuordnung der Zahlungen zu den jeweiligen Steuerarten.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 3",
+      "fields": [
+        {
+          "id": "doc-008-p01-f01",
+          "label": "Steuernummer",
+          "value": "TEST-19/482/73016",
+          "text": "Steuernummer: TEST-19/482/73016"
+        },
+        {
+          "id": "doc-008-p01-f02",
+          "label": "Bescheiddatum",
+          "value": "21.09.2026",
+          "text": "Bescheiddatum: 21.09.2026"
+        },
+        {
+          "id": "doc-008-p01-f03",
+          "label": "Veranlagungsjahr",
+          "value": "2025",
+          "text": "Veranlagungsjahr: 2025"
+        },
+        {
+          "id": "doc-008-p01-f04",
+          "label": "Steuerpflichtiger",
+          "value": "André Jäger",
+          "text": "Steuerpflichtiger: André Jäger"
+        },
+        {
+          "id": "doc-008-p01-f05",
+          "label": "Erstattungsbetrag",
+          "value": "1.284,37 €",
+          "text": "Erstattungsbetrag: 1.284,37 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-008-p01-table",
+          "rows": 4,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Steuerart",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.28729337454643195,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Festgesetzt",
+              "bbox": [
+                0.36456793441741703,
+                0.3493330482604615,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Angerechnet",
+              "bbox": [
+                0.5504636473592259,
+                0.3493330482604615,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Saldo",
+              "bbox": [
+                0.7363593603010349,
+                0.3493330482604615,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Einkommensteuer",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.28729337454643195,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "7.412,00 €",
+              "bbox": [
+                0.36456793441741703,
+                0.3766525318034422,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "8.696,37 €",
+              "bbox": [
+                0.5504636473592259,
+                0.3766525318034422,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "-1.284,37 €",
+              "bbox": [
+                0.7363593603010349,
+                0.3766525318034422,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Solidaritätszuschlag",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.28729337454643195,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "0,00 €",
+              "bbox": [
+                0.36456793441741703,
+                0.4039720153464229,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "0,00 €",
+              "bbox": [
+                0.5504636473592259,
+                0.4039720153464229,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "0,00 €",
+              "bbox": [
+                0.7363593603010349,
+                0.4039720153464229,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Kirchensteuer",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.28729337454643195,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "0,00 €",
+              "bbox": [
+                0.36456793441741703,
+                0.43129149888940355,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "0,00 €",
+              "bbox": [
+                0.5504636473592259,
+                0.43129149888940355,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "0,00 €",
+              "bbox": [
+                0.7363593603010349,
+                0.43129149888940355,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.1092779341719227
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-008-p02",
+      "documentID": "doc-008",
+      "physicalPage": 2,
+      "kind": "Steuerbescheid",
+      "image": "pages/doc-008-p02.png",
+      "sha256": "38c942ea13693da2744787c48e56274f40daa2c66c33f31f9a437c379e4bc714",
+      "pixelSHA256": "057c50e5885b510d079fb79783d44ab9afb3683202590dbe10858ebb48672804",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Finanzamt Musterstadt - Teststelle\nBerechnungsgrundlagen\nBruttoarbeitslohn: 52.840,00 €\nWerbungskosten: 2.146,00 €\nSonderausgaben: 5.372,00 €\nZu versteuerndes Einkommen: 45.322,00 €\nDie Übersicht ordnet die erklärten Beträge den verwendeten Berechnungsschritten zu. Die Zahlen sind didaktische Testwerte. Es wird keine Auskunft über einen tatsächlichen Steuerfall erteilt. Die Darstellung darf nicht als allgemeine steuerliche Berechnungsregel verwendet werden.\nAufwandsart\nErklärt\nBerücksichtigt\nFahrtkosten\n1.486,00 €\n1.486,00 €\nFortbildung\n420,00 €\n420,00 €\nArbeitsmittel\n240,00 €\n240,00 €\nSpenden\n180,00 €\n180,00 €\nBelege zu Fahrtkosten und Fortbildung wurden der Erklärung zugeordnet. Aufwendungen ohne ausreichenden Bezug wurden nicht zusätzlich berücksichtigt. Eine doppelte Zuordnung desselben Belegs ist in dieser Zusammenstellung nicht vorgesehen.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 3",
+      "fields": [
+        {
+          "id": "doc-008-p02-f01",
+          "label": "Bruttoarbeitslohn",
+          "value": "52.840,00 €",
+          "text": "Bruttoarbeitslohn: 52.840,00 €"
+        },
+        {
+          "id": "doc-008-p02-f02",
+          "label": "Werbungskosten",
+          "value": "2.146,00 €",
+          "text": "Werbungskosten: 2.146,00 €"
+        },
+        {
+          "id": "doc-008-p02-f03",
+          "label": "Sonderausgaben",
+          "value": "5.372,00 €",
+          "text": "Sonderausgaben: 5.372,00 €"
+        },
+        {
+          "id": "doc-008-p02-f04",
+          "label": "Zu versteuerndes Einkommen",
+          "value": "45.322,00 €",
+          "text": "Zu versteuerndes Einkommen: 45.322,00 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-008-p02-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Aufwandsart",
+              "bbox": [
+                0.07727455987098508,
+                0.3264975234294267,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Erklärt",
+              "bbox": [
+                0.4659655960220401,
+                0.3264975234294267,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Berücksichtigt",
+              "bbox": [
+                0.6941103346324419,
+                0.3264975234294267,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Fahrtkosten",
+              "bbox": [
+                0.07727455987098508,
+                0.3538170069724073,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "1.486,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.3538170069724073,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "1.486,00 €",
+              "bbox": [
+                0.6941103346324419,
+                0.3538170069724073,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Fortbildung",
+              "bbox": [
+                0.07727455987098508,
+                0.381136490515388,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "420,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.381136490515388,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "420,00 €",
+              "bbox": [
+                0.6941103346324419,
+                0.381136490515388,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Arbeitsmittel",
+              "bbox": [
+                0.07727455987098508,
+                0.4084559740583687,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "240,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.4084559740583687,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "240,00 €",
+              "bbox": [
+                0.6941103346324419,
+                0.4084559740583687,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Spenden",
+              "bbox": [
+                0.07727455987098508,
+                0.43577545760134934,
+                0.38869103615105505,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "180,00 €",
+              "bbox": [
+                0.4659655960220401,
+                0.43577545760134934,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "180,00 €",
+              "bbox": [
+                0.6941103346324419,
+                0.43577545760134934,
+                0.22814473861040185,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3264975234294267,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-008-p03",
+      "documentID": "doc-008",
+      "physicalPage": 3,
+      "kind": "Steuerbescheid",
+      "image": "pages/doc-008-p03.png",
+      "sha256": "86d0c64c0c6f6f95b14cba135a710b36a898b9f2dc53b337bdc0c1aac6d7bb5c",
+      "pixelSHA256": "160c9068aedb65b18d54f4fd774234030f687a36aec269ebf7c6b7e03f895cdc",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Finanzamt Musterstadt - Teststelle\nErläuterungen und Verfahrenshinweis\nAktenzeichen: E-2025-781460\nBekanntgabehinweis: Versand am 22.09.2026\nZahlungsverrechnung: abgeschlossen\nAnlagen: 2 Berechnungsseiten\nDie Erläuterungen beziehen sich auf die für diesen Testfall getroffenen Annahmen. Eine Änderung künftiger Vorauszahlungen ist in diesem Bescheid nicht enthalten. Die auf Seite eins dargestellte Erstattung bleibt das abschließende Zahlungsergebnis.\nFür Rückfragen ist das Aktenzeichen maßgeblich. Im Schriftverkehr sollen die betroffene Position und das Veranlagungsjahr genannt werden. Dieser künstliche Verfahrenshinweis enthält bewusst keine rechtsverbindliche Fristberechnung.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 3 von 3",
+      "fields": [
+        {
+          "id": "doc-008-p03-f01",
+          "label": "Aktenzeichen",
+          "value": "E-2025-781460",
+          "text": "Aktenzeichen: E-2025-781460"
+        },
+        {
+          "id": "doc-008-p03-f02",
+          "label": "Bekanntgabehinweis",
+          "value": "Versand am 22.09.2026",
+          "text": "Bekanntgabehinweis: Versand am 22.09.2026"
+        },
+        {
+          "id": "doc-008-p03-f03",
+          "label": "Zahlungsverrechnung",
+          "value": "abgeschlossen",
+          "text": "Zahlungsverrechnung: abgeschlossen"
+        },
+        {
+          "id": "doc-008-p03-f04",
+          "label": "Anlagen",
+          "value": "2 Berechnungsseiten",
+          "text": "Anlagen: 2 Berechnungsseiten"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-009-p01",
+      "documentID": "doc-009",
+      "physicalPage": 1,
+      "kind": "Arztbefund",
+      "image": "pages/doc-009-p01.png",
+      "sha256": "26afb5bf58595458b107aa94778382842d8bfe14912aa526eff3898a538ea5ca",
+      "pixelSHA256": "591f3f09eea1dd19745e6720a4bc2ab78d92b723e2b5b8abf8585788f71b3b8c",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Praxisgemeinschaft Dr. Prüf & Kolleginnen\nBefundbericht zur Verlaufskontrolle\nBefundnummer: BF-2026-38172\nPatientin: Märta Schröder\nGeburtsdatum: 14.02.1984\nUntersuchungsdatum: 03.11.2026\nBerichtsdatum: 05.11.2026\nDie Patientin stellte sich zur vereinbarten Verlaufskontrolle vor. Im Gespräch wurden Beschwerden bei längerer Belastung angegeben. Der Bericht enthält künstliche Angaben für einen Dokumententest. Er stellt weder eine Diagnose noch eine medizinische Handlungsempfehlung für eine tatsächliche Person dar.\nUntersuchung\nErgebnis\nEinheit\nBlutdruck systolisch\n128\nmmHg\nBlutdruck diastolisch\n82\nmmHg\nPuls in Ruhe\n71\npro Minute\nKörpertemperatur\n36,7\n°C\nDie Untersuchung und die Laborentnahme fanden am selben Tag statt. Die Befundfreigabe erfolgte nach Vorliegen aller Messwerte. Die auf der Folgeseite aufgeführten Referenzbereiche dienen ausschließlich der Darstellung einer typischen Tabelle.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-009-p01-f01",
+          "label": "Befundnummer",
+          "value": "BF-2026-38172",
+          "text": "Befundnummer: BF-2026-38172"
+        },
+        {
+          "id": "doc-009-p01-f02",
+          "label": "Patientin",
+          "value": "Märta Schröder",
+          "text": "Patientin: Märta Schröder"
+        },
+        {
+          "id": "doc-009-p01-f03",
+          "label": "Geburtsdatum",
+          "value": "14.02.1984",
+          "text": "Geburtsdatum: 14.02.1984"
+        },
+        {
+          "id": "doc-009-p01-f04",
+          "label": "Untersuchungsdatum",
+          "value": "03.11.2026",
+          "text": "Untersuchungsdatum: 03.11.2026"
+        },
+        {
+          "id": "doc-009-p01-f05",
+          "label": "Berichtsdatum",
+          "value": "05.11.2026",
+          "text": "Berichtsdatum: 05.11.2026"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-009-p01-table",
+          "rows": 5,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Untersuchung",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.47318908748824084,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Ergebnis",
+              "bbox": [
+                0.5504636473592259,
+                0.3493330482604615,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Einheit",
+              "bbox": [
+                0.7194597500335977,
+                0.3493330482604615,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Blutdruck systolisch",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.47318908748824084,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "128",
+              "bbox": [
+                0.5504636473592259,
+                0.3766525318034422,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "mmHg",
+              "bbox": [
+                0.7194597500335977,
+                0.3766525318034422,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Blutdruck diastolisch",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.47318908748824084,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "82",
+              "bbox": [
+                0.5504636473592259,
+                0.4039720153464229,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "mmHg",
+              "bbox": [
+                0.7194597500335977,
+                0.4039720153464229,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Puls in Ruhe",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.47318908748824084,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "71",
+              "bbox": [
+                0.5504636473592259,
+                0.43129149888940355,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "pro Minute",
+              "bbox": [
+                0.7194597500335977,
+                0.43129149888940355,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Körpertemperatur",
+              "bbox": [
+                0.07727455987098508,
+                0.45861098243238424,
+                0.47318908748824084,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "36,7",
+              "bbox": [
+                0.5504636473592259,
+                0.45861098243238424,
+                0.16899610267437173,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "°C",
+              "bbox": [
+                0.7194597500335977,
+                0.45861098243238424,
+                0.20279532320924606,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.13659741771490339
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-009-p02",
+      "documentID": "doc-009",
+      "physicalPage": 2,
+      "kind": "Arztbefund",
+      "image": "pages/doc-009-p02.png",
+      "sha256": "bdb516c0bc68a1ef084b11a2156da1485e91ba732d0aea1b54bf9863ad70df43",
+      "pixelSHA256": "ebf623620313e0c4abbcc69889d92f4a6551b4348033262d3415fafbf6d18729",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Praxisgemeinschaft Dr. Prüf & Kolleginnen\nLaborwerte und Befundfreigabe\nLaborauftrag: LAB-672905\nProbenentnahme: 03.11.2026 um 08:42 Uhr\nFreigabe durch: Dr. Hannah Weiß\nKontrolltermin: 17.11.2026 um 09:15 Uhr\nDie Probe wurde vor dem Versand eindeutig dem Laborauftrag zugeordnet. Es handelt sich um einen künstlichen Laborbefund ohne Aussage zu einem wirklichen Gesundheitszustand. Ein markierter Wert darf nicht isoliert als vollständige medizinische Beurteilung verstanden werden.\nParameter\nMesswert\nEinheit\nReferenzbereich\nHämoglobin\n13,8\ng/dl\n12,0 bis 16,0\nLeukozyten\n6,42\n10³/µl\n4,00 bis 10,00\nGlukose nüchtern\n94\nmg/dl\n70 bis 99\nKreatinin\n0,81\nmg/dl\n0,50 bis 1,10\nCRP\n2,4\nmg/l\nunter 5,0\nDer Folgetermin dient im Testdokument der Besprechung der Ergebnisse. Der Termin ist kein Ausstellungsdatum und kein Geburtsdatum. Diese Rollen sollen bei einer späteren strukturierten Extraktion getrennt erhalten bleiben.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-009-p02-f01",
+          "label": "Laborauftrag",
+          "value": "LAB-672905",
+          "text": "Laborauftrag: LAB-672905"
+        },
+        {
+          "id": "doc-009-p02-f02",
+          "label": "Probenentnahme",
+          "value": "03.11.2026 um 08:42 Uhr",
+          "text": "Probenentnahme: 03.11.2026 um 08:42 Uhr"
+        },
+        {
+          "id": "doc-009-p02-f03",
+          "label": "Freigabe durch",
+          "value": "Dr. Hannah Weiß",
+          "text": "Freigabe durch: Dr. Hannah Weiß"
+        },
+        {
+          "id": "doc-009-p02-f04",
+          "label": "Kontrolltermin",
+          "value": "17.11.2026 um 09:15 Uhr",
+          "text": "Kontrolltermin: 17.11.2026 um 09:15 Uhr"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-009-p02-table",
+          "rows": 6,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Parameter",
+              "bbox": [
+                0.07727455987098508,
+                0.3264975234294267,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Messwert",
+              "bbox": [
+                0.38146754468485417,
+                0.3264975234294267,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Einheit",
+              "bbox": [
+                0.5335640370917888,
+                0.3264975234294267,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Referenzbereich",
+              "bbox": [
+                0.6856605294987232,
+                0.3264975234294267,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Hämoglobin",
+              "bbox": [
+                0.07727455987098508,
+                0.3538170069724073,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "13,8",
+              "bbox": [
+                0.38146754468485417,
+                0.3538170069724073,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "g/dl",
+              "bbox": [
+                0.5335640370917888,
+                0.3538170069724073,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "12,0 bis 16,0",
+              "bbox": [
+                0.6856605294987232,
+                0.3538170069724073,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Leukozyten",
+              "bbox": [
+                0.07727455987098508,
+                0.381136490515388,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "6,42",
+              "bbox": [
+                0.38146754468485417,
+                0.381136490515388,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "10³/µl",
+              "bbox": [
+                0.5335640370917888,
+                0.381136490515388,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "4,00 bis 10,00",
+              "bbox": [
+                0.6856605294987232,
+                0.381136490515388,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Glukose nüchtern",
+              "bbox": [
+                0.07727455987098508,
+                0.4084559740583687,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "94",
+              "bbox": [
+                0.38146754468485417,
+                0.4084559740583687,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "mg/dl",
+              "bbox": [
+                0.5335640370917888,
+                0.4084559740583687,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "70 bis 99",
+              "bbox": [
+                0.6856605294987232,
+                0.4084559740583687,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Kreatinin",
+              "bbox": [
+                0.07727455987098508,
+                0.43577545760134934,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "0,81",
+              "bbox": [
+                0.38146754468485417,
+                0.43577545760134934,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "mg/dl",
+              "bbox": [
+                0.5335640370917888,
+                0.43577545760134934,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 3,
+              "text": "0,50 bis 1,10",
+              "bbox": [
+                0.6856605294987232,
+                0.43577545760134934,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "CRP",
+              "bbox": [
+                0.07727455987098508,
+                0.46309494114433003,
+                0.3041929848138691,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "2,4",
+              "bbox": [
+                0.38146754468485417,
+                0.46309494114433003,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "mg/l",
+              "bbox": [
+                0.5335640370917888,
+                0.46309494114433003,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 3,
+              "text": "unter 5,0",
+              "bbox": [
+                0.6856605294987232,
+                0.46309494114433003,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3264975234294267,
+            0.8449805133718586,
+            0.16391690125788405
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-010-p01",
+      "documentID": "doc-010",
+      "physicalPage": 1,
+      "kind": "Schulzeugnis",
+      "image": "pages/doc-010-p01.png",
+      "sha256": "8c1c615f5c0bb7c97d343a8b6724ea5c461a9745b267349192c7039a154840a0",
+      "pixelSHA256": "9caced007ec4afd1a700273068086e87c44d6b21a0744c0dd8f512e6e78b87eb",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Gesamtschule Am Mühlenberg - Testschule\nHalbjahreszeugnis 2026/2027\nSchülerin: Léonie Küster\nKlasse: 8b\nSchulhalbjahr: 1. Halbjahr 2026/2027\nZeugnisdatum: 29.01.2027\nVersäumte Stunden: 12 Stunden, davon 0 unentschuldigt\nLéonie beteiligt sich regelmäßig am Unterricht und bearbeitet Aufgaben überwiegend sorgfältig. In Gruppenarbeiten übernimmt sie vereinbarte Aufgaben zuverlässig. Der folgende Leistungsstand ist vollständig erfunden und dient ausschließlich der Prüfung deutscher Dokumentverarbeitung.\nFach\nBewertung\nBemerkung\nDeutsch\ngut\nmündlich sehr aktiv\nMathematik\nbefriedigend\nsicher im Grundwissen\nEnglisch\ngut\nflüssiges Lesen\nFranzösisch\nausreichend\nÜbung empfohlen\nNaturwissenschaften\ngut\nsorgfältige Versuche\nSport\nsehr gut\nausdauernde Mitarbeit\nDie Bezeichnungen der Fächer, ihre Bewertungen und ergänzende Bemerkungen bilden getrennte Tabellenzellen. Die Reihenfolge der Noten muss dem jeweiligen Fach erhalten bleiben. Eine bloße Sammlung aller Zahlen reicht für eine Zeugnisinterpretation nicht aus.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-010-p01-f01",
+          "label": "Schülerin",
+          "value": "Léonie Küster",
+          "text": "Schülerin: Léonie Küster"
+        },
+        {
+          "id": "doc-010-p01-f02",
+          "label": "Klasse",
+          "value": "8b",
+          "text": "Klasse: 8b"
+        },
+        {
+          "id": "doc-010-p01-f03",
+          "label": "Schulhalbjahr",
+          "value": "1. Halbjahr 2026/2027",
+          "text": "Schulhalbjahr: 1. Halbjahr 2026/2027"
+        },
+        {
+          "id": "doc-010-p01-f04",
+          "label": "Zeugnisdatum",
+          "value": "29.01.2027",
+          "text": "Zeugnisdatum: 29.01.2027"
+        },
+        {
+          "id": "doc-010-p01-f05",
+          "label": "Versäumte Stunden",
+          "value": "12 Stunden, davon 0 unentschuldigt",
+          "text": "Versäumte Stunden: 12 Stunden, davon 0 unentschuldigt"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-010-p01-table",
+          "rows": 7,
+          "cols": 3,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Fach",
+              "bbox": [
+                0.07727455987098508,
+                0.334740880637613,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Bewertung",
+              "bbox": [
+                0.3983671549522914,
+                0.334740880637613,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Bemerkung",
+              "bbox": [
+                0.6096122832952561,
+                0.334740880637613,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Deutsch",
+              "bbox": [
+                0.07727455987098508,
+                0.3620603641805937,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "gut",
+              "bbox": [
+                0.3983671549522914,
+                0.3620603641805937,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "mündlich sehr aktiv",
+              "bbox": [
+                0.6096122832952561,
+                0.3620603641805937,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Mathematik",
+              "bbox": [
+                0.07727455987098508,
+                0.38937984772357437,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "befriedigend",
+              "bbox": [
+                0.3983671549522914,
+                0.38937984772357437,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "sicher im Grundwissen",
+              "bbox": [
+                0.6096122832952561,
+                0.38937984772357437,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Englisch",
+              "bbox": [
+                0.07727455987098508,
+                0.416699331266555,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "gut",
+              "bbox": [
+                0.3983671549522914,
+                0.416699331266555,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "flüssiges Lesen",
+              "bbox": [
+                0.6096122832952561,
+                0.416699331266555,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 0,
+              "text": "Französisch",
+              "bbox": [
+                0.07727455987098508,
+                0.4440188148095357,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 1,
+              "text": "ausreichend",
+              "bbox": [
+                0.3983671549522914,
+                0.4440188148095357,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 4,
+              "col": 2,
+              "text": "Übung empfohlen",
+              "bbox": [
+                0.6096122832952561,
+                0.4440188148095357,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 0,
+              "text": "Naturwissenschaften",
+              "bbox": [
+                0.07727455987098508,
+                0.4713382983525164,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 1,
+              "text": "gut",
+              "bbox": [
+                0.3983671549522914,
+                0.4713382983525164,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 5,
+              "col": 2,
+              "text": "sorgfältige Versuche",
+              "bbox": [
+                0.6096122832952561,
+                0.4713382983525164,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 0,
+              "text": "Sport",
+              "bbox": [
+                0.07727455987098508,
+                0.49865778189549703,
+                0.32109259508130633,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 1,
+              "text": "sehr gut",
+              "bbox": [
+                0.3983671549522914,
+                0.49865778189549703,
+                0.21124512834296466,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 6,
+              "col": 2,
+              "text": "ausdauernde Mitarbeit",
+              "bbox": [
+                0.6096122832952561,
+                0.49865778189549703,
+                0.3126427899475877,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.334740880637613,
+            0.8449805133718586,
+            0.19123638480086472
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-010-p02",
+      "documentID": "doc-010",
+      "physicalPage": 2,
+      "kind": "Schulzeugnis",
+      "image": "pages/doc-010-p02.png",
+      "sha256": "310069c2ea26cbda50366744780b185bf93fbaaf9e3ee65486d5b6b4c91e97ef",
+      "pixelSHA256": "8f218e5d21488033ec0739248da3ed47b86548b085ffebbb3113551d48a094a2",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": 0.8
+      },
+      "text": "Gesamtschule Am Mühlenberg - Testschule\nLernentwicklung und ergänzende Angaben\nZeugniskennung: ZG-27-00842\nKlassenleitung: Frau Anne Krüger\nBeratungstermin: 10.02.2027 um 16:30 Uhr\nFörderschwerpunkt: schriftliche Ausdrucksfähigkeit\nFür das kommende Halbjahr wurden kurze wöchentliche Schreibübungen vereinbart. Dabei sollen Satzbau, Begründung und die Überarbeitung eigener Texte geübt werden. Die Aufgaben werden gemeinsam mit der Klassenleitung ausgewählt und in angemessenen Abständen besprochen.\nDie vereinbarte Förderung ist keine zusätzliche Fachnote. Die Bestätigung des Erhalts durch die Erziehungsberechtigten dokumentiert ausschließlich die Übergabe des Zeugnisses. Der Beratungstermin bleibt eine gesonderte Terminangabe.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-010-p02-f01",
+          "label": "Zeugniskennung",
+          "value": "ZG-27-00842",
+          "text": "Zeugniskennung: ZG-27-00842"
+        },
+        {
+          "id": "doc-010-p02-f02",
+          "label": "Klassenleitung",
+          "value": "Frau Anne Krüger",
+          "text": "Klassenleitung: Frau Anne Krüger"
+        },
+        {
+          "id": "doc-010-p02-f03",
+          "label": "Beratungstermin",
+          "value": "10.02.2027 um 16:30 Uhr",
+          "text": "Beratungstermin: 10.02.2027 um 16:30 Uhr"
+        },
+        {
+          "id": "doc-010-p02-f04",
+          "label": "Förderschwerpunkt",
+          "value": "schriftliche Ausdrucksfähigkeit",
+          "text": "Förderschwerpunkt: schriftliche Ausdrucksfähigkeit"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "doc-011-p01",
+      "documentID": "doc-011",
+      "physicalPage": 1,
+      "kind": "Telekommunikationsrechnung",
+      "image": "pages/doc-011-p01.png",
+      "sha256": "37f868346547b70f7f7c836f5e89b6f3998ade99e5707c10c9cbede79da3738f",
+      "pixelSHA256": "5016bf36cb8d2d6046dc9cca125697e3ff0b9324e050c5ff7e03b8a9049f55eb",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "skew",
+        "rotationDegrees": 0.8
+      },
+      "text": "Funknetz Musterkommunikation GmbH\nMobilfunkrechnung Oktober 2026\nRechnungsnummer: MF-2026-570219\nKundennummer: KD-841670\nVertragsinhaber: Günter Fröhlich\nLeistungszeitraum: 01.10.2026 bis 31.10.2026\nRechnungsbetrag: 42,73 €\nDer Rechnungsbetrag umfasst den monatlichen Tarif sowie die ausgewiesenen zusätzlichen Verbindungen. Verbindungen innerhalb der enthaltenen Freimenge werden nicht erneut berechnet. Die Testnummern dieses Belegs sind nicht für eine Kontaktaufnahme vorgesehen.\nPosition\nZeitraum oder Menge\nNetto\nBrutto\nTarif Alles Muster\nOktober 2026\n29,40 €\n34,99 €\nAuslandsverbindungen\n18 Minuten\n4,61 €\n5,49 €\nServiceverbindung\n1 Verbindung\n1,89 €\n2,25 €\nDie Einziehung erfolgt am angegebenen Zahlungstag. Der Einzelverbindungsnachweis enthält nur abrechnungsrelevante Testeinträge. Die Dauer eines Gesprächs darf nicht mit einem Geldbetrag verwechselt werden.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-011-p01-f01",
+          "label": "Rechnungsnummer",
+          "value": "MF-2026-570219",
+          "text": "Rechnungsnummer: MF-2026-570219"
+        },
+        {
+          "id": "doc-011-p01-f02",
+          "label": "Kundennummer",
+          "value": "KD-841670",
+          "text": "Kundennummer: KD-841670"
+        },
+        {
+          "id": "doc-011-p01-f03",
+          "label": "Vertragsinhaber",
+          "value": "Günter Fröhlich",
+          "text": "Vertragsinhaber: Günter Fröhlich"
+        },
+        {
+          "id": "doc-011-p01-f04",
+          "label": "Leistungszeitraum",
+          "value": "01.10.2026 bis 31.10.2026",
+          "text": "Leistungszeitraum: 01.10.2026 bis 31.10.2026"
+        },
+        {
+          "id": "doc-011-p01-f05",
+          "label": "Rechnungsbetrag",
+          "value": "42,73 €",
+          "text": "Rechnungsbetrag: 42,73 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-011-p01-table",
+          "rows": 4,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Position",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Zeitraum oder Menge",
+              "bbox": [
+                0.4152667652197286,
+                0.3493330482604615,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Netto",
+              "bbox": [
+                0.651861308963849,
+                0.3493330482604615,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Brutto",
+              "bbox": [
+                0.7870581911033464,
+                0.3493330482604615,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Tarif Alles Muster",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "Oktober 2026",
+              "bbox": [
+                0.4152667652197286,
+                0.3766525318034422,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "29,40 €",
+              "bbox": [
+                0.651861308963849,
+                0.3766525318034422,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "34,99 €",
+              "bbox": [
+                0.7870581911033464,
+                0.3766525318034422,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Auslandsverbindungen",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "18 Minuten",
+              "bbox": [
+                0.4152667652197286,
+                0.4039720153464229,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "4,61 €",
+              "bbox": [
+                0.651861308963849,
+                0.4039720153464229,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "5,49 €",
+              "bbox": [
+                0.7870581911033464,
+                0.4039720153464229,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Serviceverbindung",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.33799220534874347,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "1 Verbindung",
+              "bbox": [
+                0.4152667652197286,
+                0.43129149888940355,
+                0.23659454374412042,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "1,89 €",
+              "bbox": [
+                0.651861308963849,
+                0.43129149888940355,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "2,25 €",
+              "bbox": [
+                0.7870581911033464,
+                0.43129149888940355,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.1092779341719227
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-011-p02",
+      "documentID": "doc-011",
+      "physicalPage": 2,
+      "kind": "Telekommunikationsrechnung",
+      "image": "pages/doc-011-p02.png",
+      "sha256": "dc3cf9473b58f98756bc432de9d311ad580447d429c473d075a01645e8e963b4",
+      "pixelSHA256": "5e943f6b79af45f1eaf10ec221c394d55476d637dfd49d2c917a43d855381a75",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Funknetz Musterkommunikation GmbH\nEinzelverbindungsnachweis\nAnschlusskennung: TEST-MOBIL-2617\nZahlungstag: 12.11.2026\nNachweisnummer: EVN-570219-02\nAbrechnungswährung: EUR\nDer Nachweis zeigt beispielhafte Zeitangaben und Gebühren. Für diesen synthetischen Test werden keine tatsächlich anwählbaren Zielrufnummern verwendet. Die Daten dürfen deshalb nicht als Telefonprotokoll einer wirklichen Person interpretiert werden.\nDatum\nUhrzeit\nZielkennung\nDauer\nBetrag\n09.10.2026\n14:08\nTEST-ZIEL-A\n06:32 min\n1,83 €\n17.10.2026\n09:41\nTEST-ZIEL-B\n11:28 min\n3,66 €\n25.10.2026\n18:53\nTEST-SERVICE-C\n02:14 min\n2,25 €\nBitte beachten Sie die Zuordnung zwischen Datum, Uhrzeit, Dauer und Betrag. Ein Vergleich der OCR-Lösungen muss auch diese Tabellenstruktur prüfen. Die Gesamtrechnung steht auf der vorherigen physischen Seite.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-011-p02-f01",
+          "label": "Anschlusskennung",
+          "value": "TEST-MOBIL-2617",
+          "text": "Anschlusskennung: TEST-MOBIL-2617"
+        },
+        {
+          "id": "doc-011-p02-f02",
+          "label": "Zahlungstag",
+          "value": "12.11.2026",
+          "text": "Zahlungstag: 12.11.2026"
+        },
+        {
+          "id": "doc-011-p02-f03",
+          "label": "Nachweisnummer",
+          "value": "EVN-570219-02",
+          "text": "Nachweisnummer: EVN-570219-02"
+        },
+        {
+          "id": "doc-011-p02-f04",
+          "label": "Abrechnungswährung",
+          "value": "EUR",
+          "text": "Abrechnungswährung: EUR"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-011-p02-table",
+          "rows": 4,
+          "cols": 5,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Datum",
+              "bbox": [
+                0.07727455987098508,
+                0.3264975234294267,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Uhrzeit",
+              "bbox": [
+                0.23782085741163822,
+                0.3264975234294267,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Zielkennung",
+              "bbox": [
+                0.37301773955113565,
+                0.3264975234294267,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Dauer",
+              "bbox": [
+                0.6265118935626933,
+                0.3264975234294267,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 4,
+              "text": "Betrag",
+              "bbox": [
+                0.7786083859696278,
+                0.3264975234294267,
+                0.14364668727321597,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "09.10.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.3538170069724073,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "14:08",
+              "bbox": [
+                0.23782085741163822,
+                0.3538170069724073,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "TEST-ZIEL-A",
+              "bbox": [
+                0.37301773955113565,
+                0.3538170069724073,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "06:32 min",
+              "bbox": [
+                0.6265118935626933,
+                0.3538170069724073,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 4,
+              "text": "1,83 €",
+              "bbox": [
+                0.7786083859696278,
+                0.3538170069724073,
+                0.14364668727321597,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "17.10.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.381136490515388,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "09:41",
+              "bbox": [
+                0.23782085741163822,
+                0.381136490515388,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "TEST-ZIEL-B",
+              "bbox": [
+                0.37301773955113565,
+                0.381136490515388,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "11:28 min",
+              "bbox": [
+                0.6265118935626933,
+                0.381136490515388,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 4,
+              "text": "3,66 €",
+              "bbox": [
+                0.7786083859696278,
+                0.381136490515388,
+                0.14364668727321597,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "25.10.2026",
+              "bbox": [
+                0.07727455987098508,
+                0.4084559740583687,
+                0.16054629754065317,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "18:53",
+              "bbox": [
+                0.23782085741163822,
+                0.4084559740583687,
+                0.1351968821394974,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "TEST-SERVICE-C",
+              "bbox": [
+                0.37301773955113565,
+                0.4084559740583687,
+                0.2534941540115576,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "02:14 min",
+              "bbox": [
+                0.6265118935626933,
+                0.4084559740583687,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 4,
+              "text": "2,25 €",
+              "bbox": [
+                0.7786083859696278,
+                0.4084559740583687,
+                0.14364668727321597,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3264975234294267,
+            0.8449805133718586,
+            0.1092779341719227
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-012-p01",
+      "documentID": "doc-012",
+      "physicalPage": 1,
+      "kind": "Gebührenbescheid",
+      "image": "pages/doc-012-p01.png",
+      "sha256": "0e61c7504bd931df69407b78b4e64ac6bbeebfeb764aed538188d18208c91fdb",
+      "pixelSHA256": "0abc8f1457feb1ac73e99b6ae07dd26eacdd0e12b8bdf878e4d5bbab42ad9c71",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "faded",
+        "rotationDegrees": 0
+      },
+      "text": "Stadt Prüfhausen - Bürgerdienste\nGebührenbescheid zur Anmeldung\nAktenzeichen: BD-2026-083719\nAdressatin: Dörte Bär\nAntragsdatum: 28.10.2026\nBescheiddatum: 04.11.2026\nGesamtgebühr: 37,50 €\nFür den bezeichneten künstlichen Verwaltungsvorgang werden die aufgeführten Gebühren erhoben. Die Einzelpositionen sind in der Tabelle getrennt dargestellt. Dieser Testbescheid ist ungültig und enthält keine Zahlungsaufforderung an eine tatsächliche Person.\nLeistung\nAnzahl\nGebühr je Einheit\nSumme\nBearbeitung der Testanmeldung\n1\n24,00 €\n24,00 €\nBeglaubigte Testabschrift\n2\n5,50 €\n11,00 €\nPortopauschale\n1\n2,50 €\n2,50 €\nDie Zahlung soll dem Aktenzeichen zugeordnet werden. Ein anderer Verwendungszweck kann eine manuelle Klärung erforderlich machen. Der Bescheid und seine Anlage gehören zu demselben Vorgang, stellen aber zwei physische Seiten dar.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 1 von 2",
+      "fields": [
+        {
+          "id": "doc-012-p01-f01",
+          "label": "Aktenzeichen",
+          "value": "BD-2026-083719",
+          "text": "Aktenzeichen: BD-2026-083719"
+        },
+        {
+          "id": "doc-012-p01-f02",
+          "label": "Adressatin",
+          "value": "Dörte Bär",
+          "text": "Adressatin: Dörte Bär"
+        },
+        {
+          "id": "doc-012-p01-f03",
+          "label": "Antragsdatum",
+          "value": "28.10.2026",
+          "text": "Antragsdatum: 28.10.2026"
+        },
+        {
+          "id": "doc-012-p01-f04",
+          "label": "Bescheiddatum",
+          "value": "04.11.2026",
+          "text": "Bescheiddatum: 04.11.2026"
+        },
+        {
+          "id": "doc-012-p01-f05",
+          "label": "Gesamtgebühr",
+          "value": "37,50 €",
+          "text": "Gesamtgebühr: 37,50 €"
+        }
+      ],
+      "tables": [
+        {
+          "id": "doc-012-p01-table",
+          "rows": 4,
+          "cols": 4,
+          "cells": [
+            {
+              "row": 0,
+              "col": 0,
+              "text": "Leistung",
+              "bbox": [
+                0.07727455987098508,
+                0.3493330482604615,
+                0.41404045155221075,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 1,
+              "text": "Anzahl",
+              "bbox": [
+                0.4913150114231959,
+                0.3493330482604615,
+                0.09294785647090445,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 2,
+              "text": "Gebühr je Einheit",
+              "bbox": [
+                0.5842628678941003,
+                0.3493330482604615,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 0,
+              "col": 3,
+              "text": "Summe",
+              "bbox": [
+                0.7701585808359093,
+                0.3493330482604615,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 0,
+              "text": "Bearbeitung der Testanmeldung",
+              "bbox": [
+                0.07727455987098508,
+                0.3766525318034422,
+                0.41404045155221075,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 1,
+              "text": "1",
+              "bbox": [
+                0.4913150114231959,
+                0.3766525318034422,
+                0.09294785647090445,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 2,
+              "text": "24,00 €",
+              "bbox": [
+                0.5842628678941003,
+                0.3766525318034422,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 1,
+              "col": 3,
+              "text": "24,00 €",
+              "bbox": [
+                0.7701585808359093,
+                0.3766525318034422,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 0,
+              "text": "Beglaubigte Testabschrift",
+              "bbox": [
+                0.07727455987098508,
+                0.4039720153464229,
+                0.41404045155221075,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 1,
+              "text": "2",
+              "bbox": [
+                0.4913150114231959,
+                0.4039720153464229,
+                0.09294785647090445,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 2,
+              "text": "5,50 €",
+              "bbox": [
+                0.5842628678941003,
+                0.4039720153464229,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 2,
+              "col": 3,
+              "text": "11,00 €",
+              "bbox": [
+                0.7701585808359093,
+                0.4039720153464229,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 0,
+              "text": "Portopauschale",
+              "bbox": [
+                0.07727455987098508,
+                0.43129149888940355,
+                0.41404045155221075,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 1,
+              "text": "1",
+              "bbox": [
+                0.4913150114231959,
+                0.43129149888940355,
+                0.09294785647090445,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 2,
+              "text": "2,50 €",
+              "bbox": [
+                0.5842628678941003,
+                0.43129149888940355,
+                0.1858957129418089,
+                0.027319483542980676
+              ]
+            },
+            {
+              "row": 3,
+              "col": 3,
+              "text": "2,50 €",
+              "bbox": [
+                0.7701585808359093,
+                0.43129149888940355,
+                0.15209649240693454,
+                0.027319483542980676
+              ]
+            }
+          ],
+          "bbox": [
+            0.07727455987098508,
+            0.3493330482604615,
+            0.8449805133718586,
+            0.1092779341719227
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc-012-p02",
+      "documentID": "doc-012",
+      "physicalPage": 2,
+      "kind": "Gebührenbescheid",
+      "image": "pages/doc-012-p02.png",
+      "sha256": "eae05b34a7f32eadfb29dd1178a48b52e13632ef08a4d4cb3b4d60bf200e53a5",
+      "pixelSHA256": "18a8cc5b052497b5dafeccba2793884473b04ae8c902119f9ec31940032048a7",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": false,
+      "scan": {
+        "quality": "clean",
+        "rotationDegrees": 0
+      },
+      "text": "Stadt Prüfhausen - Bürgerdienste\nAnlage: Zahlungszuordnung und Rückfragen\nKassenzeichen: KZ-91-738204\nZahlbar bis: 25.11.2026\nSachbearbeiterin: Frau Helga Süß\nZimmer: B 2.14\nSprechzeit: Dienstag 09:00 bis 12:00 Uhr\nBitte verwenden Sie für Rückfragen das Aktenzeichen und für die Zahlungszuordnung das Kassenzeichen. Die beiden Kennungen erfüllen unterschiedliche Aufgaben und dürfen nicht gegeneinander ausgetauscht werden. Die Sachbearbeiterin ist keine Empfängerin einer Überweisung.\nEin persönlicher Besuch ist nur während der bezeichneten Sprechzeit oder nach Terminvereinbarung vorgesehen. Das Datum der Fälligkeit betrifft ausschließlich diesen Testvorgang. Diese Anlage enthält keinen rechtsverbindlichen Hinweis zu einem echten Verwaltungsverfahren.\nSynthetischer Testbeleg - keine echten Vorgänge | Seite 2 von 2",
+      "fields": [
+        {
+          "id": "doc-012-p02-f01",
+          "label": "Kassenzeichen",
+          "value": "KZ-91-738204",
+          "text": "Kassenzeichen: KZ-91-738204"
+        },
+        {
+          "id": "doc-012-p02-f02",
+          "label": "Zahlbar bis",
+          "value": "25.11.2026",
+          "text": "Zahlbar bis: 25.11.2026"
+        },
+        {
+          "id": "doc-012-p02-f03",
+          "label": "Sachbearbeiterin",
+          "value": "Frau Helga Süß",
+          "text": "Sachbearbeiterin: Frau Helga Süß"
+        },
+        {
+          "id": "doc-012-p02-f04",
+          "label": "Zimmer",
+          "value": "B 2.14",
+          "text": "Zimmer: B 2.14"
+        },
+        {
+          "id": "doc-012-p02-f05",
+          "label": "Sprechzeit",
+          "value": "Dienstag 09:00 bis 12:00 Uhr",
+          "text": "Sprechzeit: Dienstag 09:00 bis 12:00 Uhr"
+        }
+      ],
+      "tables": []
+    },
+    {
+      "id": "control-01-p01",
+      "documentID": "control-01",
+      "physicalPage": 1,
+      "kind": "Leerbildkontrolle",
+      "image": "pages/control-01-p01.png",
+      "sha256": "9fe9582e0a46afad44dd0c24e33e95afa25a75318dca3bd97d456b1056bc1554",
+      "pixelSHA256": "63b0ce1018659dc9c5b3e3b3922eda44f1677a9fd2a96ee8de94312df0201014",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": true,
+      "scan": {
+        "quality": "blank-noise-0"
+      },
+      "text": "",
+      "fields": [],
+      "tables": []
+    },
+    {
+      "id": "control-02-p01",
+      "documentID": "control-02",
+      "physicalPage": 1,
+      "kind": "Leerbildkontrolle",
+      "image": "pages/control-02-p01.png",
+      "sha256": "cc791481f7169fb7c37437723e7782ed8fbb32fc43d56f9d441d36ad709a305d",
+      "pixelSHA256": "a8127a14e8cb80cae20c7bdf9a4d76c1744ef797846d7c2d1591cae79d8183a4",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": true,
+      "scan": {
+        "quality": "blank-noise-1"
+      },
+      "text": "",
+      "fields": [],
+      "tables": []
+    },
+    {
+      "id": "control-03-p01",
+      "documentID": "control-03",
+      "physicalPage": 1,
+      "kind": "Leerbildkontrolle",
+      "image": "pages/control-03-p01.png",
+      "sha256": "095373efb200108c9dc2f991f0c47e4703f3a55305a4d9dfb9448e3e3c4a99f5",
+      "pixelSHA256": "fe053069bb932e139825647fb7177747a807468821408d03d6e95ca71a4fba6a",
+      "size": [
+        1654,
+        2339
+      ],
+      "blank": true,
+      "scan": {
+        "quality": "blank-noise-2"
+      },
+      "text": "",
+      "fields": [],
+      "tables": []
+    }
+  ],
+  "executionOrder": [
+    "control-03",
+    "doc-003",
+    "doc-002",
+    "doc-012",
+    "control-02",
+    "control-01",
+    "doc-010",
+    "doc-011",
+    "doc-001",
+    "doc-009",
+    "doc-007",
+    "doc-005",
+    "doc-004",
+    "doc-008",
+    "doc-006"
+  ],
+  "generatorSHA256": "22ebe1f4cd28675ae4bd60f53c11b9363f91f919771ff537ed13d97f65e45828",
+  "statistics": {
+    "documents": 15,
+    "documentTypes": 12,
+    "pages": 31,
+    "blankPages": 3,
+    "criticalFields": 133,
+    "distinctCriticalTexts": 133,
+    "tables": 19,
+    "tableCells": 356,
+    "sourceCharacters": 25506
+  }
+}

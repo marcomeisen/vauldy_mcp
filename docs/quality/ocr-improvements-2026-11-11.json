@@ -1,0 +1,1616 @@
+{
+  "date": "2026-11-11",
+  "baseCommit": "17b5812",
+  "completionHEAD": "e40c35f693f5d6faa339113c06f567645b2700df",
+  "syntheticOnly": true,
+  "productionInstallation": false,
+  "modelsDownloaded": false,
+  "providerChanged": false,
+  "nativeTests": {
+    "passed": 108,
+    "suites": 24,
+    "seconds": 58.758,
+    "optionalExternalProviderSkipped": true
+  },
+  "faintGate": {
+    "qualityGate": "GO",
+    "corpusImages": 35,
+    "expectedFields": 79,
+    "before": 52,
+    "after": 53,
+    "fresh": 53,
+    "gainedFields": 1,
+    "lostFields": 0,
+    "unmarkedErrors": 0,
+    "allEvidencePreserved": true,
+    "cases": [
+      {
+        "file": "ambiguous.png",
+        "expected": 2,
+        "before": 1,
+        "native": {
+          "exact": 1,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 1,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "clean.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "date.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "dense.png",
+        "expected": 6,
+        "before": 6,
+        "native": {
+          "exact": 6,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 6,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "faint-words.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-11-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-13-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-88-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-88-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-93-15.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "grid-9-93-25.png",
+        "expected": 2,
+        "before": 0,
+        "native": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 0,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "invoice.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Courier-Oblique-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Courier-Oblique-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Helvetica-Oblique-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Helvetica-Oblique-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Times-Italic-11.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "italic-Times-Italic-14.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-78-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-78-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-85-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-85-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-92-Fahrrad.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "mixed-92-fuer.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "payroll.png",
+        "expected": 2,
+        "before": 2,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-12-left.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-12-right.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-9-left.png",
+        "expected": 3,
+        "before": 3,
+        "native": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 3,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      },
+      {
+        "file": "tilted-9-right.png",
+        "expected": 3,
+        "before": 1,
+        "native": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        },
+        "fresh": {
+          "exact": 2,
+          "lost": 0,
+          "evidencePreserved": true,
+          "unexpectedLines": [],
+          "unmarkedError": false
+        }
+      }
+    ]
+  },
+  "reviewDelta": {
+    "before": 13,
+    "after": 17,
+    "changedTextPages": 1,
+    "cases": [
+      {
+        "file": "clean.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "tilted-9-right.png",
+        "beforeReview": false,
+        "afterReview": true,
+        "textChanged": true
+      },
+      {
+        "file": "payroll.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-9-88-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "date.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Courier-Oblique-14.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-11-93-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "ambiguous.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-85-Fahrrad.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "tilted-12-left.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "tilted-12-right.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-92-fuer.png",
+        "beforeReview": false,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "grid-9-88-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "grid-11-93-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "grid-9-93-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Times-Italic-11.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-85-fuer.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-11-88-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "tilted-9-left.png",
+        "beforeReview": false,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "grid-11-88-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-92-Fahrrad.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-13-88-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Helvetica-Oblique-14.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-13-93-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Times-Italic-14.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "dense.png",
+        "beforeReview": false,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Helvetica-Oblique-11.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "invoice.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-9-93-15.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "grid-13-93-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-78-fuer.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "mixed-78-Fahrrad.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "grid-13-88-25.png",
+        "beforeReview": true,
+        "afterReview": true,
+        "textChanged": false
+      },
+      {
+        "file": "italic-Courier-Oblique-11.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      },
+      {
+        "file": "faint-words.png",
+        "beforeReview": false,
+        "afterReview": false,
+        "textChanged": false
+      }
+    ]
+  },
+  "v2": {
+    "documents": 15,
+    "pages": 31,
+    "expectedFields": 133,
+    "expectedNonemptyCells": 345,
+    "fields": [
+      132,
+      132
+    ],
+    "tableTextCells": [
+      311,
+      311
+    ],
+    "lostFields": 0,
+    "lostCorrectWordOccurrences": 0,
+    "lostCellText": 0,
+    "unchangedTextPages": 31,
+    "reviewPages": [
+      10,
+      10
+    ],
+    "blankFalsePositives": 0,
+    "cases": [
+      {
+        "page": "doc-001-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          23,
+          23
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-001-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-002-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-002-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          13,
+          13
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-002-p03",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-003-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          19,
+          19
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-003-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-004-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-004-p02",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-004-p03",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          13,
+          13
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-005-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          20,
+          20
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-005-p02",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          16,
+          16
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-005-p03",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-006-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-006-p02",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-007-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          18,
+          18
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-007-p02",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-008-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-008-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          14,
+          14
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-008-p03",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-009-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          15,
+          15
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-009-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          21,
+          21
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-010-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          21,
+          21
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-010-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-011-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          16,
+          16
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-011-p02",
+        "fields": [
+          4,
+          4
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          17,
+          17
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-012-p01",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          10,
+          10
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          true,
+          true
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "doc-012-p02",
+        "fields": [
+          5,
+          5
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "control-01-p01",
+        "fields": [
+          0,
+          0
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "control-02-p01",
+        "fields": [
+          0,
+          0
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      },
+      {
+        "page": "control-03-p01",
+        "fields": [
+          0,
+          0
+        ],
+        "lostFields": [],
+        "lostCorrectWordOccurrences": {},
+        "cellText": [
+          0,
+          0
+        ],
+        "lostCellText": {},
+        "textUnchanged": true,
+        "review": [
+          false,
+          false
+        ],
+        "blankFalsePositive": false
+      }
+    ]
+  },
+  "repairWire": {
+    "passed": true,
+    "realBaselineWorker": true,
+    "freshRetries": 2,
+    "correctedWord": true,
+    "priorReadingPersisted": true,
+    "unchangedNumber": true,
+    "originalAndIdentityPreserved": true,
+    "grantsPreserved": true,
+    "localHistoryNotExposed": true,
+    "reviewVisible": true,
+    "revocation": true
+  },
+  "additionalStages": [
+    {
+      "name": "v2-before",
+      "exitCode": 0
+    },
+    {
+      "name": "v2-after",
+      "exitCode": 0
+    },
+    {
+      "name": "v2-compare",
+      "exitCode": 0
+    },
+    {
+      "name": "raster-wire",
+      "exitCode": 0
+    },
+    {
+      "name": "line-wire",
+      "exitCode": 0
+    },
+    {
+      "name": "import-wire",
+      "exitCode": 0
+    },
+    {
+      "name": "original-reference-wire",
+      "exitCode": 0
+    }
+  ],
+  "ui": {
+    "passed": true,
+    "isolatedSetupRoot": true,
+    "installationPerformed": false,
+    "priorReading": "Leistung: Zahnriemerwechsel am Aggregat",
+    "currentReading": "Leistung: Zahnriemenwechsel am Aggregat",
+    "originalCropVisible": true,
+    "priorReadingDisclosureExpanded": true,
+    "reviewReasonVisible": true,
+    "observedUsing": "cua native AX and screenshot"
+  },
+  "broadOCRAcceptance": false,
+  "remainingGaps": [
+    "Extreme faint raster: 0/24",
+    "No independently validated native table grid",
+    "No independent held-out real archive acceptance"
+  ]
+}

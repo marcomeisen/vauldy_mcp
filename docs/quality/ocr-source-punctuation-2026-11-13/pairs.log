@@ -1,0 +1,15 @@
+{"file":"pair-0-1-3.png","readings":[[{"confidence":1,"text":"Policennummer: I0"}]]}
+{"file":"pair-0-1-4.png","readings":[[{"confidence":0.5,"text":"Policennummer: IO"}]]}
+{"file":"pair-0-1-5.png","readings":[[{"confidence":1,"text":"Policennummer: IO"}]]}
+{"file":"pair-0-2-3.png","readings":[[{"confidence":1,"text":"Policennummer: 100"}]]}
+{"file":"pair-0-2-4.png","readings":[[{"confidence":0.5,"text":"Policennummer: 100"}]]}
+{"file":"pair-0-2-5.png","readings":[[{"confidence":1,"text":"Policennummer: 100"}]]}
+{"file":"pair-1-2-3.png","readings":[[{"confidence":1,"text":"Policennummer: 00"}]]}
+{"file":"pair-1-2-4.png","readings":[[{"confidence":1,"text":"Policennummer: O0"}]]}
+{"file":"pair-1-2-5.png","readings":[[{"confidence":1,"text":"Policennummer: 00"}]]}
+{"file":"pair-1-3-3.png","readings":[[{"confidence":1,"text":"Policennummer: 000"}]]}
+{"file":"pair-1-3-4.png","readings":[[{"confidence":1,"text":"Policennummer: 000"}]]}
+{"file":"pair-1-3-5.png","readings":[[{"confidence":1,"text":"Policennummer: 000"}]]}
+{"file":"pair-2-3-3.png","readings":[[{"confidence":1,"text":"Policennummer: 00"}]]}
+{"file":"pair-2-3-4.png","readings":[[{"confidence":1,"text":"Policennummer: 00"}]]}
+{"file":"pair-2-3-5.png","readings":[[{"confidence":1,"text":"Policennummer: 00"}]]}

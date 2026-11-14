@@ -11,15 +11,31 @@ enum SetupDocumentFilter: String, CaseIterable {
         case .selected: "Für diesen Chatbot freigegeben"
         case .unselected: "Freigabe ausstehend"
         case .localOnly: "Nur lokal behalten"
-        case .review: "Alle Prüfhinweise"
+        case .review: "Hinweise zu Text und Original"
         case .ocrReview: "Hinweise zur Texterkennung"
-        case .analysisReview: "Hinweise zu Basisangaben"
+        case .analysisReview: "Unvollständige Basisangaben (optional)"
         case .pending: "In Verarbeitung"
         }
     }
 }
 
 extension SetupModel {
+    func regenerateTitle(_ document: VaultDocument) {
+        guard !busy, !importing, isLocalVault else { return }
+        busy = true
+        Task {
+            defer { busy = false }
+            do {
+                let updated = try await LocalBaseAnalysisService(store: localStore).regenerateTitle(documentID: document.id)
+                if let index = documents.firstIndex(where: { $0.id == document.id }) { documents[index] = updated }
+                failure = false
+                message = updated.manualTitle == nil ? "Titel neu bestimmt. Belegzeilen und Chatbot-Freigaben bleiben erhalten." : "Automatischer Titel neu bestimmt. Deine eigene Bezeichnung bleibt erhalten."
+            } catch {
+                failure = true; message = "Titel konnte nicht aktualisiert werden. Lade den Bestand neu und versuche es erneut."
+            }
+        }
+    }
+
     /// Re-evaluate only when a source URL changes. Rendering each checkbox
     /// must neither reread the storage marker nor resolve filesystem aliases.
     func updateLocalVaultIdentity() {
@@ -59,7 +75,7 @@ extension SetupModel {
             case .selected: return activeConnection?.allowedDocumentIDs.contains(document.id) == true
             case .unselected: return needsGrantDecision(document)
             case .localOnly: return isKeptLocal(document)
-            case .review: return ["needsReview", "failed", "stale"].contains(document.baseAnalysisStatus) || (document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) } ?? false)
+            case .review: return (LocalDocumentReview(document)?.quality.reviewCount ?? 0) > 0
             case .ocrReview: return document.localImport.map { [.partial, .failed, .interrupted, .cancelled].contains($0.state) || $0.pages.contains(where: \.needsReview) } ?? false
             case .analysisReview: return ["needsReview", "failed", "stale", "unavailable"].contains(document.baseAnalysisStatus)
             case .pending: return document.localImport?.state == .queued || document.localImport?.state == .recognizing

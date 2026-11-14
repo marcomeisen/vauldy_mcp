@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "file": "source-13-0.png",
+      "sha256": "24cba275660eea8284436efd59488ab1e4a6c382c706a84875494080848ed4b4",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-13-1.png",
+      "sha256": "6c7f7ab99ba3d17e0219868f5a179de795de9974a4f2b01c279519129cca95a7",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17,29 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17,29 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-13-2.png",
+      "sha256": "df64037b6641ad80f8aeb65251e7ddb907cc6d5ffc98c1d43bd5ea3ddc6b1332",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: -39.51 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: -39.51 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-13-3.png",
+      "sha256": "0bfdc177564acb23cc66c0cc2b2106e74969bcfdd99391427191dddfc4ee7e50",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234,56 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234,56 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-9-0.png",
+      "sha256": "52a3ded894aadff4ba230025c8cafacdda1bdeba5faf8d26d12b3a54315413a5",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 82.47 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-9-1.png",
+      "sha256": "2c8439bbbea865a5ae40bd98ede64332b525bb6dd3dad9d0dae4e0f2f1a2463e",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17.29 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nBeitrag: 17.29 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-9-2.png",
+      "sha256": "99336e457fcf74c1ac8f0ee28592373c4a3fe8922f11ef7ad2c34f18b80b7702",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 39.51 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 39.51 EUR",
+      "unchanged": true
+    },
+    {
+      "file": "source-9-3.png",
+      "sha256": "a506f9f5d35a8dadd083d0d79484c51052b523ce7816305e389ab1a66102ccda",
+      "v17Text": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234.56 EUR",
+      "candidateText": "Synthetische Zeilenpruefung\nGeltungsbereich: Fahrradzubehoer und Kleingeraete\nLeistung: Wartung am Aggregat\nSumme: 1.234.56 EUR",
+      "unchanged": true
+    }
+  ],
+  "previouslyCorrectControls": 5,
+  "preExistingIncorrectControls": 3
+}

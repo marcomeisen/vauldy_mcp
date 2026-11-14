@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "date": "2026-11-13",
+  "configuration": "ocr-v17-numeric-cell-evidence-",
+  "baseline": "v16",
+  "pdf": {
+    "documents": 15,
+    "pages": 31,
+    "fieldsBefore": 133,
+    "fieldsAfter": 133,
+    "fieldsExpected": 133,
+    "tableBefore": 316,
+    "tableAfter": 345,
+    "tableExpected": 345,
+    "repairedOccurrences": 29,
+    "semanticRepairs": 5,
+    "formatRepairs": 24,
+    "lostPriorCorrectFields": 0,
+    "lostPriorCorrectTableText": 0,
+    "lostCorrectWordOccurrences": 0,
+    "lostLiteralEvidence": 0,
+    "originalHashesUnchanged": true,
+    "freshPreserved": true
+  },
+  "images": {
+    "passed": true,
+    "before": 53,
+    "after": 53,
+    "fresh": 53,
+    "images": 35,
+    "expectedFields": 79,
+    "unchangedTexts": 35,
+    "lostCorrectFields": 0,
+    "lostLiteralEvidence": 0,
+    "hashesVerified": true
+  },
+  "swift": {
+    "tests": 117,
+    "suites": 26,
+    "passed": true,
+    "optionalProviderCorpusTestSkipped": true
+  },
+  "worker": {
+    "passed": true,
+    "frozenPDFs": 7,
+    "pages": 18,
+    "freshRetriesPerPDF": 2,
+    "previousAndNewRepairsPreserved": true,
+    "priorCorrectFieldsPreserved": true,
+    "priorReadingsPersisted": true,
+    "originalIdentityAndGrantPreserved": true,
+    "sanitizedMCP": true,
+    "revocation": true
+  },
+  "wire": [
+    {
+      "test": "raster_ocr_quality_smoke_test",
+      "exitCode": 0
+    },
+    {
+      "test": "line_ocr_smoke_test",
+      "exitCode": 0
+    },
+    {
+      "test": "import_smoke_test",
+      "exitCode": 0
+    },
+    {
+      "test": "original_reference_smoke_test",
+      "exitCode": 0
+    },
+    {
+      "test": "ocr_repair_smoke_test",
+      "exitCode": 0
+    }
+  ],
+  "negativeControls": {
+    "passed": true,
+    "rejectedMutations": [
+      "priorField",
+      "separator",
+      "exponent",
+      "format"
+    ]
+  },
+  "buildSourceFiles": 195,
+  "installed": false,
+  "fullReleaseGateRun": false
+}

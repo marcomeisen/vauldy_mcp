@@ -280,7 +280,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         }
         // Select image resolution from geometry, never from expected text, numeric values
         // or confidence. Most detected lines below the existing 16-pixel small-print threshold cannot resolve small glyphs.
-        let tinyLines = lines.filter { $0.0.boundingBox.height * CGFloat(image.height) < 16 }.count
+        let tinyLines = lines.filter { glyphHeight($0.0, in: image) < 16 }.count
         if let replacement, tinyLines >= 2, tinyLines * 2 >= lines.count {
             try cancellation.check()
             return try recognizeImage(replacement(), page: page, cancellation: cancellation, retries: &retries,
@@ -311,7 +311,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         let targets = lines.indices.compactMap { index -> (index: Int, identifier: Bool, smallPrint: Bool, ambiguous: Bool, confidence: Float)? in
             let (observation, line) = lines[index]
             let identifier = OCRLineRecovery.isIdentifier(line.string)
-            let smallPrint = observation.boundingBox.height * CGFloat(image.height) < 16
+            let smallPrint = glyphHeight(observation, in: image) < 16
             let ambiguous = identifier && OCRLineRecovery.hasConfusableIdentifier(line.string)
             guard ambiguous || smallPrint || line.confidence < (identifier ? 0.94 : 0.75) else { return nil }
             return (index, identifier, smallPrint, ambiguous, line.confidence)
@@ -323,7 +323,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             return ($0.identifier ? 0 : 1, $0.confidence, $0.index) < ($1.identifier ? 0 : 1, $1.confidence, $1.index)
         }
         if recovery.lineRecovery {
-            let uncertain = Set(targets.filter { $0.ambiguous || $0.confidence < ($0.identifier ? 0.94 : 0.75) }.map(\.index))
+            let uncertain = Set(targets.filter { $0.ambiguous || $0.smallPrint || $0.confidence < ($0.identifier ? 0.94 : 0.75) }.map(\.index))
             var state = OCRLineReviewState(uncertain: uncertain, ambiguous: Set(targets.filter(\.ambiguous).map(\.index)))
             var normalizedCrops = 0
             for target in targets {
@@ -332,7 +332,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                 let index = target.index
                 let (observation, first) = lines[index]
                 state.attempted.insert(index)
-                guard let crop = lineCrop(image, bounds: observation.boundingBox) else {
+                guard let crop = rectifiedLineCrop(image, observation: observation) else {
                     state.unavailable.insert(index); continue
                 }
                 retries.attempted += 1
@@ -350,12 +350,12 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                 let alternatives = observation.topCandidates(3).dropFirst().map(\.string)
                 let decision = OCRLineRecovery.decide(original: first.string, confidence: first.confidence,
                     alternatives: alternatives, retry: second.text, retryConfidence: second.confidence,
-                    identifier: target.identifier, smallPrint: target.smallPrint)
+                    identifier: target.identifier, smallPrint: target.smallPrint, allowSmallGlyphRepair: true)
                 if decision == .review { state.conflicts.insert(index); continue }
                 let unchanged = OCRRegionRecovery.canonical(first.string) == OCRRegionRecovery.canonical(second.text)
                 // A keep decision alone does not confirm a weak source line.
                 guard decision == .replace || (uncertain.contains(index) && unchanged && !target.ambiguous) else { continue }
-                guard let context = lineCrop(image, bounds: observation.boundingBox, contextPadding: 0.6) else {
+                guard let context = rectifiedLineCrop(image, observation: observation, contextPadding: 0.6) else {
                     state.unavailable.insert(index); continue
                 }
                 let normalized = OCRLineContrast.normalize(context.image, target: context.target, maximumGain: 2)
@@ -370,9 +370,9 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                 catch { state.unavailable.insert(index); continue }
                 guard let confirmation else { state.unavailable.insert(index); continue }
                 let secondOnPage = OCRRegionRecovery.Candidate(text: second.text,
-                    bounds: second.bounds.applying(LocalOCRGeometry.cropTransform(crop.bounds, width: image.width, height: image.height)), confidence: second.confidence)
+                    bounds: second.bounds.applying(crop.transform), confidence: second.confidence)
                 let confirmedOnPage = OCRRegionRecovery.Candidate(text: confirmation.text,
-                    bounds: confirmation.bounds.applying(LocalOCRGeometry.cropTransform(context.bounds, width: image.width, height: image.height)), confidence: confirmation.confidence)
+                    bounds: confirmation.bounds.applying(context.transform), confidence: confirmation.confidence)
                 let confidence = min(second.confidence, confirmation.confidence)
                 guard OCRRegionRecovery.sameObservation(secondOnPage, confirmedOnPage) else {
                     state.conflicts.insert(index); continue
@@ -381,7 +381,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                 if decision == .replace {
                     guard OCRLineRecovery.decide(original: first.string, confidence: first.confidence, alternatives: alternatives,
                         retry: confirmation.text, retryConfidence: confidence, identifier: target.identifier,
-                        smallPrint: target.smallPrint) == .replace else { state.conflicts.insert(index); continue }
+                        smallPrint: target.smallPrint, allowSmallGlyphRepair: true) == .replace else { state.conflicts.insert(index); continue }
                     text[index] = second.text; retries.recovered += 1
                 }
                 state.confirm(index, repaired: decision == .replace)
@@ -395,7 +395,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             assessment.shortTextRegions = text.joined(separator: "\n").count < 20 ? 1 : 0
             retries.hasLineReview = true; retries.lineReview.merge(assessment)
             result.info.confidence = effectiveConfidence
-            result.info.needsReview = assessment.needsReview
+            result.info.needsReview = assessment.needsReview || assessment.repairedLines > 0
         } else {
         // Both passes can confidently confuse the same glyphs in a code.
         if targets.contains(where: { $0.ambiguous }) { result.info.needsReview = true }
@@ -455,15 +455,29 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         }
         result.text = text.joined(separator: "\n")
         result.geometry = .vision(texts: text, bounds: bounds, confidences: confidences)
+        for index in text.indices where text[index] != lines[index].1.string {
+            result.geometry?.lines[index].priorReadings = [lines[index].1.string]
+        }
         if checkCoverage { try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery) }
+        if recovery.lineRecovery {
+            do {
+                try NativeOCRFieldRecovery.recover(image, page: &result, budget: recovery.fields,
+                    check: { try cancellation.check() }, read: { crop in
+                        try readLines(crop, languageCorrection: false, cancellation: cancellation, minimumTextHeight: 0)
+                    })
+            } catch is CancellationError { throw CancellationError() }
+            catch { result.info.needsReview = true }
+        }
         result.geometry?.transform(LocalOCRGeometry.cropTransform(cropBounds, width: originalWidth, height: originalHeight))
         return result
     }
 
-    private static func readLines(_ image: CGImage, languageCorrection: Bool, cancellation: OCRCancellation)
+    private static func readLines(_ image: CGImage, languageCorrection: Bool, cancellation: OCRCancellation,
+                                  minimumTextHeight: Float? = nil)
         throws -> [VNRecognizedTextObservation] {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
+        if let minimumTextHeight { request.minimumTextHeight = minimumTextHeight }
         request.recognitionLanguages = ["de-DE", "en-US"]
         request.usesLanguageCorrection = languageCorrection
         request.automaticallyDetectsLanguage = true
@@ -474,6 +488,16 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         catch { try cancellation.check(); throw error }
         try cancellation.check()
         return request.results ?? []
+    }
+
+    /// Axis-aligned height includes a slanted line's entire rise. Measure across
+    /// the quadrilateral instead, so long, tilted small print is still retried.
+    private static func glyphHeight(_ observation: VNRecognizedTextObservation, in image: CGImage) -> CGFloat {
+        func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+            hypot((a.x - b.x) * CGFloat(image.width), (a.y - b.y) * CGFloat(image.height))
+        }
+        return min(distance(observation.topLeft, observation.bottomLeft),
+                   distance(observation.topRight, observation.bottomRight))
     }
 
     private struct DetectedCharacters {
@@ -741,6 +765,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
 
     /// One instance per physical page, shared by its tiles and PDF regions on the native queue.
     private final class RegionRecoveryBudget {
+        let fields = NativeOCRFieldRecovery.Budget()
         let enabled: Bool
         let scaleSmallRegions: Bool
         let smallTextDetection: Bool
@@ -771,6 +796,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             return true
         }
         func record(in metrics: inout LocalOCRMetrics) {
+            fields.record(in: &metrics)
             if detectionRegions > 0 {
                 metrics.smallTextDetectionRegions = detectionRegions
                 metrics.smallTextDetectionPixels = detectionPixels
@@ -790,6 +816,15 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         let normalized = CGAffineTransform(a: 1 / crop.width, b: 0, c: 0, d: 1 / crop.height,
             tx: -crop.minX / crop.width, ty: -crop.minY / crop.height)
         return pixels.concatenating(rendered.transform.inverted()).concatenating(normalized)
+    }
+
+    private static func rectifiedLineCrop(_ image: CGImage, observation: VNRecognizedTextObservation,
+                                         contextPadding: CGFloat = 0.3) -> OCRDeskewedLineCrop.Crop? {
+        if let crop = OCRDeskewedLineCrop.make(image, corners: [observation.topLeft, observation.topRight,
+            observation.bottomRight, observation.bottomLeft], contextPadding: contextPadding) { return crop }
+        guard let crop = lineCrop(image, bounds: observation.boundingBox, contextPadding: contextPadding) else { return nil }
+        return .init(image: crop.image, target: crop.target,
+                     transform: LocalOCRGeometry.cropTransform(crop.bounds, width: image.width, height: image.height))
     }
 
     private static func lineCrop(_ image: CGImage, bounds: CGRect, contextPadding: CGFloat = 0.3) -> (image: CGImage, target: CGRect, bounds: CGRect)? {

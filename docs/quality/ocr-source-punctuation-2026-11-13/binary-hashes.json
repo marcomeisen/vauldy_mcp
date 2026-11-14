@@ -1,0 +1,10 @@
+{
+  "baselineV17": {
+    "vauldy-local": "249b754902dd0d5ab91bb419b645786adc208ffc28c82cb04f25320fa6ee7af1",
+    "vauldy-mcp": "035507cd73e8017c93d199728c5b0be505bc6de89c6cd9eb0772707802882367"
+  },
+  "candidateV18": {
+    "vauldy-local": "0fcdef551684088ce857b02e59831a4598c6fa61722cfcfde5978a9ada02d5b5",
+    "vauldy-mcp": "657331a311b0d1a03ce5b27ea5f0495154f4d8f45cc106f82f751c0c06eec49a"
+  }
+}

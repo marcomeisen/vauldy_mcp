@@ -1,0 +1,30 @@
+[
+  {
+    "name": "v2-before",
+    "exitCode": 0
+  },
+  {
+    "name": "v2-after",
+    "exitCode": 0
+  },
+  {
+    "name": "v2-compare",
+    "exitCode": 0
+  },
+  {
+    "name": "raster-wire",
+    "exitCode": 0
+  },
+  {
+    "name": "line-wire",
+    "exitCode": 0
+  },
+  {
+    "name": "import-wire",
+    "exitCode": 0
+  },
+  {
+    "name": "original-reference-wire",
+    "exitCode": 0
+  }
+]
