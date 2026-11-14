@@ -28,6 +28,32 @@ public enum DocumentTitlePolicy {
         return !withoutAbbreviations.contains(".") && !value.contains("://")
     }
 
+    package static func withoutLayout(_ card: BaseDocumentOverview) -> String {
+        var card = card
+        if let subject = card.subject?.value, !LayoutDocumentTitle.isCleanTitleText(subject) { card.subject = nil }
+        if let heading = card.kindEvidence?.quote, !LayoutDocumentTitle.isCleanTitleText(heading) { card.kindEvidence = nil }
+        if let issuer = card.issuer?.value, !LayoutDocumentTitle.isCleanTitleText(issuer) { card.issuer = nil }
+        return title(for: card)
+    }
+
+    /// Do not degrade an existing, same-source type to a generic title just because the
+    /// layout cannot rank it. Require the same heading from the fresh text analysis.
+    package static func retainedTypeTitle(_ existing: String, analysis: BaseDocumentOverview) -> String? {
+        guard !analysis.issues.contains("DOCUMENT_STRUCTURE_AMBIGUOUS"),
+              let evidence = analysis.kindEvidence,
+              let originalHeading = existing.components(separatedBy: " – ").first else { return nil }
+        let supported = LayoutDocumentTitle.headingText(evidence.quote)
+        let heading = LayoutDocumentTitle.headingText(originalHeading)
+        guard LayoutDocumentTitle.isHeadingText(heading), LayoutDocumentTitle.titleKind(heading) == analysis.kind,
+              BaseAnalysisPipeline.folded(supported) == BaseAnalysisPipeline.folded(heading) else { return nil }
+        // Keep only the confirmed heading, issuer and year. Drop old unconfirmed subjects.
+        var card = analysis
+        card.kindEvidence = .init(role: .documentType, value: evidence.value, page: evidence.page, quote: heading, origin: .documentHeading)
+        card.subject = nil
+        if let issuer = card.issuer?.value, !LayoutDocumentTitle.isCleanTitleText(issuer) { card.issuer = nil }
+        return title(for: card)
+    }
+
     static func title(for card: BaseDocumentOverview) -> String {
         // Only accepted evidence enters here. Keep the specific printed heading,
         // e.g. "Versicherungsschein", instead of replacing it with a broad category.

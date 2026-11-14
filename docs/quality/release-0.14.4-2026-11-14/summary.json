@@ -1,0 +1,41 @@
+{
+  "inventory": {
+    "documents": 101,
+    "changes": 18,
+    "protected": 3,
+    "titlePage": 30,
+    "methods": {
+      "layout": 93,
+      "text": 8
+    },
+    "grantFiles": 1,
+    "savedRecordsUnchanged": true,
+    "previewSnapshotUnchanged": true
+  },
+  "package": {
+    "version": "0.14.4",
+    "buildID": "macho.5bcec1fe066d3e33bed49f3210a9c253",
+    "macOS": "14.0",
+    "architecture": [
+      "arm64"
+    ],
+    "signature": "ad-hoc",
+    "sourceCommitInManifest": null,
+    "sourceInputsCompared": 206,
+    "sha256": "0ffe7e48f3e41f4fe81809e3a3c2304794c00faa82851773613d877c32a326c9"
+  },
+  "tests": {
+    "titleTestsPassed": 22,
+    "layoutTestsPassed": 8,
+    "packageChecksPassed": [
+      "title-preview and retitle",
+      "MCP stdio and privacy",
+      "relay tool discovery",
+      "software update and rollback"
+    ],
+    "initialFullSwiftRun": "Test run with 371 tests in 59 suites failed after 165.327 seconds with 997 issues.",
+    "nativeOCRReferencePassedOnBothVersions": true,
+    "concurrentPackageImportFailureOnBothVersions": true,
+    "fullSwiftRetest": "Test run with 371 tests in 59 suites passed after 313.401 seconds."
+  }
+}

@@ -6,6 +6,28 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Layoutbasierte Titel 0.14.4 · 14.11.2026
+
+- [x] Automatische Titel aus überprüften Zeilenpositionen, Zeilenhöhe und Abstand
+  bestimmen. Layoutentscheidungen bleiben auf den Titel begrenzt.
+- [x] Titel für Import und explizite Neubestimmung aus denselben Regeln ableiten.
+  Bestehende eigene Titel und der Originaldateiname werden getrennt erhalten.
+- [x] Schreibgeschützte Vorschau aller Titel mit `vauldy-local title-preview`.
+  Im persönlichen Bestand bleiben die Vorschläge zunächst zur Durchsicht.
+- [x] 22 Titeltests inklusive 8 Layouttests bestanden. Stdio, Titelpflege,
+  Werkzeugparität und isoliertes Update/Rollback am Paket geprüft.
+- [x] Vorschau mit 18 Vorschlägen für 101 Dokumente erstellt. Drei manuelle Titel,
+  alle gespeicherten Datensätze und Freigaben blieben beim Vergleich unverändert.
+- [x] Nativer Wiederholungslauf mit 371 Tests in 59 Suiten erfolgreich, zwei
+  optionale Tests übersprungen. Ein synthetischer PDF-Import ergab in 0.14.3 und
+  0.14.4 denselben OCR-Text. Die erste volle Suite zeigte vorübergehende OCR-Fehler.
+- Der zusätzliche Wiretest für gleichzeitige Importaufrufe schlug mit beiden
+  Paketen fehl. Nächster Prüfschritt ist ein isolierter Vergleich des Worker-Starts.
+- [ ] Schwierige Layouts ohne belastbare Überschrift behalten einen neutralen Titel.
+  Rotierte oder nicht überprüfbare Geometrie wird mit Textregeln ausgewertet.
+
+[Prüfnachweis und Paketkennung](quality/release-0.14.4-2026-11-14/summary.json).
+
 ## Titel, optionale Basisangaben und OCR-Integration 0.14.3 · 14.11.2026
 
 - [x] Satzfragmente als automatische Titel abweisen; echte Überschriften und belegte

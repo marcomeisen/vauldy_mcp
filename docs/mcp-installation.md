@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.14.3)
+# Vauldy MCP einrichten (macOS, Version 0.14.4)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten

@@ -61,6 +61,36 @@ Ergebnis: Kennung, Analysezustand und Anzahl logischer Dokumente; keine Rohangab
 CLI-Ergebnis. Nicht abgeschlossene Analyse liefert Exitcode 2. Der Importexitcode betrifft
 weiterhin die OCR; `analysisStatus` meldet die getrennte Analyse.
 
+## Layoutbasierte Titel und Bestandsvorschau (0.14.4)
+
+Der Titel des Importdatensatzes nutzt das bereits gespeicherte Seitenlayout, wenn
+Quellhash, physische Seite, exakter Seitenwortlaut und Zeilenbereiche zusammenpassen.
+Kandidaten auf der ersten Seite erhalten Gewicht durch Dokumenttyp, relative Zeilenhöhe,
+Abstand und Position. Nahe, ausgerichtete Überschriftszeilen dürfen zusammengehören.
+Tabellenzellen, wiederkehrende Randzeilen, Weiterleitungszeilen, Feldbezeichner und
+Satzfragmente werden aussortiert. Ein belegter Typ auf den ersten Folgeseiten kann als
+kürzerer Titel dienen. Bei schwachem Layout kann ein bisheriger Typ erhalten bleiben,
+wenn ihn die erneute Textauswertung unabhängig bestätigt. Ein explizit belegter Aussteller hat Vorrang vor einer
+eindeutigen Organisation im Briefkopf. Bei widersprüchlichen Überschriften oder unklaren
+Zusätzen bleibt die Ausgabe beim belegbaren Typ oder einem neutralen Titel. Ältere Bestände
+ohne passendes Layout und Layouts gedrehter Seiten bleiben über Textregeln auswertbar.
+
+Der Titel der Datei und die fachlichen Basisangaben haben getrennte Rollen. Die neuen
+Layoutregeln schreiben vorhandene Basisanalysen, OCR-Text, Belegzeilen und Freigaben
+nicht um. Titelpflege verwendet dieselbe Auswahl wie der Import. Der Originaldateiname
+und manuelle Überschreibungen bleiben erhalten.
+
+```sh
+vauldy-local title-preview --store /absoluter/bestand
+vauldy-local retitle --store /absoluter/bestand --document UUID
+```
+
+Die erste Anweisung gibt lokal eine schreibgeschützte Vorschau aller Titel aus. Sie enthält
+Dateinamen, bisherige und vorgeschlagene Titel, die Methode und gegebenenfalls die Quellseite.
+Bei eigenen Titeln enthält sie zusätzlich den automatischen Vorschlag. Laufende Importe oder
+geänderte Originale werden übersprungen. Nur die zweite Anweisung übernimmt einen Vorschlag
+für das ausdrücklich angegebene Dokument. Keine der beiden Anweisungen startet Texterkennung.
+
 ## Qualitätskorpus
 
 `Tests/VauldyMCPRuntimeTests/Fixtures/overview-corpus.json` enthält 26 künstliche Fälle aus

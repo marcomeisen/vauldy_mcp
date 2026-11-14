@@ -51,6 +51,11 @@ def main():
                        enabled=True, vaultPath=str(snapshot), allowedDocumentIDs=[doc_id], acknowledgedCloudDisclosure=True)
         profile_path.write_text(json.dumps(profile))
         grant_bytes = profile_path.read_bytes()
+        preview_before = snapshot.read_bytes()
+        proposals = {row['documentID']: row for row in command(local, 'title-preview', '--store', store)}
+        assert proposals[doc_id]['before'] == bad and proposals[doc_id]['after'] == expected
+        assert proposals[other['id']]['after'] == other['manualTitle']
+        assert snapshot.read_bytes() == preview_before and profile_path.read_bytes() == grant_bytes
         result = command(local, 'retitle', '--store', store, '--document', doc_id)
         assert result['manualOverride'] is False
         refreshed, untouched = json.loads(snapshot.read_text())
@@ -83,7 +88,7 @@ def main():
             assert profile_path.read_bytes() == grant_bytes
         finally:
             client.close()
-    print('PASS: retitle/set-title/reset-title, retained evidence/original/other rows/grant, MCP scope and read-only metadata')
+    print('PASS: preview/retitle/set-title/reset-title, retained evidence/original/other rows/grant, MCP scope and read-only metadata')
 
 
 if __name__ == '__main__':
