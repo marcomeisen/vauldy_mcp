@@ -186,6 +186,11 @@ struct DocumentTitleTests {
             var changed = doc; changed.localImport?.originalState = .changed
             try writeTitleDocuments([changed], store: store)
             let changedSnapshot = try Data(contentsOf: store.snapshotURL)
+            let preview = try #require(try await LocalBaseAnalysisService(store: store).previewTitles(limit: 1).first)
+            #expect(preview.method == "sourceChanged")
+            #expect(preview.before == preview.after)
+            #expect(preview.historicalSuggestion == doc.generatedTitle)
+            #expect(try Data(contentsOf: store.snapshotURL) == changedSnapshot)
             await #expect(throws: LocalImportError.staleAttempt) {
                 try await LocalBaseAnalysisService(store: store).regenerateTitle(documentID: doc.id)
             }

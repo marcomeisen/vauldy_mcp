@@ -78,7 +78,8 @@ struct LocalDocumentQualityTests {
         #expect(q.processedPages == 2 && q.expectedPages == 3)
         #expect(q.issues.contains { $0.category == .text && $0.focus?.page == 2 && $0.title == "Kein lesbarer Text erkannt" })
         #expect(!q.issues.contains { $0.focus?.page == 3 })
-        #expect(q.processingLabel.contains("vorhandenen Seiten"))
+        #expect(q.processingLabel == "1 von 3 vorhandenen Seiten mit lesbarem Text · 1 als leer erkannt")
+        #expect(q.requiresCoverageAttention && q.chatImpact.contains("Seiten ohne erkannten Text"))
         #expect(LocalDocumentQuality.completenessExplanation.contains("nicht"))
     }
 
@@ -88,7 +89,7 @@ struct LocalDocumentQualityTests {
         #expect(d.baseAnalysisStatus == "completed")
         let q = try #require(LocalDocumentReview(d)).quality
         #expect(q.reviewCount == 0)
-        #expect(q.headline == "Textprüfung: keine automatischen Prüfhinweise")
+        #expect(q.headline == "Text für Chatfragen vorhanden")
         #expect(q.issues.contains { !$0.requiresReview && $0.title == "Aussteller nicht belegt" })
         #expect(LocalDocumentQuality.manualReviewLabel.contains("nicht dokumentiert"))
         #expect(LocalDocumentQuality.tableLabel.contains("Keine separate"))
@@ -126,8 +127,23 @@ struct LocalDocumentQualityTests {
         d.localImport?.pages[0].needsReview = true
         let quality = try #require(LocalDocumentReview(d)).quality
         #expect(quality.reviewCount == 1)
+        #expect(!quality.requiresCoverageAttention)
+        #expect(quality.chatImpact.contains("Betrifft eine Frage eine unsichere Stelle"))
+
         #expect(quality.textIssues.first?.category == .text)
         #expect(!quality.basisIssues.isEmpty)
+    }
+
+    @Test func allPagesCanHaveTextEvenWithPartialStateAndReviewFlags() throws {
+        var d = document(count: 2)
+        d.ocrText += "\n\n--- Seite 2 ---\nText der zweiten Seite."
+        d.localImport?.state = .partial
+        d.localImport?.pages[1].needsReview = true
+        let quality = try #require(LocalDocumentReview(d)).quality
+        #expect(quality.pagesWithText == 2)
+        #expect(!quality.missingPageText && !quality.requiresCoverageAttention)
+        #expect(!quality.textIssues.contains { $0.category == .processing })
+        #expect(quality.headline == "Text vorhanden · einzelne Angaben prüfen")
     }
 
     @Test func aggregateLineWarningsNeverInventAnExactLocation() throws {

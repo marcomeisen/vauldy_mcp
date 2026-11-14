@@ -42,6 +42,9 @@ package struct LayoutDocumentTitle: Sendable {
             if $0.bounds.maxY == $1.bounds.maxY { return $0.bounds.minX < $1.bounds.minX }
             return $0.bounds.maxY > $1.bounds.maxY
         }
+        if page.number == 1, let subject = OpeningPageTitle.resolve(lines, analysis: analysis) {
+            return .init(value: subject, page: page.number)
+        }
         let heights = lines.filter { $0.text.count >= 24 && $0.bounds.midY < 0.78 && $0.bounds.midY > 0.10 }
             .map(\.bounds.height).sorted()
         let typicalHeight = heights.count >= 3 ? heights[heights.count / 2] : nil

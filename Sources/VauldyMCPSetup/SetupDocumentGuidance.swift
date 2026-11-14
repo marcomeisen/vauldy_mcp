@@ -42,10 +42,8 @@ struct SetupDocumentGuidance {
             textStatus = metadata?.state == .queued ? "Texterkennung ausstehend" : "Texterkennung läuft"
             nextStep = "Das Dokument ist im Bestand. Warte auf die Verarbeitung; nicht noch einmal hinzufügen."
         } else if needsTextReview {
-            textStatus = hasText ? "Text vorhanden · Prüfhinweise" : "Noch kein lesbarer Text"
-            nextStep = hasText
-                ? "Vergleiche Original und Text über „Prüfstellen ansehen“. Nur bei fehlendem oder fehlerhaftem Text erneut lesen; kein erneuter Import nötig."
-                : "Prüfe das gespeicherte Original. Wenn es lesbar und erreichbar ist, kannst du „Text erneut lesen“ verwenden; kein erneuter Import nötig."
+            textStatus = hasText ? "Text vorhanden" : "Noch kein lesbarer Text"
+            nextStep = hasText ? nil : "Prüfe das gespeicherte Original. Wenn es lesbar und erreichbar ist, kannst du „Text erneut lesen“ verwenden."
         } else {
             textStatus = hasText ? "Text vorhanden" : "Kein Text erkannt"
             nextStep = hasText ? nil : "Das Dokument ist im Bestand. Prüfe, ob das Original Text enthält."

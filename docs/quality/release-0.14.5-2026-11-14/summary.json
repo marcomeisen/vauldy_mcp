@@ -1,0 +1,41 @@
+{
+  "version": "0.14.5",
+  "buildID": "macho.b149a5acc21130aca52e6f36d78d020c",
+  "architecture": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "zipSHA256": "f1ee7fa35ed01e74dd21c09686b4b83653d78384ed5fca9b2f9561754ab67a6f",
+  "sourceInputsCompared": 216,
+  "signing": "ad-hoc",
+  "notarized": false,
+  "packageManifestSourceCommit": null,
+  "preview": {
+    "documents": 18,
+    "changed": 14,
+    "improvedFromGeneric": 13,
+    "baselineGeneric": 15,
+    "generic": 2,
+    "matches": 18,
+    "historical": 4,
+    "manual": 0,
+    "profileFiles": 1,
+    "docPayloadsUnchanged": true,
+    "chatGrantFilesUnchanged": true,
+    "ocrQueueUnchanged": true,
+    "storeCopyUnchanged": true
+  },
+  "swiftRun": "Test run with 378 tests in 60 suites passed after 201.970 seconds.",
+  "optionalSkipped": 2,
+  "wireChecks": [
+    "stdio",
+    "relay",
+    "update",
+    "title"
+  ],
+  "syntheticNativeUI": [
+    "text missing on a page",
+    "all pages read with uncertainty",
+    "historical source"
+  ]
+}

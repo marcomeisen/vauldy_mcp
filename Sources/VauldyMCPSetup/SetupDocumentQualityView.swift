@@ -7,18 +7,23 @@ struct SetupDocumentQualityView: View {
     let open: (LocalDocumentQuality.Focus) -> Void
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label(quality.headline, systemImage: quality.reviewCount > 0 ? "exclamationmark.circle" : "doc.text.magnifyingglass")
+            Label(quality.headline, systemImage: quality.requiresCoverageAttention ? "exclamationmark.circle" : "doc.text.magnifyingglass")
                 .font(.callout.weight(.semibold))
-                .foregroundStyle(quality.reviewCount > 0 ? Color.orange : Color.primary)
+                .foregroundStyle(quality.requiresCoverageAttention ? Color.orange : Color.primary)
                 .accessibilityIdentifier("document-quality-summary")
             Text(quality.processingLabel).font(.caption)
-            DisclosureGroup("Hinweise zu Text und Original") {
+            Text(quality.chatImpact).font(.caption).foregroundStyle(.secondary)
+            DisclosureGroup("Prüfdetails zu Text und Original") {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(LocalDocumentQuality.completenessExplanation)
-                    Text("Erfassung: \(quality.recognitionLabel)")
-                    Text("Tabellen: \(LocalDocumentQuality.tableLabel). Zahlen und Zellzuordnung bei Bedarf am Original prüfen.")
-                    Text(LocalDocumentQuality.manualReviewLabel)
                     issueGroups(quality.textIssues)
+                    DisclosureGroup("Technische Angaben") {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(LocalDocumentQuality.completenessExplanation)
+                            Text("Erfassung: \(quality.recognitionLabel)")
+                            Text("Tabellen: \(LocalDocumentQuality.tableLabel).")
+                            Text(LocalDocumentQuality.manualReviewLabel)
+                        }.foregroundStyle(.secondary)
+                    }
                 }.font(.caption).padding(.top, 6)
             }.font(.caption)
             DisclosureGroup("Hinweise zu Basisangaben (optional)") {
@@ -44,7 +49,7 @@ struct SetupDocumentQualityView: View {
                         if let focus = issue.focus {
                             Button(focus.bounds.isEmpty ? "Seite \(focus.page) ansehen" : "Stelle auf Seite \(focus.page) ansehen") { open(focus) }
                                 .accessibilityIdentifier("quality-issue-\(issue.id)")
-                        } else { Text("Keine einzelne Fundstelle zugeordnet.").foregroundStyle(.secondary) }
+                        }
                     }.padding(.leading, 8)
                 }
             }

@@ -44,10 +44,28 @@ package struct LocalDocumentQuality: Sendable {
     /// Optional metadata never lowers the displayed text-quality status.
     package var reviewCount: Int { textIssues.filter(\.requiresReview).count }
     package static let basisExplanation = "Optionale Orientierung aus dem gespeicherten Text. Fehlende oder unsichere Basisangaben bewerten nicht die Texterkennung. Für fachliche Aussagen sind die Belegstellen maßgeblich."
+    package let pagesWithText: Int
+    package let blankPages: Int
+    package let sourceChanged: Bool
+    package var missingPageText: Bool { expectedPages.map { pagesWithText + blankPages < $0 } ?? false }
+    package var hasTextRisk: Bool { textIssues.contains { [.text, .tables, .processing].contains($0.category) && $0.requiresReview } }
     package var headline: String {
-        if pending { return "Verarbeitung noch nicht abgeschlossen" }
-        return reviewCount == 0 ? "Textprüfung: keine automatischen Prüfhinweise" : "Textprüfung · \(reviewCount) \(reviewCount == 1 ? "Hinweis" : "Hinweise")"
+        if sourceChanged { return "Gespeicherter Text aus früherer Fassung" }
+        if pending { return "Texterkennung in Arbeit" }
+        if pagesWithText == 0 { return blankPages == expectedPages ? "Seiten als leer erkannt" : "Kein lesbarer Seitentext" }
+        if missingPageText { return "Text fehlt auf einzelnen Seiten" }
+        if hasTextRisk { return "Text vorhanden · einzelne Angaben prüfen" }
+        return "Text für Chatfragen vorhanden"
     }
+    package var chatImpact: String {
+        if sourceChanged { return "Der gespeicherte Text gehört zur früheren Fassung. Vauldy verwendet ihn derzeit nicht als Quelle für Chatantworten." }
+        if pending { return "Antworten können sich nur auf den bereits gespeicherten Text stützen." }
+        if pagesWithText == 0 { return "Für Antworten aus diesem Dokument steht kein lesbarer Seitentext zur Verfügung." }
+        if missingPageText { return "Bei Freigabe kann der Chatbot den vorhandenen Text nutzen. Angaben auf Seiten ohne erkannten Text können in Antworten fehlen." }
+        if hasTextRisk { return "Bei Freigabe kann der Chatbot den gespeicherten Text nutzen. Betrifft eine Frage eine unsichere Stelle, können Angaben fehlen oder falsch gelesen sein. Prüfe wichtige Angaben am Original." }
+        return "Der Chatbot kann den gespeicherten Text für freigegebene Dokumente nutzen. Für wichtige Angaben sind die Belegstellen maßgeblich."
+    }
+    package var requiresCoverageAttention: Bool { sourceChanged || (!pending && (missingPageText || (pagesWithText == 0 && blankPages != expectedPages))) }
     package static let completenessExplanation = "Erfasste PDF-Seiten bestätigen nicht, dass dem Original keine Seiten fehlen."
     package static let manualReviewLabel = "Abschließende Prüfung: nicht dokumentiert"
     package static let tableLabel = "Keine separate Tabellenprüfung vorhanden"
@@ -55,11 +73,18 @@ package struct LocalDocumentQuality: Sendable {
     package init(document: VaultDocument, pages: [LocalDocumentReview.Page]) {
         expectedPages = document.pageCount.flatMap { (1...200).contains($0) ? $0 : nil }
         pending = document.localImport?.state == .queued || document.localImport?.state == .recognizing
+        sourceChanged = document.localImport?.originalState == .changed
+        pagesWithText = pages.filter { page in
+            page.info != nil && page.info?.method != .unreadable && page.info?.method != .blank
+                && page.text?.contains(where: { !$0.isWhitespace }) == true
+        }.count
+        blankPages = pages.filter { $0.info?.method == .blank }.count
         processedPages = pages.filter { $0.info != nil && $0.info?.method != .unreadable && ($0.text != nil || $0.info?.method == .blank) }.count
         if pending {
             processingLabel = document.localImport?.state == .queued ? "Texterkennung ausstehend" : "Texterkennung läuft"
         } else if let expectedPages {
-            processingLabel = "\(processedPages) von \(expectedPages) vorhandenen Seiten verarbeitet"
+            let blank = blankPages == 0 ? "" : " · \(blankPages) als leer erkannt"
+            processingLabel = "\(pagesWithText) von \(expectedPages) vorhandenen Seiten mit lesbarem Text" + blank
         } else { processingLabel = "\(processedPages) Seiten zugeordnet · Seitenzahl offen" }
         let methods = Set(pages.compactMap { $0.info?.method })
         recognitionLabel = methods.contains(.vision) || methods.contains(.embeddedTextAndVision)
@@ -84,8 +109,9 @@ package struct LocalDocumentQuality: Sendable {
         }
         if !pending {
             if expectedPages == nil { add(.processing, "unknown", "Seitenumfang nicht belegt", "Die Zahl der vorhandenen Originalseiten ist nicht zuverlässig gespeichert.") }
-            if let state = document.localImport?.state, state != .completed, document.localImport?.error == nil {
-                add(.processing, "unfinished", "Textlauf nicht vollständig abgeschlossen", "Die Verarbeitung wurde nur teilweise abgeschlossen, unterbrochen oder abgebrochen. Bereits gespeicherter Text bleibt erhalten.")
+            if let state = document.localImport?.state, [.interrupted, .cancelled, .failed].contains(state),
+               document.localImport?.error == nil {
+                add(.processing, "unfinished", "Texterkennung nicht abgeschlossen", "Bereits gespeicherte Textseiten bleiben für Fragen verfügbar.")
             }
             if let expectedPages, document.localImport?.pages.contains(where: { !(1...expectedPages).contains($0.page) }) == true {
                 add(.processing, "range", "Gespeicherte Seitenzuordnung widersprüchlich", "Verarbeitungsdaten liegen außerhalb des gespeicherten Seitenumfangs. Daraus lässt sich keine vollständige Verarbeitung ableiten.")
@@ -99,7 +125,7 @@ package struct LocalDocumentQuality: Sendable {
                     add(.text, "reading-\(revision.id)", "Lesung geändert", "Die Nachlesungen stimmen überein. Die frühere Lesung bleibt lokal erhalten. Prüfe die Änderung am Original.", focus: page.focus(quote: revision.current))
                 }
                 if page.info?.method == .unreadable {
-                    add(.text, "unreadable", "Kein lesbarer Text erkannt", "Vergleiche Seite \(page.id) mit dem Original. Eine unlesbare Erkennung ist keine fehlende Seite.", focus: focus)
+                    add(.text, "unreadable", "Kein lesbarer Text erkannt", "Zu dieser Seite fehlt lesbarer Text. Steht eine gesuchte Angabe dort, prüfe sie im Original.", focus: focus)
                 } else if page.info == nil || page.text == nil && page.info?.method != .blank {
                     add(.processing, "unassigned", "Seitentext nicht eindeutig zugeordnet", "Für Seite \(page.id) fehlt eine eindeutige gespeicherte Verarbeitung. Das belegt keine fehlende Originalseite.", focus: focus)
                 }

@@ -100,6 +100,7 @@ public struct LocalBaseAnalysisService: Sendable {
         package let before: String
         package let after: String
         package let automaticTitle: String?
+        package let historicalSuggestion: String?
         package let method: String
         package let headingPage: Int?
         package let manualOverride: Bool
@@ -107,18 +108,27 @@ public struct LocalBaseAnalysisService: Sendable {
 
     /// The preview uses the same proposal and legacy/manual rules as the write path.
     /// It opens the record snapshot read-only, without the import worker or writer lock.
-    package func previewTitles() async throws -> [TitlePreview] {
+    package func previewTitles(limit: Int? = nil) async throws -> [TitlePreview] {
         let sources = try LocalVaultSnapshotSource(fileURL: store.snapshotURL).loadDocuments()
         var results: [TitlePreview] = []
-        for source in sources.sorted(by: { ($0.importedAt, $0.id.uuidString) > ($1.importedAt, $1.id.uuidString) }) {
+        let ordered = sources.sorted { ($0.importedAt, $0.id.uuidString) > ($1.importedAt, $1.id.uuidString) }
+        for source in ordered.prefix(max(0, limit ?? ordered.count)) {
             try Task.checkCancellation()
             var proposed = source
             var headingPage: Int?
+            var historicalSuggestion: String?
             let method: String
             if source.localImport?.state == .queued || source.localImport?.state == .recognizing {
                 method = "busy"
             } else if source.localImport?.originalState == .changed {
                 method = "sourceChanged"
+                // The retained text can explain the earlier version. Keep it out of the
+                // effective proposal and preserve the changed-source refusal on writes.
+                do {
+                    let title = try await determineTitle(of: source)
+                    historicalSuggestion = title.value
+                    headingPage = title.headingPage
+                } catch LocalImportError.invalidDocument {}
             } else {
                 do {
                     let title = try await determineTitle(of: source)
@@ -131,7 +141,8 @@ public struct LocalBaseAnalysisService: Sendable {
             }
             results.append(.init(documentID: source.id, sourceName: source.sourceName, pages: source.pageCount,
                                  before: source.title, after: proposed.title,
-                                 automaticTitle: proposed.generatedTitle, method: method,
+                                 automaticTitle: proposed.generatedTitle, historicalSuggestion: historicalSuggestion,
+                                 method: method,
                                  headingPage: headingPage, manualOverride: proposed.manualTitle != nil))
         }
         return results

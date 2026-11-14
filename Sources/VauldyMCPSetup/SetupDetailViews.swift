@@ -116,7 +116,9 @@ struct SetupDocumentList: View {
                                 }.font(.caption).foregroundStyle(.secondary)
                                 HStack(spacing: 10) {
                                     Text(model.documentSharingLabel(document))
-                                    Text(model.importLabel(document, compact: true))
+                                    if !model.isLocalVault || document.localImport == nil {
+                                        Text(model.importLabel(document, compact: true))
+                                    }
                                 }.font(.caption).foregroundStyle(.secondary)
                                 if let step = SetupDocumentGuidance(document).nextStep {
                                     Text(step).font(.caption).foregroundStyle(.secondary)

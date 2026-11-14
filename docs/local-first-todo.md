@@ -6,6 +6,25 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Betreff, Titelbausteine und Hinweise für Chatfragen 0.14.5 · 14.11.2026
+
+- [x] Betreffzeilen auf Seite 1 und gleichseitig belegte Bausteine für Aussteller,
+  Bezugsjahr und Zeitraum. Konkurrierende Aussteller auslassen. Erste Seite
+  vor abweichenden Dokumentarten in Anlagen bevorzugen.
+- [x] Schreibgeschützte Durchsicht der 18 neuesten Dateien. 14 aktuelle
+  Änderungsvorschläge und vier getrennt gekennzeichnete historische Vorschläge.
+  Bei allen 18 stimmt der erwartete Dokumentanlass. Archiv und Freigaben wurden
+  per Bytevergleich geprüft. Keine neue OCR im persönlichen Bestand.
+- [x] Leseumfang und mögliche Folgen für Chatfragen sichtbar. Fehlender
+  Seitentext, erkannte Unsicherheit und frühere Originalfassung sind unterscheidbar.
+  Drei Zustände in einem isolierten synthetischen macOS-Testbestand geprüft.
+- [x] Test run with 378 tests in 60 suites passed after 201.970 seconds. Zwei optionale Tests übersprungen.
+  Titelpflege, Stdio, Werkzeugparität und isoliertes Update/Rollback am Paket geprüft.
+- [ ] Weitere Vorlagen für Betreff und Absender auf einem unabhängigen Korpus prüfen.
+  Installationsprüfung auf einem frischen Offline-Mac bleibt offen.
+
+[Prüfnachweis und Paketkennung](quality/release-0.14.5-2026-11-14/summary.json).
+
 ## Layoutbasierte Titel 0.14.4 · 14.11.2026
 
 - [x] Automatische Titel aus überprüften Zeilenpositionen, Zeilenhöhe und Abstand

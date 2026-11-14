@@ -91,6 +91,33 @@ Bei eigenen Titeln enthält sie zusätzlich den automatischen Vorschlag. Laufend
 geänderte Originale werden übersprungen. Nur die zweite Anweisung übernimmt einen Vorschlag
 für das ausdrücklich angegebene Dokument. Keine der beiden Anweisungen startet Texterkennung.
 
+## Betreff und Titelbausteine auf Seite 1 (0.14.5)
+
+Die Titelauswahl prüft zunächst beschriftete oder erkennbare Betreffzeilen auf der
+ersten Seite. Die Lage vor einer passenden Anrede kann eine Betreffzeile auch ohne
+größere Schrift stützen. Klare Betreffzeilen wie eine nummerierte Zahlungserinnerung
+haben Vorrang vor dem Typ einer späteren Anlage. Anweisungsförmige Zeilen und
+konkurrierende Betreffvorschläge bleiben ausgeschlossen.
+
+Belegte Teile können zusammen einen Titel bilden, etwa ein sachlich passender
+Ausstellerstreifen, eine mehrzeilige Steuerüberschrift mit Bezugsjahr oder der
+eindeutige Quartalszeitraum eines Depotauszugs. Mehrdeutige Aussteller werden
+weggelassen. Die Zuordnung stützt sich auf den gespeicherten Text und das geprüfte
+Layout derselben ersten Seite. Es gibt weder einen neuen OCR-Aufruf noch einen
+Modellaufruf für diese Auswertung. Die Vorschläge verändern keine Basisanalyse
+und keine Belegzeilen. Manuelle Titel behalten Vorrang.
+
+`vauldy-local title-preview --store /absoluter/bestand --limit 18` ermittelt
+die höchstens 18 neuesten Vorschläge nach gespeicherter Importzeit. Für eine
+geänderte Originaldatei zeigt die Ausgabe allenfalls mit `historicalSuggestion`
+eine getrennte Titelidee aus der alten Fassung. `after` bleibt dabei unverändert.
+Das Speichern einer Neubestimmung bleibt bei geänderter Quelle gesperrt.
+
+Die Dokumentansicht nennt den lesbaren Seitenumfang und erläutert, wie fehlender
+Text, unsichere Stellen oder eine ältere Fassung die Beleggrundlage für Chatfragen
+beeinflussen. Detailbefunde und optionale Basisangaben bleiben aufklappbar.
+Ein technisches Prüfkennzeichen allein ist keine gemessene Qualität der Chatantwort.
+
 ## Qualitätskorpus
 
 `Tests/VauldyMCPRuntimeTests/Fixtures/overview-corpus.json` enthält 26 künstliche Fälle aus
