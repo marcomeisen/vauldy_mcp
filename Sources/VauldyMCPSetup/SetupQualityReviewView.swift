@@ -52,6 +52,7 @@ struct SetupQualityReviewView: View {
     }
     private var canRetry: Bool {
         preview != nil && renderedRequest == request && !loadingPreview && !retrying && !blocked
+            && review?.name.lowercased().hasSuffix(".eml") != true
             && review?.state != .queued && review?.state != .recognizing && executable != nil
     }
 
@@ -328,7 +329,6 @@ extension SetupModel {
         for index in report.items.indices where report.items[index].documentID == document.id {
             let state = document.localImport?.state
             report.items[index].ocrReview = state == .partial || state == .failed || state == .interrupted
-            report.items[index].analysisReview = document.isSearchable && document.baseAnalysisStatus != "completed"
         }
         importReport = report
     }

@@ -18,7 +18,6 @@ struct SetupDocumentsView: View {
                 } else {
                     Button("Chatbot verbinden", action: model.newConnection)
                 }
-                Button("Ordner verwalten") { model.section = .folders }
             }.disabled(model.busy || model.importing)
             SetupDocumentList(model: model)
         }
@@ -39,8 +38,19 @@ struct SetupDocumentSource: View {
                     Button("Archivdatei auswählen …", action: model.chooseVault)
                 }.fixedSize()
             }
-            Text("Einzeldateien werden lokal kopiert. Beim Ordnerimport bleiben die Originale an ihrem Ort.")
-                .font(.caption).foregroundStyle(.secondary)
+            HStack {
+                Button("Automatischer Ordnerimport …", systemImage: "folder.badge.plus") { model.section = .folders }
+                if model.watchedFolders.contains(where: model.watchNeedsAccess) {
+                    Text("Ordner zuletzt nicht erreichbar")
+                        .font(.caption).foregroundStyle(.secondary)
+                } else if model.watchedFolders.contains(where: \.enabled) && model.watchRunning {
+                    Text("Ordnerüberwachung aktiv").font(.caption).foregroundStyle(.secondary)
+                }
+                if model.watchedFolders.contains(where: \.enabled) && !model.watchRunning {
+                    Text("Ordnerüberwachung angehalten").font(.caption).foregroundStyle(.secondary)
+                    Button("Überwachung starten") { Task { await model.refreshWatchedFolders(resume: true) } }
+                }
+            }
         }.disabled(model.busy || model.importing)
     }
 }
@@ -52,11 +62,10 @@ struct SetupDocumentList: View {
     private struct ReviewSelection: Identifiable { let id: UUID; var page: Int? = nil; var quote: String? = nil; var focus: LocalDocumentQuality.Focus? = nil }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if !model.documents.isEmpty {
-                Text("Diese Dokumente sind bereits im Bestand. Prüfhinweise zu Text oder Basisangaben erfordern keinen erneuten Import.")
-                    .font(.callout).foregroundStyle(.secondary)
-                    .accessibilityIdentifier("existing-document-guidance")
-            }
+            Label("\(SetupText.documents(model.documents.count)) " + (model.isLocalVault ? "im lokalen Bestand" : "im ausgewählten Archiv"),
+                  systemImage: "tray.full")
+                .font(.headline)
+                .accessibilityIdentifier("document-inventory-total")
 
             if let imported = model.shownImportDocumentIDs {
                 HStack {
@@ -71,31 +80,37 @@ struct SetupDocumentList: View {
                 }.labelsHidden().frame(width: 220)
             }
             if !model.showingSetup && model.isLocalVault {
-                HStack {
-                    Button("Treffer auswählen (\(model.visibleOCRDocumentIDs.count))") { model.ocrSelected.formUnion(model.visibleOCRDocumentIDs) }
-                        .disabled(model.visibleOCRDocumentIDs.isSubset(of: model.ocrSelected))
-                        .help("Wählt alle Treffer der aktuellen Suche und Filter zum erneuten Lesen aus, auch unterhalb des sichtbaren Fensterausschnitts.")
-                    Button("Auswahl aufheben") { model.ocrSelected.removeAll() }.disabled(model.ocrSelected.isEmpty)
-                    Spacer()
-                    Text("\(model.selectedOCRDocuments.count) zum erneuten Lesen ausgewählt").font(.callout).foregroundStyle(.secondary)
-                    Button("Ausgewählten Text erneut lesen", systemImage: "arrow.clockwise", action: model.retrySelectedOCR)
-                        .disabled(model.selectedOCRDocuments.isEmpty)
-                        .help("Optional bei fehlendem oder fehlerhaftem Text. Ein Hinweis zur Basisanalyse allein erfordert keinen neuen Textlauf.")
-                        .accessibilityIdentifier("batch-ocr-start")
-                }.disabled(model.busy || model.importing)
-                let visibleIDs = Set(model.filteredDocuments.map(\.id))
-                let hidden = model.ocrSelected.subtracting(visibleIDs).count
-                Text(hidden > 0 ? "\(hidden) ausgewählte Dokumente außerhalb des Filters werden ebenfalls gelesen." : "Erneut lesen ist optional und fügt keine Dokumente hinzu. Bestehende Belegzeilen und Chatbot-Freigaben bleiben erhalten.")
+                DisclosureGroup("Text erneut lesen", isExpanded: $model.showOCROptions) {
+                    HStack {
+                        Button("Treffer auswählen (\(model.visibleOCRDocumentIDs.count))") { model.ocrSelected.formUnion(model.visibleOCRDocumentIDs) }
+                            .disabled(model.visibleOCRDocumentIDs.isSubset(of: model.ocrSelected))
+                            .help("Wählt alle Treffer der aktuellen Suche und Filter zum erneuten Lesen aus, auch unterhalb des sichtbaren Fensterausschnitts.")
+                        Button("Auswahl aufheben") { model.ocrSelected.removeAll() }.disabled(model.ocrSelected.isEmpty)
+                        Spacer()
+                        Text("\(model.selectedOCRDocuments.count) zum erneuten Lesen ausgewählt").font(.callout).foregroundStyle(.secondary)
+                        Button("Ausgewählten Text erneut lesen", systemImage: "arrow.clockwise", action: model.retrySelectedOCR)
+                            .disabled(model.selectedOCRDocuments.isEmpty)
+                            .help("Optional bei fehlendem oder fehlerhaftem Text. Ein Hinweis zur Basisanalyse allein erfordert keinen neuen Textlauf.")
+                            .accessibilityIdentifier("batch-ocr-start")
+                    }.disabled(model.busy || model.importing)
+                    let visibleIDs = Set(model.filteredDocuments.map(\.id))
+                    let hidden = model.ocrSelected.subtracting(visibleIDs).count
+                    Text(hidden > 0 ? "\(hidden) ausgewählte Dokumente außerhalb des Filters werden ebenfalls gelesen." : "Erneut lesen ist optional und fügt keine Dokumente hinzu. Bestehende Belegzeilen und Chatbot-Freigaben bleiben erhalten.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }.padding(.bottom, 4)
+            }
+            if model.filteredDocuments.count != model.documents.count {
+                Text("\(model.filteredDocuments.count) von \(model.documents.count) angezeigt")
                     .font(.caption).foregroundStyle(.secondary)
             }
             if model.filteredDocuments.isEmpty {
-                ContentUnavailableView(model.documents.isEmpty ? "Noch keine Dokumente" : "Keine passenden Dokumente", systemImage: "doc.text.magnifyingglass", description: Text(model.documents.isEmpty ? "Importiere PDFs oder Bilder oder probiere das Beispieldokument aus." : "Ändere Suche oder Filter."))
+                ContentUnavailableView(model.documents.isEmpty ? "Noch keine Dokumente" : "Keine passenden Dokumente", systemImage: "doc.text.magnifyingglass", description: Text(model.documents.isEmpty ? "Füge PDFs, Bilder oder EML-Dateien hinzu." : "Ändere Suche oder Filter."))
                     .frame(maxWidth: .infinity, minHeight: 160)
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(model.filteredDocuments, id: \.id) { document in
                         HStack(alignment: .top, spacing: 12) {
-                            if !model.showingSetup && model.isLocalVault {
+                            if model.showOCROptions && !model.showingSetup && model.isLocalVault {
                                 Toggle("\(model.documentDisplayName(document)) für Texterkennung auswählen", isOn: Binding(get: { model.ocrSelected.contains(document.id) }, set: { value in
                                     if value { model.ocrSelected.insert(document.id) } else { model.ocrSelected.remove(document.id) }
                                 })).labelsHidden().disabled(model.busy || model.importing || (!model.canRetryOCR(document) && !model.ocrSelected.contains(document.id)))
@@ -173,11 +188,11 @@ struct SetupFoldersView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Automatische Ordnerüberwachung").font(.headline)
                 HStack {
-                    Button("Ordner zur Überwachung hinzufügen …", systemImage: "folder.badge.plus", action: model.chooseWatchedFolders)
+                    Button("Ordner zur Überwachung hinzufügen …", systemImage: "folder.badge.plus") { model.chooseWatchedFolders() }
                     Toggle("Unterordner einbeziehen", isOn: $model.watchRecursive).help("Gilt für neu hinzugefügte Ordner.")
                 }
             }.disabled(model.busy || model.importing)
-            Text("Ordnerimporte verwenden deine Originaldateien über dauerhafte Dateiverweise. Verschobene, gelöschte oder geänderte Originale können einen erneuten Zugriff erfordern. Neue Dokumente bleiben bis zu deiner ausdrücklichen Freigabe für Chatbots gesperrt.").foregroundStyle(.secondary)
+            Text("PDFs, Bilder und EML-Dateien erscheinen automatisch unter „Dokumente“. Anhänge aus E-Mails werden separat übernommen. Verschobene, gelöschte oder geänderte Originale können einen erneuten Zugriff erfordern. Neue Dokumente bleiben bis zu deiner ausdrücklichen Freigabe für Chatbots gesperrt.").foregroundStyle(.secondary)
             HStack {
                 Button("Bestehende Kopien prüfen …", action: model.inspectOriginalMigration)
                 Button("Originalzugriff prüfen", action: model.checkOriginals)
@@ -190,6 +205,9 @@ struct SetupFoldersView: View {
                     HStack {
                         Text(model.watchLabel(folder)).font(.callout)
                         Spacer()
+                        if model.watchNeedsAccess(folder) {
+                            Button("Ordner erneut auswählen …") { model.chooseWatchedFolders(reselecting: folder) }
+                        }
                         Button(folder.enabled ? "Pausieren" : "Fortsetzen") { model.changeWatchedFolder(folder) }
                         Button("Entfernen", role: .destructive) { model.changeWatchedFolder(folder, remove: true) }
                     }
@@ -257,7 +275,7 @@ struct SetupSettingsView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text(model.installation.root.path).font(.caption).textSelection(.enabled)
                             Button("Importdienst nach laufendem Auftrag beenden", action: model.stopWorker)
-                            Text("Damit wird auch die Ordnerüberwachung angehalten. Du kannst sie unter „Dokumente → Ordner verwalten“ wieder starten.").font(.caption).foregroundStyle(.secondary)
+                            Text("Damit wird auch die Ordnerüberwachung angehalten. Du kannst sie unter „Dokumente → Automatischer Ordnerimport“ wieder starten.").font(.caption).foregroundStyle(.secondary)
                         }.padding(.top, 8)
                     }
                 }.padding(10).frame(maxWidth: .infinity, alignment: .leading)

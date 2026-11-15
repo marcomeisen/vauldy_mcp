@@ -40,12 +40,23 @@ public struct LocalImportWorker: Sendable {
         guard FileManager.default.fileExists(atPath: url.path) else { return [] }
         return try read(url, as: [LocalWatchScanStatus].self)
     }
-    public func importFile(_ file: URL, storage: LocalOriginalStorage = .managedCopy, renewOriginalAccess: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
+    public func importFile(_ file: URL, storage: LocalOriginalStorage = .managedCopy, renewOriginalAccess: Bool = false,
+                           onStored: @escaping @Sendable ([UUID]) async -> Void = { _ in },
+                           progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
         try Task.checkCancellation()
-        let staged = try await store.stage(file: file, storage: storage, renewOriginalAccess: renewOriginalAccess)
-        if staged.duplicate, staged.document.localImport?.state != .queued {
+        let staged = try await store.stageWithAdditions(file: file, storage: storage, renewOriginalAccess: renewOriginalAccess)
+        if !staged.added.isEmpty { await onStored(staged.added) }
+        if staged.document.localImport?.fileExtension == "eml" {
+            try await prepare()
+            for id in try await pendingAttachments(of: staged.document) {
+                _ = try enqueue(id)
+                // Start after each durable admission so a full queue cannot strand this batch.
+                try await Task.detached { try startIfNeeded() }.value
+            }
+        }
+        if staged.document.localImport?.fileExtension == "eml" || (staged.duplicate && staged.document.localImport?.state != .queued) {
             return .init(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
-                         reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
+                         reusedOriginal: staged.duplicate, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
         }
         let outcome = try await submit(staged.document.id, progress: progress)
         guard staged.duplicate else { return outcome }
@@ -111,7 +122,10 @@ public struct LocalImportWorker: Sendable {
     /// Fresh reads bypass checkpoints and preserve existing literal evidence.
     /// A changed prior line keeps the previous page and remains reviewable.
     public func retry(documentID: UUID, fresh: Bool = false, progress: @escaping @Sendable (LocalImportProgress) -> Void = { _ in }) async throws -> LocalImportOutcome {
-        try await submit(documentID, fresh: fresh, progress: progress)
+        if let mail = try await store.document(id: documentID), mail.localImport?.fileExtension == "eml" {
+            throw LocalImportError.unsupportedFile
+        }
+        return try await submit(documentID, fresh: fresh, progress: progress)
     }
     public func status() async throws -> Status {
         try await prepare()
@@ -235,7 +249,9 @@ public struct LocalImportWorker: Sendable {
                     guard !FileManager.default.fileExists(atPath: stopURL.path),
                           try jobs().filter({ $0.finishedAt == nil }).count < 200 else { throw LocalImportError.workerBusy }
                     let staged = try await store.stage(file: file, storage: .referenced)
-                    if !staged.duplicate || staged.document.localImport?.state == .queued {
+                    if staged.document.localImport?.fileExtension == "eml" {
+                        for id in try await pendingAttachments(of: staged.document) { _ = try enqueue(id) }
+                    } else if !staged.duplicate || staged.document.localImport?.state == .queued {
                         _ = try enqueue(staged.document.id)
                     }
                 }
@@ -293,6 +309,14 @@ public struct LocalImportWorker: Sendable {
             }
         }
     }
+    private func pendingAttachments(of mail: VaultDocument) async throws -> [UUID] {
+        var queued: [UUID] = []
+        for id in mail.localImport?.emailAttachmentIDs ?? [] {
+            if try await store.document(id: id)?.localImport?.state == .queued { queued.append(id) }
+        }
+        return queued
+    }
+
     private func jobs() throws -> [Job] {
         let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
             .filter { $0.pathExtension == "json" && UUID(uuidString: $0.deletingPathExtension().lastPathComponent) != nil }

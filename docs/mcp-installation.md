@@ -1,4 +1,4 @@
-# Vauldy MCP einrichten (macOS, Version 0.14.5)
+# Vauldy MCP einrichten (macOS, Version 0.14.6)
 
 Vauldy kann Dokumente eigenständig lokal importieren, Text erkennen und für MCP bereitstellen.
 Die bisherige Vauldy-App wird dafür nicht benötigt. Der Import erfolgt über den mitgelieferten
@@ -23,7 +23,7 @@ getrennt. [Ablauf und Grenzen](inventory-workflow.md).
 1. `Vauldy.zip` entpacken, `Vauldy.app` nach Programme verschieben und öffnen. Pakete mit den bisherigen Namen `Vauldy-MCP-macOS.zip` / `Vauldy MCP Einrichtung.app` werden genauso verwendet. Voraussetzung: macOS 14 oder neuer und eine zum Paket passende Prozessorarchitektur.
 2. Beim ersten gewöhnlichen Start ohne installierte Software und ohne Verbindungen öffnet sich der Installationsassistent automatisch. Er zeigt Version und Speicherort. Mit **„Installieren“** werden die lokalen Programme geprüft, eingerichtet und mit einem synthetischen Profil gestartet. Der Abschluss zeigt die installierte Version und das Ergebnis des lokalen Starttests. Für diesen Schritt brauchst du kein Konto. Nach „Abbrechen“ kannst du ihn über **Übersicht → Installation starten** wieder öffnen.
 3. Am erfolgreichen Abschluss **„Chatbot verbinden“** wählen. Dieser eigene Assistent führt durch **Chatbot → Dokumente → Verbindung**. Mit **„Später einrichten“** beendest du die Installation ohne Chatbot-Verbindung. Der Verbindungsassistent bleibt über die Übersicht erreichbar.
-4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs oder Bilder mit „Neue Dateien hinzufügen …“ lokal kopieren, mit „Ordner einmal importieren …“ Originale am vorhandenen Ort verknüpfen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zeigt die Gesamtzahl gefundener unterstützter Dokumente, die aktuelle Datei und den Verarbeitungsschritt. „Import abbrechen“ zeigt den laufenden Abbruch. Beim Schließen des Assistenten läuft der Import weiter. Die Freigabe erfolgt separat.
+4. Chatbot und optional einen Verbindungsnamen wählen. Unter „Dokumente“ PDFs, Bilder oder EML-Dateien mit „Neue Dateien hinzufügen …“ lokal kopieren, mit „Ordner einmal importieren …“ Originale am vorhandenen Ort verknüpfen oder über „Weitere Quellen“ das künstliche Beispieldokument ausprobieren. Beim einmaligen Ordnerimport können mehrere Ordner ausgewählt werden. „Unterordner einbeziehen“ ist vorausgewählt. Der Fortschritt zeigt die Gesamtzahl gefundener unterstützter Dokumente, die aktuelle Datei und den Verarbeitungsschritt. „Import abbrechen“ zeigt den laufenden Abbruch. Beim Schließen des Assistenten läuft der Import weiter. Die Freigabe erfolgt separat.
 5. „Dokumente auswählen“ öffnet die gemeinsame Freigabeansicht. Lesbare Dokumente markieren, mit „Auswahl überprüfen“ Empfänger und Änderungen prüfen und die mögliche Weitergabe an dessen Cloud-Anbieter ausdrücklich bestätigen.
 6. „Auswahl für … freigeben“ speichert die Dokumentauswahl. Mit „Fertig“ zur Einrichtung zurückkehren. Für normale Chats anschließend unter „Verbindungen“ den OAuth-Anschluss im Chatbot abschließen und die Anfrage lokal bestätigen. Bei einem ausdrücklich gewählten lokalen MCP-Host wird ein passender Client-Eintrag angelegt. Konflikte mit bestehenden Einträgen bleiben sichtbar. Bei manueller Einrichtung steht „Konfiguration kopieren“ zur Verfügung.
 7. Der lokale Protokolltest prüft Handshake und Freigabestatus. Aktiviere Vauldy anschließend im Chatbot und starte dessen Verbindung bei Bedarf neu. Unter **Verbindungen** kannst du einzelne Zugriffe pausieren oder nach Bestätigung fortsetzen.
@@ -395,11 +395,13 @@ zu starten. Diese lokalen Verwaltungsbefehle verändern keine MCP-Dokumentfreiga
 
 ## Einen oder mehrere Ordner beobachten
 
-Im Assistenten unter **Ordner → „Ordner zur Überwachung hinzufügen …“** einen oder mehrere Ordner
-wählen. „Unterordner … einbeziehen“ gilt für neu hinzugefügte Ordner; standardmäßig wird nur die
-oberste Ebene gelesen. Vorhandene und später hinzugefügte PDFs und Bilder werden über dauerhafte,
-schreibgeschützte Dateiverweise durch denselben OCR-Worker verarbeitet. Neue Dokumente erscheinen in der Dokumentauswahl und müssen
-weiterhin ausdrücklich pro MCP-Verbindung freigegeben werden. Keine automatische Chatbot-Freigabe.
+Unter **Dokumente → Automatischer Ordnerimport … → Ordner zur Überwachung hinzufügen …**
+einen oder mehrere Ordner wählen. „Unterordner einbeziehen“ gilt für neu hinzugefügte Ordner.
+Die Voreinstellung erfasst die oberste Ebene. Vauldy übernimmt vorhandene und später
+hinzugefügte PDFs, Bilder und EML-Dateien automatisch in den lokalen Bestand.
+Chatbot-Zugriff erfordert eine ausdrückliche Freigabe pro Verbindung.
+„Überwachung starten“ setzt einen angehaltenen Importdienst fort. Wenn die
+letzte Prüfung den Ordner nicht erreichen konnte, dort „Ordner erneut auswählen …“ nutzen.
 
 Die Liste bleibt im eigenen Bestand unter `vault/watched-folders.json` gespeichert. Jeder Ordner
 lässt sich pausieren, fortsetzen oder entfernen. Entfernen oder Löschen einer Quelldatei löscht keine
@@ -407,6 +409,28 @@ gespeicherten Dokumenteinträge oder deren OCR. Ohne erreichbares Original sind 
 OCR nicht möglich. Geänderte Dateiinhalte erzeugen einen neuen Datensatz; identische
 Bytes werden auch über mehrere Ordner hinweg per SHA-256 dedupliziert. Fehlgeschlagene oder teilweise
 erkannte Originale werden nicht endlos neu erkannt; dafür „Text erneut lesen“ verwenden.
+
+### E-Mails im Importordner
+
+Speichere eine Nachricht als `.eml` (in Apple Mail „Reine Datei der E-Mail“) und
+lege sie in den beobachteten Ordner. Vauldy übernimmt Betreff, Absender,
+Versanddatum und Nachrichtentext direkt. PDF- und unterstützte Bildanhänge
+erscheinen separat im lokalen Bestand und durchlaufen die normale Texterkennung.
+Bereits vorhandene Inhaltsbytes werden wiederverwendet. Das EML-Original
+verbleibt bei Ordnerimporten an seinem Ort. Extrahierte Anhänge erhalten eine
+lokale Kopie. Neue Einträge brauchen ihre eigene Chatbot-Freigabe.
+
+Vauldy verarbeitet MIME vor Ort, bevorzugt die Klartextfassung und liest
+HTML-Mails als Text. Externe Inhalte, eingebettete Signaturbilder mit Content-ID
+und sonstige Dateitypen werden nicht nachgeladen oder separat importiert.
+Postfächer, .msg, .mbox sowie verschlüsselte E-Mails sind nicht unterstützt.
+Es gelten die lokale Dateigrößengrenze und zusätzlich höchstens 24 unterstützte
+Anhänge je Nachricht.
+
+Die Dokumentliste zeigt neu gespeicherte Dateien zuerst. Beim Import nennt
+Vauldy die Zahl der tatsächlich neu hinzugefügten Einträge. Bereits vorhandene
+Dateien und die Option „Text erneut lesen“ erhöhen diese Zahl nicht.
+Die Zahl der freigegebenen Dokumente wird getrennt angezeigt.
 
 Die Prüfung erfolgt etwa alle fünf Sekunden zwischen OCR-Aufträgen. Eine Datei muss in zwei Prüfungen
 unveränderte Größe und Änderungsdaten haben, bevor sie importiert wird. Laufende OCR kann die nächste

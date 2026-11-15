@@ -31,6 +31,9 @@ extension VaultDocument {
         return SHA256.hash(data: (try? encoder.encode(source)) ?? Data()).map { String(format: "%02x", $0) }.joined()
     }
     func resolvedTitle(using analysis: DocumentBaseAnalysis) -> (value: String, headingPage: Int?, usesLayout: Bool) {
+        if localImport?.fileExtension == "eml" {
+            return (LocalEmail.title(in: baseAnalysisPages.first?.text ?? ""), 1, false)
+        }
         let pages = baseAnalysisPages
         guard !pages.isEmpty, !analysis.documents.isEmpty else { return (DocumentTitlePolicy.fallback, nil, false) }
         if analysis.documents.count > 1 { return (analysis.displayTitle, nil, false) }
@@ -150,6 +153,9 @@ public struct LocalBaseAnalysisService: Sendable {
 
     private func determineTitle(of source: VaultDocument) async throws -> (value: String, headingPage: Int?, usesLayout: Bool) {
         let pages = source.baseAnalysisPages
+        if source.localImport?.fileExtension == "eml" {
+            return (LocalEmail.title(in: pages.first?.text ?? ""), 1, false)
+        }
         guard !pages.isEmpty else { return (DocumentTitlePolicy.fallback, nil, false) }
         let proposal = try await analyzer.analyze(pages: pages)
         try Task.checkCancellation()

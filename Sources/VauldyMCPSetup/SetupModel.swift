@@ -84,6 +84,8 @@ final class SetupModel: ObservableObject {
     @Published var importFileName: String?
     @Published var importCancelling = false
     @Published var importReport: SetupImportReport?
+    @Published var addedDuringImport: Set<UUID> = []
+    @Published var showOCROptions = false
     @Published var shownImportDocumentIDs: Set<UUID>?
     private var importProgressToken: UUID?
     @Published var importing = false
@@ -152,13 +154,20 @@ final class SetupModel: ObservableObject {
         } catch { watchFailure = (error as? LocalizedError)?.errorDescription ?? "Die Ordnerüberwachung ist nicht verfügbar." }
     }
 
-    func chooseWatchedFolders() {
+    func watchNeedsAccess(_ folder: LocalWatchedFolder) -> Bool {
+        folder.enabled && watchScans.contains { $0.folderID == folder.id && $0.issue == .unavailable }
+    }
+
+    func chooseWatchedFolders(reselecting folder: LocalWatchedFolder? = nil) {
         let panel = NSOpenPanel()
-        panel.title = "Ordner beobachten"
-        panel.message = "Vorhandene und neue PDFs und Bilder werden lokal importiert. Neue Dokumente benötigen weiterhin deine ausdrückliche Chatbot-Freigabe."
-        panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = true
+        panel.title = folder == nil ? "Ordner beobachten" : "Beobachteten Ordner erneut auswählen"
+        panel.message = folder == nil
+            ? "Vorhandene und neue PDFs, Bilder und EML-Dateien werden lokal importiert."
+            : "Wähle denselben Ordner erneut, damit Vauldy wieder darauf zugreifen kann."
+        if let folder { panel.directoryURL = URL(fileURLWithPath: folder.path).deletingLastPathComponent() }
+        panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = folder == nil
         guard panel.runModal() == .OK else { return }
-        let urls = panel.urls, recursive = watchRecursive
+        let urls = panel.urls, recursive = folder?.recursive ?? watchRecursive
         busy = true
         Task {
             do {
@@ -166,7 +175,7 @@ final class SetupModel: ObservableObject {
                 guard let worker = localWorker else { throw LocalImportError.storageUnavailable }
                 try await worker.start()
                 try await refreshLocalDocuments()
-                message = "Ordner gespeichert. Vorhandene und neue Dokumente werden lokal importiert; bitte anschließend einzeln für MCP freigeben."
+                message = "Ordner gespeichert. Die Dateien erscheinen automatisch unter „Dokumente“. Die Chatbot-Freigabe ist optional."
                 failure = false
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Ordner konnten nicht gespeichert werden.") }
             busy = false
@@ -194,10 +203,11 @@ final class SetupModel: ObservableObject {
 
     func watchLabel(_ folder: LocalWatchedFolder) -> String {
         guard folder.enabled else { return "Pausiert" }
-        guard watchRunning else { return "Importdienst gestoppt · zum Fortsetzen starten" }
+        if watchNeedsAccess(folder) { return watchRunning ? "Ordner nicht erreichbar" : "Bei letzter Prüfung nicht erreichbar" }
+        guard watchRunning else { return "Ordnerüberwachung angehalten" }
         guard let scan = watchScans.first(where: { $0.folderID == folder.id }) else { return "Wartet auf erste Prüfung" }
         switch scan.issue {
-        case .unavailable: return "Ordner nicht erreichbar · Zugriff prüfen"
+        case .unavailable: return "Ordner nicht erreichbar"
         case .scanLimit: return "Zu viele Einträge · höchstens 20.000 pro Ordner"
         case .importFailed: return "Ein Import ist fehlgeschlagen · wird erneut geprüft"
         case nil: return "Aktiv · zuletzt geprüft: \(scan.scannedAt.formatted(date: .omitted, time: .standard))"
@@ -233,8 +243,8 @@ final class SetupModel: ObservableObject {
         let panel = NSOpenPanel()
         panel.title = "Dokumente lokal importieren"
         panel.prompt = "Importieren"
-        panel.message = "PDFs und Bilder werden in den eigenen lokalen Bestand kopiert und auf diesem Mac gelesen. Der Import erteilt keine Chatbot-Freigabe."
-        panel.allowedContentTypes = [UTType.pdf, .png, .jpeg, .tiff, .heic]
+        panel.message = "PDFs, Bilder und EML-Dateien werden lokal übernommen. Der Import erteilt keine Chatbot-Freigabe."
+        panel.allowedContentTypes = [UTType.pdf, .png, .jpeg, .tiff, .heic] + [UTType(filenameExtension: "eml")].compactMap { $0 }
         panel.canChooseDirectories = false; panel.allowsMultipleSelection = true
         if panel.runModal() == .OK { importFiles(panel.urls) }
     }
@@ -264,6 +274,13 @@ final class SetupModel: ObservableObject {
         retryingOCR = isRetry
         importing = true; failure = false; configuration = nil
         importReport = nil; importFileName = nil; importCancelling = false
+        addedDuringImport = []
+        if !isRetry {
+            section = .documents
+            documentFilter = .all
+            documentSearch = ""
+            shownImportDocumentIDs = nil
+        }
         importProcessed = 0
         importTotal = folderRecursive == nil ? (isRetry ? retryIDs.count : urls.count) : nil
         message = ""
@@ -303,7 +320,9 @@ final class SetupModel: ObservableObject {
                         if isRetry { outcome = try await service.retry(documentID: retryIDs[index], fresh: true, progress: updates) }
                         else {
                             outcome = try await service.importFile(files[index], storage: batch == nil ? .managedCopy : .referenced,
-                                                                   progress: updates)
+                                                                   onStored: { [weak self] ids in
+                            await self?.updateStoredImport(ids)
+                        }, progress: updates)
                         }
                         report.items.append(.init(name: name, outcome: outcome, isRetry: isRetry))
                     } catch is CancellationError {
@@ -332,10 +351,17 @@ final class SetupModel: ObservableObject {
             do { try await refreshLocalDocuments() }
             catch { showError((error as? LocalStoreCapacityError)?.errorDescription ?? (error as? LocalImportError)?.errorDescription ?? "Der Bestand konnte nicht neu geladen werden.") }
             if isRetry { ocrSelected.subtract(report.items.compactMap(\.documentID)) }
+            report.addedDocumentIDs = addedDuringImport
             importReport = report
             retryingOCR = false
             importTotal = nil; importing = false; importTask = nil; importCancelling = false
         }
+    }
+
+    private func updateStoredImport(_ ids: [UUID]) async {
+        addedDuringImport.formUnion(ids)
+        do { try await refreshLocalDocuments() }
+        catch { showError("Die Dateien sind im Bestand. Die Dokumentliste konnte noch nicht aktualisiert werden.") }
     }
 
     func stopWorker() {
@@ -358,7 +384,7 @@ final class SetupModel: ObservableObject {
         localSnapshotURL = localStore.snapshotURL
         if !isLocalVault { editing = nil; selected = []; acknowledged = false }
         vaultURL = localStore.snapshotURL
-        documents = loaded.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
+        documents = loaded.sorted { ($0.importedAt, $0.id.uuidString) > ($1.importedAt, $1.id.uuidString) }
         selected.formIntersection(Set(loaded.map(\.id)))
         ocrSelected.formIntersection(Set(loaded.map(\.id)))
     }

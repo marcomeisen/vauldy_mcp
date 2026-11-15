@@ -6,6 +6,25 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Direkter E-Mail-Import und lokaler Bestand 0.14.6 · 15.11.2026
+
+- [x] EML aus beobachteten Ordnern, Einzeldateiauswahl und Ordnerimport. Betreff,
+  Absender, Datum und Nachrichtentext aus MIME vor Ort übernehmen. PDF- und
+  unterstützte Bildanhänge als eigene Dokumente speichern und erkennen.
+- [x] Neue lokale Einträge direkt anzeigen. Neu hinzugefügte und vorhandene
+  Dokumente sowie erneut gelesenen Text im Bericht getrennt zählen. Bestandszahl
+  getrennt von der Chatbot-Auswahl. Textwartung eingeklappt, optionale Basisangaben
+  in der Dokumentansicht. Angehaltene Überwachung und nicht erreichbare Ordner
+  mit sichtbaren Schritten zum Fortsetzen und zur erneuten Ordnerauswahl.
+- [x] Test run with 383 tests in 61 suites passed after 220.976 seconds. Zwei optionale Tests übersprungen.
+  Native Oberfläche, beobachtete Ordner, EML-Deduplikation und Freigaben, Stdio,
+  Titelpflege, Werkzeugparität und isoliertes Update/Rollback am Paket geprüft.
+- [ ] Gesonderte Formate und direkte Postfachanbindung sind offen. Das lokale Paket
+  ist ad hoc signiert. Die installierte App und der tatsächliche Bestand wurden
+  in dieser Iteration nicht aktualisiert.
+
+[Prüfnachweis und Paketkennung](quality/release-0.14.6-2026-11-15/summary.json).
+
 ## Betreff, Titelbausteine und Hinweise für Chatfragen 0.14.5 · 14.11.2026
 
 - [x] Betreffzeilen auf Seite 1 und gleichseitig belegte Bausteine für Aussteller,

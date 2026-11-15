@@ -51,7 +51,8 @@ public struct LocalDocumentStore: Sendable {
     private struct Marker: Codable { var kind = "vauldy-local-core"; var version = 1 }
     private static let io = DispatchQueue(label: "vauldy.local-store.io", qos: .utility)
     static let maximumOriginalBytes = 50 * 1_024 * 1_024
-    static let supportedExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "tif", "tiff", "heic", "heif"]
+    static let supportedExtensions = ocrExtensions.union(["eml"])
+    static let ocrExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "tif", "tiff", "heic", "heif"]
 
     public func documents() async throws -> [VaultDocument] {
         try await run { try locked { try read() } }
@@ -86,6 +87,12 @@ public struct LocalDocumentStore: Sendable {
     }
 
     public func stage(file: URL, storage: LocalOriginalStorage = .managedCopy, renewOriginalAccess: Bool = false) async throws -> (document: VaultDocument, duplicate: Bool) {
+        let staged = try await stageWithAdditions(file: file, storage: storage, renewOriginalAccess: renewOriginalAccess)
+        return (staged.document, staged.duplicate)
+    }
+
+    func stageWithAdditions(file: URL, storage: LocalOriginalStorage, renewOriginalAccess: Bool) async throws
+        -> (document: VaultDocument, duplicate: Bool, added: [UUID]) {
         try await run {
             guard file.isFileURL else { throw LocalImportError.unsupportedFile }
             let ext = file.pathExtension.lowercased()
@@ -117,7 +124,16 @@ public struct LocalDocumentStore: Sendable {
                         documents[index].localImport?.originalState = .available; changed = true
                     }
                     if changed { try save(documents) }
-                    return (documents[index], true)
+                    return (documents[index], true, [])
+                }
+                if ext == "eml" {
+                    let email = try LocalEmail(data)
+                    // Validate the captured source again after parsing before recording derived bytes.
+                    try access.verify(hash: hash)
+                    if let reference, try access.fileIdentity() != reference.identity { throw LocalOriginalError.changed }
+                    let batch = try stageEmail(email, data: data, hash: hash, name: file.lastPathComponent,
+                                               reference: reference, documents: documents)
+                    return (batch.mail, false, batch.added)
                 }
                 guard (try isSQLite ? database().count : documents.count) < VaultStorageLimits.importedDocuments else { throw LocalStoreCapacityError.documentCount }
                 var document = VaultDocument(title: file.deletingPathExtension().lastPathComponent,
@@ -134,19 +150,75 @@ public struct LocalDocumentStore: Sendable {
                 let encoded: Data?
                 if isSQLite { try database().validate(document); encoded = nil }
                 else { encoded = try encodedSnapshot(documents) }
-                if reference == nil {
-                    let originals = root.appendingPathComponent("originals", isDirectory: true)
-                    try privateDirectory(originals)
-                    let original = originals.appendingPathComponent("\(hash).\(ext)")
-                    try refuseSymlink(original)
-                    if FileManager.default.fileExists(atPath: original.path) {
-                        guard try Data(contentsOf: original) == data else { throw LocalImportError.damagedStore }
-                    } else { try privateWrite(data, to: original) }
-                } else { try requireReferenceStore() }
+                if reference == nil { try saveManagedOriginal(data, hash: hash, ext: ext) }
+                else { try requireReferenceStore() }
                 try save(documents, encoded: encoded)
-                return (document, false)
+                return (document, false, [document.id])
             }
         }
+    }
+
+    private func stageEmail(_ email: LocalEmail, data: Data, hash: String, name: String,
+                            reference: LocalOriginalReference?, documents: [VaultDocument]) throws -> (mail: VaultDocument, added: [UUID]) {
+        let sqlite = try isSQLite ? database() : nil
+        let count = try sqlite?.count ?? documents.count
+        var changes = documents
+        var staged = 1 // The mail and every new attachment commit as one document batch.
+        var attachmentIDs: [UUID] = []
+        var originals: [(Data, String, String)] = []
+        let now = Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down))
+        for attachment in email.attachments {
+            let digest = LocalOriginalAccess.hash(attachment.bytes)
+            let existing = try changes.first { $0.localImport?.contentHash == digest }
+                ?? sqlite?.importCandidates(hash: digest, reference: nil).first { $0.localImport?.contentHash == digest }
+            if let existing {
+                if !attachmentIDs.contains(existing.id) { attachmentIDs.append(existing.id) }
+                continue
+            }
+            var child = VaultDocument(title: DocumentTitlePolicy.fallback, sourceName: attachment.name, importedAt: now, status: "imported")
+            child.setGeneratedTitle(DocumentTitlePolicy.fallback)
+            child.localImport = .init(contentHash: digest, fileExtension: attachment.ext)
+            child.localImport?.originalState = .available
+            attachmentIDs.append(child.id)
+            changes.append(child)
+            originals.append((attachment.bytes, digest, attachment.ext))
+            staged += 1
+        }
+        guard count + staged <= VaultStorageLimits.importedDocuments else { throw LocalStoreCapacityError.documentCount }
+        var mail = VaultDocument(title: LocalEmail.title(in: email.text), sourceName: name, importedAt: now,
+                                 status: email.needsReview ? "partiallyAnalyzed" : "ocrComplete",
+                                 ocrText: "--- Seite 1 ---\n" + safeSourcePage(email.text), pageCount: 1)
+        mail.setGeneratedTitle(mail.title)
+        var metadata = LocalImportMetadata(contentHash: hash, fileExtension: "eml")
+        metadata.originalReference = reference
+        metadata.originalState = .available
+        metadata.emailAttachmentIDs = attachmentIDs
+        metadata.state = email.needsReview ? .partial : .completed
+        metadata.pages = [.init(page: 1, method: .embeddedText, needsReview: email.needsReview)]
+        mail.localImport = metadata
+        changes.append(mail)
+        for row in changes { try sqlite?.validate(row) }
+        let encoded = try sqlite == nil ? encodedSnapshot(changes) : nil
+        if reference == nil { originals.append((data, hash, "eml")) }
+        for (bytes, digest, ext) in originals { try saveManagedOriginal(bytes, hash: digest, ext: ext) }
+        if reference != nil { try requireReferenceStore() }
+        try save(changes, encoded: encoded)
+        return (mail, changes.dropFirst(documents.count).map(\.id))
+    }
+
+    private func saveManagedOriginal(_ data: Data, hash: String, ext: String) throws {
+        let originals = root.appendingPathComponent("originals", isDirectory: true)
+        try privateDirectory(originals)
+        let original = originals.appendingPathComponent("\(hash).\(ext)")
+        try refuseSymlink(original)
+        if FileManager.default.fileExists(atPath: original.path) {
+            guard try LocalOriginalAccess(url: original).readData() == data else { throw LocalImportError.damagedStore }
+        } else { try privateWrite(data, to: original) }
+    }
+
+    private func safeSourcePage(_ text: String) -> String {
+        text.replacingOccurrences(of: #"(?m)^---\s*Seite\s*\d+\s*---\s*$"#,
+                                  with: "[Seitenhinweis im Originaltext]", options: .regularExpression)
     }
 
     func acquireWorker() async throws -> LocalWorkerLease {
@@ -190,8 +262,7 @@ public struct LocalDocumentStore: Sendable {
         guard result.pages.reduce(0, { $0 + $1.text.utf8.count }) <= 900_000 else { throw LocalImportError.fileTooLarge }
         let storedPages = result.pages.map { page in
             var page = page
-            let text = page.text.replacingOccurrences(of: #"(?m)^---\s*Seite\s*\d+\s*---\s*$"#,
-                with: "[Seitenhinweis im Originaltext]", options: .regularExpression)
+            let text = safeSourcePage(page.text)
             if text != page.text { page.geometry = nil }
             page.text = text
             return page

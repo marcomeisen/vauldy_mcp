@@ -98,6 +98,7 @@ def main():
             ('software_update_smoke_test', [app]),
             ('status_smoke_test', [local, server, resources / 'Vauldy MCP Status.app']),
             ('watch_smoke_test', [local, server]),
+            ('email_watch_smoke_test', [local, server]),
             ('setup_startup_smoke_test', [app]),
             ('original_reference_smoke_test', [local, server]),
             ('oauth_smoke_test', [local, resources / 'vauldy-mcp-http']),

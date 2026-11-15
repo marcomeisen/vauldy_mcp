@@ -1,0 +1,31 @@
+{
+  "version": "0.14.6",
+  "buildID": "macho.c080674289963d1c952f0b03aecb313b",
+  "architecture": [
+    "arm64"
+  ],
+  "minimumMacOS": "14.0",
+  "zipSHA256": "1031d2e13032746fbedc50d0cd4f7837ee6aaec35507c1c40ff95c883cedf8f1",
+  "sourceInputsCompared": 224,
+  "signing": "ad-hoc",
+  "notarized": false,
+  "packageManifestSourceCommit": null,
+  "swiftRun": "Test run with 383 tests in 61 suites passed after 220.976 seconds.",
+  "optionalSkipped": 2,
+  "wireChecks": [
+    "stdio",
+    "relay",
+    "update-final",
+    "email",
+    "watch",
+    "title",
+    "setup-startup"
+  ],
+  "syntheticNativeUI": [
+    "direct EML import and immediate local list update",
+    "local inventory count",
+    "collapsed OCR maintenance",
+    "automatic folder import entry point",
+    "stopped worker and unavailable folder with recovery controls"
+  ]
+}

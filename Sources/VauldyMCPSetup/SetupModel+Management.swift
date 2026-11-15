@@ -54,7 +54,7 @@ extension SetupModel {
         return title
     }
     func canRetryOCR(_ document: VaultDocument) -> Bool {
-        isLocalVault && document.localImport?.originalState == .available
+        isLocalVault && document.localImport?.fileExtension != "eml" && document.localImport?.originalState == .available
             && document.localImport?.state != .queued && document.localImport?.state != .recognizing
     }
     var visibleOCRDocumentIDs: Set<UUID> { Set(filteredDocuments.filter { canRetryOCR($0) }.map(\.id)) }

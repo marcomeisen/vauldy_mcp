@@ -17,10 +17,16 @@ struct SetupImportProgress: View {
             Text(model.importCancelling ? "Abbruch läuft" : (model.retryingOCR ? "Text wird erneut gelesen" : "Lokaler Import")).font(.headline)
             if let total = model.importTotal, total > 0 {
                 ProgressView(value: Double(model.importProcessed), total: Double(total)) {
-                    Text("\(model.importProcessed) von \(total) Dokumenten verarbeitet")
+                    Text(model.retryingOCR
+                         ? "\(model.importProcessed) von \(total) vorhandenen Dokumenten geprüft"
+                         : "\(model.importProcessed) von \(total) ausgewählten Dateien bearbeitet")
                 }.accessibilityIdentifier("batch-import-progress")
             } else if model.importTotal == nil && !model.importCancelling {
                 ProgressView("Ordner werden nach Dokumenten durchsucht …")
+            }
+            if !model.retryingOCR && !model.addedDuringImport.isEmpty {
+                Text("\(model.addedDuringImport.count) neu im lokalen Bestand")
+                    .font(.callout.weight(.medium))
             }
             if let file = model.importFileName {
                 Text(file).font(.callout.weight(.medium)).lineLimit(1).truncationMode(.middle).help(file)
@@ -65,10 +71,13 @@ struct SetupImportResultView: View {
                 Button("Bericht ausblenden") { model.importReport = nil }.buttonStyle(.borderless)
             }
             if !report.summary.isEmpty { Text(report.summary) }
-            if report.items.contains(where: { $0.documentID != nil }) {
-                Text("Bereits übernommene Dokumente nicht erneut importieren. Prüfe bei Bedarf den gespeicherten Text; fehlende Basisangaben allein erfordern keine neue Texterkennung.")
+            if report.isRetry && report.items.contains(where: { $0.documentID != nil }) {
+                Text("Die Dokumente waren bereits im Bestand. Der Vorgang aktualisiert ihren Text.")
                     .font(.callout).foregroundStyle(.secondary)
                     .accessibilityIdentifier("import-existing-guidance")
+            } else if !report.newDocumentIDs.isEmpty {
+                Text("Die neuen Dokumente stehen bereits in dieser Liste. Freigaben für den Chat verwaltest du separat.")
+                    .font(.callout).foregroundStyle(.secondary)
             }
             if let error = report.batchError { SetupNotice(text: error, warning: true) }
             if report.cancelled {
@@ -78,7 +87,6 @@ struct SetupImportResultView: View {
                 Text("Keine unterstützten Dokumente gefunden.").foregroundStyle(.secondary)
             }
             if report.ocrReviewCount > 0 { Text("Texterkennung prüfen (\(report.ocrReviewCount))").font(.callout) }
-            if report.analysisReviewCount > 0 { Text("Basisanalyse prüfen (\(report.analysisReviewCount))").font(.callout) }
             ViewThatFits(in: .horizontal) {
                 HStack { detailActions }
                 VStack(alignment: .leading) { detailActions }
@@ -98,10 +106,6 @@ struct SetupImportResultView: View {
                         }
                     }
                 }.accessibilityIdentifier("import-file-results")
-            }
-            if !report.newDocumentIDs.isEmpty {
-                Text("Neue Dokumente bleiben bis zur ausdrücklichen Freigabe für Chatbots gesperrt.")
-                    .font(.caption).foregroundStyle(.secondary)
             }
         }.padding(16).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
             .accessibilityIdentifier("import-result")
@@ -139,7 +143,7 @@ struct SetupImportResultView: View {
     private func items(for scope: DetailScope) -> [SetupImportReport.Item] {
         switch scope {
         case .issues: report.issues
-        case .review: report.items.filter { $0.documentID != nil && ($0.ocrReview || $0.analysisReview || $0.result.isIssue) }
+        case .review: report.items.filter { $0.documentID != nil && ($0.ocrReview || $0.result.isIssue) }
         case .all: report.items
         }
     }

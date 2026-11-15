@@ -28,7 +28,6 @@ struct SetupImportReport: Identifiable {
         var documentID: UUID?
         var detail: String?
         var ocrReview = false
-        var analysisReview = false
 
         init(name: String, result: Result, detail: String? = nil, documentID: UUID? = nil) {
             self.name = name
@@ -45,7 +44,6 @@ struct SetupImportReport: Identifiable {
             else if !readable { result = .textPending }
             else { result = isRetry ? .refreshed : .imported }
             ocrReview = [.partial, .failed, .interrupted, .cancelled].contains(outcome.state)
-            analysisReview = readable && outcome.analysisStatus != nil && outcome.analysisStatus != "completed"
             if !readable { detail = "Das Dokument ist bereits im Bestand. Die Texterkennung ist noch nicht abgeschlossen; kein erneuter Import nötig." }
         }
     }
@@ -53,19 +51,20 @@ struct SetupImportReport: Identifiable {
     let id = UUID()
     let isRetry: Bool
     var items: [Item] = []
+    var addedDocumentIDs: Set<UUID> = []
     var cancelled = false
     var batchError: String?
 
     var issues: [Item] { items.filter { $0.result.isIssue } }
-    var newDocumentIDs: Set<UUID> { Set(items.filter { $0.result == .imported }.compactMap(\.documentID)) }
+    var newDocumentIDs: Set<UUID> { addedDocumentIDs }
     var ocrReviewCount: Int { Set(items.filter(\.ocrReview).compactMap(\.documentID)).count }
-    var analysisReviewCount: Int { Set(items.filter(\.analysisReview).compactMap(\.documentID)).count }
     var summary: String {
         let labels: [(Item.Result, String)] = [
-            (.imported, "neu importiert"), (.existing, "bereits vorhanden"), (.refreshed, "erneut gelesen"),
+            (.existing, "bereits vorhanden"), (.refreshed, "mit erneut gelesenem Text"),
             (.textPending, "im Bestand, Texterkennung offen"), (.failed, "fehlgeschlagen"), (.skipped, "übersprungen"), (.unavailableFolder, "Ordner nicht lesbar")
         ]
         let counts = items.reduce(into: [Item.Result: Int]()) { $0[$1.result, default: 0] += 1 }
-        return labels.compactMap { result, label in counts[result].map { "\($0) \(label)" } }.joined(separator: " · ")
+        let additions = isRetry ? [] : ["\(addedDocumentIDs.count) neu im lokalen Bestand"]
+        return (additions + labels.compactMap { result, label in counts[result].map { "\($0) \(label)" } }).joined(separator: " · ")
     }
 }

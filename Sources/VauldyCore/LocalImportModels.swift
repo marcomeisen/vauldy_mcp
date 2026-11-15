@@ -5,7 +5,7 @@ public enum LocalImportError: String, Error, LocalizedError, Codable, Sendable {
     case storageUnavailable, damagedStore, foreignStore, workerBusy, staleAttempt, interrupted, cancelled, noReadableText
     public var errorDescription: String? {
         switch self {
-        case .unsupportedFile: "Unterstützt werden PDF, PNG, JPEG, TIFF und HEIC."
+        case .unsupportedFile: "Unterstützt werden PDF, PNG, JPEG, TIFF, HEIC und EML."
         case .unreadableFile: "Die ausgewählte Datei ist nicht lesbar."
         case .fileTooLarge: "Die Datei oder ihr erkannter Text überschreitet die lokale Größenbegrenzung."
         case .invalidDocument: "Die Datei ist beschädigt oder hat ein nicht unterstütztes Format. Das importierte Original bleibt erhalten."
@@ -44,6 +44,7 @@ public struct LocalImportMetadata: Codable, Equatable, Sendable {
     public var originalReference: LocalOriginalReference? = nil
     public var referenceCandidate: LocalOriginalReference? = nil
     public var originalState: LocalOriginalState? = nil
+    var emailAttachmentIDs: [UUID]? = nil
     public var contentHash: String
     public var fileExtension: String
     public var state: LocalImportState

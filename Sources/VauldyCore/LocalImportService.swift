@@ -14,6 +14,15 @@ public struct LocalImportService: Sendable {
         try await store.recoverInterrupted()
         progress(.init(stage: "Original lokal sichern"))
         let staged = try await store.stage(file: url, storage: storage)
+        if staged.document.localImport?.fileExtension == "eml" {
+            for id in staged.document.localImport?.emailAttachmentIDs ?? [] {
+                if try await store.document(id: id)?.localImport?.state == .queued {
+                    _ = try await recognize(id, progress: progress)
+                }
+            }
+            return .init(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
+                         reusedOriginal: staged.duplicate, pageCount: staged.document.pageCount)
+        }
         if staged.duplicate {
             return LocalImportOutcome(documentID: staged.document.id, state: staged.document.localImport?.state ?? .failed,
                                       reusedOriginal: true, pageCount: staged.document.pageCount, analysisStatus: staged.document.baseAnalysisStatus)
@@ -28,6 +37,9 @@ public struct LocalImportService: Sendable {
     }
     private func recognize(_ id: UUID, borrowedAccess: Data? = nil, expected: VaultDocument? = nil,
                            progress: @escaping @Sendable (LocalImportProgress) -> Void) async throws -> LocalImportOutcome {
+        guard try await store.document(id: id)?.localImport?.fileExtension != "eml" else {
+            throw LocalImportError.unsupportedFile
+        }
         let lease = try await store.acquireWorker()
         defer { lease.release() }
         let attempt = UUID()
