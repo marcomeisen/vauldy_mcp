@@ -414,7 +414,7 @@ final class SetupModel: ObservableObject {
             } catch {
                 guard generation == loadGeneration else { return }
                 documents = []; vaultURL = nil; selected = []; editing = nil
-                showError("Der Bestand ist nicht lesbar. Bitte einen geprüften JSON- oder SQLite-Bestand auswählen oder zuerst das Beispiel verwenden. Es wurde nichts verändert.")
+                showError("Der Dokumentbestand ist nicht lesbar. Wähle einen geprüften lokalen Bestand oder zuerst das Beispieldokument. Es wurde nichts verändert.")
             }
             busy = false
         }

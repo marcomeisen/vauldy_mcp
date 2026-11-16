@@ -251,7 +251,7 @@ extension SetupModel {
             defer { accessChanges.remove(profile.connectionID) }
             do {
                 _ = try await Task.detached { try installer.setAccess(enabled, for: profile.connectionID, expectedRevision: profile.revision) }.value
-                message = enabled ? "Dokumentzugriff für \(profile.connectionName) fortgesetzt. Empfänger und Auswahl bleiben unverändert." : "Dokumentzugriff pausiert. Server und lokale Importe können weiterlaufen."
+                message = enabled ? "Dokumentzugriff für \(profile.connectionName) fortgesetzt. Chatbot und Auswahl bleiben unverändert." : "Dokumentzugriff pausiert. Server und lokale Importe können weiterlaufen."
                 failure = false
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Der Dokumentzugriff konnte nicht geändert werden. Bitte die Verbindung erneut laden.") }
             await refreshManagement()
@@ -278,7 +278,7 @@ extension SetupModel {
                 probeResults.removeValue(forKey: profile.connectionID); probeErrors.removeValue(forKey: profile.connectionID)
                 bindings.removeValue(forKey: profile.connectionID); resolvedClients.removeValue(forKey: profile.connectionID)
                 message = "Verbindung gelöscht und Zugriff gesperrt. Deine Dokumente bleiben erhalten."
-                if clientCleanupIncomplete { message += " Ein Client-Eintrag konnte nicht automatisch entfernt werden. Bitte im Chatbot prüfen." }
+                if clientCleanupIncomplete { message += " Ein Eintrag im Chatbot konnte nicht automatisch entfernt werden. Bitte dort prüfen." }
                 failure = clientCleanupIncomplete
             } catch { showError((error as? LocalizedError)?.errorDescription ?? "Die Verbindung konnte nicht entfernt werden. Bitte neu laden.") }
             await refreshManagement()
@@ -414,9 +414,9 @@ extension SetupModel {
         Task {
             do {
                 _ = try await Task.detached { try registrar.register(client, binary: installer.binaryURL, profile: installer.profileURL(profile.connectionID)) }.value
-                message = "Client-Eintrag geprüft. Starte die Vauldy-Verbindung im Chatbot bei Bedarf neu."
+                message = "Verbindungseintrag im Chatbot geprüft. Starte die Vauldy-Verbindung dort bei Bedarf neu."
                 failure = false
-            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Der Client-Eintrag konnte nicht angelegt werden.") }
+            } catch { showError((error as? LocalizedError)?.errorDescription ?? "Der Verbindungseintrag im Chatbot konnte nicht angelegt werden.") }
             await refreshManagement(checkBindings: true)
         }
     }

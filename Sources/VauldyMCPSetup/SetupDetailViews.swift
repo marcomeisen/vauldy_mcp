@@ -32,7 +32,7 @@ struct SetupDocumentSource: View {
                 Button("Neue Dateien hinzufügen …", systemImage: "square.and.arrow.down", action: model.chooseImports)
                 Button("Ordner einmal importieren …", systemImage: "folder", action: model.chooseFolderImport)
                 Menu("Weitere Quellen") {
-                    Button("Lokalen MCP-Bestand laden", action: model.openLocalStore)
+                    Button("Anderen lokalen Dokumentbestand laden", action: model.openLocalStore)
                     Button("Beispieldokument ausprobieren", action: model.useExample)
                     Divider()
                     Button("Archivdatei auswählen …", action: model.chooseVault)
@@ -113,7 +113,9 @@ struct SetupDocumentList: View {
                             if model.showOCROptions && !model.showingSetup && model.isLocalVault {
                                 Toggle("\(model.documentDisplayName(document)) für Texterkennung auswählen", isOn: Binding(get: { model.ocrSelected.contains(document.id) }, set: { value in
                                     if value { model.ocrSelected.insert(document.id) } else { model.ocrSelected.remove(document.id) }
-                                })).labelsHidden().disabled(model.busy || model.importing || (!model.canRetryOCR(document) && !model.ocrSelected.contains(document.id)))
+                                })).labelsHidden()
+                                    .accessibilityLabel("\(model.documentDisplayName(document)) für Texterkennung auswählen")
+                                    .disabled(model.busy || model.importing || (!model.canRetryOCR(document) && !model.ocrSelected.contains(document.id)))
                             }
                             Image(systemName: "doc.text").foregroundStyle(.secondary)
                             VStack(alignment: .leading, spacing: 5) {
@@ -147,7 +149,7 @@ struct SetupDocumentList: View {
                                     .help("Zeitpunkt des Imports in diesen Bestand, angezeigt in der lokalen Mac-Zeitzone. Kein Dokumentdatum und kein Zeitpunkt eines späteren OCR-Laufs.")
                                     .accessibilityIdentifier("document-import-timestamp")
                                 if model.isLocalVault, let review = LocalDocumentReview(document) {
-                                    SetupDocumentQualityView(quality: review.quality) { focus in
+                                    SetupDocumentQualityView(quality: review.quality, documentName: model.documentDisplayName(document)) { focus in
                                         reviewSelection = .init(id: document.id, page: focus.page, quote: focus.quote, focus: focus)
                                     }
                                 }
@@ -157,9 +159,11 @@ struct SetupDocumentList: View {
                             }.frame(maxWidth: .infinity, alignment: .leading)
                             if model.isLocalVault {
                                 Button("Original anzeigen") { model.preview(document) }
+                                    .accessibilityLabel("Original von \(model.documentDisplayName(document)) anzeigen")
                                 if let state = document.localImport?.state, ![.queued, .recognizing].contains(state) {
-                                    Button("Prüfstellen ansehen") { reviewSelection = .init(id: document.id) }
+                                    Button("Fundstellen ansehen") { reviewSelection = .init(id: document.id) }
                                         .help("Vergleicht Original und gespeicherten Text. Startet keine Texterkennung.")
+                                        .accessibilityLabel("Fundstellen für \(model.documentDisplayName(document)) ansehen")
                                         .accessibilityIdentifier("document-text-review")
                                 }
                             }
@@ -243,12 +247,12 @@ struct SetupSettingsView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     Text("Software auf diesem Mac").font(.headline)
                     LabeledContent("Diese App", value: MCPBuild.version)
-                    LabeledContent("App-Build", value: MCPBuildIdentity.running ?? "Unbekannt")
-                    LabeledContent("Mitgelieferter Server-Build", value: model.software?.availableBuildID ?? "Noch nicht geprüft")
-                    LabeledContent("Installierter Server-Build", value: model.software?.installedBuildID ?? "Unbekannt / älteres Paket")
-                    LabeledContent("Eigener Dokumentspeicher", value: model.localStore.storageKind == "sqlite" ? "Lokale SQLite-Datenbank" : "Lokaler JSON-Bestand")
+                    LabeledContent("Kennung dieser App", value: MCPBuildIdentity.running ?? "Unbekannt")
+                    LabeledContent("Kennung des mitgelieferten Dienstes", value: model.software?.availableBuildID ?? "Noch nicht geprüft")
+                    LabeledContent("Kennung des installierten Dienstes", value: model.software?.installedBuildID ?? "Unbekannt / älteres Paket")
+                    LabeledContent("Dokumentspeicher", value: model.localStore.storageKind == "sqlite" ? "Lokale Datenbank" : "Lokale Dokumentdatei")
                     LabeledContent("Installierter Server", value: model.software?.installedVersion ?? "Noch nicht verifiziert")
-                    Text(model.software?.state == .current ? "Die installierten Programme entsprechen dieser App." : "Installiere die Programme aus dieser App. Freigaben, pausierte Zugriffe und Client-Einträge bleiben erhalten.").foregroundStyle(.secondary)
+                    Text(model.software?.state == .current ? "Die installierten Programme entsprechen dieser App." : "Installiere die Programme aus dieser App. Freigaben, pausierte Zugriffe und Chatbot-Verbindungen bleiben erhalten.").foregroundStyle(.secondary)
                     HStack {
                         if model.software?.state == .notInstalled {
                             Button("Installation starten") { model.showingInstallation = true }.disabled(model.busy)

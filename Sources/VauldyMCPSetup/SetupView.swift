@@ -90,7 +90,7 @@ struct SetupView: View {
             Button("Abbrechen", role: .cancel) { model.resumeCandidate = nil }
         } message: {
             if let profile = model.resumeCandidate {
-                Text("\(profile.connectionName) darf wieder auf \(SetupText.documents(profile.allowedDocumentIDs.count)) zugreifen. Empfänger und gespeicherte Auswahl bleiben unverändert; neue Importe werden nicht freigegeben.")
+                Text("\(profile.connectionName) darf wieder auf \(SetupText.documents(profile.allowedDocumentIDs.count)) zugreifen. Chatbot und gespeicherte Auswahl bleiben unverändert; neue Importe werden nicht freigegeben.")
             }
         }
         .alert("Verbindung löschen?", isPresented: Binding(get: { model.removalCandidate != nil }, set: { if !$0 { model.removalCandidate = nil } })) {
@@ -100,7 +100,7 @@ struct SetupView: View {
             Button("Abbrechen", role: .cancel) { model.removalCandidate = nil }
         } message: {
             if let profile = model.removalCandidate {
-                Text("„\(profile.connectionName)“ wird entfernt und ihr Dokumentzugriff gesperrt. Ein passender Client-Eintrag wird entfernt. Deine Dokumente bleiben erhalten; der deaktivierte Verbindungsverlauf bleibt lokal archiviert.")
+                Text("„\(profile.connectionName)“ wird entfernt und ihr Dokumentzugriff gesperrt. Der passende Eintrag im Chatbot wird entfernt. Deine Dokumente bleiben erhalten; der deaktivierte Verbindungsverlauf bleibt lokal archiviert.")
             }
         }
         .quickLookPreview($model.previewURL)
@@ -145,6 +145,7 @@ struct SetupView: View {
             Spacer()
             Button("Freigaben bestätigen") { showingPendingApproval = true }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel("\(model.oauthPending.count) offene Verbindungsanfragen prüfen")
                 .accessibilityIdentifier("oauth-pending-open")
         }
         .padding(16)
@@ -243,17 +244,25 @@ struct SetupConnectionCard: View {
             }.font(.callout).foregroundStyle(.secondary)
             HStack(spacing: 12) {
                 if profile.enabled {
-                    Button("Dokumentzugriff pausieren") { model.setAccess(false, profile: profile) }.disabled(model.accessChanges.contains(profile.connectionID))
+                    Button("Dokumentzugriff pausieren") { model.setAccess(false, profile: profile) }
+                        .accessibilityLabel("Dokumentzugriff für \(profile.connectionName) pausieren")
+                        .disabled(model.accessChanges.contains(profile.connectionID))
                 } else {
-                    Button("Dokumentzugriff fortsetzen") { model.resumeCandidate = profile }.buttonStyle(.borderedProminent).disabled(profile.allowedDocumentIDs.isEmpty || model.accessChanges.contains(profile.connectionID))
+                    Button("Dokumentzugriff fortsetzen") { model.resumeCandidate = profile }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityLabel("Dokumentzugriff für \(profile.connectionName) fortsetzen")
+                        .disabled(profile.allowedDocumentIDs.isEmpty || model.accessChanges.contains(profile.connectionID))
                 }
                 Button("Freigabe bearbeiten") { model.startInventoryWorkflow(profile: profile) }
+                    .accessibilityLabel("Freigabe für \(profile.connectionName) bearbeiten")
                 Button("Verbindung prüfen") { model.showConnectionHelp(profile) }
+                    .accessibilityLabel("Verbindung mit \(profile.connectionName) prüfen")
             }
             HStack(alignment: .top) {
                 Label("Neue Dokumente werden nie automatisch für diesen Chatbot freigegeben.", systemImage: "lock").font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 Button("Verbindung löschen", role: .destructive) { model.removalCandidate = profile }
+                    .accessibilityLabel("Verbindung mit \(profile.connectionName) löschen")
                     .disabled(model.busy || model.accessChanges.contains(profile.connectionID))
             }
         }.padding(22).frame(maxWidth: .infinity, alignment: .leading)
@@ -277,7 +286,9 @@ struct SetupNotice: View {
     var body: some View {
         Label(text, systemImage: warning ? "exclamationmark.triangle" : "info.circle")
             .font(.callout).foregroundStyle(warning ? Color.orange : .secondary)
-            .textSelection(.enabled).accessibilityAddTraits(.updatesFrequently)
+            .textSelection(.enabled)
+            .accessibilityLabel(warning ? "Warnung: \(text)" : text)
+            .accessibilityAddTraits(.updatesFrequently)
     }
 }
 

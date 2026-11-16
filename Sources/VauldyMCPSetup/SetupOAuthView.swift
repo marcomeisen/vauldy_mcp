@@ -45,20 +45,23 @@ struct SetupOAuthView: View {
                     Picker("Dokumentauswahl", selection: Binding<UUID?>(get: { model.oauthProfiles[request.id] }, set: { model.oauthProfiles[request.id] = $0 })) {
                         Text("Auswahl wählen").tag(nil as UUID?)
                         ForEach(model.connections.filter { $0.enabled }, id: \.connectionID) { profile in
-                            Text("\(profile.connectionName) · \(profile.allowedDocumentIDs.count) Dokumente").tag(profile.connectionID as UUID?)
+                            Text("\(profile.connectionName) · \(SetupText.documents(profile.allowedDocumentIDs.count))").tag(profile.connectionID as UUID?)
                         }
                     }
                     if let id = model.oauthProfiles[request.id], let profile = model.connections.first(where: { $0.connectionID == id }) {
-                        Text("\(request.provider.title) darf die \(profile.allowedDocumentIDs.count) ausgewählten Dokumente lesen und deren bereinigte Inhalte an seinen Cloud-Anbieter übertragen. Neue Importe bleiben gesperrt.").font(.callout)
+                        Text("\(request.provider.title) darf \(SetupText.selectedDocuments(profile.allowedDocumentIDs.count)) lesen und die bereinigten Inhalte daraus an seinen Cloud-Anbieter übertragen. Neue Importe bleiben gesperrt.").font(.callout)
                     }
                     HStack {
                         Button("Ablehnen", role: .destructive) { model.denyOAuth(request) }
+                            .accessibilityLabel("Verbindungsanfrage von \(request.provider.title) ablehnen")
                         Button("Dokumentzugriff bestätigen") {
                             if let id = model.oauthProfiles[request.id], let profile = model.connections.first(where: { $0.connectionID == id }) {
                                 model.oauthApproval = .init(request: request, profile: profile, confirmation: enteredConfirmations[request.id] ?? "")
                             }
                         }
-                            .buttonStyle(.borderedProminent).disabled(model.oauthProfiles[request.id] == nil || enteredConfirmations[request.id]?.uppercased() != request.confirmation || model.busy)
+                            .buttonStyle(.borderedProminent)
+                            .accessibilityLabel("Dokumentzugriff für \(request.provider.title) bestätigen")
+                            .disabled(model.oauthProfiles[request.id] == nil || enteredConfirmations[request.id]?.uppercased() != request.confirmation || model.busy)
                     }
                 }.padding().background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
             }
@@ -69,6 +72,7 @@ struct SetupOAuthView: View {
                     Text(model.connections.first { $0.connectionID == connection.profileID }?.connectionName ?? "Dokumentauswahl nicht verfügbar").foregroundStyle(.secondary)
                     Spacer()
                     Button("Zugriff widerrufen", role: .destructive) { revokeCandidate = connection }
+                        .accessibilityLabel("Zugriff von \(connection.provider.title) widerrufen")
                 }
             }
             if !model.oauthError.isEmpty { SetupNotice(text: model.oauthError, warning: true) }
@@ -82,7 +86,7 @@ struct SetupOAuthView: View {
             Button("Abbrechen", role: .cancel) { model.oauthApproval = nil }
         } message: {
             if let approval = model.oauthApproval {
-                Text("\(approval.request.provider.title) erhält lesenden Zugriff auf die \(approval.profile.allowedDocumentIDs.count) Dokumente aus „\(approval.profile.connectionName)“. Angeforderte Inhalte können an den Cloud-Anbieter übergeben werden.")
+                Text("\(approval.request.provider.title) erhält lesenden Zugriff auf \(SetupText.selectedDocuments(approval.profile.allowedDocumentIDs.count)) aus „\(approval.profile.connectionName)“. Angeforderte Inhalte können an den Cloud-Anbieter übergeben werden.")
             }
         }
         .confirmationDialog("Chatbot-Zugriff widerrufen?", isPresented: Binding(get: { revokeCandidate != nil }, set: { if !$0 { revokeCandidate = nil } }), titleVisibility: .visible) {

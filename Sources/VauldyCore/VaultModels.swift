@@ -131,7 +131,8 @@ public struct VaultDocument: Codable, Equatable, Sendable {
             // Legacy snapshots had only title. Preserve ambiguous custom text;
             // exact filename/previous generated values can safely be replaced.
             let filename = URL(fileURLWithPath: sourceName).deletingPathExtension().lastPathComponent
-            if title != filename && title != baseAnalysis?.displayTitle { preserved = title }
+            let legacyPlaceholder = title == "Ohne Titel" || title == DocumentTitlePolicy.fallback
+            if !legacyPlaceholder && title != filename && title != baseAnalysis?.displayTitle { preserved = title }
         }
         generatedTitle = value
         title = preserved ?? value

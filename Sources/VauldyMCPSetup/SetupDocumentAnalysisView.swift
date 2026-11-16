@@ -19,7 +19,9 @@ struct SetupDocumentAnalysisView: View {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("\(label(field.role)): \(field.value)").textSelection(.enabled).help(field.quote)
                                     if let openEvidence {
-                                        Button("Beleg auf Seite \(field.page) ansehen") { openEvidence(field) }.font(.caption)
+                                        Button("Beleg auf Seite \(field.page) ansehen") { openEvidence(field) }
+                                            .font(.caption)
+                                            .accessibilityLabel("Beleg für \(label(field.role)) in \(document.title) auf Seite \(field.page) ansehen")
                                     } else {
                                         Text("Quelle: Seite \(field.page)").font(.caption).foregroundStyle(.secondary)
                                     }
@@ -41,7 +43,7 @@ struct SetupDocumentAnalysisView: View {
     private func label(_ role: BaseFieldRole) -> String {
         switch role {
         case .issuer: "Aussteller"
-        case .recipient: "Empfänger"
+        case .recipient: "Empfänger im Dokument"
         case .issueDate: "Dokumentdatum"
         case .subject: "Gegenstand"
         case .titleYear: "Jahr im Titel"

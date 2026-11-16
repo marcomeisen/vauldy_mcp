@@ -4,16 +4,21 @@ import VauldyCore
 /// Text/source warnings and optional extracted metadata are presented independently.
 struct SetupDocumentQualityView: View {
     let quality: LocalDocumentQuality
+    let documentName: String?
     let open: (LocalDocumentQuality.Focus) -> Void
+    init(quality: LocalDocumentQuality, documentName: String? = nil, open: @escaping (LocalDocumentQuality.Focus) -> Void) {
+        self.quality = quality; self.documentName = documentName; self.open = open
+    }
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label(quality.headline, systemImage: quality.requiresCoverageAttention ? "exclamationmark.circle" : "doc.text.magnifyingglass")
                 .font(.callout.weight(.semibold))
                 .foregroundStyle(quality.requiresCoverageAttention ? Color.orange : Color.primary)
+                .accessibilityLabel(quality.requiresCoverageAttention ? "Prüfhinweis: \(quality.headline)" : quality.headline)
                 .accessibilityIdentifier("document-quality-summary")
             Text(quality.processingLabel).font(.caption)
             Text(quality.chatImpact).font(.caption).foregroundStyle(.secondary)
-            DisclosureGroup("Prüfdetails zu Text und Original") {
+            DisclosureGroup("Text und Original prüfen") {
                 VStack(alignment: .leading, spacing: 10) {
                     issueGroups(quality.textIssues)
                     DisclosureGroup("Technische Angaben") {
@@ -26,7 +31,7 @@ struct SetupDocumentQualityView: View {
                     }
                 }.font(.caption).padding(.top, 6)
             }.font(.caption)
-            DisclosureGroup("Hinweise zu Basisangaben (optional)") {
+            DisclosureGroup("Basisangaben prüfen (optional)") {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(quality.analysisLabel)
                     Text(LocalDocumentQuality.basisExplanation)
@@ -48,6 +53,7 @@ struct SetupDocumentQualityView: View {
                         Text(issue.detail).foregroundStyle(.secondary)
                         if let focus = issue.focus {
                             Button(focus.bounds.isEmpty ? "Seite \(focus.page) ansehen" : "Stelle auf Seite \(focus.page) ansehen") { open(focus) }
+                                .accessibilityLabel(documentName.map { "\(issue.title) in \($0) auf Seite \(focus.page) ansehen" } ?? "\(issue.title) auf Seite \(focus.page) ansehen")
                                 .accessibilityIdentifier("quality-issue-\(issue.id)")
                         }
                     }.padding(.leading, 8)

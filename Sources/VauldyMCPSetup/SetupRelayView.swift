@@ -52,7 +52,7 @@ struct SetupRelayView: View {
                     Picker("Dokumentauswahl", selection: $model.relayProfileID) {
                         Text("Auswahl wählen").tag(nil as UUID?)
                         ForEach(model.connections.filter { $0.enabled && $0.acknowledgedCloudDisclosure }, id: \.connectionID) { p in
-                            Text("\(p.connectionName) · \(p.allowedDocumentIDs.count) Dokumente").tag(p.connectionID as UUID?)
+                            Text("\(p.connectionName) · \(SetupText.documents(p.allowedDocumentIDs.count))").tag(p.connectionID as UUID?)
                         }
                     }
                     Button("Mit ChatGPT verbinden") {
@@ -83,7 +83,7 @@ struct SetupRelayView: View {
             } }
             Button("Abbrechen", role: .cancel) { model.relayApproval = nil }
         } message: {
-            if let p = model.relayApproval { Text("ChatGPT darf die \(p.allowedDocumentIDs.count) Dokumente aus „\(p.connectionName)“ lesen. Angeforderte Inhalte werden auf diesem Mac bereinigt und an ChatGPT übertragen. Originaldateien bleiben lokal. Eine geänderte Auswahl erfordert eine neue Bestätigung.") }
+            if let p = model.relayApproval { Text("ChatGPT darf \(SetupText.selectedDocuments(p.allowedDocumentIDs.count)) aus „\(p.connectionName)“ lesen. Angeforderte Inhalte werden auf diesem Mac bereinigt und an ChatGPT übertragen. Originaldateien bleiben lokal. Eine geänderte Auswahl erfordert eine neue Bestätigung.") }
         }
         .confirmationDialog("ChatGPT-Verbindung löschen?", isPresented: $confirmDisconnect, titleVisibility: .visible) {
             Button("Verbindung löschen", role: .destructive, action: model.disconnectRelay)

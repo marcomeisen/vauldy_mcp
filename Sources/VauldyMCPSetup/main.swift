@@ -20,7 +20,7 @@ struct VauldyMCPSetupApp: App {
     @NSApplicationDelegateAdaptor(SetupDelegate.self) var delegate
     @StateObject private var model = SetupModel()
     var body: some Scene {
-        Window("Vauldy · MCP", id: "main") {
+        Window("Vauldy", id: "main") {
             SetupView(model: model)
                 .onOpenURL { url in
                     guard url.scheme == "vauldy-mcp", url.host == "oauth", url.query == nil else { return }

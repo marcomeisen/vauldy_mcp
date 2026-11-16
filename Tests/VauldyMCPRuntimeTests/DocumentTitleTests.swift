@@ -86,6 +86,26 @@ struct DocumentTitleTests {
         }
     }
 
+    @Test func freshOCRUpdatesAnExistingNeutralTitleWithoutChangingTheOriginal() async throws {
+        try await baseStore { root, store in
+            let file = root.appendingPathComponent("Scan_001.pdf")
+            let original = Data("synthetic title source".utf8)
+            try original.write(to: file)
+            let first = try await LocalImportService(store: store, ocr: TitleOCR(text: "Hinweis zur Prüfung"))
+                .importFile(file)
+            let before = try #require(try await store.document(id: first.documentID))
+            #expect(before.title == DocumentTitlePolicy.fallback)
+            let candidate = TitleOCR(text: "Versicherungsschein\nAussteller: Beispiel GmbH\nHinweis zur Prüfung")
+            let preserving = try EvidencePreservingLocalOCR(document: before, candidate: candidate)
+            _ = try await LocalImportService(store: store, ocr: preserving).retry(documentID: before.id)
+            let after = try #require(try await store.document(id: before.id))
+            #expect(after.title == "Versicherungsschein – Beispiel GmbH")
+            #expect(after.generatedTitle == after.title && after.manualTitle == nil)
+            #expect(after.id == before.id && after.localImport?.contentHash == before.localImport?.contentHash)
+            #expect(try Data(contentsOf: file) == original)
+        }
+    }
+
     @Test(arguments: [true, false])
     func titleRefreshPreservesAllOtherDataAndGrantBytes(_ enabled: Bool) async throws {
         try await titleStore(text: "Vertrag\nBetreff: \(screenshotFragment)\nAussteller: Beispiel GmbH") { root, store, imported in
@@ -157,6 +177,24 @@ struct DocumentTitleTests {
             #expect(after.title == "Meine alte Bezeichnung")
             #expect(after.manualTitle == "Meine alte Bezeichnung")
             #expect(after.generatedTitle == "Rechnung – Aussteller unbekannt")
+        }
+    }
+
+    @Test(arguments: ["Ohne Titel", DocumentTitlePolicy.fallback])
+    func legacyPlaceholderIsReplacedByFreshAnalysis(_ placeholder: String) async throws {
+        try await titleStore(text: "Versicherungsschein\nAussteller: Beispiel GmbH") { _, store, doc in
+            var legacy = try json(doc)
+            legacy["title"] = placeholder
+            legacy.removeValue(forKey: "generatedTitle")
+            legacy.removeValue(forKey: "manualTitle")
+            try JSONSerialization.data(withJSONObject: [legacy]).write(to: store.snapshotURL)
+            _ = try await LocalImportService(store: store,
+                ocr: TitleOCR(text: "Versicherungsschein\nAussteller: Beispiel GmbH"))
+                .retry(documentID: doc.id)
+            let refreshed = try #require(try await store.document(id: doc.id))
+            #expect(refreshed.title == "Versicherungsschein – Beispiel GmbH")
+            #expect(refreshed.generatedTitle == refreshed.title)
+            #expect(refreshed.manualTitle == nil)
         }
     }
 

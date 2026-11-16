@@ -2,6 +2,9 @@ import Foundation
 
 enum SetupText {
     static func documents(_ count: Int) -> String { "\(count) \(count == 1 ? "Dokument" : "Dokumente")" }
+    static func selectedDocuments(_ count: Int) -> String {
+        count == 1 ? "das ausgewählte Dokument" : "die \(count) ausgewählten Dokumente"
+    }
     static func pages(_ count: Int) -> String { "\(count) \(count == 1 ? "Seite" : "Seiten")" }
 
     static func importTimestamp(_ date: Date, timeZone: TimeZone = .current) -> String {

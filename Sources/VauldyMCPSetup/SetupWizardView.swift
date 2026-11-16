@@ -50,8 +50,8 @@ struct SetupWizardView: View {
                 case 0:
                     if let existing {
                         Button("Bestehende Verbindung verwalten") { model.activeConnectionID = existing.connectionID; model.section = .connections; dismiss() }.buttonStyle(.borderedProminent)
-                    } else { Button("Dokumente auswählen") { model.setupStep = 1 }.buttonStyle(.borderedProminent) }
-                case 1: Button("Dokumente auswählen", action: model.prepareNewGrant).buttonStyle(.borderedProminent).disabled(model.documents.isEmpty || model.busy || model.importing)
+                    } else { Button("Dokumente auswählen") { model.setupStep = 1 }.buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction) }
+                case 1: Button("Dokumente auswählen", action: model.prepareNewGrant).buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction).disabled(model.documents.isEmpty || model.busy || model.importing)
                 default: EmptyView()
                 }
             }

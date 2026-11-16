@@ -15,7 +15,7 @@ struct InventoryWorkflowView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(model.step == 0 ? "Originalzugriff wiederherstellen" : "Dokumente freigeben").font(.title2.bold())
-                    Text("Empfänger · \(model.profile.connectionName)").foregroundStyle(.secondary)
+                    Text("Chatbot · \(model.profile.connectionName)").foregroundStyle(.secondary)
                 }
                 Spacer()
                 Button(model.completed ? "Fertig" : "Schließen") {
@@ -76,7 +76,7 @@ struct InventoryWorkflowView: View {
             if let plan = model.plan {
                 Text("\(plan.files.filter { $0.change == .renewAccess }.count) Originalzugriffe wiederherstellbar · \(plan.files.filter { $0.change == .added }.count) neue Dateien · \(plan.files.filter { $0.change == .changed }.count) neue Fassungen")
                 Text("Identische Originale werden wieder zugeordnet. Neue Dateien und Fassungen benötigen anschließend deine Dokumentauswahl.").foregroundStyle(.secondary)
-                ForEach(plan.issues) { issue in Text("\(issue.source) · \(issue.message)").foregroundStyle(.orange) }
+                ForEach(plan.issues) { issue in SetupNotice(text: "\(issue.source) · \(issue.message)", warning: true) }
                 Button("Originale zuordnen und neue Dateien einlesen", action: model.importAndReport).buttonStyle(.borderedProminent)
             }
             Button("Zur Dokumentauswahl", action: model.reportOnly)
@@ -103,20 +103,26 @@ struct InventoryWorkflowView: View {
             ForEach(model.visibleRows) { row in
                 VStack(alignment: .leading, spacing: 6) {
                     Toggle(row.title, isOn: Binding(get: { model.selected.contains(row.id) }, set: { model.setSelected($0, id: row.id) }))
+                        .accessibilityLabel("\(row.title) für \(model.profile.connectionName) auswählen")
                         .disabled(!row.eligible && !model.selected.contains(row.id) && !model.profile.allowedDocumentIDs.contains(row.id))
                     Text(rowStatus(row)).font(.callout).foregroundStyle(.secondary)
                     if model.usesLocalStore && (row.original == .unavailable || row.original == .changed) {
                         Button("Originalzugriff wiederherstellen") { model.step = 0 }
+                            .accessibilityLabel("Originalzugriff für \(row.title) wiederherstellen")
                     }
                     if model.usesLocalStore, let quality = model.qualityByID[row.id] {
                         DisclosureGroup("Textprüfung und optionale Basisangaben") {
-                            SetupDocumentQualityView(quality: quality) { focus in inspection = .init(id: row.id, focus: focus) }
+                            SetupDocumentQualityView(quality: quality, documentName: row.title) { focus in inspection = .init(id: row.id, focus: focus) }
                         }
                     }
                     HStack {
-                        if model.usesLocalStore && row.original == .available { Button("Original anzeigen") { model.preview(row.id) } }
+                        if model.usesLocalStore && row.original == .available {
+                            Button("Original anzeigen") { model.preview(row.id) }
+                                .accessibilityLabel("Original von \(row.title) anzeigen")
+                        }
                         if !model.isNewConnection && !model.profile.allowedDocumentIDs.contains(row.id) && !model.isKeptLocal(row.id) {
                             Button("Nur lokal behalten") { model.keepLocal(row.id) }
+                                .accessibilityLabel("\(row.title) nur lokal behalten")
                         }
                     }.font(.caption)
                 }.padding(.vertical, 8)
@@ -125,12 +131,13 @@ struct InventoryWorkflowView: View {
             ForEach(Array(model.selected.subtracting(Set(report.rows.map(\.id)))).sorted { $0.uuidString < $1.uuidString }, id: \.self) { id in
                 Toggle("Gespeichertes Dokument \(id.uuidString.prefix(8)) · derzeit nicht im Bestand", isOn: Binding(get: { model.selected.contains(id) }, set: { model.setSelected($0, id: id) }))
             }
-            ForEach(model.importIssues) { issue in Text("\(issue.source) · \(issue.message)").foregroundStyle(.orange) }
+            ForEach(model.importIssues) { issue in SetupNotice(text: "\(issue.source) · \(issue.message)", warning: true) }
             HStack {
                 Button("Dokumente erneut prüfen", action: model.reportOnly)
                 Spacer()
                 Button("Auswahl überprüfen") { model.step = 2; model.acknowledged = false; model.acknowledgedReview = false }
                     .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
                     .disabled(model.isNewConnection ? model.selected.isEmpty : (!model.selectionChanged && !model.updatesChatGPT))
             }
         }.disabled(model.busy)
@@ -153,12 +160,12 @@ struct InventoryWorkflowView: View {
                 }
             }
             Text("Angeforderte Inhalte werden auf diesem Mac zum Schutz persönlicher Daten aufbereitet und an diesen Chatbot und gegebenenfalls seinen Cloud-Anbieter übertragen. Die Originaldateien bleiben auf deinem Mac.")
-            if !model.profile.enabled && !model.isNewConnection { Text("Der Dokumentzugriff ist pausiert. Die neue Auswahl wird für später gespeichert.").foregroundStyle(.orange) }
-            if model.selected.isEmpty { Text("Du entfernst alle Dokumente aus der Freigabe. Dadurch wird der Dokumentzugriff pausiert.").foregroundStyle(.orange) }
+            if !model.profile.enabled && !model.isNewConnection { SetupNotice(text: "Der Dokumentzugriff ist pausiert. Die neue Auswahl wird für später gespeichert.", warning: true) }
+            if model.selected.isEmpty { SetupNotice(text: "Du entfernst alle Dokumente aus der Freigabe. Dadurch wird der Dokumentzugriff pausiert.", warning: true) }
             if model.reviewCount > 0 {
                 Toggle("Ich erlaube die Nutzung der ausgewählten Dokumente mit Hinweisen zu Text, Original oder optionalen Basisangaben (\(model.reviewCount)) unter den angegebenen Einschränkungen.", isOn: $model.acknowledgedReview)
             }
-            Toggle("Ich erlaube diesem Empfänger den Zugriff auf die angezeigte Dokumentauswahl.", isOn: $model.acknowledged)
+            Toggle("Ich erlaube diesem Chatbot den Zugriff auf die angezeigte Dokumentauswahl.", isOn: $model.acknowledged)
             HStack {
                 Button("Auswahl bearbeiten") { model.step = 1 }
                 Spacer()
