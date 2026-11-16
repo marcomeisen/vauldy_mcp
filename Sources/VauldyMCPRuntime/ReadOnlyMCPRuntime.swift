@@ -382,9 +382,10 @@ public actor ReadOnlyMCPRuntime {
         guard handles.map({ (1...10).contains($0.count) && Set($0).count == $0.count && $0.allSatisfy { $0.count <= 64 } }) ?? true,
               names.map({ (1...8).contains($0.count) && Set($0).count == $0.count && $0.allSatisfy { MCPExtractionField(rawValue: $0).map(MCPExtractionField.exposed.contains) == true } }) ?? true,
               cursor.map({ $0.count <= 90 }) ?? true else { throw MCPAccessError.invalidArguments }
-        let profile = try loadProfile(), documents = try authorizedDocuments(profile), epoch = accessEpoch
+        let profile = try loadProfile(), documents = try selectedDocuments(profile), epoch = accessEpoch
         let key: String, offset: Int
         var selection: FieldSession
+        var prefetched: [String: VaultDocument] = [:]
         if let cursor {
             let parts = cursor.split(separator: ":", omittingEmptySubsequences: false)
             guard parts.count == 3, parts[1] == "f", let value = Int(parts[2]),
@@ -396,7 +397,8 @@ public actor ReadOnlyMCPRuntime {
             guard let handles else { throw MCPAccessError.invalidArguments }
             let fields = names?.compactMap(MCPExtractionField.init(rawValue:)) ?? MCPExtractionField.defaults
             let fingerprints = try handles.map { handle in
-                let (_, lease) = try resolve(handle, in: documents, profile: profile)
+                let (document, lease) = try resolveSelected(handle, in: documents, profile: profile)
+                prefetched[handle] = document
                 return lease.fingerprint
             }
             selection = .init(documents: handles, fields: fields, profile: profile, fingerprints: fingerprints)
@@ -405,8 +407,14 @@ public actor ReadOnlyMCPRuntime {
         var results: [MCPExtractedField] = []
         for (index, handle) in selection.documents.enumerated() {
             try Task.checkCancellation()
-            let (document, lease) = try resolve(handle, in: documents, profile: profile)
-            guard lease.fingerprint == selection.fingerprints[index] else { throw MCPAccessError.stale }
+            let document: VaultDocument
+            if let resolved = prefetched[handle] {
+                document = resolved // Resolved above in this call against the same lease.
+            } else {
+                let (resolved, lease) = try resolveSelected(handle, in: documents, profile: profile)
+                guard lease.fingerprint == selection.fingerprints[index] else { throw MCPAccessError.stale }
+                document = resolved
+            }
             let coverage = MCPSourceState(document).sourceCoverage
             if !document.isSearchable || document.localImport?.originalState == .changed {
                 results += selection.fields.map {
@@ -439,9 +447,9 @@ public actor ReadOnlyMCPRuntime {
         guard before != after, (1...64).contains(before.utf8.count), (1...64).contains(after.utf8.count) else {
             throw MCPAccessError.invalidArguments
         }
-        let profile = try loadProfile(), documents = try authorizedDocuments(profile), epoch = accessEpoch
-        let (left, _) = try resolve(before, in: documents, profile: profile)
-        let (right, _) = try resolve(after, in: documents, profile: profile)
+        let profile = try loadProfile(), documents = try selectedDocuments(profile), epoch = accessEpoch
+        let (left, _) = try resolveSelected(before, in: documents, profile: profile)
+        let (right, _) = try resolveSelected(after, in: documents, profile: profile)
         guard left.ocrText.utf8.count <= 1_000_000, right.ocrText.utf8.count <= 1_000_000 else {
             throw MCPAccessError.tooLarge
         }
@@ -1002,6 +1010,18 @@ public actor ReadOnlyMCPRuntime {
         catch { clearAccessCaches(); throw MCPAccessError.unavailable }
         guard let document else { throw MCPAccessError.stale }
         return try resolve(handle, in: [document], profile: profile)
+    }
+
+    /// For tools that operate on a few selected handles: a SQLite source resolves each handle
+    /// individually (nil here), a JSON source still loads the authorized snapshot once.
+    private func selectedDocuments(_ profile: MCPAccessProfile) throws -> [VaultDocument]? {
+        try pinSQLiteSource(profile) == nil ? authorizedDocuments(profile) : nil
+    }
+
+    private func resolveSelected(_ handle: String, in documents: [VaultDocument]?,
+                                 profile: MCPAccessProfile) throws -> (VaultDocument, Lease) {
+        if let documents { return try resolve(handle, in: documents, profile: profile) }
+        return try resolveSingle(handle, profile: profile)
     }
 
     private func authorizedDocuments(_ profile: MCPAccessProfile) throws -> [VaultDocument] {

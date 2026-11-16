@@ -289,6 +289,44 @@ struct SQLiteIntegrationTests {
         #expect(try Data(contentsOf: store.snapshotURL) == bytes)
     }
 
+    @Test func selectedHandleToolsResolveIndividuallyAndStayBound() async throws {
+        let root = try fixture(); defer { try? FileManager.default.removeItem(at: root) }
+        let store = try LocalDocumentStore.createSQLite(at: root.appendingPathComponent("vault"))
+        let db = try SQLiteDocumentStore(directory: store.snapshotURL.deletingLastPathComponent())
+        let previous = VaultDocument(title: "Kfz-Vertrag 2025", sourceName: "a.pdf",
+            ocrText: "--- Seite 1 ---\nVertragsnummer: KV-1234\nBeitrag: 49,99 EUR monatlich\nLaufzeit: 12 Monate\nWaehlmarkerAlt", pageCount: 1)
+        let current = VaultDocument(title: "Kfz-Vertrag 2026", sourceName: "b.pdf",
+            ocrText: "--- Seite 1 ---\nVertragsnummer: KV-1234\nBeitrag: 59,99 EUR monatlich\nLaufzeit: 12 Monate\nWaehlmarkerNeu", pageCount: 1)
+        let filler = (0..<20).map { VaultDocument(title: "Füller \($0)", sourceName: "f.pdf", ocrText: "--- Seite 1 ---\nFuellertext \($0)", pageCount: 1) }
+        try db.save([previous, current] + filler)
+        let all = Set(([previous, current] + filler).map(\.id))
+        let source = try profile(root, store: store, ids: all)
+        let runtime = ReadOnlyMCPRuntime(profiles: source)
+        func handle(_ marker: String) async throws -> String {
+            try #require(try await runtime.list(query: marker, includeExcerpts: false).items.first?.document)
+        }
+        let old = try await handle("WaehlmarkerAlt"), new = try await handle("WaehlmarkerNeu")
+        let fields = try await runtime.extractFields(documents: [old, new], fields: nil, cursor: nil)
+        #expect(Set(fields.results.map(\.document)) == [old, new])
+        _ = try await runtime.compareContractVersions(before: old, after: new)
+        // Selected-handle tools must not decode the whole granted SQLite corpus.
+        #expect(await runtime.snapshotDecodeCount == 0)
+
+        // A source change invalidates handles for both tools.
+        let prior = try #require(try db.document(id: previous.id))
+        var changed = prior; changed.ocrText += "\nNachtrag"
+        try db.replace(changed, ifCurrent: prior)
+        await #expect(throws: MCPAccessError.stale) { try await runtime.extractFields(documents: [old], fields: nil, cursor: nil) }
+        await #expect(throws: MCPAccessError.stale) { try await runtime.compareContractVersions(before: old, after: new) }
+
+        // Revoking a document blocks it even with a freshly issued handle.
+        let fresh = try await handle("WaehlmarkerNeu")
+        _ = try profile(root, store: store, ids: all.subtracting([current.id]))
+        await #expect(throws: (any Error).self) { try await runtime.extractFields(documents: [fresh], fields: nil, cursor: nil) }
+        await #expect(throws: (any Error).self) { try await runtime.compareContractVersions(before: try await handle("WaehlmarkerAlt"), after: fresh) }
+        #expect(await runtime.snapshotDecodeCount == 0)
+    }
+
     private func fixture() throws -> URL {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-r3b-" + UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700]); return root
