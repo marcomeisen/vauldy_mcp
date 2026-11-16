@@ -18,6 +18,7 @@ private let coverageSchema = object([
     "reviewDocumentCount": countSchema, "unknownCoverageDocumentCount": countSchema, "missingGrantedDocumentCount": countSchema
 ])
 private let hitSchema = object([
+    "untrusted": boolSchema,
     "document": textSchema, "title": textSchema, "page": countSchema, "excerpt": textSchema, "source": textSchema,
     "processingStatus": textSchema, "sourceCoverage": textSchema, "analysisStatus": textSchema
 ], optional: ["page"])
@@ -45,7 +46,7 @@ let listOutputSchema = object([
 
 let contentOutputSchema = object([
     "document": textSchema, "title": textSchema,
-    "segments": array(object(["page": countSchema, "part": countSchema, "text": textSchema, "source": textSchema], optional: ["page"])),
+    "segments": array(object(["untrusted": boolSchema, "page": countSchema, "part": countSchema, "text": textSchema, "source": textSchema], optional: ["page"])),
     "expectedPageCount": countSchema, "availablePages": array(countSchema), "sourceCoverage": textSchema,
     "nextCursor": textSchema, "containsEntireAvailableText": boolSchema,
     "analysisStatus": textSchema, "pageStatus": array(object(["page": countSchema, "method": textSchema, "needsReview": boolSchema])),
@@ -53,20 +54,20 @@ let contentOutputSchema = object([
 ], optional: ["nextCursor", "expectedPageCount"])
 
 private let analysisFieldSchema = object([
-    "role": textSchema, "value": textSchema, "page": countSchema, "quote": textSchema, "source": textSchema
+    "untrusted": boolSchema, "role": textSchema, "value": textSchema, "page": countSchema, "quote": textSchema, "source": textSchema
 ])
 let topicOverviewOutputSchema = object([
     "contractVersion": countSchema,
     "rows": array(object([
         "document": textSchema, "status": textSchema, "processingStatus": textSchema,
-        "evidence": object(["page": countSchema, "quote": textSchema, "source": textSchema]),
+        "evidence": object(["untrusted": boolSchema, "page": countSchema, "quote": textSchema, "source": textSchema]),
         "issuer": analysisFieldSchema, "subject": analysisFieldSchema
     ], optional: ["evidence", "issuer", "subject"])),
     "candidateCount": countSchema, "nextCursor": textSchema, "retrievalComplete": boolSchema,
     "processingComplete": boolSchema, "coverage": coverageSchema,
     "warnings": array(textSchema), "disclosure": disclosureSchema
 ], optional: ["nextCursor"])
-private let fieldEvidenceSchema = object(["label": textSchema, "value": textSchema, "page": countSchema,
+private let fieldEvidenceSchema = object(["untrusted": boolSchema, "label": textSchema, "value": textSchema, "page": countSchema,
                                           "quote": textSchema, "source": textSchema])
 let fieldExtractionOutputSchema = object([
     "contractVersion": countSchema, "scope": textSchema,
@@ -93,13 +94,13 @@ let contractComparisonOutputSchema = object([
 let metadataOutputSchema = object([
     "document": textSchema, "view": textSchema, "analysisStatus": textSchema, "engine": textSchema,
     "analyzedPages": array(countSchema), "logicalDocumentCount": countSchema,
-    "documents": array(object(["pages": array(countSchema), "documentType": textSchema, "title": textSchema,
+    "documents": array(object(["untrusted": boolSchema, "pages": array(countSchema), "documentType": textSchema, "title": textSchema,
                                 "overview": textSchema, "fields": array(analysisFieldSchema), "warnings": array(textSchema)], optional: ["overview"])),
     "hasMore": boolSchema, "nextCursor": textSchema, "warnings": array(textSchema), "disclosure": disclosureSchema
 ], optional: ["engine", "nextCursor"])
 private let passagesOutputSchema = object([
     "document": textSchema, "title": textSchema, "mode": textSchema,
-    "segments": array(object(["page": countSchema, "part": countSchema, "text": textSchema, "source": textSchema], optional: ["page"])),
+    "segments": array(object(["untrusted": boolSchema, "page": countSchema, "part": countSchema, "text": textSchema, "source": textSchema], optional: ["page"])),
     "matchingPassageCount": countSchema, "nextCursor": textSchema, "retrievalComplete": boolSchema,
     "containsEntireAvailableText": boolSchema, "sourceCoverage": textSchema, "analysisStatus": textSchema,
     "warnings": array(textSchema), "disclosure": disclosureSchema

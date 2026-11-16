@@ -30,9 +30,9 @@ Programm mit denselben Dateizugriffsrechten.
 
 ## MCP-Vertrag
 
-### Vauldy-Werkzeugvertrag v1
+### Vauldy-Werkzeugvertrag v2
 
-Der Werkzeugvertrag hat eine eigene Versionslinie. Der Basisvertrag `v1` bezeichnet die vier bisherigen Werkzeugnamen, Eingabe- und Ausgabeschemas sowie ihre Lese-Annotationen. Themenübersicht, Feldauslese und Fassungsvergleich ergänzen diesen Vertrag jeweils mit einem eigenen Antwortschema v1. Die Werkzeugverträge sind unabhängig von Vauldys Paketversion, der ausgehandelten MCP-Protokollversion und dem Format der lokalen Dateien. Clients entdecken die Werkzeuge bei der Verbindung. Der stdio-Vertragstest prüft die vier Basiswerkzeuge gegen einen festen Fingerabdruck. Die Relay-Kopie wird separat mit dem tatsächlichen Server verglichen. Eine inkompatible Änderung braucht eine neue Vertragsversion und eine Prüfung der betroffenen Clients.
+Der Werkzeugvertrag hat eine eigene Versionslinie. Bis 0.14.11 bezeichnete `v1` die vier Basiswerkzeuge samt Eingabe- und Ausgabeschemas sowie Lese-Annotationen. Ab 0.14.12 enthält deren Ausgabeschema `untrusted: true` an Suchtreffern und Lesesegmenten; auch zitierte Belege, Analysefelder und logische Metadatendokumente tragen diese Markierung. Die Quelltexte und Seitenbelege bleiben wörtlich. Themenübersicht, Feldauslese, Fassungsvergleich und Fristenübersicht melden dafür `contractVersion: 2`; der reine Dokumentinventarvertrag bleibt Version 1. Die Änderung ist ein neuer Ausgabevertrag: Clients müssen die Schemas neu entdecken und ältere strikt validierende Clients auf v2 umstellen. Die Werkzeugverträge sind unabhängig von Paketversion, ausgehandelter MCP-Protokollversion und lokalem Dateiformat. Der stdio-Vertragstest pinnt den aktuellen Basis-Fingerabdruck; die Relay-Kopie wird separat gegen den gebauten Server geprüft.
 
 | Ebene | Zuständigkeit | Bedeutung für den Chat |
 | --- | --- | --- |
@@ -94,7 +94,7 @@ Der separate Recherchepilot `research_insurance_contracts` ist ein Entwicklungsa
 lokalen Testhost. Er führt einen festen Auftrag mit Vertragsnummern und Kündigungsfristen aus und
 ist separat konfiguriert. Seine Abnahme im regulären ChatGPT-Gespräch steht aus.
 
-#### Vertrag der Fristenübersicht v1
+#### Vertrag der Fristenübersicht v2
 
 `get_deadline_overview` erhält die flüchtigen Kennungen von bis zu fünf ausgewählten Dokumenten
 aus Suche, Liste oder Themenübersicht und liefert eine Zeile je Dokument in Aufrufreihenfolge.
@@ -124,7 +124,7 @@ Rechtswirkung und aktueller Vertragsstatus bleiben ungeprüft.
 
 Der synthetische Offline-Test ist `scripts/mcp/deadline_overview_smoke_test.py`.
 
-#### Vertrag des Fassungsvergleichs v1
+#### Vertrag des Fassungsvergleichs v2
 
 `compare_contract_versions` erhält `before` und `after` für zwei ausdrücklich ausgewählte
 freigegebene Dokumente. Die Reihenfolge stammt vom Aufrufer. Das Werkzeug bestimmt weder die
@@ -153,7 +153,7 @@ für diese ist `extract_document_fields` mit seiner Pagination vorgesehen. Priva
 Quellenstand werden wie bei anderen Lesewerkzeugen geprüft. Das Audit führt den Aufruf als `read`.
 Der synthetische Test ist `scripts/mcp/contract_comparison_smoke_test.py`.
 
-#### Vertrag der Feldauslese v1
+#### Vertrag der Feldauslese v2
 
 `extract_document_fields` arbeitet lokal auf bereits gespeichertem OCR-Text. Es startet weder
 OCR noch Modellauswertung und speichert keine fachlichen Ergebnisse. Vor jeder Ausgabe gelten
@@ -220,7 +220,7 @@ im Messvertrag sind numerisch beschriftet. Bei der Vorprüfung wurde ein ausgesc
 von der bestehenden Privacy-Erkennung zusätzlich maskiert. Maskierte Werte bleiben ausdrücklich
 `redacted`; die Feldauslese stellt sie nicht wieder her und lockert den Datenschutz nicht.
 
-#### Vertrag der Themenübersicht v1
+#### Vertrag der Themenübersicht v2
 
 `get_topic_overview({"topic":"insurance"})` ist der Einstieg für „Zeige alle Versicherungen“.
 Der Filter sucht nach `versicher polic`. Eine erkennbare, alleinstehende Policenüberschrift wird
@@ -523,7 +523,7 @@ Version 1): stabile `documentID`, ursprüngliches `importedAt`, belegter SHA-256
 der zuletzt importierten Originalbytes sowie Zustand/Verarbeitungsabdeckung.
 Aktuell autorisierte Datensätze werden vor der Pagination nach Importdatum
 sortiert; unbekannte Daten stehen zuletzt. `documentID` ersetzt kein Lesehandle.
-Fehlende Inventarzeilen beweisen keine Löschung. Die vier gepinnten v1-
-Basisverträge bleiben unverändert. Discovery/Relay-Quellen berücksichtigen damit
+Fehlende Inventarzeilen beweisen keine Löschung. Zum Stand vom 08.11. blieben die vier gepinnten v1-
+Basisverträge unverändert; ab 0.14.12 gilt der oben beschriebene v2-Ausgabevertrag. Discovery/Relay-Quellen berücksichtigen damit
 neun Werkzeuge; ein laufender Anschluss benötigt einen separaten Rollout.
 [Vertrag, Grenzen, Nachweis und nächste Aufgaben](document-inventory.md).

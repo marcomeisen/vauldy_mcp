@@ -16,7 +16,8 @@ enum OCRRegionRecovery {
     }
 
     /// One native crop can confirm up to four neighbouring missing lines.
-    /// Four crop attempts and the existing pixel budget still bound each page.
+    /// Normal pages use four crop attempts; a confirmed source-context retry
+    /// can use two more within the same pixel budget.
     static func windows(_ regions: [LocalOCRVisualRegion], grouped: Bool) -> [(bounds: CGRect, glyphHeight: CGFloat)] {
         let sorted = regions.filter(\.needsReview).sorted {
             $0.bounds.maxY == $1.bounds.maxY ? $0.bounds.minX < $1.bounds.minX : $0.bounds.maxY > $1.bounds.maxY
@@ -66,12 +67,13 @@ enum OCRRegionRecovery {
               !OCRLineRecovery.hasConfusableIdentifier(first.text) else { return .unconfirmed }
         let intersection = region.intersection(first.bounds)
         let area = first.bounds.width * first.bounds.height
+        let regionArea = region.width * region.height
         guard area > 0, !intersection.isNull, region.contains(CGPoint(x: first.bounds.midX, y: first.bounds.midY)),
-              intersection.width * intersection.height >= area * 0.7 else { return .unconfirmed }
+              regionArea > 0, intersection.width * intersection.height >= min(area, regionArea) * 0.7 else { return .unconfirmed }
         if existingLines.contains(where: { line in
             let overlap = line.bounds.intersection(first.bounds)
             let minimum = min(area, line.bounds.width * line.bounds.height)
-            return !overlap.isNull && overlap.width * overlap.height > minimum * 0.1
+            return !overlap.isNull && overlap.width * overlap.height > minimum * 0.5
         }) { return .overlap }
         if existingText.split(whereSeparator: \.isNewline).contains(where: {
             OCRLineRecovery.hasConflictingLabel(first.text, existing: String($0))

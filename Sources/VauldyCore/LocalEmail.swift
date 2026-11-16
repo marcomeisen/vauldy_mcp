@@ -291,11 +291,13 @@ struct LocalEmail {
     private static func cleanBody(_ text: String) -> String {
         text.replacingOccurrences(of: "\r\n", with: "\n").replacingOccurrences(of: "\r", with: "\n")
             .replacingOccurrences(of: #"[\x00-\x08\x0B-\x1F\x7F]"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"[\u200E\u200F\u202A-\u202E\u2066-\u2069]"#, with: "", options: .regularExpression)
     }
 
     private static func htmlText(_ raw: String) -> String {
         let stripped = raw.replacingOccurrences(of: #"(?is)<!--.*?(?:-->|$)|<(script|style|head|template)\b[^>]*>.*?(?:</\1\s*>|$)"#,
                                                    with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(?is)<([a-z][a-z0-9]*)\b(?=[^>]*(?:\shidden(?:\s|=|>)|display\s*:\s*none|visibility\s*:\s*hidden|color\s*:\s*(?:white|#fff(?:fff)?)))\s[^>]*>.*?</\1\s*>"#, with: "", options: .regularExpression)
             .replacingOccurrences(of: #"(?i)</?(?:br|p|div|li|tr|h[1-6]|blockquote)\b[^>]*>"#, with: "\n", options: .regularExpression)
             .replacingOccurrences(of: #"<(?:"[^"]*"|'[^']*'|[^'">])*>"#, with: "", options: .regularExpression)
         let entities = ["amp":"&", "lt":"<", "gt":">", "quot":"\"", "apos":"'", "nbsp":" ", "euro":"€",

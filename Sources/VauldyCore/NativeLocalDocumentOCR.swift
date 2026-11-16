@@ -269,10 +269,16 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
 
     private static func recognizeImage(_ image: CGImage, page: Int, cancellation: OCRCancellation,
                                        retries: inout RetryBudget, replacement: (() throws -> CGImage)? = nil,
-                                       checkCoverage: Bool = true, recovery: RegionRecoveryBudget) throws -> LocalOCRPage {
+                                       checkCoverage: Bool = true, recovery: RegionRecoveryBudget,
+                                       detailRenderer: ((CGRect, Int, Int) throws -> CGImage)? = nil) throws -> LocalOCRPage {
         let originalWidth = image.width, originalHeight = image.height
         let cropBounds = OCRWhiteMargins.contentBounds(in: image) ?? CGRect(x: 0, y: 0, width: image.width, height: image.height)
         let image = image.cropping(to: cropBounds) ?? image
+        let croppedDetail: ((CGRect, Int, Int) throws -> CGImage)? = detailRenderer.map { render in
+            { pixels, width, height in
+                try render(pixels.offsetBy(dx: cropBounds.minX, dy: cropBounds.minY), width, height)
+            }
+        }
         if isBlank(image) { return LocalOCRPage(info: .init(page: page, method: .blank), text: "") }
         let observations = try readLines(image, languageCorrection: true, cancellation: cancellation)
         let lines = observations.compactMap { observation in
@@ -284,14 +290,15 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         if let replacement, tinyLines >= 2, tinyLines * 2 >= lines.count {
             try cancellation.check()
             return try recognizeImage(replacement(), page: page, cancellation: cancellation, retries: &retries,
-                                      checkCoverage: checkCoverage, recovery: recovery)
+                                      checkCoverage: checkCoverage, recovery: recovery, detailRenderer: detailRenderer)
         }
         let original = lines.map { $0.1.string }.joined(separator: "\n")
         guard original.rangeOfCharacter(from: .alphanumerics) != nil else {
             var result = LocalOCRPage(info: .init(page: page, method: .unreadable, needsReview: true), text: "")
             if checkCoverage {
                 result.geometry = .vision(texts: [], bounds: [], confidences: [])
-                try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery)
+                try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery,
+                                       detailRenderer: croppedDetail)
                 result.geometry?.transform(LocalOCRGeometry.cropTransform(cropBounds, width: originalWidth, height: originalHeight))
             }
             return result
@@ -304,7 +311,8 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         var confidences = lines.map { Double($0.1.confidence) }
         result.geometry = .vision(texts: text, bounds: bounds, confidences: confidences)
         guard recovery.lineRecovery || retries.remaining > 0 else {
-            if checkCoverage { try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery) }
+            if checkCoverage { try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery,
+                                                      detailRenderer: croppedDetail) }
             result.geometry?.transform(LocalOCRGeometry.cropTransform(cropBounds, width: originalWidth, height: originalHeight))
             return result
         }
@@ -458,7 +466,8 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         for index in text.indices where text[index] != lines[index].1.string {
             result.geometry?.lines[index].priorReadings = [lines[index].1.string]
         }
-        if checkCoverage { try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery) }
+        if checkCoverage { try checkImageCoverage(image, result: &result, cancellation: cancellation, recovery: recovery,
+                                                  detailRenderer: croppedDetail) }
         if recovery.lineRecovery {
             do {
                 try NativeOCRFieldRecovery.recover(image, page: &result, budget: recovery.fields,
@@ -584,12 +593,14 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
     }
 
     private static func checkImageCoverage(_ image: CGImage, result: inout LocalOCRPage,
-                                           cancellation: OCRCancellation, recovery: RegionRecoveryBudget) throws {
+                                           cancellation: OCRCancellation, recovery: RegionRecoveryBudget,
+                                           detailRenderer: ((CGRect, Int, Int) throws -> CGImage)? = nil) throws {
         guard let geometry = result.geometry else { return }
         let clock = LocalStopwatch()
         let before = recovery.milliseconds
         result.geometry?.coverage = try detectCoverage(image, lines: geometry.lines, cancellation: cancellation, detail: recovery)
-        try recoverMarkedRegions(image, result: &result, cancellation: cancellation, budget: recovery)
+        try recoverMarkedRegions(image, result: &result, cancellation: cancellation, budget: recovery,
+                                 detailRenderer: detailRenderer, detailNarrow: false)
         var metrics = result.info.metrics ?? LocalOCRMetrics()
         metrics.regionRetryMilliseconds = recovery.milliseconds - before
         metrics.coverageMilliseconds = max(0, clock.milliseconds - (recovery.milliseconds - before))
@@ -633,7 +644,8 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
 
     private static func recoverMarkedRegions(_ image: CGImage, result: inout LocalOCRPage,
                                              cancellation: OCRCancellation, budget: RegionRecoveryBudget,
-                                             detailRenderer: ((CGRect, Int, Int) throws -> CGImage)? = nil) throws {
+                                             detailRenderer: ((CGRect, Int, Int) throws -> CGImage)? = nil,
+                                             detailNarrow: Bool = true) throws {
         guard budget.enabled, let geometry = result.geometry, let coverage = geometry.coverage,
               coverage.status == .checked, coverage.regions.contains(where: \.needsReview) else { return }
         let clock = LocalStopwatch()
@@ -649,15 +661,15 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             let glyphHeight = target.glyphHeight * CGFloat(image.height)
             let pixels = CGRect(x: box.minX * CGFloat(image.width), y: (1 - box.maxY) * CGFloat(image.height),
                 width: box.width * CGFloat(image.width), height: box.height * CGFloat(image.height))
-            let padded = pixels.insetBy(dx: -max(8, glyphHeight), dy: -max(8, glyphHeight * 0.5)).integral
+            let padded = pixels.insetBy(dx: -max(8, glyphHeight), dy: -max(8, glyphHeight * 1.5)).integral
                 .intersection(CGRect(x: 0, y: 0, width: image.width, height: image.height))
             let size = OCRRegionRecovery.retrySize(width: Int(padded.width), height: Int(padded.height),
                 glyphHeight: glyphHeight, enabled: budget.scaleSmallRegions)
             guard let size else { continue }
             let pixelCount = size.width * size.height
-            guard budget.reserve(pixels: pixelCount) else { break }
+            guard budget.reserve(pixels: pixelCount, edge: box.maxY < 0.12 || box.minY > 0.85) else { continue }
             let crop: CGImage
-            if budget.smallTextDetection, budget.scaleSmallRegions, glyphHeight < 24, let detailRenderer {
+            if detailNarrow, budget.smallTextDetection, budget.scaleSmallRegions, glyphHeight < 24, let detailRenderer {
                 // Re-render vector outlines from the source rather than enlarging
                 // their already rasterized, potentially lost strokes.
                 crop = try detailRenderer(padded, size.width, size.height)
@@ -677,6 +689,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             } catch is CancellationError { throw CancellationError() }
             catch { continue }
             guard first.count <= 8, second.count <= 8 else { continue }
+            let beforeWindow = added
             var conflicts: [CGRect] = []
             for candidate in first {
                 let confirmations = second.filter { OCRRegionRecovery.sameObservation(candidate, $0) }
@@ -692,6 +705,54 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                         bounds: candidate.bounds, confidence: Double(min(candidate.confidence, confirmation.confidence)), method: .vision))
                     result.geometry?.blocks = nil
                     added += 1
+                }
+            }
+            // A narrow crop can hide a neighbouring baseline or suppress a
+            // small diacritic. Retry only an uncovered source region, using a
+            // wider physical PDF context and two independently confirmed reads.
+            if added == beforeWindow, let detailRenderer,
+               box.minY > 0.85 || box.maxY < 0.12 || box.width > 0.5 {
+                let nearBottom = box.maxY < 0.12
+                let bandHeight: CGFloat = nearBottom ? 0.035 : 0.09
+                let startY = max(0, min(1 - bandHeight, box.minY - (nearBottom ? 0.02 : 0.04)))
+                let context = CGRect(x: 0, y: startY, width: 1, height: bandHeight)
+                let sourcePixels = CGRect(x: context.minX * CGFloat(image.width),
+                    y: (1 - context.maxY) * CGFloat(image.height),
+                    width: context.width * CGFloat(image.width), height: context.height * CGFloat(image.height)).integral
+                let sourceCount = sourcePixels.width * sourcePixels.height
+                if sourceCount > 0, sourceCount <= 1_000_000 {
+                    let factor = min(CGFloat(5) / 3, sqrt(1_000_000 / sourceCount))
+                    let width = Int((sourcePixels.width * factor).rounded(.down))
+                    let height = Int((sourcePixels.height * factor).rounded(.down))
+                    if width > 0, height > 0, budget.reserve(pixels: width * height,
+                        edge: box.maxY < 0.12 || box.minY > 0.85) {
+                        budget.contextFallback = true
+                        do {
+                            let extra = try detailRenderer(sourcePixels, width, height)
+                            let transform = LocalOCRGeometry.cropTransform(sourcePixels, width: image.width, height: image.height)
+                            budget.pixels += width * height
+                            let confirmed = try regionCandidates(extra, transform: transform,
+                                languageCorrection: true, cancellation: cancellation)
+                            budget.pixels += width * height
+                            let independent = try regionCandidates(extra, transform: transform,
+                                languageCorrection: false, cancellation: cancellation)
+                            if confirmed.count <= 8, independent.count <= 8 {
+                                for candidate in confirmed {
+                                    guard independent.filter({ OCRRegionRecovery.sameObservation(candidate, $0) }).count == 1,
+                                          let other = independent.first(where: { OCRRegionRecovery.sameObservation(candidate, $0) }),
+                                          OCRRegionRecovery.decide(candidate, confirmedBy: other, region: box,
+                                              existingText: result.text, existingLines: result.geometry?.lines ?? []) == .append else { continue }
+                                    let offset = result.text.utf16.count + (result.text.isEmpty ? 0 : 1)
+                                    result.text += (result.text.isEmpty ? "" : "\n") + candidate.text
+                                    result.geometry?.lines.append(.init(location: offset, length: candidate.text.utf16.count,
+                                        bounds: candidate.bounds, confidence: Double(min(candidate.confidence, other.confidence)), method: .vision))
+                                    result.geometry?.blocks = nil
+                                    added += 1
+                                }
+                            }
+                        } catch is CancellationError { throw CancellationError() }
+                        catch { }
+                    }
                 }
             }
             // If a grouped context leaves a line unconfirmed, spend the
@@ -778,6 +839,7 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         var milliseconds = 0
         var recoveredLines = 0
         var conflicts = 0
+        var contextFallback = false
         private var reservedPixels = 0
         init(enabled: Bool, scaleSmallRegions: Bool, smallTextDetection: Bool, denseCoverage: Bool, lineRecovery: Bool) {
             self.enabled = enabled; self.scaleSmallRegions = scaleSmallRegions
@@ -789,8 +851,9 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
             detectionRegions += 1; detectionPixels += pixels
             return true
         }
-        func reserve(pixels: Int) -> Bool {
-            guard attempts < 4, reservedPixels + pixels * 2 <= 8_000_000 else { return false }
+        func reserve(pixels: Int, edge: Bool = false) -> Bool {
+            guard attempts < ((edge || contextFallback) ? 6 : 4),
+                  reservedPixels + pixels * 2 <= 8_000_000 else { return false }
             attempts += 1
             reservedPixels += pixels * 2
             return true
@@ -938,8 +1001,23 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
                         return detail.image
                     }
                 }
+                let detailRenderer: ((CGRect, Int, Int) throws -> CGImage)? = page.rotationAngle == 0
+                    && region == page.getBoxRect(.cropBox) ? { pixels, width, height in
+                    let crop = page.getBoxRect(.cropBox)
+                    let physical = CGRect(x: crop.minX + pixels.minX / CGFloat(rendered.image.width) * crop.width,
+                        y: crop.minY + (1 - pixels.maxY / CGFloat(rendered.image.height)) * crop.height,
+                        width: pixels.width / CGFloat(rendered.image.width) * crop.width,
+                        height: pixels.height / CGFloat(rendered.image.height) * crop.height)
+                    let detail = try renderPDF(page, region: physical,
+                        requestedScale: min(CGFloat(width) / physical.width, CGFloat(height) / physical.height)).image
+                    guard let exact = resizeRegion(detail, width: width, height: height) else {
+                        throw LocalImportError.invalidDocument
+                    }
+                    return exact
+                } : nil
                 var result = try recognizeImage(image, page: number, cancellation: cancellation,
-                                                retries: &retries, replacement: replacement, checkCoverage: checkCoverage, recovery: recovery)
+                                                retries: &retries, replacement: replacement, checkCoverage: checkCoverage,
+                                                recovery: recovery, detailRenderer: detailRenderer)
                 result.geometry?.transform(pdfCoordinates(page, rendered: rendered))
                 metrics.mergeCoverage(result.info.metrics)
                 pieces.append(result)
@@ -961,6 +1039,12 @@ public struct NativeLocalDocumentOCR: LocalDocumentOCR {
         result.geometry?.coordinateSpace = .pdfCropBottomLeft
         result.geometry?.rotationDegrees = Int((page.rotationAngle % 360 + 360) % 360)
         result.info.metrics = metrics
+        // Raster PDF pages can still have an uncovered line after the image
+        // pass. Recheck only those pages with the original PDF renderer so a
+        // second context crop stays bound to the physical source page.
+        if checkCoverage, regions.count == 1, result.geometry?.coverage?.needsReview == true {
+            try checkPDFCoverage(page, result: &result, cancellation: cancellation, recovery: recovery)
+        }
         return result
     }
     static func render(_ page: CGPDFPage, region: CGRect, requestedScale: CGFloat, correctPDFScale: Bool = true) throws -> CGImage {

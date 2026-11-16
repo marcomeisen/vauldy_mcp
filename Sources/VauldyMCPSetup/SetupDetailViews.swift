@@ -177,6 +177,7 @@ struct SetupDocumentList: View {
 
 struct SetupFoldersView: View {
     @ObservedObject var model: SetupModel
+    @State private var removeCandidate: LocalWatchedFolder?
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 8) {
@@ -209,7 +210,7 @@ struct SetupFoldersView: View {
                             Button("Ordner erneut auswählen …") { model.chooseWatchedFolders(reselecting: folder) }
                         }
                         Button(folder.enabled ? "Pausieren" : "Fortsetzen") { model.changeWatchedFolder(folder) }
-                        Button("Entfernen", role: .destructive) { model.changeWatchedFolder(folder, remove: true) }
+                        Button("Entfernen", role: .destructive) { removeCandidate = folder }
                     }
                     Text(folder.recursive ? "Mit Unterordnern" : "Ohne Unterordner").font(.caption).foregroundStyle(.secondary)
                 }.padding(18).background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
@@ -219,6 +220,16 @@ struct SetupFoldersView: View {
                 Button("Ordnerüberwachung starten") { Task { await model.refreshWatchedFolders(resume: true) } }
             }
             Text("Beim Pausieren werden bereits gestartete Importe abgeschlossen. Entfernen eines Ordners löscht keine importierten Dokumente.").font(.callout).foregroundStyle(.secondary)
+        }
+        .confirmationDialog("Ordnerüberwachung entfernen?", isPresented: Binding(get: { removeCandidate != nil }, set: { if !$0 { removeCandidate = nil } }), titleVisibility: .visible) {
+            if let folder = removeCandidate {
+                Button("Ordner entfernen", role: .destructive) { model.changeWatchedFolder(folder, remove: true); removeCandidate = nil }
+            }
+            Button("Behalten", role: .cancel) { removeCandidate = nil }
+        } message: {
+            if let folder = removeCandidate {
+                Text("„\(URL(fileURLWithPath: folder.path).lastPathComponent)“ wird nicht mehr überwacht. Bereits importierte Dokumente und Originaldateien bleiben erhalten.")
+            }
         }
     }
 }

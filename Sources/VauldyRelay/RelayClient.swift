@@ -48,11 +48,11 @@ public struct RelayClient: Sendable {
         struct Rotated: Decodable { let rotated: Bool }
         guard try JSONDecoder().decode(Rotated.self, from: data).rotated else { throw RelayFailure.unavailable }
     }
-    public func start(profile: MCPAccessProfile) async throws -> (RelayCredentials, URL) {
+    public func start(profile: MCPAccessProfile, pairingCodeHash: String) async throws -> (RelayCredentials, URL) {
         try profile.validate()
         guard profile.enabled, profile.acknowledgedCloudDisclosure else { throw MCPAccessError.notAuthorized }
         let key = P256.KeyAgreement.PrivateKey(), verifier = RelayCrypto.token()
-        let body = try JSONSerialization.data(withJSONObject: ["challenge": RelayCrypto.challenge(verifier), "publicKey": key.publicKey.x963Representation.base64EncodedString()])
+        let body = try JSONSerialization.data(withJSONObject: ["challenge": RelayCrypto.challenge(verifier), "publicKey": key.publicKey.x963Representation.base64EncodedString(), "pairingCodeHash": pairingCodeHash])
         let (data, _) = try await request("/api/pair/start", body: body)
         struct Start: Decodable { let id: String; let url: URL }
         let result = try JSONDecoder().decode(Start.self, from: data)

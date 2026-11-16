@@ -730,7 +730,7 @@ public actor ReadOnlyMCPRuntime {
             guard let row = projection.rows[id], profile.allowedDocumentIDs.contains(id) else { throw MCPAccessError.stale }
             let handle = lease(id: id, fingerprint: row.fingerprint, profile: profile)
             return .init(document: handle, documentID: inventoryReference(id),
-                         importedAt: MCPDocumentIdentity.timestamp(row.metadata.importedAt), contentHash: row.metadata.contentHash,
+                         importedAt: MCPDocumentIdentity.timestamp(row.metadata.importedAt), contentHash: MCPDocumentIdentity.protectedContentHash(row.metadata.contentHash, profile: profile),
                          originalState: row.metadata.originalState ?? "unknown", processingStatus: row.metadata.processingStatus,
                          sourceCoverage: row.metadata.sourceCoverage)
         }
@@ -1029,6 +1029,10 @@ public actor ReadOnlyMCPRuntime {
             return allowed
         } catch VaultSnapshotError.tooLarge {
             clearAccessCaches(); throw MCPAccessError.tooLarge
+        } catch let error as MCPAccessError {
+            clearAccessCaches(); throw error
+        } catch is CancellationError {
+            clearAccessCaches(); throw CancellationError()
         } catch { clearAccessCaches(); throw MCPAccessError.unavailable }
     }
 

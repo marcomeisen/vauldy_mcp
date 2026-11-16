@@ -8,7 +8,7 @@ import tempfile
 import time
 import uuid
 
-from smoke_test import Client, payload, assert_v1_discovery
+from smoke_test import Client, payload, assert_current_discovery
 from topic_overview_smoke_test import document, write_json
 
 
@@ -38,7 +38,7 @@ def main():
             original = vault.read_bytes(), profile.read_bytes()
             client = Client(args.binary, profile, server_options=mode)
             try:
-                assert_v1_discovery(client.request('tools/list', {})['tools'])
+                assert_current_discovery(client.request('tools/list', {})['tools'])
                 start = time.perf_counter()
                 page = payload(client.call('list_documents', query='Versicherung', includeExcerpts=False, pageSize=2))
                 count = page['totalCount']

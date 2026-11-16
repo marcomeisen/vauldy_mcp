@@ -109,7 +109,7 @@ def main():
             before = client.counter
             data = overview(client, schema, topic='insurance')
             assert client.counter == before + 1
-            assert data['contractVersion'] == 1 and data['candidateCount'] == 19 and data['retrievalComplete']
+            assert data['contractVersion'] == 2 and data['candidateCount'] == 19 and data['retrievalComplete']
             assert not data['processingComplete'] and data['coverage']['failedDocumentCount'] == 1
             rows = data['rows']
             assert Counter(row['status'] for row in rows) == {

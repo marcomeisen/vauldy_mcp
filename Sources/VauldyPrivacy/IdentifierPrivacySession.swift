@@ -65,7 +65,16 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
     /// Detection/validation failures stop the request before credentials or network use.
     public func protectForSending(_ value: String) throws -> String {
         let protected = protect(value)
-        guard try ExternalPersonalDataDetector.identifiers(in: protected).isEmpty else {
+        // Classify the original outgoing text: placeholder tokens can change NER
+        // context and make ordinary field labels look like personal names.
+        let unmaskedNames = Self.detectNamedEntities(in: value)
+            .filter { $0.kind == "PERSON" }
+            .map(\.value)
+            .filter { name in
+                !Self.ranges(of: Replacement(original: name, token: "", wholeWord: true), in: protected).isEmpty
+            }
+        guard try ExternalPersonalDataDetector.identifiers(in: protected).isEmpty,
+              unmaskedNames.isEmpty else {
             throw ExternalAIPrivacyError.personalDataRemaining
         }
         return protected

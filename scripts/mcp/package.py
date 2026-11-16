@@ -151,6 +151,10 @@ def main():
             for product in PRODUCTS:
                 run(command + ['--product', product], env=env)
         binary_dir = Path(capture(command + ['--show-bin-path'], env=env))
+        if args.skip_build:
+            native_dir = Path(capture(command + ['--build-system', 'native', '--show-bin-path'], env=env))
+            if all((native_dir / product).exists() for product in PRODUCTS):
+                binary_dir = native_dir
         verify_product_versions(binary_dir, version, env)
         build_info = verify_build_information(binary_dir, version, compatibility_epoch, env)
         architectures = verify_platform(binary_dir)

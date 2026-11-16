@@ -5,6 +5,7 @@ import VauldyMCPRuntime
 struct OAuthApprovalSelection {
     let request: OAuthPendingRequest
     let profile: MCPAccessProfile
+    let confirmation: String
 }
 
 extension SetupModel {
@@ -43,13 +44,22 @@ extension SetupModel {
             catch { oauthError = "Der Verbindungsdienst konnte nicht gestoppt werden." }
         }
     }
+    func armOAuth() {
+        let store = oauthStore
+        Task {
+            do {
+                try await Task.detached { try store.armAuthorization() }.value
+                message = "Verbindungsvorgang für zehn Minuten geöffnet. Starte jetzt die Verbindung im Chatbot."; failure = false
+            } catch { oauthError = "Der Verbindungsvorgang konnte nicht geöffnet werden." }
+        }
+    }
     func approveOAuth(_ approval: OAuthApprovalSelection) {
         let request = approval.request, profile = approval.profile, id = approval.profile.connectionID
         busy = true; let store = oauthStore
         Task {
             defer { busy = false }
             do {
-                try await Task.detached { try store.approve(request.id, profileID: id, expectedRevision: profile.revision) }.value
+                try await Task.detached { try store.approve(request.id, profileID: id, expectedRevision: profile.revision, confirmation: approval.confirmation) }.value
                 message = "Zugriff für \(request.provider.title) bestätigt. Kehre zum Verbindungsfenster im Chatbot zurück."; failure = false
                 await refreshOAuth()
             } catch { oauthError = (error as? LocalizedError)?.errorDescription ?? "Die Freigabe wurde nicht gespeichert." }

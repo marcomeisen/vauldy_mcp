@@ -4,6 +4,7 @@ import VauldyMCPRuntime
 struct SetupWizardView: View {
     @ObservedObject var model: SetupModel
     @Environment(\.dismiss) private var dismiss
+    @State private var showingAdvanced = false
     private let steps = ["Chatbot", "Dokumente", "Verbindung"]
     private var existing: MCPAccessProfile? {
         MCPDesktopClient(rawValue: model.clientSelection).flatMap { model.existingConnection(for: $0) }
@@ -61,17 +62,48 @@ struct SetupWizardView: View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Welchen Chatbot möchtest du verbinden?").font(.title2.weight(.semibold))
             Text("Für jeden Chatbot speichert Vauldy eine eigene Dokumentauswahl. Bestehende Verbindungen bleiben erhalten.").foregroundStyle(.secondary)
-            Picker("Chatbot", selection: $model.clientSelection) {
-                Text("ChatGPT · mit deinem Konto anmelden").tag("oauth-chatgpt")
-                Text("Claude · OAuth-Verbindung").tag("oauth-claude")
-                ForEach(MCPDesktopClient.allCases, id: \.rawValue) { Text($0.title).tag($0.rawValue) }
-                Text("Anderer Chatbot · manuell").tag("manual")
-            }.pickerStyle(.radioGroup)
+            ForEach([("oauth-chatgpt", "ChatGPT", "Mit deinem Konto anmelden. Vauldy verbindet den Mac ausgehend."),
+                     ("oauth-claude", "Claude", "Verbindung über einen vom Betreiber bereitgestellten HTTPS-Anschluss.")], id: \.0) { choice in
+                Button {
+                    model.clientSelection = choice.0
+                } label: {
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: model.clientSelection == choice.0 ? "largecircle.fill.circle" : "circle")
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(choice.1).font(.headline)
+                            Text(choice.2).font(.callout).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }.padding(12).contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .background(model.clientSelection == choice.0 ? Color.accentColor.opacity(0.09) : Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
+                .accessibilityLabel("\(choice.1), \(choice.2)")
+                .accessibilityAddTraits(model.clientSelection == choice.0 ? .isSelected : [])
+            }
+            DisclosureGroup("Erweitert · lokaler oder manueller Anschluss", isExpanded: $showingAdvanced) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Für Chatbots mit lokalem MCP-Host oder eigener Konfiguration.").font(.callout).foregroundStyle(.secondary)
+                    ForEach(MCPDesktopClient.allCases, id: \.rawValue) { client in
+                        Button {
+                            model.clientSelection = client.rawValue
+                        } label: {
+                            Label(client.title, systemImage: model.clientSelection == client.rawValue ? "checkmark.circle.fill" : "circle")
+                        }.accessibilityAddTraits(model.clientSelection == client.rawValue ? .isSelected : [])
+                    }
+                    Button {
+                        model.clientSelection = "manual"
+                    } label: {
+                        Label("Anderer Chatbot · manuelle Konfiguration", systemImage: model.clientSelection == "manual" ? "checkmark.circle.fill" : "circle")
+                    }.accessibilityAddTraits(model.clientSelection == "manual" ? .isSelected : [])
+                }.padding(.top, 8)
+            }
+            .onAppear { showingAdvanced = !model.clientSelection.hasPrefix("oauth-") }
             if let client = MCPDesktopClient(rawValue: model.clientSelection), let existing = model.existingConnection(for: client) {
                 SetupNotice(text: "Für diesen Chatbot ist bereits „\(existing.connectionName)“ eingetragen. Ein bestehender Eintrag wird nicht ersetzt. Verwende „Verbindungen“, um ihn zu bearbeiten.", warning: true)
             }
             TextField("Name der Verbindung (optional)", text: $model.connectionName).textFieldStyle(.roundedBorder)
-            Text(model.clientSelection == "oauth-chatgpt" ? "Nach der Dokumentauswahl meldest du dich im Browser mit deinem ChatGPT-Konto an. Der Mac verbindet sich ausgehend; du gibst keinen API- oder Runtime-Schlüssel ein." : model.clientSelection == "oauth-claude" ? "Claude nutzt Standard-OAuth. Der Betreiber benötigt einen erreichbaren HTTPS-Anschluss; du bestätigst den Dokumentzugriff lokal." : "Dieser Anschluss gilt für einen lokalen MCP-Host. Für normale ChatGPT-Chats wähle die Anmeldung mit deinem Konto.").font(.callout).foregroundStyle(.secondary)
+            Text(model.clientSelection == "oauth-chatgpt" ? "Empfohlen für ChatGPT: Nach der Dokumentauswahl meldest du dich im Browser an. Du gibst keinen API-Schlüssel ein." : model.clientSelection == "oauth-claude" ? "Für Claude: Der Betreiber muss zuerst einen erreichbaren HTTPS-Anschluss einrichten. Danach bestätigst du den Dokumentzugriff auf diesem Mac." : "Für einen lokalen MCP-Host. Die Einrichtung im Chatbot kann zusätzliche Schritte erfordern.").font(.callout).foregroundStyle(.secondary)
         }
     }
     private var completion: some View {

@@ -2,6 +2,7 @@ import Foundation
 import VauldyDocumentCore
 
 public struct MCPFieldEvidence: Encodable, Sendable {
+    public let untrusted = true
     public let label: String
     public let value: String
     public let page: Int
@@ -22,7 +23,7 @@ public struct MCPExtractedField: Encodable, Sendable {
 }
 
 public struct MCPFieldExtractionResult: Encodable, Sendable {
-    public let contractVersion = 1
+    public let contractVersion = 2
     public let scope = "explicit-labels-and-contract-headings"
     public let results: [MCPExtractedField]
     public let nextCursor: String?

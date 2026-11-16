@@ -62,8 +62,8 @@ public struct OAuthStore: Sendable {
     func prune(_ database: inout OAuthDatabase, now: Date) {
         database.pending.removeAll { $0.info.expiresAt < now }
         database.grants.removeAll { $0.expiresAt < now }
-        let active = Set(database.pending.map(\.clientID) + database.grants.map(\.clientID))
-        database.clients.removeAll { !active.contains($0.id) && now.timeIntervalSince($0.createdAt) > 86400 }
+        let active = Set(database.pending.map(\.clientID) + database.grants.filter { !$0.revoked && $0.expiresAt > now }.map(\.clientID))
+        database.clients.removeAll { !active.contains($0.id) && now.timeIntervalSince($0.createdAt) > 600 }
     }
     func key() throws -> SymmetricKey {
         let file = root.appendingPathComponent("authorization.key")

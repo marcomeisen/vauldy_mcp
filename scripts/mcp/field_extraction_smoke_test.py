@@ -7,7 +7,7 @@ import tempfile
 import time
 import uuid
 
-from smoke_test import Client, assert_v1_discovery, payload
+from smoke_test import Client, assert_current_discovery, payload
 from topic_overview_smoke_test import document, stats, write_json
 
 
@@ -56,7 +56,7 @@ def main():
         client = Client(args.binary, profile)
         try:
             tools = client.request('tools/list', {})['tools']
-            assert_v1_discovery(tools)
+            assert_current_discovery(tools)
             schema = next(t['outputSchema'] for t in tools if t['name'] == 'extract_document_fields')
 
             def extract(**kwargs):

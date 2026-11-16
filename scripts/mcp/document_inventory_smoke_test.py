@@ -3,6 +3,7 @@
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import hmac
 import json
 import math
 import re
@@ -13,7 +14,7 @@ import statistics
 import tempfile
 import time
 import uuid
-from smoke_test import Client, payload, assert_v1_discovery
+from smoke_test import Client, payload, assert_current_discovery
 from topic_overview_smoke_test import write_json
 
 
@@ -60,7 +61,7 @@ def main():
             profile=target/'profile.json';write_json(profile,grant);before=vault.read_bytes(),profile.read_bytes();client=Client(args.server.resolve(),profile)
             def inv(**kw):return payload(client.call('get_document_inventory',**kw),schema)
             try:
-                tools=client.request('tools/list',{})['tools'];assert_v1_discovery(tools)
+                tools=client.request('tools/list',{})['tools'];assert_current_discovery(tools)
                 schema=next(t['outputSchema'] for t in tools if t['name']=='get_document_inventory')
                 first_size=5 if name=='large' else 2
                 started=time.perf_counter();first=inv(pageSize=first_size);cold=(time.perf_counter()-started)*1000
@@ -74,7 +75,10 @@ def main():
                 for row,source in zip(output,expected):
                     if original_time(source) is None:assert 'importedAt' not in row
                     else:assert datetime.fromisoformat(row['importedAt'].replace('Z','+00:00')).timestamp()==original_time(source)
-                    assert row.get('contentHash')==source.get('localImport',{}).get('contentHash')
+                    raw_hash=source.get('localImport',{}).get('contentHash')
+                    key=('vauldy.inventory-content-hmac.v1\0'+grant['connectionID'].upper()+'\0'+grant['revision'].upper()).encode()
+                    expected_hash=hmac.new(key,raw_hash.encode(),hashlib.sha256).hexdigest() if raw_hash else None
+                    assert row.get('contentHash')==expected_hash
                 wire=json.dumps(output).lower()
                 raw_ids={v.lower() for v in info['granted']}|{info.get('hidden','never-present').lower()}
                 exposed=set(re.findall(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}',wire))
@@ -94,6 +98,8 @@ def main():
                     assert restarted['items'][0]['document']!=sample['document']
                     grant.update(revision=str(uuid.uuid4()),connectionID=str(uuid.uuid4()));write_json(profile,grant)
                     revised=inv(pageSize=5);assert revised['items'][0]['documentID']==sample['documentID']
+                    if sample.get('contentHash'):
+                        assert revised['items'][0].get('contentHash')!=sample['contentHash']
                     removed=expected[0]['id'];grant['allowedDocumentIDs']=[s for s in grant['allowedDocumentIDs'] if s.upper()!=removed.upper()];grant['revision']=str(uuid.uuid4());write_json(profile,grant)
                     assert client.call('get_document_inventory',cursor=restarted['nextCursor'])['isError']
                     reduced=inv(pageSize=100);assert reduced['totalCount']==len(selected)-1 and sample['documentID'] not in [i['documentID'] for i in reduced['items']]

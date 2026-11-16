@@ -50,6 +50,7 @@ public struct OAuthConfiguration: Codable, Equatable, Sendable {
 public struct OAuthPendingRequest: Codable, Sendable {
     public let id: UUID
     public let provider: OAuthProvider
+    public let clientID: String?
     public let redirectURI: String
     public let createdAt: Date
     public let expiresAt: Date
@@ -116,6 +117,7 @@ struct OAuthGrant: Codable, Sendable {
 }
 struct OAuthDatabase: Codable, Sendable {
     var version = 1
+    var authorizationWindowUntil: Date?
     var clients: [OAuthClient] = []
     var pending: [OAuthPending] = []
     var grants: [OAuthGrant] = []

@@ -16,7 +16,7 @@ bleiben unverändert; das Inventar hat einen eigenen Vertrag in Version 1.
 | `documentID` | Dauerhafte Referenz des gespeicherten Datensatzes, unabhängig vom Freigabehandle und von Verbindungsrevisionen. |
 | `document` | Aktuelles, widerrufbares Lesehandle. Nur dieses Handle darf für `read_document` verwendet werden. |
 | `importedAt` | Ursprünglicher Importzeitpunkt als ISO-8601-Zeit in UTC; bei unbekanntem Altbestand ausgelassen. |
-| `contentHash` | SHA-256 der zuletzt importierten Originalbytes; fehlt bei Altbeständen ohne belegten Originalhash. |
+| `contentHash` | HMAC-SHA-256 des lokal gespeicherten Originalhashs, gebunden an Verbindung und Freigaberevision; fehlt bei Altbeständen ohne belegten Originalhash. Der rohe SHA-256-Wert verlässt den Mac nicht. |
 | `originalState` | Zuletzt gespeicherter Zustand des Originals: `available`, `changed`, `unavailable` oder `unknown`. Kein aktueller Dateisystemcheck. |
 | `processingStatus`, `sourceCoverage` | Gespeicherter Verarbeitungs- und Quellenzustand; keine Behauptung vollständiger OCR. |
 
@@ -114,7 +114,7 @@ Test-, Manifest- und Skriptdateien wurden mit der Buildkopie byteverglichen.
   zurückgegebene Importzeitpunkt hatte Nachkommastellen, der erneut geladene
   ISO-8601-Wert nur Sekunden. Neue Importe werden jetzt vor dem Speichern auf
   Sekunden normiert. Vorhandene Importdaten werden nicht umgeschrieben.
-- Bestehender stdio-Smoke-Test, vier gepinnte v1-Schemas, exakte Parität zwischen
+- Zum damaligen Prüfstand: bestehender stdio-Smoke-Test, vier gepinnte v1-Schemas, exakte Parität zwischen
   lokaler Discovery und Relay-Quelldefinition sowie zehn lokale Relay-Tests.
   Das ist kein Deployment und keine reguläre ChatGPT-Abnahme.
 - Der vollständige Regressionsrunner und das feste 79-Sollfelder-OCR-Gate wurden

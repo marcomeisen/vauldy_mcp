@@ -17,7 +17,7 @@ public struct MCPContractComparisonResult: Encodable, Sendable {
         let afterEvidenceCount: Int
         let warnings: [String]
     }
-    let contractVersion = 1
+    let contractVersion = 2
     let scope = "explicit-field-text-comparison"
     let status: String
     let before: Side

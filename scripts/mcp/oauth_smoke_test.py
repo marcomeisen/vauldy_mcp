@@ -82,6 +82,7 @@ def main():
             assert post('/oauth/token',{'grant_type':'client_credentials'})[0]==400
             flows={}
             def connect(provider,deny=False):
+                command('oauth-arm','--root',installation)
                 redirect='https://chatgpt.com/connector_platform_oauth_redirect' if provider=='chatgpt' else 'https://claude.ai/api/mcp/auth_callback'
                 status,_,client=request('POST','/oauth/register',json.dumps(dict(redirect_uris=[redirect],client_name='Untrusted claimed label',token_endpoint_auth_method='none',grant_types=['authorization_code','refresh_token'],response_types=['code'])),{'Content-Type':'application/json'})
                 assert status==201
@@ -101,7 +102,7 @@ def main():
                     command('oauth-deny','--root',installation,'--request',pending[0]['id'])
                 else:
                     profile=profiles[provider][1]
-                    command('oauth-approve','--root',installation,'--request',pending[0]['id'],'--profile',profile['connectionID'],'--revision',profile['revision'])
+                    command('oauth-approve','--root',installation,'--request',pending[0]['id'],'--profile',profile['connectionID'],'--revision',profile['revision'],'--confirmation',pending[0]['confirmation'])
                 status,headers,_=request('GET','/oauth/continue',headers={'Cookie':cookie})
                 assert status==303
                 result=urllib.parse.parse_qs(urllib.parse.urlsplit(headers['location']).query)

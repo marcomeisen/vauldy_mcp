@@ -32,8 +32,9 @@ public struct OAuthWebService: Sendable {
     public let store: OAuthStore
     public let configuration: OAuthConfiguration
     private let metadataLoader: any OAuthClientMetadataLoader
+    private let limiter: OAuthRequestLimiter
     public init(store: OAuthStore, configuration: OAuthConfiguration, metadataLoader: any OAuthClientMetadataLoader = PublicOAuthClientMetadataLoader()) {
-        self.store = store; self.configuration = configuration; self.metadataLoader = metadataLoader
+        self.store = store; self.configuration = configuration; self.metadataLoader = metadataLoader; self.limiter = OAuthRequestLimiter()
     }
     public var challenge: String { "Bearer resource_metadata=\"\(configuration.origin)/.well-known/oauth-protected-resource\", scope=\"documents:read\"" }
     public func handle(_ request: OAuthWebRequest) async -> OAuthWebResponse {
@@ -53,6 +54,7 @@ public struct OAuthWebService: Sendable {
                     "code_challenge_methods_supported": ["S256"], "scopes_supported": ["documents:read"],
                     "authorization_response_iss_parameter_supported": true, "client_id_metadata_document_supported": true])
             case ("POST", "/oauth/register"):
+                guard await limiter.permit(.registration) else { return Self.tooManyRequests() }
                 guard request.header("content-type")?.split(separator: ";").first?.trimmingCharacters(in: .whitespaces).lowercased() == "application/json",
                       let object = try JSONSerialization.jsonObject(with: request.body) as? [String: Any],
                       let redirects = object["redirect_uris"] as? [String],
@@ -63,6 +65,7 @@ public struct OAuthWebService: Sendable {
                 return .json(["client_id": client.id, "client_id_issued_at": Int(client.createdAt.timeIntervalSince1970), "redirect_uris": client.redirectURIs,
                               "token_endpoint_auth_method": "none", "grant_types": ["authorization_code", "refresh_token"], "response_types": ["code"]], status: 201)
             case ("GET", "/oauth/authorize"):
+                guard await limiter.permit(.authorization) else { return Self.tooManyRequests() }
                 let fields = try Self.fields(target.queryItems ?? [])
                 guard let clientID = fields["client_id"] else { throw OAuthFailure.invalidClient }
                 try await resolveClient(clientID)
@@ -79,7 +82,7 @@ public struct OAuthWebService: Sendable {
                     return .init(status: 303, headers: ["Location": url, "Set-Cookie": "vauldy_oauth=; Path=/oauth/continue; Secure; HttpOnly; SameSite=Lax; Max-Age=0"])
                 case .expired: return Self.html("Verbindung abgelaufen. Bitte im Chatbot erneut verbinden.", status: 410)
                 case .waiting(let info):
-                    return Self.html("<meta http-equiv=\"refresh\" content=\"2\"><h1>\(info.provider.title) mit Vauldy verbinden</h1><p><a href=\"vauldy-mcp://oauth\">Vauldy auf diesem Mac öffnen</a></p><p>Wähle in der App ChatGPT &amp; Claude.</p><p>Vergleiche die Kennung <strong>\(info.confirmation)</strong> und bestätige dort die gewünschte Dokumentauswahl.</p><p>Dieses Fenster kehrt nach deiner Freigabe automatisch zum Chatbot zurück. Ohne lokale Freigabe erhält niemand Zugriff.</p>")
+                    return Self.html("<h1>\(info.provider.title) mit Vauldy verbinden</h1><p><a href=\"vauldy-mcp://oauth\">Vauldy auf diesem Mac öffnen</a></p><p>Öffne in Vauldy „Verbindungen“ und dort „Anmeldung und Verbindungshilfe“.</p><p>Gib dort die Kennung <strong>\(info.confirmation)</strong> ein und bestätige die gewünschte Dokumentauswahl.</p><p><a href=\"/oauth/continue\">Nach der Freigabe im Chatbot fortfahren</a></p><p>Ohne lokale Freigabe erhält niemand Zugriff.</p>")
                 }
             case ("POST", "/oauth/token"):
                 let fields = try Self.form(request)
@@ -101,6 +104,7 @@ public struct OAuthWebService: Sendable {
         if try store.client(id) != nil { return }
         guard let url = URL(string: id), OAuthProvider.provider(for: url) != nil,
               id.count <= 2048, !id.contains("%"), !url.path.contains("..") else { throw OAuthFailure.invalidClient }
+        guard await limiter.permit(.metadata) else { throw OAuthFailure.temporarilyUnavailable }
         let data = try await metadataLoader.load(url)
         guard data.count <= 16384 else { throw OAuthFailure.invalidClient }
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -127,6 +131,34 @@ public struct OAuthWebService: Sendable {
     }
     private static func html(_ content: String, status: Int = 200) -> OAuthWebResponse {
         .init(status: status, headers: ["Content-Type": "text/html; charset=utf-8"], body: Data(("<!doctype html><html lang=\"de\"><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width\"><title>Vauldy verbinden</title><body>" + content + "</body></html>").utf8))
+    }
+    private static func tooManyRequests() -> OAuthWebResponse {
+        .json(["error": "temporarily_unavailable"], status: 429, headers: ["Retry-After": "60"])
+    }
+}
+/// Process-local admission before metadata fetches or any synchronized credential writes.
+actor OAuthRequestLimiter {
+    enum Route: Sendable { case registration, authorization, metadata }
+    private var registration: [Date] = []
+    private var authorization: [Date] = []
+    private var metadata: [Date] = []
+    func permit(_ route: Route, now: Date = Date()) -> Bool {
+        let cutoff = now.addingTimeInterval(-60)
+        switch route {
+        case .registration:
+            registration.removeAll { $0 <= cutoff }
+            guard registration.count < 12 else { return false }
+            registration.append(now)
+        case .authorization:
+            authorization.removeAll { $0 <= cutoff }
+            guard authorization.count < 24 else { return false }
+            authorization.append(now)
+        case .metadata:
+            metadata.removeAll { $0 <= cutoff }
+            guard metadata.count < 4 else { return false }
+            metadata.append(now)
+        }
+        return true
     }
 }
 public protocol OAuthClientMetadataLoader: Sendable { func load(_ url: URL) async throws -> Data }

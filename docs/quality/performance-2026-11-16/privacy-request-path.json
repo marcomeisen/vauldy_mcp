@@ -1,0 +1,106 @@
+{
+ "privacyScaling": [
+  {
+   "textKiB": 32,
+   "identifiers": 0,
+   "coldReadMS": 371.7,
+   "warmReadMedianMS": 12.6,
+   "passagesAfterWarmMS": 37.9
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 50,
+   "coldReadMS": 1615.9,
+   "warmReadMedianMS": 12.5,
+   "passagesAfterWarmMS": 81.9
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 200,
+   "coldReadMS": 4889.5,
+   "warmReadMedianMS": 13.9,
+   "passagesAfterWarmMS": 242.0
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 800,
+   "coldReadMS": 6876.9,
+   "warmReadMedianMS": 13.5,
+   "passagesAfterWarmMS": 325.7
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 0,
+   "coldReadMS": 1400.1,
+   "warmReadMedianMS": 13.9,
+   "passagesAfterWarmMS": 106.6
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 50,
+   "coldReadMS": 6020.1,
+   "warmReadMedianMS": 24.8,
+   "passagesAfterWarmMS": 216.1
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 200,
+   "coldReadMS": 17109.2,
+   "warmReadMedianMS": 12.8,
+   "passagesAfterWarmMS": 294.9
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 800,
+   "coldReadMS": 68444.4,
+   "warmReadMedianMS": 23.7,
+   "passagesAfterWarmMS": 920.9
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 0,
+   "coldReadMS": 6198.0,
+   "warmReadMedianMS": 34.9,
+   "passagesAfterWarmMS": 440.5
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 50,
+   "coldReadMS": 20978.7,
+   "warmReadMedianMS": 26.7,
+   "passagesAfterWarmMS": 413.8
+  }
+ ],
+ "cacheThrash": {
+  "8": {
+   "documents": 8,
+   "secondRoundMedianMS": 14.6
+  },
+  "12": {
+   "documents": 12,
+   "secondRoundMedianMS": 5111.9
+  }
+ },
+ "corpusLoad": [
+  {
+   "grantedDocuments": 10,
+   "vaultBytes": 183569,
+   "readMedianMS": 14.5,
+   "extractFieldsMedianMS": 11.7
+  },
+  {
+   "grantedDocuments": 1000,
+   "vaultBytes": 16724305,
+   "readMedianMS": 25.4,
+   "extractFieldsMedianMS": 24.1
+  },
+  {
+   "grantedDocuments": 5000,
+   "vaultBytes": 83564303,
+   "readMedianMS": 184.9,
+   "extractFieldsMedianMS": 186.7
+  }
+ ],
+ "note": "Erste sechs Punkte aus Lauf 1 (15-s-Clienttimeout, brach bei 128 KiB/200 ab); \u00fcbrige aus Lauf 2 mit 180-s-Timeout. Gleiche Binary.",
+ "mcpSHA256": "1100e7fba20dcf66d2decb86ebad67f38bfdffc7497d73642e2674d2ada345d8"
+}

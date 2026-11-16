@@ -6,6 +6,7 @@ import VauldyMCPRuntime
 
 struct SetupView: View {
     @ObservedObject var model: SetupModel
+    @State private var showingPendingApproval = false
     var body: some View {
         NavigationSplitView {
             VStack(alignment: .leading, spacing: 22) {
@@ -24,7 +25,15 @@ struct SetupView: View {
                         header
                         if model.busy { ProgressView("Wird lokal verarbeitet …").controlSize(.small) }
                         if !model.managementError.isEmpty { SetupNotice(text: model.managementError, warning: true) }
+                        if !model.message.isEmpty {
+                            SetupNotice(text: model.message, warning: model.failure)
+                                .padding(14)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(model.failure ? Color.orange.opacity(0.12) : Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+                                .accessibilityIdentifier("setup-message")
+                        }
                         SetupImportStatusView(model: model)
+                        if !model.oauthPending.isEmpty { pendingApprovalBanner }
                         switch model.section {
                         case .overview: overview
                         case .connections: connections
@@ -35,7 +44,6 @@ struct SetupView: View {
                         case .oauth: connections
                         case .settings: SetupSettingsView(model: model)
                         }
-                        if !model.message.isEmpty { SetupNotice(text: model.message, warning: model.failure) }
                     }.padding(28).frame(maxWidth: 940, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
                 }.background(Color(nsColor: .windowBackgroundColor))
                 .onChange(of: model.shownImportDocumentIDs) { _, ids in
@@ -44,6 +52,12 @@ struct SetupView: View {
             }
         }
         .navigationTitle("Vauldy")
+        .onChange(of: model.message) { _, message in
+            if !message.isEmpty {
+                NSAccessibility.post(element: NSApplication.shared, notification: .announcementRequested,
+                                     userInfo: [.announcement: message, .priority: NSAccessibilityPriorityLevel.high.rawValue])
+            }
+        }
         .toolbar { ToolbarItem(placement: .primaryAction) { Button("Chatbot verbinden", systemImage: "plus", action: model.newConnection).disabled(model.busy) } }
         .frame(minWidth: 860, minHeight: 640)
         .sheet(item: Binding(get: { model.showingSetup ? nil : model.inventoryWorkflow }, set: { model.inventoryWorkflow = $0 })) { workflow in InventoryWorkflowView(model: workflow) }
@@ -51,6 +65,23 @@ struct SetupView: View {
             SoftwareInstallationWizard(model: model)
         }
         .sheet(isPresented: $model.showingSetup) { SetupWizardView(model: model) }
+        .sheet(isPresented: $showingPendingApproval) {
+            ScrollViewReader { scroll in
+                ScrollView {
+                    SetupOAuthView(model: model)
+                        .padding(24)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .onAppear { scroll.scrollTo("oauth-pending-requests", anchor: .top) }
+            }
+            .frame(minWidth: 680, minHeight: 520)
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    Spacer()
+                    Button("Schließen") { showingPendingApproval = false }
+                }.padding(16).background(.regularMaterial)
+            }
+        }
         .sheet(item: $model.diagnosisProfile) { profile in SetupDiagnosisView(model: model, profileID: profile.connectionID) }
         .alert("Dokumentzugriff fortsetzen?", isPresented: Binding(get: { model.resumeCandidate != nil }, set: { if !$0 { model.resumeCandidate = nil } })) {
             if let profile = model.resumeCandidate {
@@ -99,6 +130,25 @@ struct SetupView: View {
         case .oauth: "Sicher verbinden und Dokumentzugriff bestätigen. Ohne API-Schlüssel."
         case .settings: "Software, Datenschutz und lokale Diagnose."
         }
+    }
+
+    private var pendingApprovalBanner: some View {
+        HStack(alignment: .center, spacing: 14) {
+            Image(systemName: "person.crop.circle.badge.questionmark")
+                .font(.title2).foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(model.oauthPending.count) offene \(model.oauthPending.count == 1 ? "Verbindungsanfrage" : "Verbindungsanfragen")")
+                    .font(.headline)
+                Text("Prüfe die Anfrage und bestätige nur einen Verbindungsvorgang, den du selbst gestartet hast.")
+                    .font(.callout).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button("Freigaben bestätigen") { showingPendingApproval = true }
+                .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("oauth-pending-open")
+        }
+        .padding(16)
+        .background(.orange.opacity(0.10), in: RoundedRectangle(cornerRadius: 10))
     }
 
     @ViewBuilder private var overview: some View {
@@ -156,7 +206,7 @@ struct SetupView: View {
         VStack(alignment: .leading, spacing: 18) {
             if model.connections.isEmpty { Text("Noch keine gespeicherte Verbindung. Wähle „Chatbot verbinden“, um einen Chatbot einzurichten.").foregroundStyle(.secondary) }
             ForEach(model.connections, id: \.connectionID) { profile in SetupConnectionCard(model: model, profile: profile) }
-            DisclosureGroup("Anmeldung und Verbindungshilfe", isExpanded: Binding(get: { model.section == .oauth }, set: { model.section = $0 ? .oauth : .connections })) {
+            DisclosureGroup("Anmeldung und Verbindungshilfe\(model.oauthPending.isEmpty ? "" : " · \(model.oauthPending.count) offen")", isExpanded: Binding(get: { model.section == .oauth || !model.oauthPending.isEmpty }, set: { model.section = $0 ? .oauth : .connections })) {
                 SetupOAuthView(model: model)
             }
         }

@@ -55,18 +55,29 @@ public struct EvidencePreservingLocalOCR: LocalDocumentOCR {
         }
         var result = candidate
         let available = entries(candidate.text)
-        var next = 0, repaired = false
+        var next = 0, used: Set<Int> = [], repaired = false
         let validGeometry = previous.geometry?.coordinateSpace == candidate.geometry?.coordinateSpace
             && previous.geometry?.rotationDegrees == candidate.geometry?.rotationDegrees
             && LocalOCRPageLayout(sourceHash: "validation-only", page: candidate) != nil
         for old in entries(previous.text) {
             let oldLine = previous.geometry?.lines.first { $0.location == old.offset && $0.length == old.text.utf16.count }
             var found: Int?
-            for index in next..<available.count {
+            // Vision may return columns and headings in a different order on a
+            // later OS build. A line may move in reading order only when both
+            // layouts place the same source reading at the same physical spot.
+            let spatial = validGeometry && oldLine != nil
+            for index in available.indices where !used.contains(index) && (spatial || index >= next) {
                 let new = available[index]
-                if new.text == old.text { found = index; break }
-                guard validGeometry, let oldLine,
-                      let line = candidate.geometry?.lines.first(where: { $0.location == new.offset && $0.length == new.text.utf16.count }),
+                let line = candidate.geometry?.lines.first(where: { $0.location == new.offset && $0.length == new.text.utf16.count })
+                if new.text == old.text {
+                    if spatial, let oldLine, let line {
+                        let overlap = oldLine.bounds.intersection(line.bounds)
+                        let area = min(oldLine.bounds.width * oldLine.bounds.height, line.bounds.width * line.bounds.height)
+                        guard area > 0, !overlap.isNull, overlap.width * overlap.height >= area * 0.7 else { continue }
+                    } else if index < next { continue }
+                    found = index; break
+                }
+                guard validGeometry, let oldLine, let line,
                       line.priorReadings?.contains(old.text) == true else { continue }
                 // Whitespace-only money presentation retains all source
                 // characters and the original uncertainty; it is not a new OCR
@@ -86,6 +97,7 @@ public struct EvidencePreservingLocalOCR: LocalDocumentOCR {
                 found = index; repaired = true; break
             }
             guard let found else { return fallback() }
+            used.insert(found)
             // Carry history through later unchanged reads as well. Never silently
             // truncate a history which no longer fits the bounded local schema.
             if let history = oldLine?.priorReadings, !history.isEmpty {
@@ -101,7 +113,7 @@ public struct EvidencePreservingLocalOCR: LocalDocumentOCR {
                     result.geometry?.lines[index].policyIdentifierRepair = oldLine?.policyIdentifierRepair
                 }
             }
-            next = found + 1
+            if !spatial { next = found + 1 }
         }
         if repaired || result.geometry?.lines.contains(where: { !($0.priorReadings ?? []).isEmpty }) == true {
             result.info.needsReview = true

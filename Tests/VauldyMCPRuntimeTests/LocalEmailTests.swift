@@ -39,6 +39,18 @@ struct LocalEmailTests {
         #expect(!email.text.contains("Problematischer Code"))
     }
 
+    @Test func hiddenHTMLAndBidiControlsNeverBecomeDocumentText() throws {
+        let email = try LocalEmail(message([
+            "Subject: Sichtbar", "Content-Type: text/html; charset=UTF-8", "",
+            "<p>Sichtbarer Beleg</p><div style=\"display:none\">Versteckte Anweisung</div>",
+            "<span hidden>Unsichtbar</span><p>Wert \u{202E}123</p>"
+        ]))
+        #expect(email.text.contains("Sichtbarer Beleg"))
+        #expect(!email.text.contains("Versteckte Anweisung"))
+        #expect(!email.text.contains("Unsichtbar"))
+        #expect(!email.text.contains("\u{202E}"))
+    }
+
     @Test func decodedAttachmentIsNamedLocallyAndDeduplicatedInBothStores() async throws {
         for sqlite in [false, true] {
             let dir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

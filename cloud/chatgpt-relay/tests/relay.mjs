@@ -5,7 +5,7 @@ import {readFileSync} from 'node:fs';
 import worker,{sharedKey,seal,open} from '../worker/index.js';
 
 class DB {
-  constructor(){this.db=new DatabaseSync(':memory:');this.db.exec(readFileSync(new URL('../drizzle/0000_relay.sql',import.meta.url),'utf8'));}
+  constructor(){this.db=new DatabaseSync(':memory:');for(const migration of ['0000_relay.sql','0001_pair_code.sql'])this.db.exec(readFileSync(new URL('../drizzle/'+migration,import.meta.url),'utf8'));}
   prepare(sql){const stmt=this.db.prepare(sql);let args=[];return {bind(...a){args=a;return this;},async first(){return stmt.get(...args)??null;},async all(){return {results:stmt.all(...args)};},async run(){const r=stmt.run(...args);return {meta:{changes:Number(r.changes)}};}};}
   async batch(statements){this.db.exec('BEGIN');try{const results=[];for(const s of statements)results.push(await s.run());this.db.exec('COMMIT');return results;}catch(e){this.db.exec('ROLLBACK');throw e;}}
 }
@@ -13,12 +13,13 @@ const origin='https://vauldy.example';
 function request(path,body={},headers={}) {return new Request(origin+path,{method:'POST',headers:{'content-type':'application/json',...headers},body:JSON.stringify(body)});}
 const browser=owner=>({'oai-authenticated-user-id':owner,origin,'x-vauldy-action':'1'});
 const digest=async value=>Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))).toString('base64');
+const hexDigest=async value=>Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))).toString('hex');
 async function pair(db,owner='alice') {
   const keys=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']);
   const pub=Buffer.from(await crypto.subtle.exportKey('raw',keys.publicKey)).toString('base64');
-  const verifier=crypto.randomUUID(),deviceToken=crypto.randomUUID();
-  const start=await worker.fetch(request('/api/pair/start',{challenge:await digest(verifier),publicKey:pub}),{DB:db});assert.equal(start.status,200);const {id}=await start.json();
-  let r=await worker.fetch(request('/api/pair/confirm',{id},browser(owner)),{DB:db});assert.equal(r.status,200);
+  const verifier=crypto.randomUUID(),deviceToken=crypto.randomUUID(),code='123456789012';
+  const start=await worker.fetch(request('/api/pair/start',{challenge:await digest(verifier),publicKey:pub,pairingCodeHash:await hexDigest(code)}),{DB:db});assert.equal(start.status,200);const {id}=await start.json();
+  let r=await worker.fetch(request('/api/pair/confirm',{id,code},browser(owner)),{DB:db});assert.equal(r.status,200);
   r=await worker.fetch(request('/api/pair/finish',{id,verifier,deviceToken}),{DB:db});assert.equal(r.status,200);
   return {id,keys,pub,verifier,deviceToken};
 }
@@ -32,12 +33,36 @@ test('MCP and browser writes require actual Sites user identity; service access 
 test('PKCE verifier, SSO identity, one-time confirmation and retry-safe token binding',async()=>{
   const db=new DB();const p=await pair(db);
   let r=await worker.fetch(request('/api/pair/finish',{id:p.id,verifier:'wrong',deviceToken:p.deviceToken}),{DB:db});assert.equal(r.status,401);
-  r=await worker.fetch(request('/api/pair/confirm',{id:p.id},browser('bob')),{DB:db});assert.equal(r.status,409);
+  r=await worker.fetch(request('/api/pair/confirm',{id:p.id,code:'123456789012'},browser('bob')),{DB:db});assert.equal(r.status,409);
   r=await worker.fetch(request('/api/pair/finish',{id:p.id,verifier:p.verifier,deviceToken:'different'}),{DB:db});assert.equal(r.status,409);
   r=await worker.fetch(request('/api/pair/finish',{id:p.id,verifier:p.verifier,deviceToken:p.deviceToken}),{DB:db});assert.equal(r.status,200);
   const rows=db.db.prepare('SELECT * FROM devices').all();assert.equal(rows.length,1);assert.equal(rows[0].owner,'alice');assert.notEqual(rows[0].token_hash,p.deviceToken);
   r=await worker.fetch(request('/api/connections',{},browser('bob')),{DB:db});assert.deepEqual((await r.json()).devices,[]);
+  r=await worker.fetch(request('/api/connections',{},browser('alice')),{DB:db});const [listed]= (await r.json()).devices;assert.equal(listed.id,p.id);assert.equal(Number.isInteger(listed.created),true);
+  r=await worker.fetch(new Request(origin+'/',{headers:{'oai-authenticated-user-id':'alice'}}),{DB:db});assert.equal(r.status,200);assert.match(await r.text(),/window\.confirm\('Verbindung zu '/);
   r=await worker.fetch(request('/api/revoke',{id:p.id},browser('bob')),{DB:db});assert.equal(r.status,200);assert.equal(db.db.prepare('SELECT revoked FROM devices').get().revoked,0);
+});
+test('pairing requires the code shown on the Mac and never displaces an active Mac',async()=>{
+  const db=new DB();const keys=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']);
+  const pub=Buffer.from(await crypto.subtle.exportKey('raw',keys.publicKey)).toString('base64');
+  const start=async()=>worker.fetch(request('/api/pair/start',{challenge:await digest(crypto.randomUUID()),publicKey:pub,pairingCodeHash:await hexDigest('123456789012')}),{DB:db});
+  const firstStart=await start();assert.equal(firstStart.status,200);const {id}=await firstStart.json();
+  let r=await worker.fetch(request('/api/pair/confirm',{id,code:'000000000000'},browser('alice')),{DB:db});assert.equal(r.status,409);
+  assert.equal(db.db.prepare('SELECT owner,confirmation_attempts FROM pairs WHERE id=?').get(id).owner,null);
+  r=await worker.fetch(request('/api/pair/confirm',{id,code:'123456789012'},browser('alice')),{DB:db});assert.equal(r.status,200);
+  await pair(db,'bob');
+  const active=await pair(db,'alice');
+  const secondStart=await start();const secondID=(await secondStart.json()).id;
+  r=await worker.fetch(request('/api/pair/confirm',{id:secondID,code:'123456789012'},browser('alice')),{DB:db});assert.equal(r.status,409);
+  assert.equal(db.db.prepare('SELECT id FROM devices WHERE owner=? AND revoked=0').get('alice').id,active.id);
+});
+test('five incorrect pairing codes lock the pending request',async()=>{
+  const db=new DB();const keys=await crypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']);
+  const pub=Buffer.from(await crypto.subtle.exportKey('raw',keys.publicKey)).toString('base64');
+  const start=await worker.fetch(request('/api/pair/start',{challenge:await digest(crypto.randomUUID()),publicKey:pub,pairingCodeHash:await hexDigest('123456789012')}),{DB:db});const {id}=await start.json();
+  for(let i=0;i<5;i++){const r=await worker.fetch(request('/api/pair/confirm',{id,code:'000000000000'},browser('alice')),{DB:db});assert.equal(r.status,409);}
+  const r=await worker.fetch(request('/api/pair/confirm',{id,code:'123456789012'},browser('alice')),{DB:db});assert.equal(r.status,409);
+  assert.equal(db.db.prepare('SELECT confirmation_attempts FROM pairs WHERE id=?').get(id).confirmation_attempts,5);
 });
 test('device revocation denies queued work and cannot be undone by replaying pair completion',async()=>{
   const db=new DB();const p=await pair(db);const auth={deviceToken:p.deviceToken};

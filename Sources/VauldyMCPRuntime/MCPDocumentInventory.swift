@@ -21,7 +21,7 @@ public struct MCPDocumentInventory: Encodable, Sendable {
     public let scope = "currently-authorized-documents"
     public let identityScope = "stored-document; independent-of-access-handles"
     public let identityAlgorithm = "sha256-domain-separated-document-uuid-v1"
-    public let contentHashScope = "sha256-of-last-imported-original; not-current-file-or-ocr-text"
+    public let contentHashScope = "connection-bound-hmac-of-last-imported-original-hash; not-current-file-or-ocr-text"
     public let order: String
     public let snapshot: String
     public let items: [Item]
@@ -34,6 +34,12 @@ public struct MCPDocumentInventory: Encodable, Sendable {
 }
 
 package enum MCPDocumentIdentity {
+    package static func protectedContentHash(_ hash: String?, profile: MCPAccessProfile) -> String? {
+        guard let hash, !hash.isEmpty else { return nil }
+        let key = SymmetricKey(data: Data(("vauldy.inventory-content-hmac.v1\0" + profile.connectionID.uuidString + "\0" + profile.revision.uuidString).utf8))
+        return HMAC<SHA256>.authenticationCode(for: Data(hash.utf8), using: key)
+            .map { String(format: "%02x", $0) }.joined()
+    }
     /// Domain separation keeps the raw archive UUID out of transport metadata.
     /// This correlatable pseudonym is not a secret or an authorization capability.
     /// Deliberately correlatable across grants to the same stored document, as requested.

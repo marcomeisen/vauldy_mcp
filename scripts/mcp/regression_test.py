@@ -19,6 +19,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--skip-build', action='store_true', help='Reuse already-built release programs')
     parser.add_argument('--update-reports', action='store_true', help='Copy measured corpus/wire/P0 reports into docs/quality')
+    parser.add_argument('--legacy-zip', type=Path, help='Verified pre-SQLite package for compatibility gates')
+    parser.add_argument('--ocr-v18-local', type=Path, help='Verified OCR v18 local binary for repair gates')
+    parser.add_argument('--ocr-v16-local', type=Path, help='Verified OCR v16 local binary for numeric recovery')
     args = parser.parse_args()
     output = ROOT / 'dist/mcp/regression' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     output.mkdir(parents=True, exist_ok=False)
@@ -56,15 +59,30 @@ def main():
         run('ocr-improvement-quality', [sys.executable, ROOT / 'scripts/mcp/ocr_improvement_quality_gate.py',
             output / 'ocr-improved', '--report', output / 'ocr-improvement.json'])
         run('package-metadata', [sys.executable, ROOT / 'scripts/mcp/package_metadata_smoke_test.py'])
-        command = [sys.executable, ROOT / 'scripts/mcp/package.py']
+        package_output = output / 'package'
+        command = [sys.executable, ROOT / 'scripts/mcp/package.py', '--output', package_output]
         if args.skip_build:
             command.append('--skip-build')
         run('package', command)
         run('relay-worker-tests', ['node', '--test', ROOT / 'cloud/chatgpt-relay/tests/relay.mjs'])
-        app = ROOT / 'dist/mcp/Vauldy MCP Einrichtung.app'
+        app = package_output / 'Vauldy MCP Einrichtung.app'
         resources = app / 'Contents/Resources'
         local, server = resources / 'vauldy-local', resources / 'vauldy-mcp'
         scripts = ROOT / 'scripts/mcp'
+        if args.legacy_zip:
+            run('sqlite_primary_smoke_test', [sys.executable, scripts / 'sqlite_primary_smoke_test.py', app,
+                '--legacy-zip', args.legacy_zip, '--output', output / 'sqlite-primary.json'])
+            run('storage_legacy_writer_smoke_test', [sys.executable, scripts / 'storage_legacy_writer_smoke_test.py', local,
+                args.legacy_zip, '--output', output / 'legacy-writer.json'])
+        if args.ocr_v18_local:
+            fixtures = ROOT / 'Tests/VauldyMCPRuntimeTests/Fixtures'
+            run('ocr_policy_repair_smoke_test', [sys.executable, scripts / 'ocr_policy_repair_smoke_test.py',
+                args.ocr_v18_local, local, server, ROOT / 'docs/quality/ocr-source-punctuation-2026-11-13/remaining-examples/ambiguous.png'])
+            run('ocr_field_recovery_smoke_test', [sys.executable, scripts / 'ocr_field_recovery_smoke_test.py',
+                args.ocr_v18_local, local, server])
+        if args.ocr_v16_local:
+            run('ocr_numeric_recovery_smoke_test', [sys.executable, scripts / 'ocr_numeric_recovery_smoke_test.py',
+                args.ocr_v16_local, local, server])
         run('relay-tool-parity', [sys.executable, scripts / 'export_relay_tools.py', server, '--check'])
         for name, arguments in [
             ('smoke_test', [server]),

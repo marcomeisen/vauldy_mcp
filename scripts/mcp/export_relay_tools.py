@@ -17,7 +17,9 @@ def main():
         root=Path(temp); vault=root/'documents.json';vault.write_text('[]')
         profile=root/'profile.json'; profile.write_text(json.dumps(dict(version=1,revision=str(uuid.uuid4()),connectionID=str(uuid.uuid4()),enabled=False,vaultPath=str(vault),allowedDocumentIDs=[],acknowledgedCloudDisclosure=False)))
         client=Client(args.server.resolve(),profile)
-        try: tools=client.request('tools/list',{})['tools']
+        try:
+            initialization = client.initialization
+            tools=client.request('tools/list',{})['tools']
         finally: client.close()
     path=ROOT/'cloud/chatgpt-relay/worker/index.js'; source=path.read_text()
     updated, markers = re.subn(
@@ -28,11 +30,21 @@ def main():
     )
     if markers != 1:
         raise SystemExit('Expected exactly one relay discovery export marker.')
+    for marker, value in [('VAULDY_INSTRUCTIONS', initialization['instructions']),
+                          ('VAULDY_VERSION', initialization['serverInfo']['version'])]:
+        updated, count = re.subn(
+            rf'^const {marker.removeprefix("VAULDY_")} = /\* {marker} \*/ .*?;\n',
+            lambda _, marker=marker, value=value: 'const ' + marker.removeprefix('VAULDY_')
+            + ' = /* ' + marker + ' */ ' + json.dumps(value, ensure_ascii=False) + ';\n',
+            updated, flags=re.M,
+        )
+        if count != 1:
+            raise SystemExit(f'Expected exactly one relay {marker} marker.')
     if args.check:
         if source != updated:
             raise SystemExit('Relay tool schemas differ from local MCP.')
     else:
         path.write_text(updated)
-    print('PASS: exact relay tool discovery matches local MCP')
+    print('PASS: relay discovery, instructions and version match local MCP')
 
 if __name__=='__main__':main()

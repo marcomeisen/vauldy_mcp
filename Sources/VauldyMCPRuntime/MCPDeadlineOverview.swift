@@ -27,7 +27,7 @@ public struct MCPDeadlineOverview: Encodable, Sendable {
         let warnings: [String]
     }
 
-    let contractVersion = 1
+    let contractVersion = 2
     let scope = "selected-documents-explicit-deadlines"
     public let rows: [Row]
     let warnings = ["EXPLICIT_LABELS_ONLY", "CALCULATED_DATES_ARE_ARITHMETIC", "LEGAL_EFFECT_AND_CONTRACT_STATUS_NOT_VERIFIED"]

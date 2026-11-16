@@ -25,6 +25,7 @@ public struct MCPAnalysisCoverage: Encodable, Sendable {
 
 /// Sanitized metadata only. Raw persisted models never cross the MCP boundary.
 public struct MCPAnalysisField: Encodable, Sendable {
+    public let untrusted = true
     public let role: String
     public let value: String
     public let page: Int
@@ -32,6 +33,7 @@ public struct MCPAnalysisField: Encodable, Sendable {
     public let source: String
 }
 public struct MCPLogicalDocument: Encodable, Sendable {
+    public let untrusted = true
     public let pages: [Int]
     public let documentType: String
     public let title: String

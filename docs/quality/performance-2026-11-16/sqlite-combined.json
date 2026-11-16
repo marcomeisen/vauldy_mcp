@@ -1,0 +1,249 @@
+{
+  "scope": "R3d.3 local stdio, synthetic long text and native concurrent raster OCR",
+  "localSHA256": "3d1065547f5926511c473a4d5e9dc24a74be5ed6b63bd2bd38ddd6a3d71ae11a",
+  "mcpSHA256": "1100e7fba20dcf66d2decb86ebad67f38bfdffc7497d73642e2674d2ada345d8",
+  "cases": [
+    {
+      "documents": 20000,
+      "go": false,
+      "failureType": "OperationalError"
+    },
+    {
+      "documents": 1000,
+      "initialRebuildMS": 16827.567,
+      "go": false,
+      "failureType": "AssertionError",
+      "check": "Native import or fresh OCR failed"
+    },
+    {
+      "documents": 5000,
+      "initialRebuildMS": 64654.158,
+      "newImport": {
+        "grants": 4999,
+        "ocrObservations": 174,
+        "ocrObservedMS": 4195.013,
+        "nativeMS": 4428.296,
+        "pageCount": 24,
+        "staleHandleAndCursorChecked": true,
+        "requests": {
+          "commonFilter": {
+            "samples": 25,
+            "medianMS": 81.84,
+            "p95MS": 87.165,
+            "requested": 1,
+            "attempted": 25,
+            "sourceChanges": 0,
+            "timeouts": 0,
+            "go": true,
+            "allAttempts": 26,
+            "allTimeouts": 0,
+            "allSourceChanges": 0
+          },
+          "rareRanked": {
+            "samples": 24,
+            "medianMS": 69.938,
+            "p95MS": 78.864,
+            "requested": 1,
+            "attempted": 25,
+            "sourceChanges": 1,
+            "timeouts": 0,
+            "go": true,
+            "allAttempts": 25,
+            "allTimeouts": 0,
+            "allSourceChanges": 1
+          }
+        },
+        "sampledMaxRSSBytes": 44924928,
+        "peakRSSBytes": 46333952,
+        "go": true
+      },
+      "noImplicitGrant": true,
+      "fullGrantOCR": {
+        "grants": 5000,
+        "ocrObservations": 162,
+        "ocrObservedMS": 3905.999,
+        "nativeMS": 4171.217,
+        "pageCount": 24,
+        "staleHandleAndCursorChecked": true,
+        "requests": {
+          "commonFilter": {
+            "samples": 22,
+            "medianMS": 87.005,
+            "p95MS": 95.99,
+            "requested": 2,
+            "attempted": 22,
+            "sourceChanges": 0,
+            "timeouts": 0,
+            "go": true,
+            "allAttempts": 22,
+            "allTimeouts": 0,
+            "allSourceChanges": 0
+          },
+          "rareRanked": {
+            "samples": 21,
+            "medianMS": 69.26,
+            "p95MS": 82.322,
+            "requested": 2,
+            "attempted": 21,
+            "sourceChanges": 0,
+            "timeouts": 0,
+            "go": true,
+            "allAttempts": 22,
+            "allTimeouts": 0,
+            "allSourceChanges": 0
+          }
+        },
+        "sampledMaxRSSBytes": 43646976,
+        "peakRSSBytes": 45121536,
+        "go": true
+      },
+      "fullGrantBroadOCR": {
+        "grants": 5000,
+        "ocrObservations": 164,
+        "ocrObservedMS": 3924.536,
+        "nativeMS": 4148.798,
+        "pageCount": 24,
+        "staleHandleAndCursorChecked": true,
+        "requests": {
+          "commonRanked": {
+            "samples": 18,
+            "medianMS": 179.745,
+            "p95MS": 744.024,
+            "requested": 2,
+            "attempted": 19,
+            "sourceChanges": 1,
+            "timeouts": 0,
+            "go": true,
+            "allAttempts": 20,
+            "allTimeouts": 0,
+            "allSourceChanges": 1
+          }
+        },
+        "sampledMaxRSSBytes": 48037888,
+        "peakRSSBytes": 49053696,
+        "go": true
+      },
+      "databaseBytes": 313360384,
+      "steady": {
+        "commonFilter": {
+          "samples": 10,
+          "medianMS": 94.995,
+          "p95MS": 99.945,
+          "requested": 10,
+          "attempted": 10,
+          "sourceChanges": 0,
+          "timeouts": 0,
+          "go": true,
+          "sampledMaxRSSBytes": 25329664,
+          "peakRSSBytes": 25640960
+        },
+        "rareRanked": {
+          "samples": 10,
+          "medianMS": 74.029,
+          "p95MS": 481.322,
+          "requested": 10,
+          "attempted": 10,
+          "sourceChanges": 0,
+          "timeouts": 0,
+          "go": true,
+          "sampledMaxRSSBytes": 38666240,
+          "peakRSSBytes": 41779200
+        },
+        "commonRanked": {
+          "samples": 3,
+          "medianMS": 188.008,
+          "p95MS": 583.825,
+          "requested": 3,
+          "attempted": 3,
+          "sourceChanges": 0,
+          "timeouts": 0,
+          "go": true,
+          "sampledMaxRSSBytes": 46661632,
+          "peakRSSBytes": 48332800
+        }
+      },
+      "baseline": {
+        "granted": 5000,
+        "options": [],
+        "coldStatusMS": 168.87895899708383,
+        "warmStatus": {
+          "samples": 25,
+          "medianMS": 52.094,
+          "p95MS": 55.913,
+          "completedRequestedSamples": true
+        },
+        "warmCompact": {
+          "samples": 25,
+          "medianMS": 89.877,
+          "p95MS": 99.827,
+          "completedRequestedSamples": true
+        },
+        "pagination": {
+          "documents": 5000,
+          "calls": 50,
+          "totalMS": 4714.11,
+          "complete": true
+        },
+        "narrowGrantMS": 38.871,
+        "revocation": {
+          "readListSearchBlocked": true,
+          "threeCallsMS": 132.76
+        },
+        "filters": [
+          {
+            "query": "Versicherung",
+            "expected": 1250,
+            "actual": 1250,
+            "milliseconds": 353.387,
+            "passed": true
+          },
+          {
+            "query": "Befund",
+            "expected": 1249,
+            "actual": 1249,
+            "milliseconds": 101.269,
+            "passed": true
+          },
+          {
+            "query": "NichtvorhandenerSuchbegriff",
+            "expected": 0,
+            "actual": 0,
+            "milliseconds": 62.001,
+            "passed": true
+          },
+          {
+            "query": "versicher",
+            "expected": 1250,
+            "actual": 1250,
+            "milliseconds": 112.341,
+            "passed": true
+          }
+        ],
+        "rankedExactMarkerMS": 525.5,
+        "correctness": "pass",
+        "sampledMaxRSSBytes": 42876928,
+        "peakRSSBytes": 45563904,
+        "failedGates": [],
+        "go": true
+      },
+      "readOnlySourceUnchanged": true,
+      "go": true
+    }
+  ],
+  "limits": {
+    "coldStatusMS": 5000,
+    "warmCompactP95MS": 1000,
+    "warmStatusP95MS": 1000,
+    "peakRSSBytes": 536870912,
+    "filteredListMS": 5000,
+    "repeatedSearchP95MS": 5000,
+    "searchRequestSeconds": 15
+  },
+  "textBytes": 32768,
+  "ocrPages": 24,
+  "baselineSamples": 25,
+  "searchRepeats": 10,
+  "broadRepeats": 3,
+  "broadOCRMin": 2,
+  "go": false
+}

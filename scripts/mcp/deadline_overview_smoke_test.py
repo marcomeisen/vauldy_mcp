@@ -7,7 +7,7 @@ import tempfile
 import time
 import uuid
 
-from smoke_test import Client, assert_v1_discovery, payload
+from smoke_test import Client, assert_current_discovery, payload
 from topic_overview_smoke_test import document, write_json
 
 
@@ -64,7 +64,7 @@ def main():
         client = Client(args.binary, profile)
         try:
             tools = client.request('tools/list', {})['tools']
-            assert_v1_discovery(tools)
+            assert_current_discovery(tools)
             tool = next(tool for tool in tools if tool['name'] == 'get_deadline_overview')
             handles = {}
             for marker, item in fixtures.items():
@@ -75,7 +75,7 @@ def main():
             def overview(*markers):
                 selected = [handles[marker] for marker in markers]
                 data = payload(client.call('get_deadline_overview', documents=selected), tool['outputSchema'])
-                assert data['contractVersion'] == 1 and data['scope'] == 'selected-documents-explicit-deadlines', data
+                assert data['contractVersion'] == 2 and data['scope'] == 'selected-documents-explicit-deadlines', data
                 assert [row['document'] for row in data['rows']] == selected, data
                 wire = json.dumps(data)
                 for secret in [str(root), 'erika@example.com', private['id'], *(item['id'] for item in items)]:

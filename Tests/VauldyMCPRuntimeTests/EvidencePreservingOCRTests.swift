@@ -21,6 +21,24 @@ struct EvidencePreservingOCRTests {
         #expect(EvidencePreservingLocalOCR.preserving(previous: previous, candidate: added).text == added.text)
     }
 
+    @Test func reorderedVisionLinesNeedTheSamePhysicalSourcePositions() {
+        func laidOut(_ texts: [String], _ ys: [CGFloat]) -> LocalOCRPage {
+            var value = page(texts.joined(separator: "\n"))
+            value.geometry = .vision(texts: texts,
+                bounds: ys.map { CGRect(x: 0.1, y: $0, width: 0.5, height: 0.05) },
+                confidences: texts.map { _ in 1 })
+            value.geometry?.configuration = LocalOCRPageCache.configuration
+            return value
+        }
+        let previous = laidOut(["Alpha", "Beta"], [0.8, 0.6])
+        let reordered = laidOut(["Beta", "Alpha"], [0.6, 0.8])
+        #expect(EvidencePreservingLocalOCR.preserving(previous: previous, candidate: reordered).text == reordered.text)
+        let changedPositions = laidOut(["Beta", "Alpha"], [0.8, 0.6])
+        #expect(EvidencePreservingLocalOCR.preserving(previous: previous, candidate: changedPositions).text == previous.text)
+        let lost = laidOut(["Alpha"], [0.8])
+        #expect(EvidencePreservingLocalOCR.preserving(previous: previous, candidate: lost).text == previous.text)
+    }
+
     @Test func refinementUsesNormalOriginalValidationAndAtomicImportCommit() async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-preserve-\(UUID())")
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

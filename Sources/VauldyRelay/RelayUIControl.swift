@@ -48,6 +48,7 @@ public struct RelayUIRequest: Codable, Sendable {
     public var snapshotDigest: String?
     public var acknowledgedDisclosure: Bool?
     public var acknowledgedReview: Bool?
+    public var pairingCodeHash: String?
     public init(_ operation: Operation, profileID: UUID? = nil, revision: UUID? = nil) {
         self.operation = operation; self.profileID = profileID; self.revision = revision
     }
@@ -121,9 +122,12 @@ public enum RelayUIManager {
             case .begin:
                 guard let credentials else { throw RelayFailure.notProvisioned }
                 guard !credentials.paired, credentials.pairID == nil, let id = request.profileID, let revision = request.revision else { throw RelayFailure.signInRequired }
+                guard let pairingCodeHash = request.pairingCodeHash,
+                      pairingCodeHash.count == 64,
+                      pairingCodeHash.allSatisfy({ $0.isASCII && $0.isHexDigit }) else { throw RelayFailure.credentials }
                 let source = FileMCPProfileSource(url: installation.profileURL(id)), profile = try source.load()
                 guard profile.revision == revision else { throw RelayFailure.changedGrant }
-                let (pending, target) = try await RelayClient(credentials: credentials).start(profile: profile)
+                let (pending, target) = try await RelayClient(credentials: credentials).start(profile: profile, pairingCodeHash: pairingCodeHash)
                 guard try source.load() == profile else { throw RelayFailure.changedGrant }
                 try store.save(pending); snapshot = pending; url = target
                 try service.start(executable: installation.root.appendingPathComponent("bin/vauldy-relay"))
@@ -155,8 +159,8 @@ public enum RelayUIManager {
                 var updated = current; updated.deviceToken = next; updated.pendingDeviceToken = nil; snapshot = updated
                 try service.start(executable: installation.root.appendingPathComponent("bin/vauldy-relay"))
             case .disconnect:
-                try store.clearDevice(); snapshot = credentials.map { RelayCredentials(serviceToken: $0.serviceToken) }
                 if let credentials, credentials.paired { try await RelayClient(credentials: credentials).disconnect() }
+                try store.clearDevice(); snapshot = credentials.map { RelayCredentials(serviceToken: $0.serviceToken) }
             }
         } catch RelayFailure.ownerApprovalRequired {
             ownerApprovalNeeded = true; problem = RelayFailure.ownerApprovalRequired.errorDescription

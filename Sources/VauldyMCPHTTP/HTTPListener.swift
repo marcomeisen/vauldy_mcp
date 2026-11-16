@@ -16,7 +16,7 @@ actor HTTPListener {
         let admission = Admission()
         do {
             let channel = try await ServerBootstrap(group: group)
-                .serverChannelOption(ChannelOptions.backlog, value: 64)
+                .serverChannelOption(ChannelOptions.backlog, value: 32)
                 .serverChannelOption(ChannelOptions.socketOption(.so_reuseaddr), value: 1)
                 .childChannelInitializer { channel in
                     channel.pipeline.configureHTTPServerPipeline().flatMap { channel.pipeline.addHandler(RequestHandler(router: self.router, admission: admission)) }
@@ -32,7 +32,7 @@ actor HTTPListener {
 private final class Admission: @unchecked Sendable {
     private let lock = NSLock()
     private var active = 0
-    func acquire() -> Bool { lock.lock(); defer { lock.unlock() }; guard active < 64 else { return false }; active += 1; return true }
+    func acquire() -> Bool { lock.lock(); defer { lock.unlock() }; guard active < 16 else { return false }; active += 1; return true }
     func release() { lock.lock(); active -= 1; lock.unlock() }
 }
 private final class RequestHandler: ChannelInboundHandler, @unchecked Sendable {
@@ -51,7 +51,7 @@ private final class RequestHandler: ChannelInboundHandler, @unchecked Sendable {
         admitted = admission.acquire()
         guard admitted else { context.close(promise: nil); return }
         let channel = context.channel
-        timeout = context.eventLoop.scheduleTask(in: .seconds(40)) { channel.close(promise: nil) }
+        timeout = context.eventLoop.scheduleTask(in: .seconds(6)) { channel.close(promise: nil) }
         context.fireChannelActive()
     }
     func channelInactive(context: ChannelHandlerContext) {
@@ -72,15 +72,20 @@ private final class RequestHandler: ChannelInboundHandler, @unchecked Sendable {
                 guard names.insert(key).inserted else { context.close(promise: nil); return }
             }
             head = next
+            timeout?.cancel()
+            let channel = context.channel
+            timeout = context.eventLoop.scheduleTask(in: .seconds(10)) { channel.close(promise: nil) }
         case .body(let buffer):
             guard head != nil, body.count + buffer.readableBytes <= 65536 else { context.close(promise: nil); return }
             body.append(contentsOf: buffer.readableBytesView)
         case .end:
             guard let head else { context.close(promise: nil); return }
             processing = true
+            timeout?.cancel()
+            let channel = context.channel
+            timeout = context.eventLoop.scheduleTask(in: .seconds(40)) { channel.close(promise: nil) }
             let request = OAuthWebRequest(method: head.method.rawValue, target: head.uri,
                 headers: Dictionary(uniqueKeysWithValues: head.headers.map { ($0.name.lowercased(), $0.value) }), body: body)
-            let channel = context.channel
             task = Task { [router] in
                 let response = await router.handle(request)
                 guard !Task.isCancelled else { return }

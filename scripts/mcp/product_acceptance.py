@@ -16,7 +16,7 @@ import shutil
 import time
 import uuid
 
-from smoke_test import Client, payload, assert_v1_discovery
+from smoke_test import Client, payload, assert_current_discovery
 from topic_overview_smoke_test import document, write_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -244,7 +244,7 @@ def main():
     client=Client(args.server.resolve(),profile);report=dict(scope='local MCP + deterministic extractive reference; not live ChatGPT',questions=[],nativeDocuments=len(native['documents']),controlledCoverageFixtures=1)
     answers=[];packets=[];failures=[]
     try:
-        tools=client.request('tools/list',{})['tools'];assert_v1_discovery(tools);schemas={t['name']:t['outputSchema'] for t in tools}
+        tools=client.request('tools/list',{})['tools'];assert_current_discovery(tools);schemas={t['name']:t['outputSchema'] for t in tools}
         workflow=Workflow(client,schemas)
         # Complete inventory independently exercises pagination, including unreadable candidates.
         inventory,_=workflow.all_rows('list_documents','items',includeExcerpts=False,pageSize=2)

@@ -26,11 +26,13 @@ struct VauldyLocalCLI {
                 try output(store.configuration())
             case "oauth-pending":
                 guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try output(store.pendingRequests())
+            case "oauth-arm":
+                guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try store.armAuthorization()
             case "oauth-connections":
                 guard args.count == 3 else { throw OAuthFailure.invalidRequest }; try output(store.connections())
             case "oauth-approve":
-                guard args.count == 9, args[3] == "--request", let id = UUID(uuidString: args[4]), args[5] == "--profile", let profile = UUID(uuidString: args[6]), args[7] == "--revision", let revision = UUID(uuidString: args[8]) else { throw OAuthFailure.invalidRequest }
-                try store.approve(id, profileID: profile, expectedRevision: revision)
+                guard args.count == 11, args[3] == "--request", let id = UUID(uuidString: args[4]), args[5] == "--profile", let profile = UUID(uuidString: args[6]), args[7] == "--revision", let revision = UUID(uuidString: args[8]), args[9] == "--confirmation" else { throw OAuthFailure.invalidRequest }
+                try store.approve(id, profileID: profile, expectedRevision: revision, confirmation: args[10])
             case "oauth-deny":
                 guard args.count == 5, args[3] == "--request", let id = UUID(uuidString: args[4]) else { throw OAuthFailure.invalidRequest }; try store.deny(id)
             case "oauth-revoke":

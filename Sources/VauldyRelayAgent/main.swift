@@ -76,16 +76,28 @@ import VauldyMCPRuntime
                     if let job = try await client.poll() {
                         let request = try client.decode(job: job)
                         _ = try credentials.validatedProfile(installation: installation)
-                        let result = try await local.call(request)
-                        guard !service.stopRequested, let current = try store.load(), current.deviceToken == credentials.deviceToken else { throw RelayFailure.signInRequired }
+                        let result: Data
+                        do { result = try await local.call(request) }
+                        catch {
+                            guard !service.stopRequested else { return }
+                            guard let current = try store.load(), current.deviceToken == credentials.deviceToken else { throw RelayFailure.signInRequired }
+                            _ = try credentials.validatedProfile(installation: installation)
+                            let failure: [String: Any] = ["content": [["type": "text", "text": "Die lokale Anfrage ist fehlgeschlagen. Bitte erneut versuchen oder die Verbindung auf dem Mac prüfen."]], "isError": true]
+                            try await client.result(job: job, data: JSONSerialization.data(withJSONObject: failure))
+                            failures = 0
+                            continue
+                        }
+                        guard !service.stopRequested else { return }
+                        guard let current = try store.load(), current.deviceToken == credentials.deviceToken else { throw RelayFailure.signInRequired }
                         _ = try credentials.validatedProfile(installation: installation)
                         try await client.result(job: job, data: result)
                     }
                     failures = 0; try await Task.sleep(for: .milliseconds(750))
-                } catch RelayFailure.signInRequired { try store.clearDevice(expectedToken: credentials.deviceToken); throw RelayFailure.signInRequired }
+                } catch RelayFailure.signInRequired { throw RelayFailure.signInRequired }
                 catch {
                     failures += 1
-                    // Never replay a claimed request. Its caller gets a timeout.
+                    // A claimed request is never replayed. Local failures are returned
+                    // through the same encrypted, direction-bound result channel.
                     if !local.isRunning { throw RelayFailure.unavailable }
                     try await Task.sleep(for: .seconds(min(10, failures * 2)))
                 }

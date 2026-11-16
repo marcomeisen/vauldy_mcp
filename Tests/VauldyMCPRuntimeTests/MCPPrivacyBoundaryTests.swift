@@ -30,6 +30,7 @@ struct MCPPrivacyBoundaryTests {
             let search = try await f.runtime.search(query: "Rechnung")
             let hit = try #require(search.hits.first)
             let read = try await f.runtime.read(document: hit.document)
+            #expect(hit.untrusted && read.segments.allSatisfy(\.untrusted))
             for value in [try encoded(search), try encoded(read)] {
                 for secret in ["Erika Musterfrau", "erika@example.com", "DE89370400440532013000", "12345678901",
                                "/Users/erika", f.document.id.uuidString, "privater-dateiname"] {

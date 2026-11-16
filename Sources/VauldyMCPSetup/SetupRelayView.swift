@@ -2,9 +2,13 @@ import SwiftUI
 import AppKit
 import VauldyRelay
 import VauldyMCPRuntime
+import CryptoKit
 
 struct SetupRelayView: View {
     @ObservedObject var model: SetupModel
+    @State private var confirmDisconnect = false
+    @State private var confirmCancel = false
+    @State private var pairingCode = ""
     var body: some View {
         GroupBox("ChatGPT · mit deinem Konto anmelden") {
             VStack(alignment: .leading, spacing: 12) {
@@ -26,10 +30,16 @@ struct SetupRelayView: View {
                     HStack {
                         if !model.relayRunning { Button("Mac verbinden", action: model.startRelay) }
                         Button("ChatGPT-Verbindung öffnen") { NSWorkspace.shared.open(URL(string: RelayCredentials.origin)!) }
-                        Button("Verbindung löschen", role: .destructive, action: model.disconnectRelay)
+                        Button("Verbindung löschen", role: .destructive) { confirmDisconnect = true }
                     }
                 } else if model.relayState.pairID != nil {
                     Text("Anmeldung im Browser abschließen. Der Mac wartet auf deine Bestätigung.")
+                    if pairingCode.isEmpty {
+                        Text("Der Bestätigungscode ist nicht mehr verfügbar. Brich diese Anmeldung ab und starte sie erneut.").foregroundStyle(.orange)
+                    } else {
+                        Text("Gib im Browser diesen Code ein: \(pairingCode.prefix(6)) \(pairingCode.suffix(6))")
+                            .font(.title3.monospacedDigit()).textSelection(.enabled)
+                    }
                     if !model.relayRunning { Button("Anmeldung fortsetzen") { model.resumeRelay() } }
                     Button("Browser öffnen") {
                         if let id = model.relayState.pairID {
@@ -37,7 +47,7 @@ struct SetupRelayView: View {
                             if let url = c.url { NSWorkspace.shared.open(url) }
                         }
                     }
-                    Button("Anmeldung abbrechen", role: .cancel, action: model.disconnectRelay)
+                    Button("Anmeldung abbrechen", role: .cancel) { confirmCancel = true }
                 } else {
                     Picker("Dokumentauswahl", selection: $model.relayProfileID) {
                         Text("Auswahl wählen").tag(nil as UUID?)
@@ -66,10 +76,24 @@ struct SetupRelayView: View {
             }
         }
         .confirmationDialog("Dokumentzugriff für ChatGPT bestätigen?", isPresented: Binding(get: { model.relayApproval != nil }, set: { if !$0 { model.relayApproval = nil } }), titleVisibility: .visible) {
-            if let p = model.relayApproval { Button("Auswahl bestätigen und anmelden") { model.beginRelay(profile: p); model.relayApproval = nil } }
+            if let p = model.relayApproval { Button("Auswahl bestätigen und anmelden") {
+                pairingCode = String(format: "%06d%06d", Int.random(in: 0...999_999), Int.random(in: 0...999_999))
+                model.beginRelay(profile: p, pairingCodeHash: SHA256.hash(data: Data(pairingCode.utf8)).map { String(format: "%02x", $0) }.joined())
+                model.relayApproval = nil
+            } }
             Button("Abbrechen", role: .cancel) { model.relayApproval = nil }
         } message: {
             if let p = model.relayApproval { Text("ChatGPT darf die \(p.allowedDocumentIDs.count) Dokumente aus „\(p.connectionName)“ lesen. Angeforderte Inhalte werden auf diesem Mac bereinigt und an ChatGPT übertragen. Originaldateien bleiben lokal. Eine geänderte Auswahl erfordert eine neue Bestätigung.") }
+        }
+        .confirmationDialog("ChatGPT-Verbindung löschen?", isPresented: $confirmDisconnect, titleVisibility: .visible) {
+            Button("Verbindung löschen", role: .destructive, action: model.disconnectRelay)
+            Button("Behalten", role: .cancel) { }
+        } message: {
+            Text("Der Online-Gerätezugriff wird widerrufen und anschließend die lokale Kopplung entfernt. Deine Dokumente bleiben erhalten.")
+        }
+        .confirmationDialog("Anmeldung abbrechen?", isPresented: $confirmCancel, titleVisibility: .visible) {
+            Button("Anmeldung abbrechen", role: .destructive, action: model.disconnectRelay)
+            Button("Fortsetzen", role: .cancel) { }
         }
     }
 }
@@ -102,13 +126,15 @@ extension SetupModel {
         relayAuthorizationTask?.cancel()
         relayError = "Freigabe abgebrochen. Die gespeicherte Verbindung bleibt erhalten."
     }
-    func beginRelay(profile: MCPAccessProfile) {
+    func beginRelay(profile: MCPAccessProfile, pairingCodeHash: String) {
         guard !busy, !relayRefreshing else { return }
         busy = true; relayError = ""
         Task {
             defer { busy = false }
             do {
-                let r = try await relayControl.request(.init(.begin, profileID: profile.connectionID, revision: profile.revision))
+                var request = RelayUIRequest(.begin, profileID: profile.connectionID, revision: profile.revision)
+                request.pairingCodeHash = pairingCodeHash
+                let r = try await relayControl.request(request)
                 relayState = r.state; relayRunning = r.state.running
                 if let error = r.error { relayError = error }
                 if let url = r.authorizationURL, !NSWorkspace.shared.open(url) { relayError = "Die Anmeldung konnte nicht geöffnet werden." }
@@ -133,7 +159,7 @@ extension SetupModel {
             defer { busy = false }
             do {
                 let r = try await relayControl.request(.init(.disconnect)); relayState = r.state; relayRunning = r.state.running
-                relayError = r.error == nil ? "" : "Der Zugriff auf diesem Mac ist gestoppt. Falls die Online-Verbindung noch angezeigt wird, lösche sie zusätzlich im Verbindungsfenster."
+                relayError = r.error ?? ""
             } catch { relayError = error.localizedDescription }
         }
     }

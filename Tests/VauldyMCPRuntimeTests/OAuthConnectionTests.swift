@@ -10,10 +10,13 @@ struct OAuthConnectionTests {
         let f = try Fixture(); defer { f.clean() }
         let before = try Data(contentsOf: f.vault)
         let flow = try f.flow(provider)
+        #expect(throws: OAuthFailure.temporarilyUnavailable) { try f.store.begin(flow.authorization, now: Date().addingTimeInterval(601)) }
         #expect(try f.store.pendingRequests().count == 1)
         #expect(try f.store.browserResult(flow.browser).isWaiting)
+        #expect(throws: OAuthFailure.invalidGrant) { try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: "WRONG000") }
+        #expect(try f.store.browserResult(flow.browser).isWaiting)
         #expect(throws: OAuthFailure.invalidGrant) { try f.store.exchange(flow.exchange(code: "not-an-approved-authorization-code")) }
-        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision)
+        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: flow.confirmation)
         let fields = try flow.exchange(code: f.code(flow.browser))
         #expect(throws: OAuthFailure.invalidGrant) { try f.store.exchange(fields.merging(["code_verifier": String(repeating: "z", count: 43)]) { _, new in new }) }
         let tokens = try f.store.exchange(fields)
@@ -34,7 +37,7 @@ struct OAuthConnectionTests {
         for invalid in [["resource": "https://foreign.example/mcp"], ["redirect_uri": "https://foreign.example/callback"], ["code_challenge_method": "plain"], ["scope": "documents:write"], ["state": ""]] {
             #expect(throws: (any Error).self) { try f.store.begin(flow.authorization.merging(invalid) { _, new in new }) }
         }
-        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision)
+        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: flow.confirmation)
         let fields = try flow.exchange(code: f.code(flow.browser))
         for invalid in [["resource": "https://foreign.example/mcp"], ["redirect_uri": "https://claude.ai/callback"], ["client_id": "foreign-client"]] {
             #expect(throws: (any Error).self) { try f.store.exchange(fields.merging(invalid) { _, new in new }) }
@@ -44,7 +47,7 @@ struct OAuthConnectionTests {
     @Test func consumedCodeRevokesItsIssuedGrantOnReplay() throws {
         let f = try Fixture(); defer { f.clean() }
         let flow = try f.flow(.chatgpt)
-        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision)
+        try f.store.approve(flow.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: flow.confirmation)
         let fields = try flow.exchange(code: f.code(flow.browser)), tokens = try f.store.exchange(fields)
         #expect(throws: OAuthFailure.invalidGrant) { try f.store.exchange(fields) }
         #expect(throws: OAuthFailure.invalidToken) { try f.store.authorize(tokens.access_token) }
@@ -80,10 +83,10 @@ struct OAuthConnectionTests {
         try f.store.deny(denied.id)
         if case .redirect(let value) = try f.store.browserResult(denied.browser) { #expect(value.contains("error=access_denied")) }
         else { Issue.record("Denied request did not return an OAuth denial") }
-        #expect(throws: OAuthFailure.invalidGrant) { try f.store.approve(denied.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision) }
+        #expect(throws: OAuthFailure.invalidGrant) { try f.store.approve(denied.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: denied.confirmation) }
         let stale = try f.flow(.chatgpt)
-        #expect(throws: (any Error).self) { try f.store.approve(stale.id, profileID: f.profile.connectionID, expectedRevision: UUID()) }
-        #expect(throws: OAuthFailure.invalidGrant) { try f.store.approve(stale.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, now: Date().addingTimeInterval(601)) }
+        #expect(throws: (any Error).self) { try f.store.approve(stale.id, profileID: f.profile.connectionID, expectedRevision: UUID(), confirmation: stale.confirmation) }
+        #expect(throws: OAuthFailure.invalidGrant) { try f.store.approve(stale.id, profileID: f.profile.connectionID, expectedRevision: f.profile.revision, confirmation: stale.confirmation, now: Date().addingTimeInterval(601)) }
     }
     @Test func registrationsRejectForeignAndMixedProviderRedirects() throws {
         let f = try Fixture(); defer { f.clean() }
@@ -108,6 +111,7 @@ struct OAuthConnectionTests {
     @Test(arguments: ["valid", "opaque-path", "wrong-id", "foreign-redirect", "wrong-provider", "private-client", "oversize"])
     func publishedClientMetadataIsVerifiedBeforeAnyConsent(variant: String) async throws {
         let f = try Fixture(); defer { f.clean() }
+        try f.store.armAuthorization()
         let valid = ["valid", "opaque-path"].contains(variant)
         let clientID = variant == "opaque-path" ? "https://chatgpt.com/oauth/client-metadata" : "https://chatgpt.com/oauth/client.json"
         var object: [String: Any] = ["client_id": variant == "wrong-id" ? "https://chatgpt.com/wrong.json" : clientID,
@@ -142,11 +146,47 @@ struct OAuthConnectionTests {
     @Test func pendingConsentIsBoundedWithoutTouchingGrantsOrVault() throws {
         let f = try Fixture(); defer { f.clean() }
         let bytes = try Data(contentsOf: f.vault)
-        let first = try f.flow(.chatgpt)
-        for _ in 1..<128 { _ = try f.store.begin(first.authorization) }
-        #expect(throws: OAuthFailure.temporarilyUnavailable) { try f.store.begin(first.authorization) }
+        let flows = try (0..<4).map { _ in try f.flow(.chatgpt) }
+        for flow in flows { for _ in 1..<4 { _ = try f.store.begin(flow.authorization) } }
+        #expect(throws: OAuthFailure.temporarilyUnavailable) { try f.store.begin(flows[0].authorization) }
+        #expect(try f.store.pendingRequests().count == 16)
         #expect(try f.store.connections().isEmpty)
         #expect(try Data(contentsOf: f.vault) == bytes)
+    }
+    @Test func oneClientCannotFillPendingConsentQueue() throws {
+        let f = try Fixture(); defer { f.clean() }
+        let flow = try f.flow(.chatgpt)
+        for _ in 1..<4 { _ = try f.store.begin(flow.authorization) }
+        #expect(throws: OAuthFailure.temporarilyUnavailable) { try f.store.begin(flow.authorization) }
+        #expect(try f.store.pendingRequests().count == 4)
+    }
+    @Test func unauthenticatedRegistrationIsThrottledBeforeCredentialWrites() async throws {
+        let f = try Fixture(); defer { f.clean() }
+        let web = OAuthWebService(store: f.store, configuration: try #require(try f.store.configuration()))
+        let request = OAuthWebRequest(method: "POST", target: "/oauth/register", headers: ["content-type": "application/json"], body: Data("{}".utf8))
+        for _ in 0..<12 { #expect(await web.handle(request).status == 401) }
+        let throttled = await web.handle(request)
+        #expect(throttled.status == 429 && throttled.headers["Retry-After"] == "60")
+        #expect(try f.store.database().clients.isEmpty)
+    }
+    @Test func metadataFetchHasSeparateShortBudget() async {
+        let limiter = OAuthRequestLimiter()
+        let start = Date(timeIntervalSince1970: 1000)
+        for _ in 0..<4 { #expect(await limiter.permit(.metadata, now: start)) }
+        #expect(await !limiter.permit(.metadata, now: start))
+        #expect(await limiter.permit(.registration, now: start))
+        #expect(await limiter.permit(.metadata, now: start.addingTimeInterval(61)))
+    }
+    @Test func ungrantedMetadataClientsCannotConsumeRegistrationQuota() throws {
+        let f = try Fixture(); defer { f.clean() }
+        let redirect = "https://chatgpt.com/connector_platform_oauth_redirect"
+        for number in 0..<8 {
+            _ = try f.store.register(redirectURIs: [redirect], clientID: "https://chatgpt.com/oauth/client/\(number)")
+        }
+        #expect(throws: OAuthFailure.temporarilyUnavailable) {
+            try f.store.register(redirectURIs: [redirect], clientID: "https://chatgpt.com/oauth/client/overflow")
+        }
+        #expect(try f.store.register(redirectURIs: [redirect]).metadata == false)
     }
     @Test func malformedOrLinkedStateFailsClosedAndCannotOverwriteForeignFiles() throws {
         let f = try Fixture(); defer { f.clean() }
@@ -167,6 +207,7 @@ private extension OAuthStore.BrowserResult { var isWaiting: Bool { if case .wait
 private struct Flow {
     let id: UUID
     let browser: String
+    let confirmation: String
     let authorization: [String: String]
     let verifier: String
     func exchange(code: String) -> [String: String] {
@@ -185,6 +226,7 @@ private struct Fixture {
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         store = OAuthStore(installation: MCPInstallation(root: root.appendingPathComponent("installation")))
         try store.configure(OAuthConfiguration(origin: "https://vauldy.example.test"))
+        try store.armAuthorization()
         let document = VaultDocument(title: "Synthetischer Beleg", sourceName: "example.pdf", ocrText: "--- Seite 1 ---\nFahrradwartung 49,99 EUR.", pageCount: 1)
         vault = root.appendingPathComponent("documents.json")
         let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601
@@ -196,12 +238,13 @@ private struct Fixture {
     }
     func clean() { try? FileManager.default.removeItem(at: root) }
     func flow(_ provider: OAuthProvider) throws -> Flow {
+        try store.armAuthorization()
         let client = try store.register(redirectURIs: [provider == .chatgpt ? "https://chatgpt.com/connector_platform_oauth_redirect" : "https://claude.ai/api/mcp/auth_callback"])
         let verifier = try OAuthStore.randomToken()
         let fields = ["response_type": "code", "client_id": client.id, "redirect_uri": client.redirectURIs[0], "resource": resource,
                       "scope": "documents:read", "state": "test-state", "code_challenge_method": "S256", "code_challenge": OAuthStore.challenge(for: verifier)]
         let pending = try store.begin(fields)
-        return .init(id: pending.request.id, browser: pending.browser, authorization: fields, verifier: verifier)
+        return .init(id: pending.request.id, browser: pending.browser, confirmation: pending.request.confirmation, authorization: fields, verifier: verifier)
     }
     func code(_ browser: String) throws -> String {
         guard case .redirect(let value) = try store.browserResult(browser), let components = URLComponents(string: value),
@@ -211,7 +254,7 @@ private struct Fixture {
     }
     func tokens(_ provider: OAuthProvider) throws -> TokenFixture {
         let flow = try flow(provider)
-        try store.approve(flow.id, profileID: profile.connectionID, expectedRevision: profile.revision)
+        try store.approve(flow.id, profileID: profile.connectionID, expectedRevision: profile.revision, confirmation: flow.confirmation)
         let tokens = try store.exchange(flow.exchange(code: code(flow.browser)))
         return .init(access_token: tokens.access_token, refresh_token: tokens.refresh_token, clientID: flow.authorization["client_id"]!)
     }

@@ -35,4 +35,22 @@ struct IdentifierPrivacyCompletionTests {
             try session.protectForSending("E-Mail: synthetic-private@example.com")
         }
     }
+    @Test func newlyIntroducedRecognizableNameFailsAtOutput() throws {
+        let session = try IdentifierPrivacySession(contents: ["Unverfänglicher Text."])
+        #expect(throws: ExternalAIPrivacyError.personalDataRemaining) {
+            try session.protectForSending("Angela Merkel")
+        }
+        #expect(try session.protectForSending("Beitrag und Laufzeit") == "Beitrag und Laufzeit")
+    }
+    @Test func maskingAnIdentifierDoesNotTurnAFieldLabelIntoAName() throws {
+        let pages = ["Versicherungsschein\nAussteller: Nordstern Sachversicherung AG\nPolicennummer: PK-85HJ\n\nBetreff: Hausrat\nPOLICENALTT"]
+            + Array(repeating: String(repeating: "Hinweise zur Bearbeitung der Unterlagen. ", count: 10), count: 16)
+            + ["Kosten: Referenz PK-85HJ"]
+        let source = pages.enumerated().map { "--- Seite \($0.offset + 1) ---\n\($0.element)" }.joined(separator: "\n")
+        let session = try IdentifierPrivacySession(contents: [source])
+        for (index, page) in pages.enumerated() {
+            let protected = try session.protectForSending(page)
+            #expect(!protected.contains("PK-85HJ"), "Page \(index + 1) must not disclose the policy number")
+        }
+    }
 }

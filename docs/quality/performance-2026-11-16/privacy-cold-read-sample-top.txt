@@ -1,0 +1,13 @@
+Sort by top of stack, same collapsed (when >= 5):
+        __workq_kernreturn  (in libsystem_kernel.dylib)        14286
+        mach_msg2_trap  (in libsystem_kernel.dylib)        4771
+        icu::UnicodeSet::findCodePoint(int) const  (in libicucore.A.dylib)        1201
+        icu::UnicodeSet::applyFilter(signed char (*)(int, void*), void*, icu::UnicodeSet const*, UErrorCode&)  (in libicucore.A.dylib)        591
+        uhash_compareUnicodeString  (in libicucore.A.dylib)        297
+        icu::RegexMatcher::find(UErrorCode&)  (in libicucore.A.dylib)        265
+        u_charType  (in libicucore.A.dylib)        217
+        icu::UnicodeSet::add(int)  (in libicucore.A.dylib)        152
+        icu::UnicodeSet::add(int const*, int, signed char)  (in libicucore.A.dylib)        139
+        icu::UnicodeSet::retain(int const*, int, signed char)  (in libicucore.A.dylib)        132
+        icu::RegexMatcher::MatchAt(long long, signed char, UErrorCode&)  (in libicucore.A.dylib)        131
+        _platform_memcmp  (in libsystem_platform.dylib)        101

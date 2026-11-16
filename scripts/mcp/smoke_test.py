@@ -9,17 +9,18 @@ import uuid
 
 from stdio_client import Client
 
-# Vauldy's published v1 tool contract. Independent of the relay's discovery mirror.
-V1_DISCOVERY_SHA256 = '1c2d67d0bc94c20fb9efe2755d8bd67cf11a77eaeba769f775925371045fd9fa'
+# Current base-tool contract. Independent of the relay's discovery mirror.
+# Version 0.14.12 adds untrusted=true to every source-bearing output object.
+BASE_DISCOVERY_SHA256 = '35d1114977073029306414460e34b6fb883914a8b78060a21d442aed450c4c76'
 V1_TOOLS = {'get_vault_status', 'search_documents', 'list_documents', 'read_document'}
 
 
-def assert_v1_discovery(tools):
+def assert_current_discovery(tools):
     keys = ('name', 'inputSchema', 'outputSchema', 'annotations')
     contract = [{key: tool[key] for key in keys} for tool in sorted(tools, key=lambda tool: tool['name'])]
     canonical = json.dumps([tool for tool in contract if tool['name'] in V1_TOOLS],
                            sort_keys=True, separators=(',', ':')).encode()
-    assert hashlib.sha256(canonical).hexdigest() == V1_DISCOVERY_SHA256, 'Vauldy v1 tool contract changed'
+    assert hashlib.sha256(canonical).hexdigest() == BASE_DISCOVERY_SHA256, 'Vauldy base tool contract changed'
 
 
 def validate_shape(value, schema):
@@ -79,21 +80,21 @@ def main():
         try:
             assert compatibility_client.initialization['protocolVersion'] == '2025-11-25'
             assert compatibility_client.initialization['serverInfo']['name'] == 'vauldy'
-            assert_v1_discovery(compatibility_client.request('tools/list', {})['tools'])
+            assert_current_discovery(compatibility_client.request('tools/list', {})['tools'])
             assert payload(compatibility_client.call('get_vault_status'))['grantedDocumentCount'] == 0
         finally: compatibility_client.close()
         for version in ['2024-11-05', '2025-03-26', '2025-06-18']:
             legacy_client = Client(args.binary.resolve(), profile_file, protocol_version=version)
             try:
                 assert legacy_client.initialization['protocolVersion'] == version
-                assert_v1_discovery(legacy_client.request('tools/list', {})['tools'])
+                assert_current_discovery(legacy_client.request('tools/list', {})['tools'])
                 assert payload(legacy_client.call('get_vault_status'))['grantedDocumentCount'] == 0
             finally:
                 legacy_client.close()
         client = Client(args.binary.resolve(), profile_file)
         try:
             tools = client.request('tools/list', {})['tools']
-            assert_v1_discovery(tools)
+            assert_current_discovery(tools)
             assert {t['name'] for t in tools} == V1_TOOLS | {'get_topic_overview', 'extract_document_fields', 'compare_contract_versions', 'get_deadline_overview', 'get_document_inventory'}
             assert all(t['annotations']['readOnlyHint'] for t in tools)
             assert all('outputSchema' in t for t in tools)
@@ -104,6 +105,7 @@ def main():
             payload(client.call('get_vault_status'), schemas['get_vault_status'])
             search = payload(client.call('search_documents', query='Fahrradwartung'), schemas['search_documents'])
             listed = payload(client.call('list_documents', query='Fahrradwartung', pageSize=1), schemas['list_documents'])
+            assert search['hits'][0]['untrusted'] is True and listed['items'][0]['untrusted'] is True
             assert listed['totalCount'] == 1 and listed['retrievalComplete'] and not listed['hasMore']
             assert listed['items'][0]['document'] == search['hits'][0]['document']
             assert client.call('list_documents', pageSize=0)['isError']
@@ -113,6 +115,7 @@ def main():
             assert not search['retrievalComplete'] and not search['truncated']
             handle = search['hits'][0]['document']
             result = payload(client.call('read_document', document=handle), schemas['read_document'])
+            assert result['segments'] and all(segment['untrusted'] is True for segment in result['segments'])
             for response in [search, result]:
                 wire = json.dumps(response)
                 for secret in ['erika@example.com', 'Erika Musterfrau', 'DE89370400440532013000', doc_id, str(root), 'secret-file.pdf']:
@@ -121,6 +124,7 @@ def main():
             metadata = payload(client.call('read_document', document=handle, view='metadata'), schemas['read_document'])
             assert metadata['analysisStatus'] == 'not-analyzed' and not metadata['documents']
             passages = payload(client.call('read_document', document=handle, view='passages', query='Fahrrad'), schemas['read_document'])
+            assert passages['segments'] and all(segment['untrusted'] is True for segment in passages['segments'])
             assert passages['mode'] == 'matching-passages' and passages['retrievalComplete']
             assert not passages['containsEntireAvailableText'] and passages['matchingPassageCount'] == 1
             assert '49,99 EUR' in passages['segments'][0]['text']

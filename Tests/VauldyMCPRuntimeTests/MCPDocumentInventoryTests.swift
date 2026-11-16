@@ -49,7 +49,8 @@ struct MCPDocumentInventoryTests {
         let tied = [granted[1],granted[4]].map { MCPDocumentIdentity.reference($0.id) }.sorted()
         #expect(items.map(\.documentID) == tied + [granted[0],granted[2],granted[3]].map { MCPDocumentIdentity.reference($0.id) })
         #expect(items.last?.importedAt == nil && result.retrievalComplete)
-        #expect(items.allSatisfy { $0.contentHash == String(repeating:"a",count:64) })
+        let expectedHash = MCPDocumentIdentity.protectedContentHash(String(repeating:"a",count:64), profile: try source.load())
+        #expect(items.allSatisfy { $0.contentHash == expectedHash && $0.contentHash != String(repeating:"a",count:64) })
         let wire = String(decoding: try JSONEncoder().encode(result), as: UTF8.self)
         for privateValue in [root.path,hidden.id.uuidString.lowercased(),"Private synthetic","private-source.pdf"] { #expect(!wire.lowercased().contains(privateValue.lowercased())) }
         #expect(await runtime.privacyBuildCount == 0)
@@ -97,6 +98,7 @@ struct MCPDocumentInventoryTests {
         var grant = try source.load();grant.revision = UUID();try source.save(grant)
         let revised = try #require(try await old.documentInventory(pageSize:1).items.first)
         #expect(revised.documentID == item.documentID && revised.document != changed.document)
+        #expect(revised.contentHash != item.contentHash)
         grant.allowedDocumentIDs.remove(docs[0].id);grant.revision = UUID();try source.save(grant)
         let reduced = try await old.documentInventory()
         #expect(reduced.totalCount == 2 && !reduced.items.contains { $0.documentID == item.documentID })

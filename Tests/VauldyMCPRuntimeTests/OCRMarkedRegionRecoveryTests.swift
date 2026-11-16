@@ -17,6 +17,16 @@ struct OCRMarkedRegionRecoveryTests {
         let oldLines = LocalOCRGeometry.vision(texts: [existing], bounds: [box], confidences: [1]).lines
         #expect(OCRRegionRecovery.decide(first, confirmedBy: first, region: box,
             existingText: "", existingLines: oldLines) == .overlap)
+        let adjacent = CGRect(x: box.minX, y: box.minY + box.height * 0.8,
+                              width: box.width, height: box.height)
+        let adjacentLines = LocalOCRGeometry.vision(texts: ["neighbouring source row"], bounds: [adjacent], confidences: [1]).lines
+        #expect(OCRRegionRecovery.decide(first, confirmedBy: first, region: box,
+            existingText: "", existingLines: adjacentLines) == .append)
+        let taller = CGRect(x: box.minX, y: box.minY - box.height * 0.25,
+                            width: box.width, height: box.height * 1.5)
+        let tallerCandidate = OCRRegionRecovery.Candidate(text: "Source heading", bounds: taller, confidence: 1)
+        #expect(OCRRegionRecovery.decide(tallerCandidate, confirmedBy: tallerCandidate,
+            region: box, existingText: "", existingLines: []) == .append)
         let newField = OCRRegionRecovery.Candidate(text: "Versicherungsart: Hausrat", bounds: box, confidence: 1)
         #expect(OCRRegionRecovery.decide(newField, confirmedBy: newField, region: box,
             existingText: existing, existingLines: []) == .append)

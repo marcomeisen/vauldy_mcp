@@ -3,6 +3,14 @@ import CryptoKit
 import VauldyMCPRuntime
 
 extension OAuthStore {
+    /// Local owner action only; remote OAuth endpoints cannot open this window.
+    public func armAuthorization(now: Date = Date()) throws {
+        try locked {
+            var db = try database()
+            db.authorizationWindowUntil = now.addingTimeInterval(600)
+            try save(db)
+        }
+    }
     public func register(redirectURIs: [String], clientID: String? = nil, now: Date = Date()) throws -> OAuthClient {
         guard (1...4).contains(redirectURIs.count), Set(redirectURIs).count == redirectURIs.count,
               let first = redirectURIs.first.flatMap(URL.init(string:)).flatMap(OAuthProvider.provider),
@@ -17,10 +25,17 @@ extension OAuthStore {
         }
         return try locked {
             var db = try database(); prune(&db, now: now)
+            guard db.authorizationWindowUntil ?? .distantPast > now else { throw OAuthFailure.temporarilyUnavailable }
             if let clientID, let old = db.clients.first(where: { $0.id == clientID }) {
                 guard old.redirectURIs == redirectURIs else { throw OAuthFailure.invalidClient }; return old
             }
             guard db.clients.count < 256 else { throw OAuthFailure.temporarilyUnavailable }
+            let ungranted = db.clients.filter { client in
+                !db.grants.contains { $0.clientID == client.id && !$0.revoked && $0.expiresAt > now }
+            }
+            guard ungranted.filter({ $0.metadata == (clientID != nil) }).count < (clientID == nil ? 32 : 8) else {
+                throw OAuthFailure.temporarilyUnavailable
+            }
             let client = OAuthClient(id: try clientID ?? Self.randomToken(), provider: first, redirectURIs: redirectURIs, createdAt: now, metadata: clientID != nil)
             db.clients.append(client); try save(db); return client
         }
@@ -38,11 +53,15 @@ extension OAuthStore {
         guard parameters["scope"] == nil || parameters["scope"] == "documents:read" else { throw OAuthFailure.invalidScope }
         return try locked {
             var db = try database(); prune(&db, now: now)
+            guard db.authorizationWindowUntil ?? .distantPast > now else { throw OAuthFailure.temporarilyUnavailable }
             guard let client = db.clients.first(where: { $0.id == clientID }), client.redirectURIs.contains(redirect) else { throw OAuthFailure.invalidClient }
-            guard db.pending.count < 128 else { throw OAuthFailure.temporarilyUnavailable }
+            guard db.pending.count < 16 else { throw OAuthFailure.temporarilyUnavailable }
+            guard db.pending.filter({ $0.clientID == clientID && !$0.rejected && $0.profileID == nil }).count < 4 else {
+                throw OAuthFailure.temporarilyUnavailable
+            }
             let browser = try Self.randomToken()
             let confirmation = String(try Self.randomToken().prefix(8)).uppercased()
-            let info = OAuthPendingRequest(id: UUID(), provider: client.provider, redirectURI: redirect, createdAt: now,
+            let info = OAuthPendingRequest(id: UUID(), provider: client.provider, clientID: clientID, redirectURI: redirect, createdAt: now,
                                           expiresAt: now.addingTimeInterval(600), confirmation: confirmation)
             db.pending.append(.init(info: info, browserHash: Self.hash(browser), clientID: clientID, challenge: challenge, state: state, scope: "documents:read"))
             try save(db); return (browser, info)
@@ -53,11 +72,12 @@ extension OAuthStore {
         return try locked { try database().pending.filter { $0.info.expiresAt > now && !$0.rejected && $0.profileID == nil }.map(\.info) }
     }
     /// Trusted local action only. Rechecks the precise revision displayed by the native UI.
-    public func approve(_ id: UUID, profileID: UUID, expectedRevision: UUID, now: Date = Date()) throws {
+    public func approve(_ id: UUID, profileID: UUID, expectedRevision: UUID, confirmation: String, now: Date = Date()) throws {
         try locked {
             var db = try database()
             guard let index = db.pending.firstIndex(where: { $0.info.id == id }), db.pending[index].info.expiresAt > now,
-                  !db.pending[index].rejected, db.pending[index].profileID == nil else { throw OAuthFailure.invalidGrant }
+                  !db.pending[index].rejected, db.pending[index].profileID == nil,
+                  db.pending[index].info.confirmation == confirmation.uppercased() else { throw OAuthFailure.invalidGrant }
             let selected = try profile(profileID, revision: expectedRevision)
             let code = try Self.randomToken()
             db.pending[index].profileID = profileID; db.pending[index].revision = selected.revision
