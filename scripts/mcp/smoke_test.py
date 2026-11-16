@@ -108,7 +108,8 @@ def main():
             assert search['hits'][0]['untrusted'] is True and listed['items'][0]['untrusted'] is True
             assert listed['totalCount'] == 1 and listed['retrievalComplete'] and not listed['hasMore']
             assert listed['items'][0]['document'] == search['hits'][0]['document']
-            assert client.call('list_documents', pageSize=0)['isError']
+            invalid_page = client.call('list_documents', pageSize=0)
+            assert invalid_page['isError'] and 'pageSize muss zwischen 1 und 100 liegen' in invalid_page['content'][0]['text']
             assert client.call('list_documents', pageSize=26)['isError']
             assert client.call('list_documents', query='!!!')['isError']
             assert client.call('list_documents', vaultPath='/arbitrary')['isError']
@@ -130,7 +131,9 @@ def main():
             assert '49,99 EUR' in passages['segments'][0]['text']
             for secret in ['erika@example.com', 'Erika Musterfrau', doc_id, str(root), 'secret-file.pdf']:
                 assert secret not in json.dumps(passages)
-            assert client.call('read_document', document=handle, view='metadata', query='Fahrrad')['isError']
+            invalid_view = client.call('read_document', document=handle, view='metadata', query='erika@example.com')
+            assert invalid_view['isError'] and 'query ist nur mit view=passages erlaubt' in invalid_view['content'][0]['text']
+            assert 'erika@example.com' not in invalid_view['content'][0]['text']
             assert result['containsEntireAvailableText']
 
             # Exhaust the list using only continuation cursors, then revoke a live one.

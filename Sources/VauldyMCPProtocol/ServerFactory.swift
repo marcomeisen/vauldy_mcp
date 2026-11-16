@@ -18,12 +18,12 @@ public enum VauldyMCPServerFactory {
             let request = UUID()
             let operation = MCPAuditLog.Operation(tool: parameters.name)
             let started = ContinuousClock.now
+            let args = parameters.arguments ?? [:]
             do {
                 let initialProfile = try? profile.load()
                 try audit.append(.requestStarted, operation: operation, request: request,
                                  revision: initialProfile?.revision)
                 observedRequest()
-                let args = parameters.arguments ?? [:]
                 let access = initialProfile.flatMap { try? MCPResponseAccess(profile: $0) }
                 let response: CallTool.Result
                 var count = 0
@@ -132,13 +132,64 @@ public enum VauldyMCPServerFactory {
                                       durationMS: elapsedMS(since: started)) }
                 catch { diagnostic(.auditUnavailable) }
                 diagnostic(code, request: request)
-                if let error = error as? MCPAccessError { return errorResult(error.errorDescription ?? "Anfrage fehlgeschlagen.") }
+                if let error = error as? MCPAccessError {
+                    return errorResult(error == .invalidArguments
+                        ? argumentGuidance(for: parameters.name, arguments: args)
+                        : error.errorDescription ?? "Anfrage fehlgeschlagen.")
+                }
                 if error is CancellationError { return errorResult("Die Anfrage wurde abgebrochen.") }
                 if error is MCPAuditLog.AuditError { return errorResult("Das lokale Audit-Protokoll ist nicht verfügbar. Keine Dokumentinhalte ausgegeben. Bitte Einrichtung und Logs prüfen.") }
                 return errorResult("Die lokale Anfrage konnte nicht ausgeführt werden. Bitte Einrichtung und Freigabe prüfen.")
             }
         }
         return server
+    }
+}
+
+// Never echo client-provided values: an argument can contain document text or instructions.
+private func argumentGuidance(for tool: String, arguments: [String: Value]) -> String {
+    let cursor = arguments["cursor"] != nil
+    switch tool {
+    case "get_vault_status":
+        return "get_vault_status erwartet keine Parameter. Rufe das Werkzeug ohne Argumente erneut auf."
+    case "search_documents":
+        if arguments["query"]?.stringValue == nil {
+            return "query ist erforderlich und muss ein Suchtext sein (höchstens 2000 UTF-8-Bytes)."
+        }
+        return "Prüfe query (nicht leer, höchstens 2000 UTF-8-Bytes) und limit (ganze Zahl von 1 bis 10)."
+    case "list_documents":
+        if let size = arguments["pageSize"]?.intValue, !(1...100).contains(size) {
+            return "pageSize muss zwischen 1 und 100 liegen; mit Auszügen höchstens 25."
+        }
+        if cursor { return "cursor nur mit unveränderten Filtern, pageSize und Auszugsmodus fortsetzen; sonst ohne cursor neu beginnen." }
+        return "Prüfe query (konkrete Suchbegriffe), matchMode (all-tokens oder any-term-substring) und pageSize (mit Auszügen höchstens 25, sonst 100)."
+    case "read_document":
+        if arguments["document"]?.stringValue == nil {
+            return "document ist erforderlich: Verwende einen aktuellen Lese-Handle aus Suche oder Liste."
+        }
+        if arguments["query"] != nil && arguments["view"]?.stringValue != "passages" {
+            return "query ist nur mit view=passages erlaubt."
+        }
+        if arguments["view"]?.stringValue == "passages", arguments["query"] == nil, !cursor {
+            return "view=passages benötigt beim ersten Aufruf query mit konkreten Wortstämmen."
+        }
+        if cursor { return "cursor nur für denselben document-Handle und dieselbe view fortsetzen; sonst ohne cursor neu beginnen." }
+        return "Prüfe view (content, metadata oder passages) und die Leseparameter des Werkzeugs."
+    case "get_topic_overview":
+        if cursor { return "cursor nur mit demselben topic oder derselben query fortsetzen; sonst ohne cursor neu beginnen." }
+        return "Gib genau einen Filter an: topic=insurance oder query mit konkreten Wortstämmen (höchstens 240 UTF-8-Bytes)."
+    case "extract_document_fields":
+        if cursor { return "cursor nur mit unveränderten documents und fields fortsetzen; sonst ohne cursor neu beginnen." }
+        return "documents muss 1 bis 10 unterschiedliche aktuelle Lese-Handles enthalten; fields darf höchstens 8 unterstützte Feldnamen enthalten."
+    case "compare_contract_versions":
+        return "before und after müssen zwei verschiedene aktuelle Lese-Handles sein."
+    case "get_deadline_overview":
+        return "documents muss 1 bis 5 unterschiedliche aktuelle Lese-Handles enthalten."
+    case "get_document_inventory":
+        if cursor { return "cursor nur mit unveränderter order und pageSize fortsetzen; sonst ohne cursor neu beginnen." }
+        return "Prüfe pageSize (ganze Zahl von 1 bis 100) und order (imported-desc oder imported-asc)."
+    default:
+        return "Unbekanntes Werkzeug. Rufe tools/list ab und verwende einen dort beschriebenen Werkzeugnamen."
     }
 }
 
