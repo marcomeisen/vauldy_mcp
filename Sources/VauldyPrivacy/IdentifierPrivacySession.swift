@@ -9,9 +9,37 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
         let original: String
         let token: String
         let wholeWord: Bool
+        /// Compiled once per replacement. Recompiling for every `protect` call dominated
+        /// cold document preparation (ICU rebuilds the `\p{L}`/case-folding sets each time).
+        let regex: NSRegularExpression?
+
+        init(original: String, token: String, wholeWord: Bool) {
+            self.original = original
+            self.token = token
+            self.wholeWord = wholeWord
+            let literal = NSRegularExpression.escapedPattern(for: original)
+            // An entity such as "Kinder" is not a match inside "Kindernothilfe".
+            // Structured identifiers retain literal matching, including split lines.
+            let pattern = wholeWord ? "(?<![\\p{L}\\p{N}_])\(literal)(?![\\p{L}\\p{N}_])" : literal
+            regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
+        }
+
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.original == rhs.original && lhs.token == rhs.token && lhs.wholeWord == rhs.wholeWord
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(original); hasher.combine(token); hasher.combine(wholeWord)
+        }
     }
 
     private var replacements: [Replacement] = []
+
+    /// Conservative local memory estimate for cache budgeting, including compiled patterns.
+    /// Exposes no mapping values.
+    public var estimatedBytes: Int {
+        replacements.reduce(0) { $0 + $1.original.utf8.count + $1.token.utf8.count + 4_096 }
+    }
 
     public init(contents: [String]) throws {
         var valuesByKind: [(kind: String, value: String)] = []
@@ -104,11 +132,7 @@ nonisolated public struct IdentifierPrivacySession: Sendable {
     }
 
     private static func ranges(of replacement: Replacement, in text: String) -> [NSRange] {
-        let literal = NSRegularExpression.escapedPattern(for: replacement.original)
-        // An entity such as "Kinder" is not a match inside "Kindernothilfe".
-        // Structured identifiers retain literal matching, including split lines.
-        let pattern = replacement.wholeWord ? "(?<![\\p{L}\\p{N}_])\(literal)(?![\\p{L}\\p{N}_])" : literal
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else { return [] }
+        guard let regex = replacement.regex else { return [] }
         return regex.matches(in: text, range: NSRange(text.startIndex..., in: text)).map(\.range)
     }
 
