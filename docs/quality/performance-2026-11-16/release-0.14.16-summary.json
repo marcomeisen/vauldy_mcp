@@ -1,0 +1,86 @@
+{
+  "allPassed": true,
+  "stages": [
+    {
+      "name": "swift-tests-no-ocr",
+      "passed": true
+    },
+    {
+      "name": "package-metadata",
+      "passed": true
+    },
+    {
+      "name": "package",
+      "passed": true
+    },
+    {
+      "name": "relay-worker-tests",
+      "passed": true
+    },
+    {
+      "name": "relay-tool-parity",
+      "passed": true
+    },
+    {
+      "name": "smoke_test",
+      "passed": true
+    },
+    {
+      "name": "index_recovery_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "topic_overview_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "search_normalization_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "field_extraction_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "contract_comparison_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "deadline_overview_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "sqlite_integration_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "audit_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "client_install_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "management_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "software_update_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "setup_startup_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "oauth_smoke_test",
+      "passed": true
+    },
+    {
+      "name": "scalability_benchmark",
+      "passed": true
+    }
+  ],
+  "ocrStages": "skipped on user request"
+}
