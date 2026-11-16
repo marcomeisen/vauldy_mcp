@@ -6,6 +6,27 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Produktive Titelprüfung und Angebotsüberschriften · 16.11.2026
+
+- [x] Laufende App anhand des tatsächlich geöffneten Bundles als 0.14.6 verifiziert. Die ebenfalls vorhandene ältere `/Applications/Vauldy.app` ist nicht die vom Nutzer gezeigte App.
+- [x] Produktive Titelvorschau gegen 141 lokale Dokumente gelesen: neun bereits durch 0.14.6 belegbar verbesserte Titel waren noch nicht gespeichert. Diese neun mit `retitle` übernommen; genau neun Datensätze geändert, Profil bytegleich.
+- [x] Die zwei im Screenshot gezeigten Angebote anhand von Seite 1 geprüft: Angebotsnummer, betroffener Bereich und REMO GmbH sind im gespeicherten OCR belegt. Die lokalen Titel gezielt auf „Angebot Nr. A059-21-PR – Terrasse – REMO GmbH“ und „Angebot Nr. A058-21-PR – KG – REMO GmbH“ gesetzt. Genau zwei weitere Datensätze geändert; beide Titel in der laufenden 0.14.6-Dokumentansicht sichtbar. Freigabe weiterhin 140.
+- [x] Enge automatische Regel für gedruckte Angebote mit eindeutigem Angebotsbeleg, Bereich und bestätigtem Aussteller in `OpeningPageTitle` ergänzt. Sie verwirft einen bloßen Rechtsform-Zusatz ohne belegten Firmennamen. 7 `OpeningPageTitleTests` und 8 benachbarte `LayoutDocumentTitleTests` bestanden. Die nur lesende Vorschau des neu gebauten Programms liefert für beide echten Angebote exakt die gespeicherten Titel.
+- [x] Frisches Release-Build aller sechs Paketprogramme erstellt. Separates lokales Prüf-ZIP `dist/mcp/title-offer-20261116/Vauldy Titelpruefung.zip` (20.122.268 Bytes, SHA-256 `7db03a9658d0848c557a17cd54db82be2fe1a94a8940483c5aa945d0509b891b`, Build `macho.b29b784ab36e36139209815e4c83ba29`) nach dem Entpacken tief geprüft, ad hoc signiert. Der Paketierer verwendete `--skip-build`, nachdem die sechs Release-Binärdateien aus dem aktuellen Quellstand frisch gebaut und an seinen erwarteten Binärpfad kopiert wurden; deshalb lautet der Paketmarker `buildMode=reused` und `sourceCommit=null`.
+- [x] Für den Push ein endgültig benanntes lokales Installations-ZIP `dist/mcp/title-offer-release-20261116/Vauldy MCP Einrichtung.zip` erstellt (20.122.613 Bytes, SHA-256 `1db3bcf5cd62bff8fc952b6a560b39c54786992ffac5890e18df39fa59b1ba11`, gleicher Build `macho.b29b784ab36e36139209815e4c83ba29`). Die fünf eingebetteten Dienstprogramme sind bytegleich zum geprüften Paket; die Setup-Binärsignatur unterscheidet sich durch den Bundle-Namen. Paketierer prüfte Signatur und entpacktes ZIP.
+- [x] Reale stdio-Antworten des paketierten MCP für Initialisierung, Werkzeuge, Privacy, Widerruf und beide Antwortkanäle bestanden. Der vollständige Swift-Lauf mit 384 Tests in 61 Suites meldete 27 Probleme: 24 in zwei nativen OCR-Golden-Suites und drei durch feste `.build/debug`-Pfade im isolierten Build. Die drei Pfadfälle bestanden bei gezielter Wiederholung mit temporären Debug-Links (32 Tests in drei Suites); Links danach entfernt. Der Titel-Wiretest stoppte beim synthetischen Importstatus `partial`; das unveränderte installierte 0.14.6-Programm liefert für dieselbe Vorlage ebenfalls `partial`. Keine dieser Abweichungen ist als bestandener Release-Gate gewertet.
+- [ ] Die automatische Regel ist noch nicht produktiv installiert. Vor einem Rollout vollständige Releasegates einschließlich nativer OCR, stdio-Wiretests und Paket-/Zielclientprüfung ausführen. Die zwei manuell gesetzten produktiven Titel bleiben unabhängig davon erhalten.
+
+Die Titelvorschau zeigte weiterhin zahlreiche allgemeine Titel, für die der aktuelle Algorithmus keine eindeutige Überschrift belegt. Eine erneute OCR allein startet keine pauschale Titelneubestimmung; unklare Fälle benötigen eigene Quellprüfung statt Dateinamenraten.
+
+## Produktive Freigabe nach Importen · 16.11.2026
+
+- [x] Ursache geprüft: Der lokale SQLite-Bestand enthält 141 Dokumente, das bestehende ChatGPT-Profil hatte weiterhin die frühere explizite Auswahl von 96 IDs. Die MCP-Statusabfrage bestätigte 96/96; es lag kein Pagination- oder Anzeigeproblem vor.
+- [x] Über den nativen Qualitäts- und Freigabeablauf nach ausdrücklicher Bestätigung 44 weitere lesbare Dokumente ausgewählt. Keine alte Freigabe entfernt. Der produktive MCP-Status bestätigt anschließend 140 freigegebene und 140 durchsuchbare Dokumente; die vorhandene ChatGPT-Verbindung blieb erhalten.
+- [ ] Ein fünfseitiges Fotodokument bleibt außerhalb der Freigabe. Es enthält auf keiner Seite lesbaren OCR-Text (`noReadableText`); der native Qualitätsbericht stuft es deshalb als nicht neu freigebbar ein. Ein gezielter OCR-Wiederholungslauf und der einmalige Bestandsabgleich machten es nicht lesbar. Nächster Schritt: Originalverweis und Bild-/OCR-Pipeline dieses Dokuments gezielt prüfen und erst nach belastbarem Text eine neue explizite Freigabe bestätigen.
+
+Prüfung: Produktiver `get_vault_status` vor/nach der Auswahl (96 → 140), nativer Qualitätsbericht (141 lokal, 140 lesbar, 1 nicht neu freigebbar), schreibgeschützte SQLite-Zählung (141). Keine Codeänderung, kein Build und keine synthetischen Tests in dieser Betriebsiteration.
+
 ## Direkter E-Mail-Import und lokaler Bestand 0.14.6 · 15.11.2026
 
 - [x] EML aus beobachteten Ordnern, Einzeldateiauswahl und Ordnerimport. Betreff,

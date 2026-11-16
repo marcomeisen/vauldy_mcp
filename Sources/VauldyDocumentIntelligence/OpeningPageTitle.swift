@@ -132,6 +132,7 @@ enum OpeningPageTitle {
     }
 
     private static func contextualSubject(in lines: [Line], opening: [Line], greetings: [Line]) -> Subject? {
+        if let offer = printedOffer(in: lines, opening: opening) { return offer }
         // These independent cues distinguish a statement from a brochure or a table heading.
         let summary = lines.first { key($0.text) == "portfolio summary" }
         let value = lines.contains { key($0.text) == "net portfolio value" }
@@ -165,6 +166,37 @@ enum OpeningPageTitle {
             }
         }
         return nil
+    }
+
+    private static func printedOffer(in lines: [Line], opening: [Line]) -> Subject? {
+        let offers = opening.filter { row in
+            row.bounds.midY >= 0.60 &&
+                key(row.text).range(of: #"^angebot nr\.? [a-z0-9][a-z0-9.-]{3,30}$"#, options: .regularExpression) != nil
+        }
+        guard offers.count == 1, let offer = offers.first,
+              opening.contains(where: { key($0.text).contains("angefragten arbeiten") && key($0.text).contains("bieten wir") }) else {
+            return nil
+        }
+        let reference = normalized(offer.text)
+        let areas = opening.compactMap { row -> String? in
+            let value = normalized(row.text)
+            guard let range = value.range(of: #"^Betroffene Bereiche\s*=\s*"#, options: [.regularExpression, .caseInsensitive]) else { return nil }
+            let area = String(value[range.upperBound...])
+            return (2...50).contains(area.count) && DocumentTitlePolicy.isTitlePhrase(area)
+                && LayoutDocumentTitle.isCleanTitleText(area) ? area : nil
+        }
+        let area = unique(areas)
+        let header = opening.filter { $0.bounds.midY >= 0.86 }.sorted { $0.bounds.midY > $1.bounds.midY }
+        let issuers = header.indices.flatMap { index in header.indices.filter { $0 > index }.compactMap { next -> String? in
+            let brand = normalized(header[index].text), legalForm = normalized(header[next].text)
+            guard brand.range(of: #"^[A-ZÄÖÜ]{3,20}$"#, options: .regularExpression) != nil,
+                  legalForm == "GmbH", abs(header[index].bounds.minX - header[next].bounds.minX) <= 0.04,
+                  header[index].bounds.midY - header[next].bounds.midY <= 0.05 else { return nil }
+            let name = brand + " GmbH"
+            return lines.contains(where: { key($0.text) == key(name) }) ? name : nil
+        } }
+        let title = [reference, area].compactMap { $0 }.joined(separator: " – ")
+        return Subject(title, [offer], issuer: unique(issuers))
     }
 
     private static func quarter(_ text: String) -> String? {
@@ -234,6 +266,7 @@ enum OpeningPageTitle {
     private static func organization(_ text: String) -> Bool {
         let value = key(text)
         guard text.count <= 80, LayoutDocumentTitle.isCleanTitleText(text),
+              value.range(of: #"^(?:ag|gmbh|kg|eg|ug|kgaa|se)$"#, options: .regularExpression) == nil,
               !text.contains(where: { ",:;?@".contains($0) }),
               !value.contains("empfanger"), !value.contains("ansprechpartner"),
               !value.contains("betreut sie"),

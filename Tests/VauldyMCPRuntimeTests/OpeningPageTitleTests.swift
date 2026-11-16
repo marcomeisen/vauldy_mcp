@@ -6,6 +6,28 @@ import VauldyDocumentIntelligence
 
 @Suite("Titles from the opening page")
 struct OpeningPageTitleTests {
+    @Test func printedOfferUsesItsReferenceAreaAndCorroboratedIssuer() {
+        let shared = [
+            line("REMO", 0.95),
+            line("✦", 0.94, x: 0.70),
+            line("GmbH", 0.92),
+            line("Die angefragten Arbeiten zu o.g. BV infolge eines Regen-Wasserschadens bieten wir", 0.55),
+            line("REMO GmbH", 0.09),
+        ]
+        let terrace = resolve(shared + [line("Angebot Nr. A059-21-PR", 0.62),
+                                        line("Betroffene Bereiche = Terrasse", 0.50)])
+        #expect(terrace.value == "Angebot Nr. A059-21-PR – Terrasse – REMO GmbH")
+        #expect(terrace.page == 1)
+        let basement = resolve(shared + [line("Angebot Nr. A058-21-PR", 0.63),
+                                         line("Betroffene Bereiche = KG", 0.53)])
+        #expect(basement.value == "Angebot Nr. A058-21-PR – KG – REMO GmbH")
+        let withoutFirmProof = resolve(shared.filter { $0.text != "REMO GmbH" }
+            + [line("Angebot Nr. A058-21-PR", 0.63), line("Betroffene Bereiche = KG", 0.53)])
+        #expect(withoutFirmProof.value == "Angebot Nr. A058-21-PR – KG")
+        #expect(resolve(shared + [line("Angebot Nr. A058-21-PR", 0.42),
+                                  line("Betroffene Bereiche = KG", 0.53)]).value == DocumentTitlePolicy.fallback)
+    }
+
     @Test func ordinarySubjectBeatsAnAttachedInvoice() {
         let title = resolve([
             line("Musterhandel GmbH • Postfach 20 31 • 12345 Beispielstadt", 0.83),
