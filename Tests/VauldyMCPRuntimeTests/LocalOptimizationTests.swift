@@ -109,6 +109,39 @@ struct LocalOptimizationTests {
             await #expect(throws: MCPAccessError.notAuthorized) { try await runtime.search(query: "Fahrradwartung") }
         }
     }
+    @Test func preparedPrivacyCacheKeepsMoreThanEightDocumentsAndNeverOutlivesRevocation() async throws {
+        try await fixture { root in
+            let vault = root.appendingPathComponent("documents.json"), profileFile = root.appendingPathComponent("profile.json")
+            let docs = (0..<12).map { i in
+                VaultDocument(title: "Rundbeleg \(i)", sourceName: "source-\(i)",
+                              ocrText: "--- Seite 1 ---\nRundbeleg\(i) Fahrradwartung\nName: Erika Musterfrau\(i)\nE-Mail: kunde\(i)@example.com", pageCount: 1)
+            }
+            let encoder = JSONEncoder(); encoder.dateEncodingStrategy = .iso8601
+            try encoder.encode(docs).write(to: vault, options: .atomic)
+            var profile = MCPAccessProfile(vaultPath: vault.path)
+            profile.enabled = true; profile.acknowledgedCloudDisclosure = true; profile.allowedDocumentIDs = Set(docs.map(\.id))
+            try FileMCPProfileSource(url: profileFile).save(profile)
+            let runtime = ReadOnlyMCPRuntime(profiles: FileMCPProfileSource(url: profileFile))
+            var handles: [String] = []
+            for i in 0..<12 {
+                handles.append(try #require(try await runtime.search(query: "Rundbeleg\(i)").hits.first).document)
+            }
+            for _ in 0..<2 { for handle in handles { _ = try await runtime.read(document: handle) } }
+            // Cyclic access over 12 small documents must reuse each prepared document.
+            #expect(await runtime.privacyBuildCount == 12)
+
+            // Revoking one document: no old handle survives, its cached text is never served.
+            profile.allowedDocumentIDs = Set(docs.dropFirst().map(\.id)); profile.revision = UUID()
+            try FileMCPProfileSource(url: profileFile).save(profile)
+            for handle in handles {
+                await #expect(throws: (any Error).self) { try await runtime.read(document: handle) }
+            }
+            #expect(try await runtime.search(query: "Rundbeleg0").hits.isEmpty)
+            let fresh = try #require(try await runtime.search(query: "Rundbeleg1").hits.first)
+            let read = String(decoding: try JSONEncoder().encode(await runtime.read(document: fresh.document)), as: UTF8.self)
+            #expect(!read.contains("kunde1@example.com") && !read.contains("Musterfrau1"))
+        }
+    }
 }
 private func fixture(_ body: (URL) async throws -> Void) async throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent("vauldy-optimization-test-\(UUID())")

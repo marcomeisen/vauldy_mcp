@@ -82,8 +82,12 @@ public actor ReadOnlyMCPRuntime {
         let sections: [VauldyDocumentCore.VaultPageMarkedText.Section]
         let summary: String
         let session: IdentifierPrivacySession
-        var bytes: Int { sections.reduce(summary.utf8.count) { $0 + $1.text.utf8.count } }
+        var bytes: Int { sections.reduce(summary.utf8.count + session.estimatedBytes) { $0 + $1.text.utf8.count } }
     }
+    /// Byte budget for prepared (pseudonymized) documents. A fixed small entry count made
+    /// cyclic access over more than 8 documents miss on every call. Entries stay bound to
+    /// fingerprint and profile; there is no time-based reuse.
+    private static let preparedDocumentBudget = 32_000_000
     private(set) var privacyBuildCount = 0
     private var protectedDocuments: [UUID: PreparedDocument] = [:]
     private var protectedOrder: [UUID] = []
@@ -1080,7 +1084,11 @@ public actor ReadOnlyMCPRuntime {
 
     private func preparedDocument(_ document: VaultDocument, profile: MCPAccessProfile) throws -> PreparedDocument {
         let hash = try fingerprint(document)
-        if let existing = protectedDocuments[document.id], existing.fingerprint == hash, existing.profile == profile { return existing }
+        if let existing = protectedDocuments[document.id], existing.fingerprint == hash, existing.profile == profile {
+            // Least-recently-used order: a hit moves the entry to the end.
+            protectedOrder.removeAll { $0 == document.id }; protectedOrder.append(document.id)
+            return existing
+        }
         protectedDocuments.removeValue(forKey: document.id); protectedOrder.removeAll { $0 == document.id }
         let session = try privacySession(document)
         privacyBuildCount += 1
@@ -1089,11 +1097,12 @@ public actor ReadOnlyMCPRuntime {
         }
         let result = PreparedDocument(fingerprint: hash, profile: profile, sections: sections,
                                       summary: try protect(document.summary, using: session), session: session)
-        while protectedDocuments.count >= 8 || protectedDocuments.values.reduce(0, { $0 + $1.bytes }) + result.bytes > 8_000_000 {
-            guard let first = protectedOrder.first else { break }
-            protectedDocuments.removeValue(forKey: first); protectedOrder.removeFirst()
+        let budget = Self.preparedDocumentBudget
+        var retained = protectedDocuments.values.reduce(0) { $0 + $1.bytes }
+        while retained + result.bytes > budget, let first = protectedOrder.first {
+            retained -= protectedDocuments.removeValue(forKey: first)?.bytes ?? 0; protectedOrder.removeFirst()
         }
-        if result.bytes <= 8_000_000 { protectedDocuments[document.id] = result; protectedOrder.append(document.id) }
+        if result.bytes <= budget { protectedDocuments[document.id] = result; protectedOrder.append(document.id) }
         return result
     }
 

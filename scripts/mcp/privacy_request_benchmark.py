@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Synthetic privacy/request-path micro benchmark. JSON fixtures in a temp dir only."""
+import subprocess
 import json, statistics, sys, tempfile, time, uuid, random
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -66,6 +67,8 @@ with tempfile.TemporaryDirectory() as tmp:
                     warmReadMedianMS=round(statistics.median(warm), 1), passagesAfterWarmMS=round(psg, 1)))
                 print(results['privacyScaling'][-1], flush=True)
             finally:
+                rss_kb = int(subprocess.run(['ps','-o','rss=','-p',str(c.process.pid)],capture_output=True,text=True).stdout.strip() or 0)
+                print('  rssMiB', round(rss_kb/1024,1), flush=True)
                 c.close()
     # 2) Privacy cache thrash: cycling through 8 vs 12 documents.
     for n in (8, 12):
@@ -80,6 +83,8 @@ with tempfile.TemporaryDirectory() as tmp:
             results['cacheThrash'][str(n)] = dict(documents=n, secondRoundMedianMS=round(statistics.median(times), 1))
             print(n, results['cacheThrash'][str(n)], flush=True)
         finally:
+            rss_kb = int(subprocess.run(['ps','-o','rss=','-p',str(c.process.pid)],capture_output=True,text=True).stdout.strip() or 0)
+            print('  rssMiB', round(rss_kb/1024,1), flush=True)
             c.close()
     # 3) extract_document_fields / read for ONE doc while the grant size grows.
     for total in (10, 1000, 5000):
@@ -99,5 +104,7 @@ with tempfile.TemporaryDirectory() as tmp:
                 readMedianMS=round(statistics.median(reads), 1), extractFieldsMedianMS=round(statistics.median(ext), 1)))
             print(results['corpusLoad'][-1], flush=True)
         finally:
+            rss_kb = int(subprocess.run(['ps','-o','rss=','-p',str(c.process.pid)],capture_output=True,text=True).stdout.strip() or 0)
+            print('  rssMiB', round(rss_kb/1024,1), flush=True)
             c.close()
 out.write_text(json.dumps(results, indent=1))
