@@ -1,0 +1,26 @@
+{
+ "binary": "/private/tmp/claude-501/-Users-marcomeisen-development-vauldy-mcp/b117a203-f246-4a46-9929-39784cfb1307/scratchpad/perf/vauldy-mcp-p2",
+ "rows": [
+  {
+   "documents": 100,
+   "readMedianMS": 23.1,
+   "extractMedianMS": 40.0,
+   "compareMedianMS": 24.2,
+   "peakRSSBytes": 41123840
+  },
+  {
+   "documents": 1000,
+   "readMedianMS": 31.7,
+   "extractMedianMS": 35.5,
+   "compareMedianMS": 20.5,
+   "peakRSSBytes": 110559232
+  },
+  {
+   "documents": 5000,
+   "readMedianMS": 41.6,
+   "extractMedianMS": 7459.0,
+   "compareMedianMS": 7407.3,
+   "peakRSSBytes": 460636160
+  }
+ ]
+}

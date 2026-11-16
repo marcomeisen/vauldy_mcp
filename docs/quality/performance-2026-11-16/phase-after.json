@@ -1,0 +1,118 @@
+{
+ "privacyScaling": [
+  {
+   "textKiB": 32,
+   "identifiers": 0,
+   "coldReadMS": 374.9,
+   "warmReadMedianMS": 12.2,
+   "passagesAfterWarmMS": 35.3
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 50,
+   "coldReadMS": 527.7,
+   "warmReadMedianMS": 12.3,
+   "passagesAfterWarmMS": 33.8
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 200,
+   "coldReadMS": 989.9,
+   "warmReadMedianMS": 12.8,
+   "passagesAfterWarmMS": 44.2
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 800,
+   "coldReadMS": 1230.4,
+   "warmReadMedianMS": 12.6,
+   "passagesAfterWarmMS": 27.9
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 0,
+   "coldReadMS": 1365.7,
+   "warmReadMedianMS": 12.6,
+   "passagesAfterWarmMS": 118.0
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 50,
+   "coldReadMS": 1782.1,
+   "warmReadMedianMS": 22.2,
+   "passagesAfterWarmMS": 105.9
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 200,
+   "coldReadMS": 3027.4,
+   "warmReadMedianMS": 24.0,
+   "passagesAfterWarmMS": 90.8
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 800,
+   "coldReadMS": 7920.8,
+   "warmReadMedianMS": 24.7,
+   "passagesAfterWarmMS": 88.8
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 0,
+   "coldReadMS": 5387.4,
+   "warmReadMedianMS": 30.6,
+   "passagesAfterWarmMS": 351.6
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 50,
+   "coldReadMS": 6933.9,
+   "warmReadMedianMS": 25.3,
+   "passagesAfterWarmMS": 352.2
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 200,
+   "coldReadMS": 11546.1,
+   "warmReadMedianMS": 33.6,
+   "passagesAfterWarmMS": 346.4
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 800,
+   "coldReadMS": 28845.9,
+   "warmReadMedianMS": 23.8,
+   "passagesAfterWarmMS": 364.1
+  }
+ ],
+ "cacheThrash": {
+  "8": {
+   "documents": 8,
+   "secondRoundMedianMS": 13.3
+  },
+  "12": {
+   "documents": 12,
+   "secondRoundMedianMS": 24.1
+  }
+ },
+ "corpusLoad": [
+  {
+   "grantedDocuments": 10,
+   "vaultBytes": 183569,
+   "readMedianMS": 12.2,
+   "extractFieldsMedianMS": 12.5
+  },
+  {
+   "grantedDocuments": 1000,
+   "vaultBytes": 16724305,
+   "readMedianMS": 13.8,
+   "extractFieldsMedianMS": 26.0
+  },
+  {
+   "grantedDocuments": 5000,
+   "vaultBytes": 83564303,
+   "readMedianMS": 181.7,
+   "extractFieldsMedianMS": 185.1
+  }
+ ]
+}

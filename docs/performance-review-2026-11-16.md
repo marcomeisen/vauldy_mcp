@@ -27,6 +27,67 @@ Die SQLite-Listen-, Filter- und Statuspfade bleiben bei 1.000 und 5.000 Dokument
 unter den Gates. Das gilt auch während einer nativen OCR mit 24 Seiten. Die Hauptlatenz
 entsteht durch die Privacy-Vorbereitung bei Inhaltsabrufen, nicht durch die Suche.
 
+## Umsetzung Phase 1–3 (Branch `perf/privacy-regex`)
+
+Basis: Snapshot des nicht committeten Arbeitsstands, 0.14.15. Die Basis-Binary hat die
+SHA-256 `4d9cb9a70aebb856cc5eb2193bc727f9bf6d346249389d0ec11d6f5a11c59350`.
+Vorher- und Nachher-Werte stammen von derselben Maschine, aus denselben Skripten und von
+synthetischen Beständen.
+
+| Commit | Änderung |
+|---|---|
+| `PrivacyOutputGoldenTests` | Hält die pseudonymisierte Ausgabe auf einem festen Korpus byte-genau fest. Nur der zufällige Namespace wird normalisiert. |
+| Phase 1 | `IdentifierPrivacySession.Replacement` kompiliert sein Muster einmal. Reihenfolge, Überlappungsregel und Ausgabe bleiben unverändert. |
+| Phase 2 | Der Privacy-Cache verdrängt LRU innerhalb eines 32-MB-Budgets, das die kompilierten Muster mitzählt. Die Bindung an Fingerprint und Profil bleibt, es gibt keine TTL. |
+| Phase 3 | `extract_document_fields` und `compare_contract_versions` lösen Handles bei SQLite einzeln auf. JSON-Bestände sind unverändert. |
+
+**Privacy-Vorbereitung** (`privacy_request_benchmark.py`, erster `read_document`-Abruf in
+einem frischen Prozess):
+
+| Fall | Vorher | Nachher | Faktor | RSS vorher → nachher |
+|---|---:|---:|---:|---:|
+| 32 KiB, 50 Kennungen | 1,56 s | 0,53 s | 3,0× | 43 → 39 MiB |
+| 32 KiB, 200 Kennungen | 4,81 s | 0,99 s | 4,9× | 62 → 49 MiB |
+| 32 KiB, 800 Kennungen | 6,55 s | 1,23 s | 5,3× | 69 → 52 MiB |
+| 128 KiB, 50 Kennungen | 5,21 s | 1,78 s | 2,9× | 51 → 46 MiB |
+| 128 KiB, 200 Kennungen | 16,7 s | 3,03 s | 5,5× | 79 → 58 MiB |
+| 128 KiB, 800 Kennungen | 62,7 s | 7,92 s | 7,9× | 175 → 99 MiB |
+| 512 KiB, 50 Kennungen | 21,2 s | 6,93 s | 3,1× | 86 → 73 MiB |
+| Ohne Kennungen (32/128/512 KiB) | 0,37/1,39/5,62 s | 0,37/1,37/5,39 s | – | gleich |
+| Wechsel über 12 Dokumente, 2. Runde | 5.006 ms | 24 ms | ~200× | 52 → 100 MiB |
+
+Die 512-KiB-Fälle mit 200 und 800 Kennungen wurden nur nachher gemessen (11,5 s und 28,8 s).
+Vorher hätten sie das Timeout überschritten. Der höhere RSS im Zyklusfall ist der
+beabsichtigte Cacheinhalt und liegt innerhalb des Budgets.
+
+**Ausgewählte Handles mit SQLite** (`selected_tool_sqlite_benchmark.py`, 32 KiB je
+Dokument, Median aus 5 Durchläufen, warm):
+
+| Freigaben | `extract` vorher → nachher | `compare` vorher → nachher | Peak-RSS vorher → nachher |
+|---:|---:|---:|---:|
+| 100 | 40 → 42 ms | 24 → 23 ms | 41 → 34 MB |
+| 1.000 | 36 → 38 ms | 21 → 24 ms | 111 → 35 MB |
+| 5.000 | 7.459 → 58 ms | 7.407 → 38 ms | 461 → 40 MB |
+
+Damit korrigiert sich eine frühere Schätzung: Phase 3 hilft nur bei SQLite. JSON-Bestände
+über dem Cachebudget bleiben beim Befund P1 unten.
+
+**Prüfungen:**
+- `regression_test.py` mit 48 Stufen ist nach Phase 2 bestanden. Darin enthalten sind 394
+  Swift-Tests in 62 Suites mit nativer OCR, Relay-Parität, stdio-Wiretests und
+  `base_analysis_wire_test`.
+- Nach Phase 3 bestanden der neue SQLite-Test (er schlägt am alten Code fehl) und 61 Tests
+  aus den betroffenen Suites. Außerdem bestanden die Wiretests für Feldauslese, Vergleich,
+  Fristen und den stdio-Smoke-Test.
+- Die Relay-Discovery wurde für die neue Buildkennung regeneriert.
+
+Bei dieser Arbeit sind zwei Punkte im bestehenden Verhalten aufgefallen. Die Golden-Datei
+hält sie fest; sie wurden nicht geändert und sollten separat bewertet werden:
+
+- In „Erika Musterfrau“ wird nur „Erika“ maskiert.
+- Eine IBAN mit Leerzeichen über einen Zeilenumbruch wird nur teilweise maskiert
+  (`IBAN DE89 3704 [TELEFON]`).
+
 ## P0: Privacy-Vorbereitung ist superlinear
 
 `preparedDocument` (`ReadOnlyMCPRuntime.swift`) baut für jedes Dokument eine

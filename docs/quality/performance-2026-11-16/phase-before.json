@@ -1,0 +1,104 @@
+{
+ "privacyScaling": [
+  {
+   "textKiB": 32,
+   "identifiers": 0,
+   "coldReadMS": 369.7,
+   "warmReadMedianMS": 12.7,
+   "passagesAfterWarmMS": 33.4
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 50,
+   "coldReadMS": 1564.4,
+   "warmReadMedianMS": 12.4,
+   "passagesAfterWarmMS": 83.2
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 200,
+   "coldReadMS": 4807.6,
+   "warmReadMedianMS": 13.2,
+   "passagesAfterWarmMS": 244.7
+  },
+  {
+   "textKiB": 32,
+   "identifiers": 800,
+   "coldReadMS": 6550.8,
+   "warmReadMedianMS": 11.9,
+   "passagesAfterWarmMS": 336.4
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 0,
+   "coldReadMS": 1390.4,
+   "warmReadMedianMS": 24.4,
+   "passagesAfterWarmMS": 109.8
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 50,
+   "coldReadMS": 5209.7,
+   "warmReadMedianMS": 11.9,
+   "passagesAfterWarmMS": 144.1
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 200,
+   "coldReadMS": 16732.5,
+   "warmReadMedianMS": 24.0,
+   "passagesAfterWarmMS": 306.5
+  },
+  {
+   "textKiB": 128,
+   "identifiers": 800,
+   "coldReadMS": 62708.2,
+   "warmReadMedianMS": 22.6,
+   "passagesAfterWarmMS": 905.3
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 0,
+   "coldReadMS": 5615.1,
+   "warmReadMedianMS": 29.0,
+   "passagesAfterWarmMS": 352.8
+  },
+  {
+   "textKiB": 512,
+   "identifiers": 50,
+   "coldReadMS": 21159.7,
+   "warmReadMedianMS": 31.0,
+   "passagesAfterWarmMS": 403.3
+  }
+ ],
+ "cacheThrash": {
+  "8": {
+   "documents": 8,
+   "secondRoundMedianMS": 24.4
+  },
+  "12": {
+   "documents": 12,
+   "secondRoundMedianMS": 5006.2
+  }
+ },
+ "corpusLoad": [
+  {
+   "grantedDocuments": 10,
+   "vaultBytes": 183569,
+   "readMedianMS": 14.1,
+   "extractFieldsMedianMS": 24.3
+  },
+  {
+   "grantedDocuments": 1000,
+   "vaultBytes": 16724305,
+   "readMedianMS": 23.6,
+   "extractFieldsMedianMS": 25.4
+  },
+  {
+   "grantedDocuments": 5000,
+   "vaultBytes": 83564303,
+   "readMedianMS": 192.5,
+   "extractFieldsMedianMS": 192.3
+  }
+ ]
+}
