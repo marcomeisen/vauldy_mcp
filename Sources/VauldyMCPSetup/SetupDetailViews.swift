@@ -120,6 +120,10 @@ struct SetupDocumentList: View {
                             Image(systemName: "doc.text").foregroundStyle(.secondary)
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(model.documentDisplayName(document)).font(.body.weight(.medium)).help(document.sourceName)
+                                if model.usesFilenameInsteadOfGeneratedTitle(document) {
+                                    Text("Dateiname · automatische Überschrift nicht belegt")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                                 DisclosureGroup("Titelangaben") {
                                     Text("Originaldatei: \(document.sourceName)")
                                     if let title = document.generatedTitle { Text("Automatischer Titel: \(title)") }

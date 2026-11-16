@@ -6,6 +6,13 @@ Die Weiterentwicklung konzentriert sich auf den eigenständigen Vauldy MCP. Der 
 
 Nach jeder Iteration werden die betreffenden Aufgaben abgehakt und der tatsächliche Prüfnachweis, offene Punkte und der nächste Schritt unten ergänzt. Die Reihenfolge in den offenen Abschnitten gilt als Arbeitsreihenfolge.
 
+## Neutrale Titel nach erneutem Öffnen · 16.11.2026
+
+- [x] Die drei vom Screenshot erkennbaren Importzeitpunkte schreibgeschützt und nur anhand von Titel-/Zustandsmetadaten geprüft: Der neutrale Titel ist bereits gespeichert, nicht durch eine UI-Aktualisierung erfunden. Der abgeschlossene Einseiter hat OCR-Text, aber weder belegten Dokumenttyp noch Aussteller in der Basisanalyse; die aktuelle lokale Titelvorschau bleibt ebenfalls neutral. Keine Originale, OCR-Inhalte, Profile oder Freigaben verändert.
+- [x] Die Dokumentliste zeigt bei neutralem automatischem Titel künftig den Originaldateinamen ohne Erweiterung und kennzeichnet ihn ausdrücklich als Dateinamen. Bestätigte automatische und manuelle Titel bleiben unverändert. Zwei gezielte Swift-Tests bestanden; vollständiger OCR-Lauf für diese reine Anzeigeänderung nicht wiederholt.
+- [x] Neues Paket 0.14.20 in `dist/mcp/title-display-2026-11-16-0.14.20/Vauldy-MCP-macOS.zip` erstellt und geprüft; Build `macho.6b92064aabcb38d0bb62a26b6fc4221a`, SHA-256 `5e3a3e22e050b1eb17f16df7741fd1deb5bc70d913fdbc1efc9b0348c631d633`. ZIP-CRC, Relay-Parität und reale stdio-Antworten bestanden.
+- [ ] Eine spezifische automatisch erzeugte Überschrift für den betroffenen Beleg erfordert belegbaren Quelltext. Die frühere kurz sichtbare Beschriftung ist nicht getrennt gespeichert und lässt sich ohne Beispiel nicht zuverlässig rekonstruieren. Version 0.14.20 ist noch nicht in der laufenden App installiert.
+
 ## Titel bei neuem Import und erneutem OCR · 16.11.2026
 
 - [x] Import- und beide UI-Wiederholungswege geprüft: `fresh: true` erreicht den Worker; OCR und Basisanalyse werden vor dem atomaren Speichern des automatisch erzeugten Titels ausgeführt.

@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 import VauldyCore
+import VauldyDocumentIntelligence
 import VauldyMCPRuntime
 
 enum SetupDocumentFilter: String, CaseIterable {
@@ -16,6 +17,24 @@ enum SetupDocumentFilter: String, CaseIterable {
         case .analysisReview: "Unvollständige Basisangaben (optional)"
         case .pending: "In Verarbeitung"
         }
+    }
+}
+
+enum SetupDocumentName {
+    static func usesFilename(_ document: VaultDocument) -> Bool {
+        document.manualTitle == nil && document.title == DocumentTitlePolicy.fallback
+            && !document.sourceName.isEmpty
+    }
+
+    static func display(_ document: VaultDocument) -> String {
+        let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        if usesFilename(document) {
+            return URL(fileURLWithPath: document.sourceName).deletingPathExtension().lastPathComponent
+        }
+        if title.isEmpty || ["Dokument", "Freigegebenes Dokument"].contains(title) {
+            return document.sourceName.isEmpty ? "Dokument" : document.sourceName
+        }
+        return title
     }
 }
 
@@ -46,13 +65,8 @@ extension SetupModel {
         } else { matches = false }
         if isLocalVault != matches { isLocalVault = matches }
     }
-    func documentDisplayName(_ document: VaultDocument) -> String {
-        let title = document.title.trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.isEmpty || ["Dokument", "Freigegebenes Dokument"].contains(title) {
-            return document.sourceName.isEmpty ? "Dokument" : document.sourceName
-        }
-        return title
-    }
+    func documentDisplayName(_ document: VaultDocument) -> String { SetupDocumentName.display(document) }
+    func usesFilenameInsteadOfGeneratedTitle(_ document: VaultDocument) -> Bool { SetupDocumentName.usesFilename(document) }
     func canRetryOCR(_ document: VaultDocument) -> Bool {
         isLocalVault && document.localImport?.fileExtension != "eml" && document.localImport?.originalState == .available
             && document.localImport?.state != .queued && document.localImport?.state != .recognizing
