@@ -53,9 +53,10 @@ struct LocalDocumentQualityTests {
         model.acknowledged = true; model.acknowledgedReview = true
         try await model.makeReport()
         #expect(model.report?.snapshotDigest == (try LocalInventoryFingerprint.snapshot(store.snapshotURL)))
-        #expect(model.qualityByID[imported.documentID]?.issues.contains { $0.category == .classification && $0.focus?.page == 1 } == true)
+        let reviewed = try #require(try await store.document(id: imported.documentID))
+        #expect(LocalDocumentReview(reviewed)?.quality.issues.contains { $0.category == .classification && $0.focus?.page == 1 } == true)
         #expect(model.reviewCount == 0 && model.report?.readyIDs.isEmpty == true)
-        #expect(model.report?.reviewIDs == [imported.documentID])
+        #expect(model.report?.selectionReviewIDs == [imported.documentID])
         #expect(!model.acknowledged && !model.acknowledgedReview)
         #expect(try Data(contentsOf: profileURL) == before)
         let workerStatus = try await model.worker.status()

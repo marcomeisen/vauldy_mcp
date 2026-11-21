@@ -14,21 +14,26 @@ public struct MCPLocalDocumentChoices: Sendable {
 
     public func load(for connectionID: UUID) throws -> [UUID: String] {
         let url = file(for: connectionID)
-        guard FileManager.default.fileExists(atPath: url.path) else { return [:] }
+        let decisions = try FileMCPProfileSource(url: installation.profileURL(connectionID)).load().removedDocumentChoices ?? [:]
+        guard FileManager.default.fileExists(atPath: url.path) else { return decisions }
         guard (try url.resourceValues(forKeys: [.isSymbolicLinkKey, .fileSizeKey])).isSymbolicLink != true,
               ((try url.resourceValues(forKeys: [.fileSizeKey])).fileSize ?? Int.max) <= 4_000_000 else { throw MCPAccessError.configuration }
-        return try JSONDecoder().decode([UUID: String].self, from: Data(contentsOf: url))
+        return try JSONDecoder().decode([UUID: String].self, from: Data(contentsOf: url)).merging(decisions) { previous, _ in previous }
     }
 
     public func keepLocal(_ documents: [VaultDocument], for profile: MCPAccessProfile) throws {
+        try keepLocal(Dictionary(uniqueKeysWithValues: documents.map { ($0.id, Self.fingerprint($0)) }), for: profile)
+    }
+
+    package func keepLocal(_ fingerprints: [UUID: String], for profile: MCPAccessProfile) throws {
         let directory = installation.profileURL(profile.connectionID).deletingLastPathComponent()
         let lock = try MCPManagementLock(directory.appendingPathComponent("local-choices.lock"))
         defer { lock.release() }
         let current = try FileMCPProfileSource(url: installation.profileURL(profile.connectionID)).load()
         guard current.revision == profile.revision else { throw MCPAccessError.stale }
         var choices = try load(for: profile.connectionID)
-        for document in documents where !current.allowedDocumentIDs.contains(document.id) {
-            choices[document.id] = Self.fingerprint(document)
+        for (id, fingerprint) in fingerprints where !current.allowedDocumentIDs.contains(id) {
+            choices[id] = fingerprint
         }
         guard choices.count <= 20_000 else { throw MCPAccessError.tooLarge }
         let url = file(for: profile.connectionID)

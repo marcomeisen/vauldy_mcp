@@ -63,7 +63,8 @@ struct SetupWizardView: View {
             Text("Welchen Chatbot möchtest du verbinden?").font(.title2.weight(.semibold))
             Text("Für jeden Chatbot speichert Vauldy eine eigene Dokumentauswahl. Bestehende Verbindungen bleiben erhalten.").foregroundStyle(.secondary)
             ForEach([("oauth-chatgpt", "ChatGPT", "Mit deinem Konto anmelden. Vauldy verbindet den Mac ausgehend."),
-                     ("oauth-claude", "Claude", "Verbindung über einen vom Betreiber bereitgestellten HTTPS-Anschluss.")], id: \.0) { choice in
+                     ("claude", "Claude Desktop", "Direkte Verbindung auf diesem Mac über die lokale Claude-Konfiguration."),
+                     ("oauth-claude", "Claude über HTTPS", "Verbindung über einen vom Betreiber bereitgestellten HTTPS-Anschluss.")], id: \.0) { choice in
                 Button {
                     model.clientSelection = choice.0
                 } label: {
@@ -84,7 +85,7 @@ struct SetupWizardView: View {
             DisclosureGroup("Erweitert · lokaler oder manueller Anschluss", isExpanded: $showingAdvanced) {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Für Chatbots mit lokalem MCP-Host oder eigener Konfiguration.").font(.callout).foregroundStyle(.secondary)
-                    ForEach(MCPDesktopClient.allCases, id: \.rawValue) { client in
+                    ForEach(MCPDesktopClient.allCases.filter { $0 != .claude }, id: \.rawValue) { client in
                         Button {
                             model.clientSelection = client.rawValue
                         } label: {
@@ -112,7 +113,7 @@ struct SetupWizardView: View {
             Text(model.registrationMessage)
             if let profile = model.activeConnection, profile.connectionKind == .oauth {
                 Text("Die gespeicherte Dokumentauswahl allein aktiviert noch keinen Zugriff im Chatbot.")
-                Button(model.clientSelection == "oauth-chatgpt" ? "ChatGPT-Anmeldung öffnen" : "OAuth-Verbindung öffnen") { model.relayProfileID = profile.connectionID; model.section = .oauth; dismiss() }.buttonStyle(.borderedProminent)
+                Button(model.clientSelection == "oauth-chatgpt" ? "ChatGPT-Anmeldung öffnen" : "OAuth-Verbindung öffnen") { if model.clientSelection == "oauth-chatgpt" { model.relayProfileID = profile.connectionID }; model.section = .oauth; dismiss() }.buttonStyle(.borderedProminent)
             } else if let profile = model.activeConnection {
                 SetupStatusBadge(text: model.state(for: profile).headline, tone: model.state(for: profile).tone)
                 if model.probing.contains(profile.connectionID) { ProgressView("Lokaler Protokolltest läuft …") }

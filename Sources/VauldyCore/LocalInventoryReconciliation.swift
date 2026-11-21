@@ -12,6 +12,30 @@ public enum LocalInventoryError: LocalizedError {
     }
 }
 public enum LocalInventoryFingerprint {
+    package static func grantDigest(_ versions: [UUID: Data]) -> String {
+        var hash = SHA256()
+        for id in versions.keys.sorted(by: { $0.uuidString < $1.uuidString }) {
+            hash.update(data: Data(id.uuidString.utf8))
+            hash.update(data: versions[id]!)
+        }
+        return "selection-" + Data(hash.finalize()).base64EncodedString()
+    }
+
+    package static func selectedDocuments(_ url: URL, ids: Set<UUID>) throws -> [VaultDocument] {
+        let source = LocalVaultSnapshotSource(fileURL: url)
+        let documents = try source.isSQLite ? source.database().documents(ids: ids) : source.loadDocuments().filter { ids.contains($0.id) }
+        guard Set(documents.map(\.id)) == ids else { throw LocalInventoryError.changed }
+        return documents
+    }
+
+    package static func checkGrant(_ digest: String, url: URL, ids: Set<UUID>) throws {
+        if digest.hasPrefix("selection-") {
+            let docs = try selectedDocuments(url, ids: ids)
+            let versions = try Dictionary(uniqueKeysWithValues: docs.map { ($0.id, try SQLiteDocumentStore.documentFingerprint($0)) })
+            guard grantDigest(versions) == digest else { throw LocalInventoryError.changed }
+        } else if try snapshot(url) != digest { throw LocalInventoryError.changed }
+    }
+
     public static func snapshot(_ url: URL) throws -> String {
         let url = LocalDocumentStore.resolvedSnapshotURL(url)
         if let generation = try LocalVaultSnapshotSource(fileURL: url).generation {
@@ -127,6 +151,16 @@ public struct LocalInventoryReconciler: Sendable {
 }
 
 extension LocalDocumentStore {
+    package func withGrant<T>(_ digest: String, ids: Set<UUID>, perform: () throws -> T) throws -> T {
+        let result: Result<T, Error> = try locked {
+            Result {
+                try LocalInventoryFingerprint.checkGrant(digest, url: snapshotURL, ids: ids)
+                return try perform()
+            }
+        }
+        return try result.get()
+    }
+
     /// Keep a report's snapshot fixed through the explicit local grant commit.
     public func withUnchangedInventory<T>(_ digest: String, perform: () throws -> T) throws -> T {
         let result: Result<T, Error> = try locked {

@@ -85,12 +85,7 @@ extension MCPInstallation {
                                 acknowledgedDisclosure: Bool = false, expectedFingerprint: String? = nil) throws -> MCPAccessProfile {
         try changeProfile(id, expectedRevision: expectedRevision) { value in
             if let expectedFingerprint { guard try value.disclosureFingerprint() == expectedFingerprint else { throw MCPAccessError.stale } }
-            guard ids.isSubset(of: value.allowedDocumentIDs) || acknowledgedDisclosure else { throw MCPAccessError.notAuthorized }
-            if acknowledgedDisclosure { value.acknowledgedCloudDisclosure = true }
-            value.allowedDocumentIDs = ids
-            if ids.isEmpty { value.enabled = false }
-            // Preserve paused access when a selection is saved, including an expanded selection.
-            try value.validate()
+            try value.applySelection(ids, acknowledged: acknowledgedDisclosure)
         }
     }
 

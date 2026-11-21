@@ -171,9 +171,22 @@ final class SetupModel: ObservableObject {
         busy = true
         Task {
             do {
-                try await LocalWatchedFolderStore(store: localStore).add(urls, recursive: recursive)
-                guard let worker = localWorker else { throw LocalImportError.storageUnavailable }
-                try await worker.start()
+                guard let executable = localExecutable else { throw LocalImportError.storageUnavailable }
+                if let folder, urls.first?.resolvingSymlinksInPath().standardizedFileURL.path != URL(fileURLWithPath: folder.path).resolvingSymlinksInPath().standardizedFileURL.path {
+                    throw LocalWatchError.invalidFolder
+                }
+                let root = localStore.root
+                try await Task.detached {
+                    // The process that scans the folder also creates and validates its bookmark.
+                    let process = Process()
+                    process.executableURL = executable
+                    process.arguments = ["watch-add", "--store", root.path] + urls.map(\.path) + (recursive ? ["--recursive"] : [])
+                    process.standardOutput = FileHandle.nullDevice
+                    process.standardError = FileHandle.nullDevice
+                    try process.run()
+                    process.waitUntilExit()
+                    guard process.terminationStatus == 0 else { throw LocalWatchError.invalidFolder }
+                }.value
                 try await refreshLocalDocuments()
                 message = "Ordner gespeichert. Die Dateien erscheinen automatisch unter „Dokumente“. Die Chatbot-Freigabe ist optional."
                 failure = false

@@ -382,10 +382,10 @@ extension SetupModel {
         defer { busy = false }
         configuration = try await Task.detached {
             let install = {
-                guard try LocalInventoryFingerprint.snapshot(snapshot) == digest else { throw LocalInventoryError.changed }
+                try LocalInventoryFingerprint.checkGrant(digest, url: snapshot, ids: profile.allowedDocumentIDs)
                 return try installer.install(binary: binary, profile: profile, localCLI: local, statusApp: status, setupApp: setup)
             }
-            if localInventory { return try store.withUnchangedInventory(digest, perform: install) }
+            if localInventory { return try store.withGrant(digest, ids: profile.allowedDocumentIDs, perform: install) }
             return try install()
         }.value
         await restartStatusMenu()

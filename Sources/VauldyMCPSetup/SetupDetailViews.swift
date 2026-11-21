@@ -29,8 +29,9 @@ struct SetupDocumentSource: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 12) {
-                Button("Neue Dateien hinzufügen …", systemImage: "square.and.arrow.down", action: model.chooseImports)
-                Button("Ordner einmal importieren …", systemImage: "folder", action: model.chooseFolderImport)
+                Button("Dateien hinzufügen …", systemImage: "square.and.arrow.down", action: model.chooseImports)
+                    .buttonStyle(.borderedProminent)
+                Button("Ordner hinzufügen …", systemImage: "folder.badge.plus") { model.section = .folders }
                 Menu("Weitere Quellen") {
                     Button("Anderen lokalen Dokumentbestand laden", action: model.openLocalStore)
                     Button("Beispieldokument ausprobieren", action: model.useExample)
@@ -39,9 +40,8 @@ struct SetupDocumentSource: View {
                 }.fixedSize()
             }
             HStack {
-                Button("Automatischer Ordnerimport …", systemImage: "folder.badge.plus") { model.section = .folders }
                 if model.watchedFolders.contains(where: model.watchNeedsAccess) {
-                    Text("Ordner zuletzt nicht erreichbar")
+                    Button("Ordnerzugriff prüfen") { model.section = .folders }
                         .font(.caption).foregroundStyle(.secondary)
                 } else if model.watchedFolders.contains(where: \.enabled) && model.watchRunning {
                     Text("Ordnerüberwachung aktiv").font(.caption).foregroundStyle(.secondary)
@@ -188,9 +188,12 @@ struct SetupFoldersView: View {
     @State private var removeCandidate: LocalWatchedFolder?
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
+            Text("Wähle, ob Vauldy einen Ordner einmal liest oder künftig neue Dateien erkennt. Neue Dokumente bleiben für Chatbots gesperrt, bis du sie ausdrücklich freigibst.")
+                .foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 8) {
                 Text("Einmaliger Import").font(.headline)
                 Button("Ordner einmal importieren …", action: model.chooseFolderImport)
+                    .buttonStyle(.borderedProminent)
                 Text("Vauldy durchsucht die gewählten Ordner einmal und verknüpft die Originale.").font(.caption).foregroundStyle(.secondary)
             }.disabled(model.busy || model.importing)
             Divider()

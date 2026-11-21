@@ -51,6 +51,112 @@ private struct InventoryFixture {
 
 @Suite("Guided inventory reconciliation and renewed grants")
 struct InventoryWorkflowTests {
+    @Test func sqliteOverviewTracksChangedRowsAndExpiresCheckedSelection() async throws {
+        let f = try InventoryFixture()
+        defer { try? FileManager.default.removeItem(at: f.root) }
+        try FileManager.default.createDirectory(at: f.installation.root, withIntermediateDirectories: true)
+        _ = try LocalDocumentStore.createSQLite(at: f.store.root)
+        let id = try await f.imported("one.pdf", "original")
+        let service = MCPInventoryQualityService(store: f.store)
+        let initial = try await service.overview()
+        let cached = try await service.overview()
+        #expect(initial.rows.first?.version == cached.rows.first?.version)
+        let checked = try await service.report(verifyOriginalIDs: [id], grantScope: [id])
+        let original = try #require(try await f.store.document(id: id))
+        _ = try await f.store.saveManualTitle("Neue Version", expected: original)
+        let refreshed = try await service.overview()
+        #expect(refreshed.rows.first?.title == "Neue Version")
+        #expect(throws: LocalInventoryError.changed) { try f.store.withGrant(checked.snapshotDigest, ids: [id]) {} }
+    }
+
+    @Test func scopedGrantSurvivesOtherImportsAndRejectsChangedSelection() async throws {
+        let f = try InventoryFixture()
+        defer { try? FileManager.default.removeItem(at: f.root) }
+        let selected = try await f.imported("selected.pdf", "selected")
+        let service = MCPInventoryQualityService(store: f.store)
+        let report = try await service.report(verifyOriginalIDs: [selected], grantScope: [selected])
+        _ = try await f.imported("later.pdf", "later")
+        let relay = try await service.report(using: report.nativeVerification, verifyOriginalIDs: nil, grantScope: [selected])
+        try relay.validateSelection([selected], acknowledgedReview: true)
+        try f.store.withGrant(report.snapshotDigest, ids: [selected]) {}
+        _ = try f.file("selected.pdf", "different bytes")
+        let changed = try await service.report(verifyOriginalIDs: [selected], grantScope: [selected])
+        #expect(throws: MCPAccessError.notAuthorized) { try changed.validateSelection([selected], acknowledgedReview: true) }
+    }
+
+    @Test func disclosurePreviewProtectsIdentifiersAndRetainsReadableContext() throws {
+        let document = VaultDocument(title: "Test", sourceName: "test.pdf", ocrText: "Zahlungsfrist: morgen. E-Mail: person@example.org", pageCount: 1)
+        let text = try ReadOnlyMCPRuntime.disclosurePreview(document)
+        #expect(text.contains("Zahlungsfrist") && !text.contains("person@example.org"))
+    }
+
+    @Test func fastSelectionDefersHashingAndProofContainsOnlyCheckedOriginals() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let selected = try await f.imported("selected.pdf", "selected")
+        let other = try await f.imported("other.pdf", "other")
+        let service = MCPInventoryQualityService(store: f.store)
+        _ = try f.file("other.pdf", "changed")
+        let preview = try await service.report(verifyOriginalIDs: [])
+        #expect(preview.selectableIDs == [selected, other])
+        #expect(preview.eligibleIDs.isEmpty)
+        #expect(preview.nativeVerification.verifiedIDs.isEmpty)
+        #expect(throws: MCPAccessError.notAuthorized) { try preview.validateSelection([selected], acknowledgedReview: true) }
+        let relayView = try await service.report(using: preview.nativeVerification)
+        #expect(relayView.eligibleIDs.isEmpty)
+
+        // An unrelated original may change without delaying or authorizing the selection.
+        let focused = try await service.report(verifyOriginalIDs: [selected])
+        #expect(focused.eligibleIDs == [selected])
+        #expect(focused.nativeVerification.verifiedIDs == [selected])
+        try focused.validateSelection([selected], acknowledgedReview: true)
+        #expect(throws: MCPAccessError.notAuthorized) { try focused.validateSelection([other], acknowledgedReview: true) }
+
+        // A stale preview never authorizes a changed selected original.
+        _ = try f.file("selected.pdf", "changed")
+        let changed = try await service.report(verifyOriginalIDs: [selected])
+        #expect(!changed.eligibleIDs.contains(selected))
+        #expect(throws: MCPAccessError.notAuthorized) { try changed.validateSelection([selected], acknowledgedReview: true) }
+    }
+    @Test @MainActor func bulkSelectionUsesVisibleReadyRowsAndPreservesExistingGrant() async throws {
+        let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
+        let existing = UUID(), ready = UUID(), review = UUID(), unavailable = UUID()
+        let profile = try f.profile([existing])
+        let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"),
+            profile: profile, updatesChatGPT: false) { _ in }
+        let rows: [MCPInventoryQualityReport.Row] = [
+            .init(id: existing, title: "existing", original: .available, processing: "source-ready", coverage: "complete",
+                analysis: "completed", readable: true, expectedPages: 1, processedPages: 1, unfilledBaseFields: []),
+            .init(id: ready, title: "ready", original: .available, processing: "source-ready", coverage: "complete",
+                analysis: "completed", readable: true, expectedPages: 1, processedPages: 1, unfilledBaseFields: []),
+            .init(id: review, title: "review", original: .available, processing: "source-ready", coverage: "complete",
+                analysis: "needsReview", readable: true, expectedPages: 1, processedPages: 1, unfilledBaseFields: []),
+            .init(id: unavailable, title: "unavailable", original: .unavailable, processing: "failed", coverage: "partial",
+                analysis: "unavailable", readable: true, expectedPages: 1, processedPages: 0, unfilledBaseFields: []),
+        ]
+        model.report = .init(createdAt: Date(), snapshotDigest: "synthetic", rows: rows)
+        model.documentFingerprints[review] = "review-hash"
+        model.localChoices[review] = "review-hash"
+        model.onlyUnshared = true
+        model.search = "ready"
+        #expect(model.visibleNewEligibleIDs == [ready])
+        model.selectAllVisibleEligible()
+        #expect(model.selected == [existing, ready])
+        model.search = ""
+        #expect(!model.visibleRows.contains { $0.id == existing })
+        model.onlyUnshared = false
+        #expect(model.visibleRows.first?.id == ready && model.visibleRows.last?.id == existing)
+        #expect(!model.visibleNewEligibleIDs.contains(review))
+        #expect(model.visibleReviewSelectableIDs == [review])
+        #expect(model.isKeptLocal(review) && model.visibleReviewKeptLocalCount == 1)
+        #expect(model.newSelectableCount == 2 && model.unavailableNewCount == 1)
+        #expect(!model.visibleReviewSelectableIDs.contains(unavailable))
+        model.selectAllVisibleReview()
+        #expect(model.selected == [existing, ready, review])
+        #expect(model.reviewCount == 1 && !model.acknowledgedReview)
+        model.clearNewSelection()
+        #expect(model.selected == [existing])
+        #expect(model.addedCount == 0 && model.removedCount == 0)
+    }
     @Test func previewClassifiesFilesWithoutWritesAndReportsUnavailableFolders() async throws {
         let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
         _ = try await f.imported("same.pdf", "same")
@@ -341,7 +447,11 @@ struct DocumentDecisionTests {
         model.setSelected(true, id: fresh)
         #expect(model.selected == [missing, fresh])
         let report = try #require(model.report)
-        try report.validateSelection(model.selected, acknowledgedReview: true, preserving: profile.allowedDocumentIDs)
+        #expect(throws: MCPAccessError.notAuthorized) {
+            try report.validateSelection(model.selected, acknowledgedReview: true, preserving: profile.allowedDocumentIDs)
+        }
+        let verified = try await model.currentReport(verifyOriginalIDs: [fresh])
+        try verified.validateSelection(model.selected, acknowledgedReview: true, preserving: profile.allowedDocumentIDs)
         #expect(throws: MCPAccessError.notAuthorized) { try report.validateSelection([missing], acknowledgedReview: true) }
         let unknown = UUID()
         #expect(throws: MCPAccessError.notAuthorized) { try report.validateSelection([unknown], acknowledgedReview: true, preserving: profile.allowedDocumentIDs) }
@@ -371,7 +481,7 @@ struct DocumentDecisionTests {
         #expect(throws: MCPAccessError.stale) { try choices.keepLocal(documents, for: first) }
     }
 
-    @Test @MainActor func keepLocalSurvivesReopeningAndDoesNotHideOtherRecipients() async throws {
+    @Test @MainActor func keepLocalSurvivesReopeningButRemainsVisibleForExplicitSelection() async throws {
         let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
         let id = try await f.imported("one.pdf", "original")
         let profile = try f.profile([], enabled: false)
@@ -380,9 +490,10 @@ struct DocumentDecisionTests {
         model.onlyUnshared = true
         #expect(model.visibleRows.count == 1)
         model.keepLocal(id)
-        #expect(model.visibleRows.isEmpty)
+        #expect(model.visibleRows.count == 1)
         try await model.makeReport()
         #expect(model.isKeptLocal(id))
+        #expect(model.visibleRows.count == 1 && model.visibleReviewSelectableIDs == [id])
         model.onlyUnshared = false
         #expect(model.visibleRows.count == 1)
         model.setSelected(true, id: id)
@@ -408,6 +519,7 @@ struct DocumentDecisionTests {
         let f = try InventoryFixture(); defer { try? FileManager.default.removeItem(at: f.root) }
         let first = try await f.imported("first.pdf", "first")
         let second = try await f.imported("second.pdf", "second")
+        let undecided = try await f.imported("undecided.pdf", "undecided")
         let profile = try f.profile([first])
         let model = InventoryWorkflowModel(installation: f.installation, executable: URL(fileURLWithPath: "/not-launched"), profile: profile, updatesChatGPT: false) { _ in }
         try await model.makeReport()
@@ -423,7 +535,8 @@ struct DocumentDecisionTests {
         #expect(model.completed && model.error.isEmpty)
         let saved = try FileMCPProfileSource(url: f.installation.profileURL(profile.connectionID)).load()
         #expect(saved.allowedDocumentIDs == [second])
-        #expect(try MCPLocalDocumentChoices(installation: f.installation).load(for: profile.connectionID)[first] != nil)
+        let local = try MCPLocalDocumentChoices(installation: f.installation).load(for: profile.connectionID)
+        #expect(local[first] != nil && local[undecided] == nil)
     }
 
     @Test func legacyArchiveUsesCommonReviewWithoutInventingOriginalVerification() async throws {

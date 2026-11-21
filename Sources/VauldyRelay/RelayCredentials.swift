@@ -110,10 +110,9 @@ public struct RelayCredentialStore: Sendable {
                   c.pendingDeviceToken == nil else { throw RelayFailure.signInRequired }
             let profile = try FileMCPProfileSource(url: installation.profileURL(profileID)).load()
             let snapshot = LocalDocumentStore(root: installation.root.appendingPathComponent("vault")).snapshotURL
-            guard LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) == snapshot.standardizedFileURL,
-                  try LocalInventoryFingerprint.snapshot(snapshot) == digest else { throw LocalInventoryError.changed }
+            guard LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) == snapshot.standardizedFileURL else { throw LocalInventoryError.changed }
             let localStore = LocalDocumentStore(root: installation.root.appendingPathComponent("vault"))
-            return try localStore.withUnchangedInventory(digest) {
+            return try localStore.withGrant(digest, ids: ids.subtracting(profile.allowedDocumentIDs)) {
                 let updated = try installation.updateSelection(ids, for: profileID, expectedRevision: expectedRevision,
                     acknowledgedDisclosure: true, expectedFingerprint: expectedFingerprint)
                 c.revision = updated.revision; c.profileFingerprint = try RelayCredentials.fingerprint(updated)

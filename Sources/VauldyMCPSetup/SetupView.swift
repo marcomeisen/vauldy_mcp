@@ -7,14 +7,25 @@ import VauldyMCPRuntime
 struct SetupView: View {
     @ObservedObject var model: SetupModel
     @State private var showingPendingApproval = false
+    @State private var showingSharing = false
     var body: some View {
         NavigationSplitView {
             VStack(alignment: .leading, spacing: 22) {
                 Label("Vauldy", systemImage: "externaldrive.badge.checkmark")
                     .font(.title2.weight(.semibold)).padding(.horizontal, 12).padding(.top, 18)
-                List([MCPSetupSection.overview, .documents, .connections, .settings], id: \.self, selection: Binding<MCPSetupSection?>(
-                    get: { model.section == .folders ? .documents : model.section == .oauth ? .connections : model.section }, set: { if let section = $0 { model.navigate(section) } })) { section in
-                    Label(section.title, systemImage: section.symbol).tag(section)
+                List(selection: Binding<MCPSetupSection?>(
+                    get: { showingSharing ? nil : model.section == .folders ? .documents : model.section == .oauth ? .connections : model.section },
+                    set: { if let section = $0 { showingSharing = false; model.navigate(section) } })) {
+                    ForEach([MCPSetupSection.overview, .documents], id: \.self) { section in
+                        Label(section.title, systemImage: section.symbol).tag(section)
+                    }
+                    Button { showingSharing = true } label: {
+                        Label("Freigaben", systemImage: "checkmark.shield")
+                    }.buttonStyle(.plain)
+                        .listRowBackground(showingSharing ? Color.accentColor.opacity(0.12) : Color.clear)
+                    ForEach([MCPSetupSection.connections, .settings], id: \.self) { section in
+                        Label(section.title, systemImage: section.symbol).tag(section)
+                    }
                 }.listStyle(.sidebar)
                 Label("Auf diesem Mac", systemImage: "lock.shield").font(.caption).foregroundStyle(.secondary).padding(16)
             }.navigationSplitViewColumnWidth(min: 170, ideal: 190, max: 240)
@@ -34,7 +45,8 @@ struct SetupView: View {
                         }
                         SetupImportStatusView(model: model)
                         if !model.oauthPending.isEmpty { pendingApprovalBanner }
-                        switch model.section {
+                        if showingSharing { sharing }
+                        else { switch model.section {
                         case .overview: overview
                         case .connections: connections
                         case .documents: SetupDocumentsView(model: model)
@@ -43,7 +55,7 @@ struct SetupView: View {
                             SetupFoldersView(model: model)
                         case .oauth: connections
                         case .settings: SetupSettingsView(model: model)
-                        }
+                        } }
                     }.padding(28).frame(maxWidth: 940, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
                 }.background(Color(nsColor: .windowBackgroundColor))
                 .onChange(of: model.shownImportDocumentIDs) { _, ids in
@@ -52,6 +64,8 @@ struct SetupView: View {
             }
         }
         .navigationTitle("Vauldy")
+        .tint(Color(red: 0.09, green: 0.35, blue: 0.42))
+        .onChange(of: model.section) { _, _ in showingSharing = false }
         .onChange(of: model.message) { _, message in
             if !message.isEmpty {
                 NSAccessibility.post(element: NSApplication.shared, notification: .announcementRequested,
@@ -117,15 +131,17 @@ struct SetupView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(model.section == .oauth ? "Verbindungen" : model.section == .folders ? "Dokumente · Ordner" : model.section.title).font(.largeTitle.weight(.semibold))
+            Text(showingSharing ? "Freigaben" : model.section == .oauth ? "Verbindungen" : model.section == .folders ? "Dokumente · Ordner" : model.section.title)
+                .font(.largeTitle.weight(.semibold))
             Text(subtitle).foregroundStyle(.secondary)
         }
     }
     private var subtitle: String {
-        switch model.section {
+        if showingSharing { return "Bestimme für jeden Chatbot, welche Dokumente er lesen darf." }
+        return switch model.section {
         case .overview: "Deine Dokumente, Freigaben und nächsten Schritte."
         case .connections: "Dokumentzugriff für jeden Chatbot einzeln verwalten."
-        case .documents: "Vorhandene Dokumente prüfen und neue Dateien hinzufügen."
+        case .documents: "Dateien und Ordner hinzufügen, Text prüfen und Originale verwalten."
         case .folders: "Ordner einmalig importieren oder automatisch überwachen."
         case .oauth: "Sicher verbinden und Dokumentzugriff bestätigen. Ohne API-Schlüssel."
         case .settings: "Software, Datenschutz und lokale Diagnose."
@@ -205,10 +221,42 @@ struct SetupView: View {
     }
     private var connections: some View {
         VStack(alignment: .leading, spacing: 18) {
+            Button("Mit Claude verbinden") {
+                model.newConnection()
+                model.clientSelection = MCPDesktopClient.claude.rawValue
+            }.disabled(model.busy)
             if model.connections.isEmpty { Text("Noch keine gespeicherte Verbindung. Wähle „Chatbot verbinden“, um einen Chatbot einzurichten.").foregroundStyle(.secondary) }
             ForEach(model.connections, id: \.connectionID) { profile in SetupConnectionCard(model: model, profile: profile) }
             DisclosureGroup("Anmeldung und Verbindungshilfe\(model.oauthPending.isEmpty ? "" : " · \(model.oauthPending.count) offen")", isExpanded: Binding(get: { model.section == .oauth || !model.oauthPending.isEmpty }, set: { model.section = $0 ? .oauth : .connections })) {
                 SetupOAuthView(model: model)
+            }
+        }
+    }
+    private var sharing: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            if model.connections.isEmpty {
+                ContentUnavailableView("Noch keine Verbindung", systemImage: "checkmark.shield",
+                    description: Text("Verbinde einen Chatbot und wähle anschließend seine Dokumente aus."))
+                Button("Chatbot verbinden", action: model.newConnection).buttonStyle(.borderedProminent)
+            } else {
+                SetupConnectionPicker(model: model)
+                if let profile = model.activeConnection {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text(profile.connectionName).font(.title2.weight(.semibold))
+                            Spacer()
+                            SetupStatusBadge(text: profile.enabled ? "Zugriff aktiv" : "Zugriff pausiert",
+                                tone: profile.enabled ? .good : .attention)
+                        }
+                        Text("\(SetupText.documents(profile.allowedDocumentIDs.count)) derzeit freigegeben")
+                        Text("Neue Importe bleiben für diesen Chatbot zunächst gesperrt. Du kannst alle freigabefähigen Treffer gemeinsam auswählen und die genaue Liste vor dem Speichern prüfen.")
+                            .foregroundStyle(.secondary)
+                        Button("Dokumente auswählen und Freigabe prüfen") { model.startInventoryWorkflow(profile: profile) }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(model.busy || model.importing)
+                    }.padding(22).frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 12))
+                }
             }
         }
     }

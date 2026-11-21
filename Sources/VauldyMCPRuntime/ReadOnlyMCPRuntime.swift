@@ -1110,11 +1110,12 @@ public actor ReadOnlyMCPRuntime {
             return existing
         }
         protectedDocuments.removeValue(forKey: document.id); protectedOrder.removeAll { $0 == document.id }
-        let session = try privacySession(document)
+        let session = try Self.privacySession(document)
         privacyBuildCount += 1
-        let sections = try MCPSourceState.sourceSections(document).map {
-            VauldyDocumentCore.VaultPageMarkedText.Section(page: $0.page, text: try protect($0.text, using: session))
-        }
+        let sections: [VauldyDocumentCore.VaultPageMarkedText.Section]
+        do { sections = try Self.protectedSections(document, session: session) }
+        catch is CancellationError { throw CancellationError() }
+        catch { throw MCPAccessError.privacy }
         let result = PreparedDocument(fingerprint: hash, profile: profile, sections: sections,
                                       summary: try protect(document.summary, using: session), session: session)
         let budget = Self.preparedDocumentBudget
@@ -1162,7 +1163,32 @@ public actor ReadOnlyMCPRuntime {
                             processingStatus: state.processingStatus, sourceCoverage: state.sourceCoverage, analysisStatus: document.baseAnalysisStatus)
     }
 
-    private func privacySession(_ document: VaultDocument) throws -> IdentifierPrivacySession {
+    package static func disclosurePreview(_ document: VaultDocument) throws -> String {
+        let session = try privacySession(document)
+        let summary = try session.protectForSending(document.summary)
+        let sections = try protectedSections(document, session: session)
+        var fields: [String] = []
+        for card in document.currentBaseAnalysis?.documents ?? [] {
+            fields.append(try session.protectForSending(card.title))
+            if let overview = card.overview { fields.append(try session.protectForSending(overview.value)) }
+            for field in card.fields {
+                fields.append(try session.protectForSending(field.value))
+                fields.append(try session.protectForSending(field.quote))
+            }
+        }
+        return ([summary] + fields + sections.map { section in
+            (section.page.map { "Seite " + String($0) + "\n" } ?? "") + section.text
+        }).filter { !$0.isEmpty }.joined(separator: "\n\n")
+    }
+
+    private static func protectedSections(_ document: VaultDocument, session: IdentifierPrivacySession) throws -> [VauldyDocumentCore.VaultPageMarkedText.Section] {
+        try MCPSourceState.sourceSections(document).map {
+            try Task.checkCancellation()
+            return .init(page: $0.page, text: try session.protectForSending($0.text))
+        }
+    }
+
+    private static func privacySession(_ document: VaultDocument) throws -> IdentifierPrivacySession {
         let entityNames = document.entities.filter {
             ["person", "recipient", "patient", "customer"].contains($0.type.lowercased())
         }.map { "Name: \($0.value)" }

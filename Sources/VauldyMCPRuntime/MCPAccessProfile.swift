@@ -15,6 +15,7 @@ public struct MCPAccessProfile: Codable, Equatable, Sendable {
     public var enabled: Bool
     public var vaultPath: String
     public var allowedDocumentIDs: Set<UUID>
+    package var removedDocumentChoices: [UUID: String]?
     public var acknowledgedCloudDisclosure: Bool
 
     public init(vaultPath: String, allowedDocumentIDs: Set<UUID> = [], enabled: Bool = false,
@@ -23,6 +24,18 @@ public struct MCPAccessProfile: Codable, Equatable, Sendable {
         self.allowedDocumentIDs = allowedDocumentIDs
         self.enabled = enabled
         self.acknowledgedCloudDisclosure = acknowledgedCloudDisclosure
+    }
+
+    package mutating func applySelection(_ ids: Set<UUID>, acknowledged: Bool, newConnection: Bool = false) throws {
+        guard ids.isSubset(of: allowedDocumentIDs) || acknowledged else { throw MCPAccessError.notAuthorized }
+        if acknowledged { acknowledgedCloudDisclosure = true }
+        var choices = removedDocumentChoices ?? [:]
+        for id in ids { choices[id] = nil }
+        for id in allowedDocumentIDs.subtracting(ids) { choices[id] = "*" }
+        removedDocumentChoices = choices.isEmpty ? nil : choices
+        allowedDocumentIDs = ids
+        if newConnection || ids.isEmpty { enabled = !ids.isEmpty }
+        try validate()
     }
 
     public func validate() throws {

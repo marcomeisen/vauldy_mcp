@@ -104,6 +104,21 @@ package final class SQLiteDocumentStore: DocumentRecordStorage {
         _ = try generation
     }
 
+    package func inventoryRecordVersions() throws -> [UUID: String] {
+        let statement = try prepare("SELECT id, hex(digest) FROM records")
+        defer { sqlite3_finalize(statement) }
+        var result: [UUID: String] = [:]
+        while true {
+            try Task.checkCancellation()
+            let step = sqlite3_step(statement)
+            if step == SQLITE_DONE { return result }
+            guard step == SQLITE_ROW, let key = sqlite3_column_text(statement, 0),
+                  let id = UUID(uuidString: String(cString: key)),
+                  let bytes = sqlite3_column_text(statement, 1) else { throw Failure.corrupt }
+            result[id] = String(cString: bytes)
+        }
+    }
+
     package var count: Int { get throws { try scalar("SELECT count(*) FROM records") } }
 
     private var hasProjections: Bool { get throws {

@@ -18,26 +18,55 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     let store: LocalDocumentStore
     let worker: LocalImportWorker
     let localExecutable: URL
-    @Published var qualityByID: [UUID: LocalDocumentQuality] = [:]
     @Published var profile: MCPAccessProfile
     let updatesChatGPT: Bool
     var createConnection: (@MainActor (MCPAccessProfile, String) async throws -> Void)?
     @Published var onlyUnshared = false
     @Published var localChoices: [UUID: String] = [:]
-    var documents: [VaultDocument] = []
+    private static var lastOverview: (url: URL, report: MCPInventoryQualityReport)?
+    @Published var disclosureText: String?
+    func showDisclosure(_ id: UUID) {
+        let url = snapshotURL
+        run("Chatbot-Vorschau wird lokal vorbereitet …") { [self] in
+            let text = try await Task.detached {
+                guard let document = try LocalInventoryFingerprint.selectedDocuments(url, ids: [id]).first else { throw MCPAccessError.unavailable }
+                return try ReadOnlyMCPRuntime.disclosurePreview(document)
+            }.value
+            try Task.checkCancellation()
+            disclosureText = text.isEmpty ? "Kein lesbarer Text verfügbar." : text
+        }
+    }
     var documentFingerprints: [UUID: String] = [:]
     var isNewConnection: Bool { createConnection != nil }
     var snapshotURL: URL { LocalDocumentStore.resolvedSnapshotURL(URL(fileURLWithPath: profile.vaultPath)) }
     var usesLocalStore: Bool { snapshotURL == store.snapshotURL }
-    func currentReport() async throws -> MCPInventoryQualityReport {
+    func currentReport(verifyOriginalIDs: Set<UUID>? = nil, grantScope: Set<UUID>? = nil) async throws -> MCPInventoryQualityReport {
         if usesLocalStore {
-            return try await MCPInventoryQualityService(store: store).report { [weak self] done, total in
+            return try await MCPInventoryQualityService(store: store).report(verifyOriginalIDs: verifyOriginalIDs, grantScope: grantScope,
+                onOriginalCheck: { [weak self] index, total, name in
+                    Task { @MainActor in
+                        guard let self, self.busy, self.committing else { return }
+                        self.reportCheckDone = index - 1
+                        self.reportCheckTotal = total
+                        self.currentOriginalName = name
+                        self.currentOriginalStartedAt = Date()
+                        self.progress = "Original \(index) von \(total) prüfen · \(name)"
+                    }
+                }) { [weak self] done, total in
                 if done == total || done % 20 == 0 {
-                    Task { @MainActor in self?.progress = "Originalzugriff prüfen · \(done) von \(total)" }
+                    Task { @MainActor in
+                        guard let self, self.busy, !self.reportPreparing else { return }
+                        self.reportCheckDone = done
+                        self.reportCheckTotal = total
+                        if done == total {
+                            self.currentOriginalName = ""; self.currentOriginalStartedAt = nil
+                            self.progress = "\(done) Originale geprüft · Freigabe wird gespeichert …"
+                        }
+                    }
                 }
             }
         }
-        return try await MCPInventoryQualityService.archiveReport(at: snapshotURL)
+        return try await MCPInventoryQualityService.archiveReport(at: snapshotURL, verifyOriginalIDs: verifyOriginalIDs, grantScope: grantScope)
     }
     var selectionChanged: Bool { selected != profile.allowedDocumentIDs }
     let didUpdate: @MainActor (RelayUIState?) -> Void
@@ -54,6 +83,11 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     @Published var busy = false
     @Published var committing = false
     @Published var progress = ""
+    @Published var reportCheckDone = 0
+    @Published var reportCheckTotal = 0
+    @Published var reportPreparing = false
+    @Published var currentOriginalName = ""
+    @Published var currentOriginalStartedAt: Date?
     @Published var error = ""
     @Published var completed = false
     @Published var updatedAccessEnabled = false
@@ -70,14 +104,56 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
         store = .init(root: installation.root.appendingPathComponent("vault"))
         worker = .init(store: store, executable: executable, watchFolders: false)
     }
-    var reviewCount: Int { report.map { selected.subtracting(profile.allowedDocumentIDs).intersection($0.reviewIDs).count } ?? 0 }
+    var reviewCount: Int { report.map { selected.subtracting(profile.allowedDocumentIDs).intersection($0.selectionReviewIDs).count } ?? 0 }
     var addedCount: Int { selected.subtracting(profile.allowedDocumentIDs).count }
     var removedCount: Int { profile.allowedDocumentIDs.subtracting(selected).count }
     var visibleRows: [MCPInventoryQualityReport.Row] {
         report?.rows.filter { row in
-            (!onlyUnshared || (!profile.allowedDocumentIDs.contains(row.id) && !isKeptLocal(row.id)))
+            (!onlyUnshared || !profile.allowedDocumentIDs.contains(row.id))
                 && (search.isEmpty || row.title.localizedCaseInsensitiveContains(search))
+        }.sorted { left, right in
+            let leftRank = profile.allowedDocumentIDs.contains(left.id) ? 2 : left.selectable ? 0 : 1
+            let rightRank = profile.allowedDocumentIDs.contains(right.id) ? 2 : right.selectable ? 0 : 1
+            return leftRank == rightRank ? left.title.localizedStandardCompare(right.title) == .orderedAscending : leftRank < rightRank
         } ?? []
+    }
+    var visibleNewEligibleIDs: Set<UUID> {
+        let reviewIDs = report?.selectionReviewIDs ?? []
+        return Set(visibleRows.filter {
+            $0.selectable && !reviewIDs.contains($0.id) && !profile.allowedDocumentIDs.contains($0.id)
+        }.map(\.id))
+    }
+    var visibleReviewSelectableIDs: Set<UUID> {
+        let reviewIDs = report?.selectionReviewIDs ?? []
+        return Set(visibleRows.filter {
+            $0.selectable && reviewIDs.contains($0.id) && !profile.allowedDocumentIDs.contains($0.id)
+        }.map(\.id))
+    }
+    var visibleReviewKeptLocalCount: Int { visibleReviewSelectableIDs.count(where: isKeptLocal) }
+    var newSelectableCount: Int {
+        report?.rows.count { $0.selectable && !profile.allowedDocumentIDs.contains($0.id) } ?? 0
+    }
+    var unavailableNewCount: Int {
+        report?.rows.count { !$0.selectable && !profile.allowedDocumentIDs.contains($0.id) } ?? 0
+    }
+    var newlySelectedIDs: Set<UUID> { selected.subtracting(profile.allowedDocumentIDs) }
+    var selectedOutsideVisibleRowsCount: Int {
+        newlySelectedIDs.subtracting(Set(visibleRows.map(\.id))).count
+    }
+    func selectAllVisibleEligible() {
+        guard !busy else { return }
+        selected.formUnion(visibleNewEligibleIDs)
+        acknowledged = false; acknowledgedReview = false
+    }
+    func selectAllVisibleReview() {
+        guard !busy else { return }
+        selected.formUnion(visibleReviewSelectableIDs)
+        acknowledged = false; acknowledgedReview = false
+    }
+    func clearNewSelection() {
+        guard !busy else { return }
+        selected.subtract(newlySelectedIDs)
+        acknowledged = false; acknowledgedReview = false
     }
     func loadSources() async {
         do { sources = try await LocalWatchedFolderStore(store: store).folders(); sourceIDs = Set(sources.filter(\.enabled).map(\.id)) }
@@ -119,23 +195,20 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
         guard currentProfile.vaultPath == profile.vaultPath else { throw LocalInventoryError.wrongStore }
         profile = currentProfile
         report = nil; acknowledged = false; acknowledgedReview = false
+        reportCheckDone = 0; reportCheckTotal = 0; reportPreparing = false
+        currentOriginalName = ""; currentOriginalStartedAt = nil
+        reportPreparing = true
+        progress = "Freigabeübersicht wird vorbereitet …"
+        let digest = try LocalInventoryFingerprint.snapshot(snapshotURL)
         let value: MCPInventoryQualityReport
-        if usesLocalStore {
-            let observed = try await currentReport()
-            let states = Dictionary(uniqueKeysWithValues: observed.rows.compactMap { row in row.original.map { (row.id, $0) } })
-            let digest = try await store.recordOriginalVerification(states, expectedDigest: observed.snapshotDigest)
-            value = try await MCPInventoryQualityService(store: store).report(using: .init(snapshotDigest: digest,
-                checkedAt: observed.createdAt, verifiedIDs: observed.nativeVerification.verifiedIDs))
-            documents = try await store.documents()
+        if let cached = Self.lastOverview, cached.url == snapshotURL, cached.report.snapshotDigest == digest {
+            value = cached.report
         } else {
-            value = try await currentReport()
-            documents = try LocalVaultSnapshotSource(fileURL: snapshotURL).loadDocuments()
+            if usesLocalStore { value = try await MCPInventoryQualityService(store: store).overview() }
+            else { value = try await currentReport(verifyOriginalIDs: []) }
+            Self.lastOverview = (snapshotURL, value)
         }
-        guard try LocalInventoryFingerprint.snapshot(snapshotURL) == value.snapshotDigest else { throw LocalInventoryError.changed }
-        documentFingerprints = Dictionary(uniqueKeysWithValues: documents.map { ($0.id, MCPLocalDocumentChoices.fingerprint($0)) })
-        qualityByID = Dictionary(uniqueKeysWithValues: documents.compactMap { document in
-            LocalDocumentReview(document).map { (document.id, $0.quality) }
-        })
+        documentFingerprints = Dictionary(uniqueKeysWithValues: value.rows.map { ($0.id, $0.localFingerprint) })
         report = value
         if !isNewConnection { localChoices = try MCPLocalDocumentChoices(installation: installation).load(for: profile.connectionID) }
         step = 1
@@ -155,13 +228,13 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
     }
     func isKeptLocal(_ id: UUID) -> Bool {
         guard let fingerprint = documentFingerprints[id] else { return false }
-        return localChoices[id] == fingerprint
+        return localChoices[id] == "*" || localChoices[id] == fingerprint
     }
     func keepLocal(_ id: UUID) {
         guard !busy, !isNewConnection, !profile.allowedDocumentIDs.contains(id),
-              let document = documents.first(where: { $0.id == id }) else { return }
+              let fingerprint = documentFingerprints[id] else { return }
         do {
-            try MCPLocalDocumentChoices(installation: installation).keepLocal([document], for: profile)
+            try MCPLocalDocumentChoices(installation: installation).keepLocal([id: fingerprint], for: profile)
             localChoices = try MCPLocalDocumentChoices(installation: installation).load(for: profile.connectionID)
             selected.remove(id)
             acknowledged = false
@@ -176,27 +249,28 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
         }
     }
     func setSelected(_ value: Bool, id: UUID) {
-        guard !busy, !value || profile.allowedDocumentIDs.contains(id) || report?.eligibleIDs.contains(id) == true else { return }
+        guard !busy, !value || profile.allowedDocumentIDs.contains(id) || report?.selectableIDs.contains(id) == true else { return }
         if value { selected.insert(id) } else { selected.remove(id) }
         acknowledged = false; acknowledgedReview = false
     }
     func prepareApproval() {
         guard !busy, acknowledged, let report, reviewCount == 0 || acknowledgedReview else { return }
-        confirm(.init(profile: profile, ids: selected, digest: report.snapshotDigest, acknowledgedReview: acknowledgedReview))
+        confirm(.init(profile: profile, ids: selected, digest: LocalInventoryFingerprint.grantDigest(Dictionary(uniqueKeysWithValues: report.rows.filter { newlySelectedIDs.contains($0.id) }.map { ($0.id, $0.version) })), acknowledgedReview: acknowledgedReview))
     }
     func confirm(_ frozen: InventoryGrantApproval) {
         run("Bestand und bestätigte Freigabe werden erneut geprüft …") { [self] in
             committing = true; defer { committing = false }
-            let current = try await currentReport()
+            let newlyGranted = frozen.ids.subtracting(frozen.profile.allowedDocumentIDs)
+            reportPreparing = false; reportCheckDone = 0; reportCheckTotal = newlyGranted.count
+            currentOriginalName = ""; currentOriginalStartedAt = nil
+            progress = newlyGranted.isEmpty ? "Bestand und Freigabe werden gespeichert …" : "Ausgewählte Originale prüfen · 0 von \(newlyGranted.count)"
+            let current = try await currentReport(verifyOriginalIDs: newlyGranted, grantScope: newlyGranted)
             guard current.snapshotDigest == frozen.digest else { throw LocalInventoryError.changed }
             try current.validateSelection(frozen.ids, acknowledgedReview: frozen.acknowledgedReview, preserving: frozen.profile.allowedDocumentIDs)
             if let createConnection {
                 var created = frozen.profile
-                created.allowedDocumentIDs = frozen.ids
-                created.enabled = !frozen.ids.isEmpty
-                created.acknowledgedCloudDisclosure = true
+                try created.applySelection(frozen.ids, acknowledged: true, newConnection: true)
                 try await createConnection(created, frozen.digest)
-                saveLocalChoices(profile: created, selectedIDs: frozen.ids)
                 updatedAccessEnabled = created.enabled
                 completed = true
                 didUpdate(nil)
@@ -211,25 +285,16 @@ final class InventoryWorkflowModel: ObservableObject, Identifiable {
                 state = response.state
             } else {
                 let update = {
-                    guard try LocalInventoryFingerprint.snapshot(self.snapshotURL) == frozen.digest else { throw LocalInventoryError.changed }
+                    try LocalInventoryFingerprint.checkGrant(frozen.digest, url: self.snapshotURL, ids: newlyGranted)
                     return try self.installation.updateSelection(frozen.ids, for: frozen.profile.connectionID, expectedRevision: frozen.profile.revision,
                         acknowledgedDisclosure: true, expectedFingerprint: frozen.profile.disclosureFingerprint())
                 }
-                if usesLocalStore { _ = try store.withUnchangedInventory(frozen.digest, perform: update) }
+                if usesLocalStore { _ = try store.withGrant(frozen.digest, ids: newlyGranted, perform: update) }
                 else { _ = try update() }
                 state = nil
             }
-            let updated = try FileMCPProfileSource(url: installation.profileURL(profile.connectionID)).load()
-            saveLocalChoices(profile: updated, selectedIDs: frozen.ids)
-            updatedAccessEnabled = updated.enabled
+            updatedAccessEnabled = try FileMCPProfileSource(url: installation.profileURL(profile.connectionID)).load().enabled
             completed = true; didUpdate(state)
-        }
-    }
-    private func saveLocalChoices(profile: MCPAccessProfile, selectedIDs: Set<UUID>) {
-        do {
-            try MCPLocalDocumentChoices(installation: installation).keepLocal(documents.filter { !selectedIDs.contains($0.id) }, for: profile)
-        } catch {
-            self.error = "Freigabe gespeichert. Die Entscheidung für die übrigen lokalen Dokumente konnte nicht gespeichert werden. Diese Dokumente können erneut als offene Entscheidung erscheinen."
         }
     }
 
